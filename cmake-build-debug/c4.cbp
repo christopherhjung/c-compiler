@@ -80,12 +80,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/BinaryNode.cpp">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/BinaryNode.h">
-			<Option target="c4"/>
-		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/InputReader.cpp">
 			<Option target="c4"/>
 		</Unit>
@@ -102,18 +96,6 @@
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/TreeNode.h">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/UnaryNode.cpp">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/UnaryNode.h">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/ValueNode.cpp">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/ValueNode.h">
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/lexer.cpp">

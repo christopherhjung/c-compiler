@@ -123,33 +123,6 @@ c4/fast:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/build
 .PHONY : c4/fast
 
-src/BinaryNode.o: src/BinaryNode.cpp.o
-
-.PHONY : src/BinaryNode.o
-
-# target to build an object file
-src/BinaryNode.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/BinaryNode.cpp.o
-.PHONY : src/BinaryNode.cpp.o
-
-src/BinaryNode.i: src/BinaryNode.cpp.i
-
-.PHONY : src/BinaryNode.i
-
-# target to preprocess a source file
-src/BinaryNode.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/BinaryNode.cpp.i
-.PHONY : src/BinaryNode.cpp.i
-
-src/BinaryNode.s: src/BinaryNode.cpp.s
-
-.PHONY : src/BinaryNode.s
-
-# target to generate assembly for a file
-src/BinaryNode.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/BinaryNode.cpp.s
-.PHONY : src/BinaryNode.cpp.s
-
 src/InputReader.o: src/InputReader.cpp.o
 
 .PHONY : src/InputReader.o
@@ -231,60 +204,6 @@ src/TreeNode.cpp.s:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/TreeNode.cpp.s
 .PHONY : src/TreeNode.cpp.s
 
-src/UnaryNode.o: src/UnaryNode.cpp.o
-
-.PHONY : src/UnaryNode.o
-
-# target to build an object file
-src/UnaryNode.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/UnaryNode.cpp.o
-.PHONY : src/UnaryNode.cpp.o
-
-src/UnaryNode.i: src/UnaryNode.cpp.i
-
-.PHONY : src/UnaryNode.i
-
-# target to preprocess a source file
-src/UnaryNode.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/UnaryNode.cpp.i
-.PHONY : src/UnaryNode.cpp.i
-
-src/UnaryNode.s: src/UnaryNode.cpp.s
-
-.PHONY : src/UnaryNode.s
-
-# target to generate assembly for a file
-src/UnaryNode.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/UnaryNode.cpp.s
-.PHONY : src/UnaryNode.cpp.s
-
-src/ValueNode.o: src/ValueNode.cpp.o
-
-.PHONY : src/ValueNode.o
-
-# target to build an object file
-src/ValueNode.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/ValueNode.cpp.o
-.PHONY : src/ValueNode.cpp.o
-
-src/ValueNode.i: src/ValueNode.cpp.i
-
-.PHONY : src/ValueNode.i
-
-# target to preprocess a source file
-src/ValueNode.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/ValueNode.cpp.i
-.PHONY : src/ValueNode.cpp.i
-
-src/ValueNode.s: src/ValueNode.cpp.s
-
-.PHONY : src/ValueNode.s
-
-# target to generate assembly for a file
-src/ValueNode.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/ValueNode.cpp.s
-.PHONY : src/ValueNode.cpp.s
-
 src/lexer.o: src/lexer.cpp.o
 
 .PHONY : src/lexer.o
@@ -348,9 +267,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... c4"
-	@echo "... src/BinaryNode.o"
-	@echo "... src/BinaryNode.i"
-	@echo "... src/BinaryNode.s"
 	@echo "... src/InputReader.o"
 	@echo "... src/InputReader.i"
 	@echo "... src/InputReader.s"
@@ -360,12 +276,6 @@ help:
 	@echo "... src/TreeNode.o"
 	@echo "... src/TreeNode.i"
 	@echo "... src/TreeNode.s"
-	@echo "... src/UnaryNode.o"
-	@echo "... src/UnaryNode.i"
-	@echo "... src/UnaryNode.s"
-	@echo "... src/ValueNode.o"
-	@echo "... src/ValueNode.i"
-	@echo "... src/ValueNode.s"
 	@echo "... src/lexer.o"
 	@echo "... src/lexer.i"
 	@echo "... src/lexer.s"

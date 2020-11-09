@@ -57,22 +57,9 @@ include CMakeFiles/c4.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/c4.dir/flags.make
 
-CMakeFiles/c4.dir/src/BinaryNode.cpp.o: CMakeFiles/c4.dir/flags.make
-CMakeFiles/c4.dir/src/BinaryNode.cpp.o: ../src/BinaryNode.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/c4.dir/src/BinaryNode.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/c4.dir/src/BinaryNode.cpp.o -c /Users/chris/CLionProjects/c4/src/BinaryNode.cpp
-
-CMakeFiles/c4.dir/src/BinaryNode.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/c4.dir/src/BinaryNode.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/chris/CLionProjects/c4/src/BinaryNode.cpp > CMakeFiles/c4.dir/src/BinaryNode.cpp.i
-
-CMakeFiles/c4.dir/src/BinaryNode.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/c4.dir/src/BinaryNode.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chris/CLionProjects/c4/src/BinaryNode.cpp -o CMakeFiles/c4.dir/src/BinaryNode.cpp.s
-
 CMakeFiles/c4.dir/src/InputReader.cpp.o: CMakeFiles/c4.dir/flags.make
 CMakeFiles/c4.dir/src/InputReader.cpp.o: ../src/InputReader.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/c4.dir/src/InputReader.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/c4.dir/src/InputReader.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/c4.dir/src/InputReader.cpp.o -c /Users/chris/CLionProjects/c4/src/InputReader.cpp
 
 CMakeFiles/c4.dir/src/InputReader.cpp.i: cmake_force
@@ -85,7 +72,7 @@ CMakeFiles/c4.dir/src/InputReader.cpp.s: cmake_force
 
 CMakeFiles/c4.dir/src/RegExParser.cpp.o: CMakeFiles/c4.dir/flags.make
 CMakeFiles/c4.dir/src/RegExParser.cpp.o: ../src/RegExParser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/c4.dir/src/RegExParser.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/c4.dir/src/RegExParser.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/c4.dir/src/RegExParser.cpp.o -c /Users/chris/CLionProjects/c4/src/RegExParser.cpp
 
 CMakeFiles/c4.dir/src/RegExParser.cpp.i: cmake_force
@@ -98,7 +85,7 @@ CMakeFiles/c4.dir/src/RegExParser.cpp.s: cmake_force
 
 CMakeFiles/c4.dir/src/TreeNode.cpp.o: CMakeFiles/c4.dir/flags.make
 CMakeFiles/c4.dir/src/TreeNode.cpp.o: ../src/TreeNode.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/c4.dir/src/TreeNode.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/c4.dir/src/TreeNode.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/c4.dir/src/TreeNode.cpp.o -c /Users/chris/CLionProjects/c4/src/TreeNode.cpp
 
 CMakeFiles/c4.dir/src/TreeNode.cpp.i: cmake_force
@@ -109,35 +96,9 @@ CMakeFiles/c4.dir/src/TreeNode.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/c4.dir/src/TreeNode.cpp.s"
 	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chris/CLionProjects/c4/src/TreeNode.cpp -o CMakeFiles/c4.dir/src/TreeNode.cpp.s
 
-CMakeFiles/c4.dir/src/UnaryNode.cpp.o: CMakeFiles/c4.dir/flags.make
-CMakeFiles/c4.dir/src/UnaryNode.cpp.o: ../src/UnaryNode.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/c4.dir/src/UnaryNode.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/c4.dir/src/UnaryNode.cpp.o -c /Users/chris/CLionProjects/c4/src/UnaryNode.cpp
-
-CMakeFiles/c4.dir/src/UnaryNode.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/c4.dir/src/UnaryNode.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/chris/CLionProjects/c4/src/UnaryNode.cpp > CMakeFiles/c4.dir/src/UnaryNode.cpp.i
-
-CMakeFiles/c4.dir/src/UnaryNode.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/c4.dir/src/UnaryNode.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chris/CLionProjects/c4/src/UnaryNode.cpp -o CMakeFiles/c4.dir/src/UnaryNode.cpp.s
-
-CMakeFiles/c4.dir/src/ValueNode.cpp.o: CMakeFiles/c4.dir/flags.make
-CMakeFiles/c4.dir/src/ValueNode.cpp.o: ../src/ValueNode.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/c4.dir/src/ValueNode.cpp.o"
-	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/c4.dir/src/ValueNode.cpp.o -c /Users/chris/CLionProjects/c4/src/ValueNode.cpp
-
-CMakeFiles/c4.dir/src/ValueNode.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/c4.dir/src/ValueNode.cpp.i"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /Users/chris/CLionProjects/c4/src/ValueNode.cpp > CMakeFiles/c4.dir/src/ValueNode.cpp.i
-
-CMakeFiles/c4.dir/src/ValueNode.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/c4.dir/src/ValueNode.cpp.s"
-	/Library/Developer/CommandLineTools/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /Users/chris/CLionProjects/c4/src/ValueNode.cpp -o CMakeFiles/c4.dir/src/ValueNode.cpp.s
-
 CMakeFiles/c4.dir/src/lexer.cpp.o: CMakeFiles/c4.dir/flags.make
 CMakeFiles/c4.dir/src/lexer.cpp.o: ../src/lexer.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/c4.dir/src/lexer.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/c4.dir/src/lexer.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/c4.dir/src/lexer.cpp.o -c /Users/chris/CLionProjects/c4/src/lexer.cpp
 
 CMakeFiles/c4.dir/src/lexer.cpp.i: cmake_force
@@ -150,7 +111,7 @@ CMakeFiles/c4.dir/src/lexer.cpp.s: cmake_force
 
 CMakeFiles/c4.dir/src/main.cpp.o: CMakeFiles/c4.dir/flags.make
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/c4.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/c4.dir/src/main.cpp.o"
 	/Library/Developer/CommandLineTools/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/c4.dir/src/main.cpp.o -c /Users/chris/CLionProjects/c4/src/main.cpp
 
 CMakeFiles/c4.dir/src/main.cpp.i: cmake_force
@@ -163,29 +124,23 @@ CMakeFiles/c4.dir/src/main.cpp.s: cmake_force
 
 # Object files for target c4
 c4_OBJECTS = \
-"CMakeFiles/c4.dir/src/BinaryNode.cpp.o" \
 "CMakeFiles/c4.dir/src/InputReader.cpp.o" \
 "CMakeFiles/c4.dir/src/RegExParser.cpp.o" \
 "CMakeFiles/c4.dir/src/TreeNode.cpp.o" \
-"CMakeFiles/c4.dir/src/UnaryNode.cpp.o" \
-"CMakeFiles/c4.dir/src/ValueNode.cpp.o" \
 "CMakeFiles/c4.dir/src/lexer.cpp.o" \
 "CMakeFiles/c4.dir/src/main.cpp.o"
 
 # External object files for target c4
 c4_EXTERNAL_OBJECTS =
 
-c4: CMakeFiles/c4.dir/src/BinaryNode.cpp.o
 c4: CMakeFiles/c4.dir/src/InputReader.cpp.o
 c4: CMakeFiles/c4.dir/src/RegExParser.cpp.o
 c4: CMakeFiles/c4.dir/src/TreeNode.cpp.o
-c4: CMakeFiles/c4.dir/src/UnaryNode.cpp.o
-c4: CMakeFiles/c4.dir/src/ValueNode.cpp.o
 c4: CMakeFiles/c4.dir/src/lexer.cpp.o
 c4: CMakeFiles/c4.dir/src/main.cpp.o
 c4: CMakeFiles/c4.dir/build.make
 c4: CMakeFiles/c4.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable c4"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable c4"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/c4.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

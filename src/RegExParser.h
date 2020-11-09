@@ -11,12 +11,9 @@
 
 #include <unordered_set>
 #include <unordered_map>
-
 #include "InputReader.h"
-#include "BinaryNode.h"
-#include "UnaryNode.h"
-#include "ValueNode.h"
 
+using namespace std;
 
 struct SetHash {
     size_t operator()(const unordered_set<int>& s) const {
@@ -38,18 +35,19 @@ public:
 
 class State{
 public:
+    bool finish;
+    State(bool finish) : finish(finish){};
     unordered_map<char, State*> transitions;
 };
 
 class RegExParser {
 public:
     InputReader reader;
-    bool nullifiesLeft = false;
-    bool nullifiesRight = false;
     int currentIndex = 0;
     Info* finish;
     unordered_map<int, Info*> infos;
     unordered_map<int, char> values;
+    unordered_map<int, string> finalState;
     unordered_map<unordered_set<int>, State*, SetHash> states;
 
     RegExParser(ifstream *stream) : reader(stream){
@@ -87,9 +85,27 @@ public:
         return info;
     }
 
-    State* parse()
+    void add(string name, string regex)
     {
         finish = parseOr();
+        Info* finish = createInfo();
+
+        if (finish->nullifies)
+        {
+            finish->firstPositions.insert(finish->index);
+        }
+
+        for (int lastPosition : finish->lastPositions)
+        {
+            infos[lastPosition]->followPositions.insert(finish->index);
+        }
+
+        finalState.insert(pair<int, string>(finish->index, regex));
+
+
+    }
+
+    State* build(){
         return compile(finish->firstPositions);
     }
 
@@ -103,7 +119,7 @@ public:
         unordered_map<char, unordered_set<int>> next;
         for (int key : set)
         {
-            if (finish->index == key)
+            if (currentIndex == key)
             {
                 isFinish = true;
             }
@@ -123,7 +139,7 @@ public:
             }
         }
 
-        State* state = new State();
+        State* state = new State(isFinish);
         states.insert(pair<unordered_set<int>, State*>(set, state));
         for (pair<char, unordered_set<int>> element : next)
         {
@@ -151,8 +167,8 @@ public:
                 result->firstPositions.insert(left->firstPositions.begin(), left->firstPositions.end());
                 result->firstPositions.insert(right->firstPositions.begin(), right->firstPositions.end());
 
-                result->lastPositions.insert(left->firstPositions.begin(), left->firstPositions.end());
-                result->lastPositions.insert(right->firstPositions.begin(), right->firstPositions.end());
+                result->lastPositions.insert(left->lastPositions.begin(), left->lastPositions.end());
+                result->lastPositions.insert(right->lastPositions.begin(), right->lastPositions.end());
 
                 return result;
             }
@@ -163,7 +179,7 @@ public:
 
     Info* parseConcat()
     {
-        Info* state = parseMultiplier();
+        Info* leftState = parseMultiplier();
 
         if (hasNext())
         {
@@ -172,31 +188,31 @@ public:
                 Info* rightState = parseConcat();
                 Info* result = createInfo();
 
-                result->firstPositions.insert(state->firstPositions.begin(), state->firstPositions.end());
-                result->lastPositions.insert(state->lastPositions.begin(), state->lastPositions.end());
+                result->firstPositions.insert(leftState->firstPositions.begin(), leftState->firstPositions.end());
+                result->lastPositions.insert(rightState->lastPositions.begin(), rightState->lastPositions.end());
 
-                if (state->nullifies)
+                if (leftState->nullifies)
                 {
                     result->firstPositions.insert(rightState->firstPositions.begin(), rightState->firstPositions.end());
                 }
 
                 if (rightState->nullifies)
                 {
-                    result->lastPositions.insert(state->firstPositions.begin(), state->firstPositions.end());
+                    result->lastPositions.insert(leftState->lastPositions.begin(), leftState->lastPositions.end());
                 }
 
-                for(int lastPosition : state->lastPositions)
+                for(int lastPosition : leftState->lastPositions)
                 {
                     infos[lastPosition]->followPositions.insert(rightState->firstPositions.begin(), rightState->firstPositions.end());
                 }
 
-                result->nullifies = state->nullifies && rightState->nullifies;
+                result->nullifies = leftState->nullifies && rightState->nullifies;
 
                 return result;
             }
         }
 
-        return state;
+        return leftState;
     }
 
     Info* parseMultiplier()
@@ -218,7 +234,7 @@ public:
             {
                 type = 2;
             }else{
-                //error
+                return state;
             }
 
             Info* result = createInfo();

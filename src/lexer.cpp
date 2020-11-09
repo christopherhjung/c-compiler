@@ -19,20 +19,34 @@ using namespace std;
 
 int runTest(){
     string line;
-    ifstream myfile ("example.txt");
+    ifstream myfile ("../example.txt");
 
     cout << "start" << endl;
     if (myfile.is_open())
     {
-        InputReader reader(&myfile);
-
         RegExParser regExParser(&myfile);
 
-        State* state = regExParser.parse();
+        regExParser.add("first", "a(ab*)*");
 
+        State* state = regExParser.build();
+        while(true){
+            for(auto key : state->transitions) {
+                std::cout << key.first << ", ";
+            }
 
-        for(auto key : state->transitions) {
-            std::cout << key.first << endl;
+            if(state->finish){
+                cout << "!!!";
+            }
+            std::cout << endl;
+
+            char c;
+            std::cin >> c;
+
+            if(c == 1){
+                break;
+            }
+
+            state = state->transitions[c];
         }
 
         cout << "finish" << endl;
