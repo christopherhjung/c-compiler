@@ -26,7 +26,7 @@ int runTest(){
     {
         RegExParser regExParser(&myfile);
 
-        regExParser.add("first", "a(ab*)*");
+        regExParser.add("first", ".(ab*)*");
 
         State* state = regExParser.build();
         while(true){
@@ -35,7 +35,7 @@ int runTest(){
             }
 
             if(state->finish){
-                cout << "!!!";
+                cout << state->name;
             }
             std::cout << endl;
 

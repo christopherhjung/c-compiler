@@ -12,18 +12,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a1e4184-8b91-48c7-ba19-c4ea78b1ce09" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/example.txt" beforeDir="false" afterPath="$PROJECT_DIR$/example.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BinaryNode.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/BinaryNode.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RegExParser.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegExParser.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UnaryNode.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/UnaryNode.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueNode.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ValueNode.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -89,7 +82,7 @@
       <workItem from="1604706497311" duration="4000" />
       <workItem from="1604919324833" duration="1355000" />
       <workItem from="1604932765009" duration="3888000" />
-      <workItem from="1604936713118" duration="382000" />
+      <workItem from="1604936713118" duration="3726000" />
     </task>
     <servers />
   </component>
