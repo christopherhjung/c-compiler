@@ -39,7 +39,7 @@ LDFLAGS  += $(LLVM_LDFLAGS)
 
 DUMMY := $(shell mkdir -p $(sort $(dir $(OBJ))))
 
-.PHONY: all clean
+.PHONY: all clean develop
 
 all: $(BIN)
 
@@ -56,3 +56,6 @@ $(BIN): $(OBJ)
 $(BINDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "===> CXX $<"
 	$(Q)$(CXX) $(CXXFLAGS) -MMD -c -o $@ $<
+
+develop: all
+	./build/debug/c4

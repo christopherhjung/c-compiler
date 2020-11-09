@@ -1,8 +1,10 @@
 #include <iostream>
 
+#include "lexer.h"
+
 using namespace std;
 
 int main(int, char **const) {
-    cerr << "TODO: Implement a compiler." << std::endl;
-    return EXIT_FAILURE;
+    runTest();
+    return 0;
 }
