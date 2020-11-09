@@ -150,6 +150,33 @@ src/InputReader.cpp.s:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/InputReader.cpp.s
 .PHONY : src/InputReader.cpp.s
 
+src/Lexer.o: src/Lexer.cpp.o
+
+.PHONY : src/Lexer.o
+
+# target to build an object file
+src/Lexer.cpp.o:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Lexer.cpp.o
+.PHONY : src/Lexer.cpp.o
+
+src/Lexer.i: src/Lexer.cpp.i
+
+.PHONY : src/Lexer.i
+
+# target to preprocess a source file
+src/Lexer.cpp.i:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Lexer.cpp.i
+.PHONY : src/Lexer.cpp.i
+
+src/Lexer.s: src/Lexer.cpp.s
+
+.PHONY : src/Lexer.s
+
+# target to generate assembly for a file
+src/Lexer.cpp.s:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Lexer.cpp.s
+.PHONY : src/Lexer.cpp.s
+
 src/RegExParser.o: src/RegExParser.cpp.o
 
 .PHONY : src/RegExParser.o
@@ -177,6 +204,60 @@ src/RegExParser.cpp.s:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/RegExParser.cpp.s
 .PHONY : src/RegExParser.cpp.s
 
+src/StreamInputReader.o: src/StreamInputReader.cpp.o
+
+.PHONY : src/StreamInputReader.o
+
+# target to build an object file
+src/StreamInputReader.cpp.o:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StreamInputReader.cpp.o
+.PHONY : src/StreamInputReader.cpp.o
+
+src/StreamInputReader.i: src/StreamInputReader.cpp.i
+
+.PHONY : src/StreamInputReader.i
+
+# target to preprocess a source file
+src/StreamInputReader.cpp.i:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StreamInputReader.cpp.i
+.PHONY : src/StreamInputReader.cpp.i
+
+src/StreamInputReader.s: src/StreamInputReader.cpp.s
+
+.PHONY : src/StreamInputReader.s
+
+# target to generate assembly for a file
+src/StreamInputReader.cpp.s:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StreamInputReader.cpp.s
+.PHONY : src/StreamInputReader.cpp.s
+
+src/StringInputReader.o: src/StringInputReader.cpp.o
+
+.PHONY : src/StringInputReader.o
+
+# target to build an object file
+src/StringInputReader.cpp.o:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StringInputReader.cpp.o
+.PHONY : src/StringInputReader.cpp.o
+
+src/StringInputReader.i: src/StringInputReader.cpp.i
+
+.PHONY : src/StringInputReader.i
+
+# target to preprocess a source file
+src/StringInputReader.cpp.i:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StringInputReader.cpp.i
+.PHONY : src/StringInputReader.cpp.i
+
+src/StringInputReader.s: src/StringInputReader.cpp.s
+
+.PHONY : src/StringInputReader.s
+
+# target to generate assembly for a file
+src/StringInputReader.cpp.s:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StringInputReader.cpp.s
+.PHONY : src/StringInputReader.cpp.s
+
 src/TreeNode.o: src/TreeNode.cpp.o
 
 .PHONY : src/TreeNode.o
@@ -203,33 +284,6 @@ src/TreeNode.s: src/TreeNode.cpp.s
 src/TreeNode.cpp.s:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/TreeNode.cpp.s
 .PHONY : src/TreeNode.cpp.s
-
-src/lexer.o: src/lexer.cpp.o
-
-.PHONY : src/lexer.o
-
-# target to build an object file
-src/lexer.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/lexer.cpp.o
-.PHONY : src/lexer.cpp.o
-
-src/lexer.i: src/lexer.cpp.i
-
-.PHONY : src/lexer.i
-
-# target to preprocess a source file
-src/lexer.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/lexer.cpp.i
-.PHONY : src/lexer.cpp.i
-
-src/lexer.s: src/lexer.cpp.s
-
-.PHONY : src/lexer.s
-
-# target to generate assembly for a file
-src/lexer.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/lexer.cpp.s
-.PHONY : src/lexer.cpp.s
 
 src/main.o: src/main.cpp.o
 
@@ -270,15 +324,21 @@ help:
 	@echo "... src/InputReader.o"
 	@echo "... src/InputReader.i"
 	@echo "... src/InputReader.s"
+	@echo "... src/Lexer.o"
+	@echo "... src/Lexer.i"
+	@echo "... src/Lexer.s"
 	@echo "... src/RegExParser.o"
 	@echo "... src/RegExParser.i"
 	@echo "... src/RegExParser.s"
+	@echo "... src/StreamInputReader.o"
+	@echo "... src/StreamInputReader.i"
+	@echo "... src/StreamInputReader.s"
+	@echo "... src/StringInputReader.o"
+	@echo "... src/StringInputReader.i"
+	@echo "... src/StringInputReader.s"
 	@echo "... src/TreeNode.o"
 	@echo "... src/TreeNode.i"
 	@echo "... src/TreeNode.s"
-	@echo "... src/lexer.o"
-	@echo "... src/lexer.i"
-	@echo "... src/lexer.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

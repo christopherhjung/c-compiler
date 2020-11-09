@@ -1,39 +1,16 @@
 //
-// Created by Christopher Jung on 2020-11-06.
+// Created by Christopher Jung on 09.11.20.
 //
 
 #ifndef C4_INPUTREADER_H
 #define C4_INPUTREADER_H
 
 
-#include <iostream>
-#include <fstream>
-#include <string>
-
-using namespace std;
-
 class InputReader {
-
 public:
-    InputReader(ifstream *stream){
-        this->stream = stream;
-    };
-
-    char peek(){
-        return current;
-    }
-
-    char next(){
-        *stream >> current;
-        return current;
-    }
-
-    bool hasNext(){
-        return !stream->eof();
-    }
-private:
-    ifstream *stream;
-    char current;
+    virtual char peek() = 0;
+    virtual char next() = 0;
+    virtual bool hasNext() = 0;
 };
 
 

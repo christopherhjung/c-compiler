@@ -12,12 +12,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a1e4184-8b91-48c7-ba19-c4ea78b1ce09" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/c.lexer" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/test.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Lexer.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/StreamInputReader.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/StreamInputReader.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/StringInputReader.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/StringInputReader.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/reader/FileInputReader.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/reader/FileInputReader.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/DependInfo.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/cmake_clean.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/progress.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example.txt" beforeDir="false" afterPath="$PROJECT_DIR$/example.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InputReader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/InputReader.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/InputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/InputReader.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RegExParser.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegExParser.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/c.lexer" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,15 +62,19 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/cmake-build-debug" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/cmake-build-debug" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources" />
+      <recent name="$PROJECT_DIR$/src/reader" />
       <recent name="$PROJECT_DIR$" />
     </key>
   </component>
@@ -82,7 +111,7 @@
       <workItem from="1604706497311" duration="4000" />
       <workItem from="1604919324833" duration="1355000" />
       <workItem from="1604932765009" duration="3888000" />
-      <workItem from="1604936713118" duration="3726000" />
+      <workItem from="1604936713118" duration="14810000" />
     </task>
     <servers />
   </component>

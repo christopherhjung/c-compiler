@@ -7,14 +7,18 @@
 #IncludeRegexTransform: 
 
 /Users/chris/CLionProjects/c4/src/InputReader.h
+
+/Users/chris/CLionProjects/c4/src/Lexer.h
 iostream
 -
 fstream
 -
 string
 -
-
-/Users/chris/CLionProjects/c4/src/RegExParser.cpp
+sstream
+-
+InputReader.h
+/Users/chris/CLionProjects/c4/src/InputReader.h
 RegExParser.h
 /Users/chris/CLionProjects/c4/src/RegExParser.h
 
@@ -31,10 +35,22 @@ unordered_map
 -
 vector
 -
+StringInputReader.h
+/Users/chris/CLionProjects/c4/src/StringInputReader.h
+
+/Users/chris/CLionProjects/c4/src/StreamInputReader.h
+iostream
+-
+fstream
+-
+string
+-
+cstdio
+-
 InputReader.h
 /Users/chris/CLionProjects/c4/src/InputReader.h
 
-/Users/chris/CLionProjects/c4/src/lexer.cpp
+/Users/chris/CLionProjects/c4/src/StringInputReader.h
 iostream
 -
 fstream
@@ -43,12 +59,16 @@ string
 -
 InputReader.h
 /Users/chris/CLionProjects/c4/src/InputReader.h
+
+/Users/chris/CLionProjects/c4/src/main.cpp
+iostream
+-
+StreamInputReader.h
+/Users/chris/CLionProjects/c4/src/StreamInputReader.h
 RegExParser.h
 /Users/chris/CLionProjects/c4/src/RegExParser.h
-unordered_set
--
-unordered_map
--
+Lexer.h
+/Users/chris/CLionProjects/c4/src/Lexer.h
 functional
 -
 

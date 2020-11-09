@@ -12,7 +12,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include <vector>
-#include "InputReader.h"
+#include "StringInputReader.h"
 
 using namespace std;
 
@@ -44,17 +44,13 @@ public:
 
 class RegExParser {
 public:
-    InputReader reader;
+    StringInputReader reader;
     int currentIndex = 0;
-    Info* finish;
+    Info* finish = nullptr;
     unordered_map<int, Info*> infos;
-    unordered_map<int, vector<char>> values;
+    unordered_map<int, bool*> values;
     unordered_map<int, string> finalState;
     unordered_map<unordered_set<int>, State*, SetHash> states;
-
-    RegExParser(ifstream *stream) : reader(stream){
-        reader.next();
-    }
 
     char eat(){
         char result = reader.peek();
@@ -83,26 +79,48 @@ public:
     Info* createInfo(){
         Info* info = new Info();
         info->index = currentIndex++;
-        infos.insert(pair<int,Info*>(info->index,info));
+        //infos.insert(pair<int,Info*>(info->index,info));
+        infos[info->index] = info;
         return info;
     }
 
     void add(const string& name, const string& regex)
     {
-        finish = parseOr();
-        Info* last = createInfo();
+        reader.reset(regex);
+        Info* newInfo = parseOr();
+        //Info* last = createInfo();
+        int finalIndex = currentIndex++;
 
-        if (finish->nullifies)
+        if (newInfo->nullifies)
         {
-            finish->firstPositions.insert(last->index);
+            newInfo->firstPositions.insert(finalIndex);
         }
 
-        for (int lastPosition : finish->lastPositions)
+        for (int lastPosition : newInfo->lastPositions)
         {
-            infos[lastPosition]->followPositions.insert(last->index);
+            infos[lastPosition]->followPositions.insert(finalIndex);
         }
 
-        finalState.insert(pair<int, string>(last->index, name));
+        //finalState.insert(pair<int, string>(last->index, name));
+        finalState[finalIndex] = name;
+
+        if(finish != nullptr){
+            Info* left = finish;
+            Info* right = newInfo;
+
+            Info* result = createInfo();
+            result->nullifies = left->nullifies || right->nullifies;
+
+            result->firstPositions.insert(left->firstPositions.begin(), left->firstPositions.end());
+            result->firstPositions.insert(right->firstPositions.begin(), right->firstPositions.end());
+
+            result->lastPositions.insert(left->lastPositions.begin(), left->lastPositions.end());
+            result->lastPositions.insert(right->lastPositions.begin(), right->lastPositions.end());
+
+            finish = result;
+        }else{
+            finish = newInfo;
+        }
     }
 
     State* build(){
@@ -118,42 +136,50 @@ public:
         bool isFinish = false;
         unordered_map<char, unordered_set<int>> next;
         string name;
+        int usedKey = -1;
         for (int key : set)
         {
             if (finalState.find(key) != finalState.end())
             {
                 isFinish = true;
-                name = finalState[key];
+                if(usedKey == -1 || key < usedKey){
+                    name = finalState[key];
+                    usedKey = key;
+                }
             }
             else
             {
-                for(char value : values[key]){
-                    if(next.find(value) == next.end()){
-                        next.insert(pair<char, unordered_set<int>>(value, unordered_set<int>()));
-                    }
+                bool* arr = values[key];
+                for(int value = 0; value < 128; value++){
+                    if(arr[value]){
+                        if(next.find(value) == next.end()){
+                            //next.insert(pair<char, unordered_set<int>>(value, unordered_set<int>()));
+                            next[value] = unordered_set<int>();
+                        }
 
-                    unordered_set<int>& nextSet = next[value];
+                        unordered_set<int>& nextSet = next[value];
 
-                    if(infos.find(key) != infos.end()){
-                        Info* info = infos[key];
-                        nextSet.insert(info->followPositions.begin(), info->followPositions.end());
+                        if(infos.find(key) != infos.end()){
+                            Info* info = infos[key];
+                            nextSet.insert(info->followPositions.begin(), info->followPositions.end());
+                        }
                     }
                 }
             }
         }
 
         State* state = new State(isFinish, name);
-        states.insert(pair<unordered_set<int>, State*>(set, state));
+        //states.insert(pair<unordered_set<int>, State*>(set, state));
+        states[set] = state;
         for (pair<char, unordered_set<int>> element : next)
         {
             State* following = compile(element.second);
-            state->transitions.insert(pair<char, State*>(element.first, following));
+            //state->transitions.insert(pair<char, State*>(element.first, following));
+            state->transitions[element.first] = following;
         }
 
         return state;
     }
-
-
 
     Info* parseOr()
     {
@@ -224,7 +250,7 @@ public:
 
         if (hasNext())
         {
-            int type = -1;
+            int type;
             if (eat('*'))
             {
                 type = 1;
@@ -284,80 +310,120 @@ public:
                 result->firstPositions.insert(result->index);
                 result->lastPositions.insert(result->index);
 
-                vector<char> vec;
-                computeValue(vec);
-                values.insert(pair<int, vector<char>>(result->index, vec));
+                bool* arr = computeValue();
+                values[result->index] = arr;
 
                 return result;
             }
         }
 
-        return 0;
+        return nullptr;
     }
 
-    void computeValue(vector<char>& vec){
+    bool* computeValue(){
+        bool* arr = new bool[128]{false};
+
         char specifier = eat();
         if(specifier == '.')
         {
             for(int i = 0 ; i < 127 ; i++){
-                if(i == '\n')
-                {
-                    continue;
-                }
-
-                char c = (char) i;
-
-                vec.push_back(c);
+                arr[i] = true;
             }
-        }else if(specifier == '\\'){
-            computeEscaped(eat(), vec);
+
+            arr['\n'] = false;
+
+        }
+        else if (specifier == '[')
+        {
+            bool negate = eat('^');
+
+            int save = -1;
+
+            while (true)
+            {
+                if (save >= 0 && eat('-'))
+                {
+                    if (is('\\'))
+                    {
+                        //error
+                    }
+
+                    addRange((char)save, eat(), arr);
+                    save = -1;
+                }
+                else
+                {
+                    if (save >= 0)
+                    {
+                        arr[save] = true;
+                    }
+
+                    if (eat(']'))
+                    {
+                        break;
+                    }
+
+                    if (eat('\\'))
+                    {
+                        computeEscaped(arr);
+                    }
+                    else
+                    {
+                        save = eat();
+                    }
+                }
+            }
+
+            if (negate)
+            {
+                for(int i = 0 ; i < 128 ; i++){
+                    arr[i] ^= !arr[i];
+                }
+            }
+        }
+        else if(specifier == '\\'){
+            computeEscaped( arr);
         }
         else{
-            vec.push_back(specifier);
+            arr[specifier] = true;
         }
+
+        return arr;
     }
 
-    static void computeEscaped(char specifier ,vector<char>& vec){
+    void computeEscaped(bool* arr){
+        char specifier = eat();
         if (specifier == 'n')
         {
-            return vec.push_back('\n');
+            arr['\n'] = true;
         }
         else if (specifier == 'd')
         {
-            for(int i = 0 ; i < 127 ; i++){
-                if(i == '\n')
-                {
-                    continue;
-                }
-
-                char c = (char) i;
-
-                vec.push_back(c);
-            }
+            addRange('0', '9', arr);
         }
         else if (specifier == 's')
         {
-            vec.push_back('\n');
-            vec.push_back(' ');
-            vec.push_back('\t');
-            vec.push_back('\r');
+            arr['\n'] = true;
+            arr[' '] = true;
+            arr['\t'] = true;
+            arr['\r'] = true;
         }
         else if (specifier == 'w')
         {
-            addRange('a', 'z', vec);
-            addRange('A', 'Z', vec);
-            addRange('a', 'z', vec);
-            vec.push_back('_');
+            addRange('a', 'z', arr);
+            addRange('A', 'Z', arr);
+            addRange('0', '9', arr);
+            arr['_'] = true;
         }
         else
         {
-            return vec.push_back(specifier);
+            arr[specifier] = true;
         }
     }
 
-    static void addRange(char from, char to, vector<char>& vec){
+    static void addRange(char from, char to, bool* vec){
         for( ; from <= to; from++ ){
-            vec.push_back(from);
+            vec[from] = true;
         }
     }
 };

@@ -86,22 +86,34 @@
 		<Unit filename="/Users/chris/CLionProjects/c4/src/InputReader.h">
 			<Option target="c4"/>
 		</Unit>
+		<Unit filename="/Users/chris/CLionProjects/c4/src/Lexer.cpp">
+			<Option target="c4"/>
+		</Unit>
+		<Unit filename="/Users/chris/CLionProjects/c4/src/Lexer.h">
+			<Option target="c4"/>
+		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/RegExParser.cpp">
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/RegExParser.h">
 			<Option target="c4"/>
 		</Unit>
+		<Unit filename="/Users/chris/CLionProjects/c4/src/StreamInputReader.cpp">
+			<Option target="c4"/>
+		</Unit>
+		<Unit filename="/Users/chris/CLionProjects/c4/src/StreamInputReader.h">
+			<Option target="c4"/>
+		</Unit>
+		<Unit filename="/Users/chris/CLionProjects/c4/src/StringInputReader.cpp">
+			<Option target="c4"/>
+		</Unit>
+		<Unit filename="/Users/chris/CLionProjects/c4/src/StringInputReader.h">
+			<Option target="c4"/>
+		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/TreeNode.cpp">
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/TreeNode.h">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/lexer.cpp">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/lexer.h">
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/main.cpp">
