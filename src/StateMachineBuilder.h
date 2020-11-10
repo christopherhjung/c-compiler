@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include "StringInputReader.h"
+#include "reader/StringInputReader.h"
 
 
 
@@ -55,6 +55,12 @@ public:
     std::unordered_map<int, int> rules;
     std::unordered_map<int, std::string> kinds;
     std::unordered_map<std::unordered_set<int>, State*, SetHash> states;
+
+    virtual ~StateMachineBuilder() {
+        for(std::pair<int, Info*> infoEntry : infos){
+            delete infoEntry.second;
+        }
+    }
 
     char eat(){
         char result = reader.peek();

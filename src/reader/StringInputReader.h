@@ -23,15 +23,15 @@ public:
         index = 0;
     };
 
-    virtual char peek(){
+    char peek() override{
         return str[index];
     }
 
-    virtual void next(){
+    void next() override{
         index++;
     }
 
-    virtual bool hasNext(){
+    bool hasNext() override{
         return index < str.length();
     }
 };

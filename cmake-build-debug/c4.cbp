@@ -80,12 +80,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/InputReader.cpp">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/InputReader.h">
-			<Option target="c4"/>
-		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/Lexer.cpp">
 			<Option target="c4"/>
 		</Unit>
@@ -96,18 +90,6 @@
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/StateMachineBuilder.h">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/StreamInputReader.cpp">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/StreamInputReader.h">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/StringInputReader.cpp">
-			<Option target="c4"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/StringInputReader.h">
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/Token.cpp">

@@ -123,33 +123,6 @@ c4/fast:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/build
 .PHONY : c4/fast
 
-src/InputReader.o: src/InputReader.cpp.o
-
-.PHONY : src/InputReader.o
-
-# target to build an object file
-src/InputReader.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/InputReader.cpp.o
-.PHONY : src/InputReader.cpp.o
-
-src/InputReader.i: src/InputReader.cpp.i
-
-.PHONY : src/InputReader.i
-
-# target to preprocess a source file
-src/InputReader.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/InputReader.cpp.i
-.PHONY : src/InputReader.cpp.i
-
-src/InputReader.s: src/InputReader.cpp.s
-
-.PHONY : src/InputReader.s
-
-# target to generate assembly for a file
-src/InputReader.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/InputReader.cpp.s
-.PHONY : src/InputReader.cpp.s
-
 src/Lexer.o: src/Lexer.cpp.o
 
 .PHONY : src/Lexer.o
@@ -203,60 +176,6 @@ src/StateMachineBuilder.s: src/StateMachineBuilder.cpp.s
 src/StateMachineBuilder.cpp.s:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.s
 .PHONY : src/StateMachineBuilder.cpp.s
-
-src/StreamInputReader.o: src/StreamInputReader.cpp.o
-
-.PHONY : src/StreamInputReader.o
-
-# target to build an object file
-src/StreamInputReader.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StreamInputReader.cpp.o
-.PHONY : src/StreamInputReader.cpp.o
-
-src/StreamInputReader.i: src/StreamInputReader.cpp.i
-
-.PHONY : src/StreamInputReader.i
-
-# target to preprocess a source file
-src/StreamInputReader.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StreamInputReader.cpp.i
-.PHONY : src/StreamInputReader.cpp.i
-
-src/StreamInputReader.s: src/StreamInputReader.cpp.s
-
-.PHONY : src/StreamInputReader.s
-
-# target to generate assembly for a file
-src/StreamInputReader.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StreamInputReader.cpp.s
-.PHONY : src/StreamInputReader.cpp.s
-
-src/StringInputReader.o: src/StringInputReader.cpp.o
-
-.PHONY : src/StringInputReader.o
-
-# target to build an object file
-src/StringInputReader.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StringInputReader.cpp.o
-.PHONY : src/StringInputReader.cpp.o
-
-src/StringInputReader.i: src/StringInputReader.cpp.i
-
-.PHONY : src/StringInputReader.i
-
-# target to preprocess a source file
-src/StringInputReader.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StringInputReader.cpp.i
-.PHONY : src/StringInputReader.cpp.i
-
-src/StringInputReader.s: src/StringInputReader.cpp.s
-
-.PHONY : src/StringInputReader.s
-
-# target to generate assembly for a file
-src/StringInputReader.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StringInputReader.cpp.s
-.PHONY : src/StringInputReader.cpp.s
 
 src/Token.o: src/Token.cpp.o
 
@@ -348,21 +267,12 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... c4"
-	@echo "... src/InputReader.o"
-	@echo "... src/InputReader.i"
-	@echo "... src/InputReader.s"
 	@echo "... src/Lexer.o"
 	@echo "... src/Lexer.i"
 	@echo "... src/Lexer.s"
 	@echo "... src/StateMachineBuilder.o"
 	@echo "... src/StateMachineBuilder.i"
 	@echo "... src/StateMachineBuilder.s"
-	@echo "... src/StreamInputReader.o"
-	@echo "... src/StreamInputReader.i"
-	@echo "... src/StreamInputReader.s"
-	@echo "... src/StringInputReader.o"
-	@echo "... src/StringInputReader.i"
-	@echo "... src/StringInputReader.s"
 	@echo "... src/Token.o"
 	@echo "... src/Token.i"
 	@echo "... src/Token.s"

@@ -11,7 +11,7 @@
 
 #include <sstream>
 
-#include "InputReader.h"
+#include "reader/InputReader.h"
 #include "StateMachineBuilder.h"
 #include "Token.h"
 

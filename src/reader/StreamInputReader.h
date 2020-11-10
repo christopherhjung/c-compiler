@@ -18,15 +18,15 @@
 class StreamInputReader : public InputReader{
 
 public:
-    StreamInputReader(std::ifstream *stream){
+    explicit StreamInputReader(std::ifstream *stream){
         this->stream = stream;
     };
 
-    virtual char peek(){
+    char peek() override{
         return current;
     }
 
-    virtual void next(){
+    void next() override{
         if(stream->eof()){
             finished = true;
         }else{
@@ -34,12 +34,13 @@ public:
         }
     }
 
-    virtual bool hasNext(){
+    bool hasNext() override{
         return !finished;
     }
-private:
+
+protected:
     std::ifstream *stream;
-    char current;
+    char current{};
     bool finished = false;
 };
 
