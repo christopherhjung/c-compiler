@@ -123,114 +123,6 @@ c4/fast:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/build
 .PHONY : c4/fast
 
-src/Lexer.o: src/Lexer.cpp.o
-
-.PHONY : src/Lexer.o
-
-# target to build an object file
-src/Lexer.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Lexer.cpp.o
-.PHONY : src/Lexer.cpp.o
-
-src/Lexer.i: src/Lexer.cpp.i
-
-.PHONY : src/Lexer.i
-
-# target to preprocess a source file
-src/Lexer.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Lexer.cpp.i
-.PHONY : src/Lexer.cpp.i
-
-src/Lexer.s: src/Lexer.cpp.s
-
-.PHONY : src/Lexer.s
-
-# target to generate assembly for a file
-src/Lexer.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Lexer.cpp.s
-.PHONY : src/Lexer.cpp.s
-
-src/StateMachineBuilder.o: src/StateMachineBuilder.cpp.o
-
-.PHONY : src/StateMachineBuilder.o
-
-# target to build an object file
-src/StateMachineBuilder.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.o
-.PHONY : src/StateMachineBuilder.cpp.o
-
-src/StateMachineBuilder.i: src/StateMachineBuilder.cpp.i
-
-.PHONY : src/StateMachineBuilder.i
-
-# target to preprocess a source file
-src/StateMachineBuilder.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.i
-.PHONY : src/StateMachineBuilder.cpp.i
-
-src/StateMachineBuilder.s: src/StateMachineBuilder.cpp.s
-
-.PHONY : src/StateMachineBuilder.s
-
-# target to generate assembly for a file
-src/StateMachineBuilder.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.s
-.PHONY : src/StateMachineBuilder.cpp.s
-
-src/Token.o: src/Token.cpp.o
-
-.PHONY : src/Token.o
-
-# target to build an object file
-src/Token.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Token.cpp.o
-.PHONY : src/Token.cpp.o
-
-src/Token.i: src/Token.cpp.i
-
-.PHONY : src/Token.i
-
-# target to preprocess a source file
-src/Token.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Token.cpp.i
-.PHONY : src/Token.cpp.i
-
-src/Token.s: src/Token.cpp.s
-
-.PHONY : src/Token.s
-
-# target to generate assembly for a file
-src/Token.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Token.cpp.s
-.PHONY : src/Token.cpp.s
-
-src/TreeNode.o: src/TreeNode.cpp.o
-
-.PHONY : src/TreeNode.o
-
-# target to build an object file
-src/TreeNode.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/TreeNode.cpp.o
-.PHONY : src/TreeNode.cpp.o
-
-src/TreeNode.i: src/TreeNode.cpp.i
-
-.PHONY : src/TreeNode.i
-
-# target to preprocess a source file
-src/TreeNode.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/TreeNode.cpp.i
-.PHONY : src/TreeNode.cpp.i
-
-src/TreeNode.s: src/TreeNode.cpp.s
-
-.PHONY : src/TreeNode.s
-
-# target to generate assembly for a file
-src/TreeNode.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/TreeNode.cpp.s
-.PHONY : src/TreeNode.cpp.s
-
 src/main.o: src/main.cpp.o
 
 .PHONY : src/main.o
@@ -267,18 +159,6 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... c4"
-	@echo "... src/Lexer.o"
-	@echo "... src/Lexer.i"
-	@echo "... src/Lexer.s"
-	@echo "... src/StateMachineBuilder.o"
-	@echo "... src/StateMachineBuilder.i"
-	@echo "... src/StateMachineBuilder.s"
-	@echo "... src/Token.o"
-	@echo "... src/Token.i"
-	@echo "... src/Token.s"
-	@echo "... src/TreeNode.o"
-	@echo "... src/TreeNode.i"
-	@echo "... src/TreeNode.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

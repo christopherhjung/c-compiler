@@ -6,11 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/chris/CLionProjects/c4/src/Lexer.cpp
-Lexer.h
-/Users/chris/CLionProjects/c4/src/Lexer.h
-
-/Users/chris/CLionProjects/c4/src/Lexer.h
+/Users/chris/CLionProjects/c4/src/lexer/Lexer.h
 iostream
 -
 fstream
@@ -19,18 +15,14 @@ string
 -
 sstream
 -
-reader/InputReader.h
+../reader/InputReader.h
 /Users/chris/CLionProjects/c4/src/reader/InputReader.h
 StateMachineBuilder.h
-/Users/chris/CLionProjects/c4/src/StateMachineBuilder.h
+/Users/chris/CLionProjects/c4/src/lexer/StateMachineBuilder.h
 Token.h
-/Users/chris/CLionProjects/c4/src/Token.h
+/Users/chris/CLionProjects/c4/src/lexer/Token.h
 
-/Users/chris/CLionProjects/c4/src/StateMachineBuilder.cpp
-StateMachineBuilder.h
-/Users/chris/CLionProjects/c4/src/StateMachineBuilder.h
-
-/Users/chris/CLionProjects/c4/src/StateMachineBuilder.h
+/Users/chris/CLionProjects/c4/src/lexer/StateMachineBuilder.h
 iostream
 -
 fstream
@@ -45,10 +37,10 @@ utility
 -
 vector
 -
-reader/StringInputReader.h
+../reader/StringInputReader.h
 /Users/chris/CLionProjects/c4/src/reader/StringInputReader.h
 
-/Users/chris/CLionProjects/c4/src/Token.h
+/Users/chris/CLionProjects/c4/src/lexer/Token.h
 string
 -
 iostream
@@ -61,10 +53,10 @@ reader/StreamInputReader.h
 /Users/chris/CLionProjects/c4/src/reader/StreamInputReader.h
 reader/FileInputReader.h
 /Users/chris/CLionProjects/c4/src/reader/FileInputReader.h
-StateMachineBuilder.h
-/Users/chris/CLionProjects/c4/src/StateMachineBuilder.h
-Lexer.h
-/Users/chris/CLionProjects/c4/src/Lexer.h
+lexer/StateMachineBuilder.h
+/Users/chris/CLionProjects/c4/src/lexer/StateMachineBuilder.h
+lexer/Lexer.h
+/Users/chris/CLionProjects/c4/src/lexer/Lexer.h
 functional
 -
 

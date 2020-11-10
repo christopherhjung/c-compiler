@@ -3,8 +3,8 @@
 
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
-#include "StateMachineBuilder.h"
-#include "Lexer.h"
+#include "lexer/StateMachineBuilder.h"
+#include "lexer/Lexer.h"
 
 #include <functional>
 

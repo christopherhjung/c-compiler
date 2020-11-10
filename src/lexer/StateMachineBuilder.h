@@ -13,7 +13,7 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include "reader/StringInputReader.h"
+#include "../reader/StringInputReader.h"
 
 
 

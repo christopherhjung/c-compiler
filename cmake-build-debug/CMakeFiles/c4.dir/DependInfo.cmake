@@ -4,10 +4,6 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/Users/chris/CLionProjects/c4/src/Lexer.cpp" "/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/c4.dir/src/Lexer.cpp.o"
-  "/Users/chris/CLionProjects/c4/src/StateMachineBuilder.cpp" "/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.o"
-  "/Users/chris/CLionProjects/c4/src/Token.cpp" "/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/c4.dir/src/Token.cpp.o"
-  "/Users/chris/CLionProjects/c4/src/TreeNode.cpp" "/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/c4.dir/src/TreeNode.cpp.o"
   "/Users/chris/CLionProjects/c4/src/main.cpp" "/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/c4.dir/src/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "AppleClang")
