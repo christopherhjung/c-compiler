@@ -20,8 +20,7 @@ public:
     };
 
     friend std::ostream& operator<<(std::ostream& stream, const Token& tok){
-        stream << tok.line << ":" << tok.column << ":" << tok.id << ":" << *(tok.value) ;
-        return stream;
+        return stream << tok.line << ":" << tok.column << ":" << tok.id << ":" << *(tok.value) ;
     }
 };
 

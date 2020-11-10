@@ -12,8 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a1e4184-8b91-48c7-ba19-c4ea78b1ce09" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reader/StreamInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/StreamInputReader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer/Token.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/Token.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,6 +44,7 @@
       <recent name="$PROJECT_DIR$/cmake-build-debug" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/lexer" />
       <recent name="$PROJECT_DIR$/src/reader" />
       <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$" />
@@ -83,7 +83,7 @@
       <workItem from="1604706497311" duration="4000" />
       <workItem from="1604919324833" duration="1355000" />
       <workItem from="1604932765009" duration="3888000" />
-      <workItem from="1604936713118" duration="21363000" />
+      <workItem from="1604936713118" duration="21462000" />
     </task>
     <servers />
   </component>
