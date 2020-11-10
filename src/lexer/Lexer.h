@@ -59,12 +59,16 @@ public:
         ss.str(std::string());
         int currentLine = line;
         int currentColumn = column;
-        while(reader->hasNext()){
+        while(true){
             if(currentState == nullptr){
                 break;
             }else if(currentState->finish){
                 finish = true;
             }else if(finish){
+                break;
+            }
+
+            if(!reader->hasNext()){
                 break;
             }
 
@@ -81,7 +85,7 @@ public:
             currentState = currentState->transitions[c];
         }
 
-        token = Token(currentLine,currentColumn,currentState->id,new std::string(ss.str()));
+        token = Token(currentLine,currentColumn,currentState->id,currentState->name, new std::string(ss.str()));
 
         return finish;
     }
@@ -102,7 +106,7 @@ private:
     int line = 1;
     int column = 1;
     bool finish = false;
-    Token token = {0,0,0,new std::string()};
+    Token token = {0,0,0,"",new std::string()};
     State* state;
     State* currentState;
     InputReader* reader;

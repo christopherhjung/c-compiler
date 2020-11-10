@@ -27,11 +27,8 @@ public:
     }
 
     void next() override{
-        if(stream->eof()){
-            finished = true;
-        }else{
-            stream->get(current);
-        }
+        stream->get(current);
+        finished = stream->eof();
     }
 
     bool hasNext() override{

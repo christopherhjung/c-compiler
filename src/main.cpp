@@ -15,10 +15,11 @@ int main(int, char **const args) {
     Lexer lexer("../resources/c.lexer");
 
     InputReader* fileInputReader = new FileInputReader(args[2]);
+
     lexer.reset(fileInputReader);
     while(lexer.hasNextToken()){
         Token token = lexer.fetchToken();
-        if(token.id != 7){ //whitespace
+        if(token.id != 0){ //whitespace
             std::cout << token << std::endl;
         }
     }

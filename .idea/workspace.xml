@@ -12,9 +12,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a1e4184-8b91-48c7-ba19-c4ea78b1ce09" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/resources/test2.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/c.lexer" beforeDir="false" afterPath="$PROJECT_DIR$/resources/c.lexer" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/resources/test.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/Lexer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer/Token.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/Token.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/reader/StreamInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/StreamInputReader.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -35,7 +43,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="CPPToolchains" />
   </component>
@@ -47,6 +55,7 @@
       <recent name="$PROJECT_DIR$" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/src" />
       <recent name="$PROJECT_DIR$/cmake-build-debug" />

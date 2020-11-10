@@ -109,8 +109,9 @@ public:
             infos[lastPosition]->followPositions.insert(finalIndex);
         }
 
-        rules[finalIndex] = currentRule++;
-        kinds[currentRule] = name;
+        int rule = currentRule++;
+        rules[finalIndex] = rule;
+        kinds[rule] = name;
 
         if(finish != nullptr){
             finish = wrapOr(finish, newInfo);
@@ -372,7 +373,7 @@ public:
             if (negate)
             {
                 for(int i = 0 ; i < CHAR_COUNT ; i++){
-                    arr[i] ^= !arr[i];
+                    arr[i] ^= true;
                 }
             }
         }
