@@ -39,10 +39,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake
+CMAKE_COMMAND = /usr/local/Cellar/cmake/3.15.1/bin/cmake
 
 # The command to remove a file.
-RM = /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E remove -f
+RM = /usr/local/Cellar/cmake/3.15.1/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /Users/chris/CLionProjects/c4/cmake-build-debug
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/local/Cellar/cmake/3.15.1/bin/cmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -70,7 +70,7 @@ rebuild_cache/fast: rebuild_cache
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
-	/Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
+	/usr/local/Cellar/cmake/3.15.1/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -177,32 +177,32 @@ src/Lexer.cpp.s:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Lexer.cpp.s
 .PHONY : src/Lexer.cpp.s
 
-src/RegExParser.o: src/RegExParser.cpp.o
+src/StateMachineBuilder.o: src/StateMachineBuilder.cpp.o
 
-.PHONY : src/RegExParser.o
+.PHONY : src/StateMachineBuilder.o
 
 # target to build an object file
-src/RegExParser.cpp.o:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/RegExParser.cpp.o
-.PHONY : src/RegExParser.cpp.o
+src/StateMachineBuilder.cpp.o:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.o
+.PHONY : src/StateMachineBuilder.cpp.o
 
-src/RegExParser.i: src/RegExParser.cpp.i
+src/StateMachineBuilder.i: src/StateMachineBuilder.cpp.i
 
-.PHONY : src/RegExParser.i
+.PHONY : src/StateMachineBuilder.i
 
 # target to preprocess a source file
-src/RegExParser.cpp.i:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/RegExParser.cpp.i
-.PHONY : src/RegExParser.cpp.i
+src/StateMachineBuilder.cpp.i:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.i
+.PHONY : src/StateMachineBuilder.cpp.i
 
-src/RegExParser.s: src/RegExParser.cpp.s
+src/StateMachineBuilder.s: src/StateMachineBuilder.cpp.s
 
-.PHONY : src/RegExParser.s
+.PHONY : src/StateMachineBuilder.s
 
 # target to generate assembly for a file
-src/RegExParser.cpp.s:
-	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/RegExParser.cpp.s
-.PHONY : src/RegExParser.cpp.s
+src/StateMachineBuilder.cpp.s:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.s
+.PHONY : src/StateMachineBuilder.cpp.s
 
 src/StreamInputReader.o: src/StreamInputReader.cpp.o
 
@@ -257,6 +257,33 @@ src/StringInputReader.s: src/StringInputReader.cpp.s
 src/StringInputReader.cpp.s:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/StringInputReader.cpp.s
 .PHONY : src/StringInputReader.cpp.s
+
+src/Token.o: src/Token.cpp.o
+
+.PHONY : src/Token.o
+
+# target to build an object file
+src/Token.cpp.o:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Token.cpp.o
+.PHONY : src/Token.cpp.o
+
+src/Token.i: src/Token.cpp.i
+
+.PHONY : src/Token.i
+
+# target to preprocess a source file
+src/Token.cpp.i:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Token.cpp.i
+.PHONY : src/Token.cpp.i
+
+src/Token.s: src/Token.cpp.s
+
+.PHONY : src/Token.s
+
+# target to generate assembly for a file
+src/Token.cpp.s:
+	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/src/Token.cpp.s
+.PHONY : src/Token.cpp.s
 
 src/TreeNode.o: src/TreeNode.cpp.o
 
@@ -327,15 +354,18 @@ help:
 	@echo "... src/Lexer.o"
 	@echo "... src/Lexer.i"
 	@echo "... src/Lexer.s"
-	@echo "... src/RegExParser.o"
-	@echo "... src/RegExParser.i"
-	@echo "... src/RegExParser.s"
+	@echo "... src/StateMachineBuilder.o"
+	@echo "... src/StateMachineBuilder.i"
+	@echo "... src/StateMachineBuilder.s"
 	@echo "... src/StreamInputReader.o"
 	@echo "... src/StreamInputReader.i"
 	@echo "... src/StreamInputReader.s"
 	@echo "... src/StringInputReader.o"
 	@echo "... src/StringInputReader.i"
 	@echo "... src/StringInputReader.s"
+	@echo "... src/Token.o"
+	@echo "... src/Token.i"
+	@echo "... src/Token.s"
 	@echo "... src/TreeNode.o"
 	@echo "... src/TreeNode.i"
 	@echo "... src/TreeNode.s"

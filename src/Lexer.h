@@ -12,7 +12,7 @@
 #include <sstream>
 
 #include "InputReader.h"
-#include "RegExParser.h"
+#include "StateMachineBuilder.h"
 #include "Token.h"
 
 
@@ -28,7 +28,7 @@ public:
         std::ifstream source (file);
 
         State* state = nullptr;
-        RegExParser regExParser;
+        StateMachineBuilder builder;
         if (source.is_open())
         {
             for( std::string line; getline( source, line ); )
@@ -37,10 +37,10 @@ public:
                 std::string key = line.substr(0, position);
                 std::string value = line.substr(position + 1);
 
-                regExParser.add(key, value);
+                builder.add(key, value);
             }
 
-            state = regExParser.build();
+            state = builder.build();
 
             source.close();
         }

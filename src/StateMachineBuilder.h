@@ -2,8 +2,8 @@
 // Created by Christopher Jung on 2020-11-06.
 //
 
-#ifndef C4_REGEXPARSER_H
-#define C4_REGEXPARSER_H
+#ifndef C4_STATEMACHINEBUILDER_H
+#define C4_STATEMACHINEBUILDER_H
 
 #include <iostream>
 #include <fstream>
@@ -26,7 +26,7 @@ struct SetHash {
     }
 };
 
-class Info{
+struct Info{
 public:
     int index;
     bool nullifies;
@@ -35,7 +35,7 @@ public:
     std::unordered_set<int> followPositions;
 };
 
-class State{
+struct State{
 public:
     bool finish;
     std::string name;
@@ -44,7 +44,7 @@ public:
     std::unordered_map<char, State*> transitions;
 };
 
-class RegExParser {
+class StateMachineBuilder {
 public:
     StringInputReader reader;
     int currentIndex = 0;
@@ -418,4 +418,4 @@ public:
 };
 
 
-#endif //C4_REGEXPARSER_H
+#endif //C4_STATEMACHINEBUILDER_H

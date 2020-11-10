@@ -6,13 +6,11 @@ CMakeFiles/c4.dir/src/Lexer.cpp.o
  /Users/chris/CLionProjects/c4/src/InputReader.h
  /Users/chris/CLionProjects/c4/src/Lexer.cpp
  /Users/chris/CLionProjects/c4/src/Lexer.h
- /Users/chris/CLionProjects/c4/src/RegExParser.h
- /Users/chris/CLionProjects/c4/src/StringInputReader.h
  /Users/chris/CLionProjects/c4/src/Token.h
-CMakeFiles/c4.dir/src/RegExParser.cpp.o
+CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.o
  /Users/chris/CLionProjects/c4/src/InputReader.h
- /Users/chris/CLionProjects/c4/src/RegExParser.cpp
- /Users/chris/CLionProjects/c4/src/RegExParser.h
+ /Users/chris/CLionProjects/c4/src/StateMachineBuilder.cpp
+ /Users/chris/CLionProjects/c4/src/StateMachineBuilder.h
  /Users/chris/CLionProjects/c4/src/StringInputReader.h
 CMakeFiles/c4.dir/src/StreamInputReader.cpp.o
  /Users/chris/CLionProjects/c4/src/InputReader.h
@@ -22,14 +20,15 @@ CMakeFiles/c4.dir/src/StringInputReader.cpp.o
  /Users/chris/CLionProjects/c4/src/InputReader.h
  /Users/chris/CLionProjects/c4/src/StringInputReader.cpp
  /Users/chris/CLionProjects/c4/src/StringInputReader.h
+CMakeFiles/c4.dir/src/Token.cpp.o
+ /Users/chris/CLionProjects/c4/src/Token.cpp
+ /Users/chris/CLionProjects/c4/src/Token.h
 CMakeFiles/c4.dir/src/TreeNode.cpp.o
  /Users/chris/CLionProjects/c4/src/TreeNode.cpp
  /Users/chris/CLionProjects/c4/src/TreeNode.h
 CMakeFiles/c4.dir/src/main.cpp.o
  /Users/chris/CLionProjects/c4/src/InputReader.h
  /Users/chris/CLionProjects/c4/src/Lexer.h
- /Users/chris/CLionProjects/c4/src/RegExParser.h
  /Users/chris/CLionProjects/c4/src/StreamInputReader.h
- /Users/chris/CLionProjects/c4/src/StringInputReader.h
  /Users/chris/CLionProjects/c4/src/Token.h
  /Users/chris/CLionProjects/c4/src/main.cpp

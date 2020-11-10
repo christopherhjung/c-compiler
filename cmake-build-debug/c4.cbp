@@ -92,10 +92,10 @@
 		<Unit filename="/Users/chris/CLionProjects/c4/src/Lexer.h">
 			<Option target="c4"/>
 		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/RegExParser.cpp">
+		<Unit filename="/Users/chris/CLionProjects/c4/src/StateMachineBuilder.cpp">
 			<Option target="c4"/>
 		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/src/RegExParser.h">
+		<Unit filename="/Users/chris/CLionProjects/c4/src/StateMachineBuilder.h">
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/StreamInputReader.cpp">
@@ -108,6 +108,12 @@
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/StringInputReader.h">
+			<Option target="c4"/>
+		</Unit>
+		<Unit filename="/Users/chris/CLionProjects/c4/src/Token.cpp">
+			<Option target="c4"/>
+		</Unit>
+		<Unit filename="/Users/chris/CLionProjects/c4/src/Token.h">
 			<Option target="c4"/>
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/src/TreeNode.cpp">

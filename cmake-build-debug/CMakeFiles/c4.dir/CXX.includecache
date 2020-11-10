@@ -8,31 +8,11 @@
 
 /Users/chris/CLionProjects/c4/src/InputReader.h
 
-/Users/chris/CLionProjects/c4/src/Lexer.cpp
-Lexer.h
-/Users/chris/CLionProjects/c4/src/Lexer.h
+/Users/chris/CLionProjects/c4/src/StateMachineBuilder.cpp
+StateMachineBuilder.h
+/Users/chris/CLionProjects/c4/src/StateMachineBuilder.h
 
-/Users/chris/CLionProjects/c4/src/Lexer.h
-iostream
--
-fstream
--
-string
--
-sstream
--
-InputReader.h
-/Users/chris/CLionProjects/c4/src/InputReader.h
-RegExParser.h
-/Users/chris/CLionProjects/c4/src/RegExParser.h
-Token.h
-/Users/chris/CLionProjects/c4/src/Token.h
-
-/Users/chris/CLionProjects/c4/src/RegExParser.cpp
-RegExParser.h
-/Users/chris/CLionProjects/c4/src/RegExParser.h
-
-/Users/chris/CLionProjects/c4/src/RegExParser.h
+/Users/chris/CLionProjects/c4/src/StateMachineBuilder.h
 iostream
 -
 fstream
@@ -50,18 +30,6 @@ vector
 StringInputReader.h
 /Users/chris/CLionProjects/c4/src/StringInputReader.h
 
-/Users/chris/CLionProjects/c4/src/StreamInputReader.h
-iostream
--
-fstream
--
-string
--
-cstdio
--
-InputReader.h
-/Users/chris/CLionProjects/c4/src/InputReader.h
-
 /Users/chris/CLionProjects/c4/src/StringInputReader.h
 iostream
 -
@@ -71,22 +39,4 @@ string
 -
 InputReader.h
 /Users/chris/CLionProjects/c4/src/InputReader.h
-
-/Users/chris/CLionProjects/c4/src/Token.h
-string
--
-iostream
--
-
-/Users/chris/CLionProjects/c4/src/main.cpp
-iostream
--
-StreamInputReader.h
-/Users/chris/CLionProjects/c4/src/StreamInputReader.h
-RegExParser.h
-/Users/chris/CLionProjects/c4/src/RegExParser.h
-Lexer.h
-/Users/chris/CLionProjects/c4/src/Lexer.h
-functional
--
 

@@ -5,14 +5,12 @@
 CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/InputReader.h
 CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/Lexer.cpp
 CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/Lexer.h
-CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/RegExParser.h
-CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/StringInputReader.h
 CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/Token.h
 
-CMakeFiles/c4.dir/src/RegExParser.cpp.o: ../src/InputReader.h
-CMakeFiles/c4.dir/src/RegExParser.cpp.o: ../src/RegExParser.cpp
-CMakeFiles/c4.dir/src/RegExParser.cpp.o: ../src/RegExParser.h
-CMakeFiles/c4.dir/src/RegExParser.cpp.o: ../src/StringInputReader.h
+CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.o: ../src/InputReader.h
+CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.o: ../src/StateMachineBuilder.cpp
+CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.o: ../src/StateMachineBuilder.h
+CMakeFiles/c4.dir/src/StateMachineBuilder.cpp.o: ../src/StringInputReader.h
 
 CMakeFiles/c4.dir/src/StreamInputReader.cpp.o: ../src/InputReader.h
 CMakeFiles/c4.dir/src/StreamInputReader.cpp.o: ../src/StreamInputReader.cpp
@@ -22,14 +20,15 @@ CMakeFiles/c4.dir/src/StringInputReader.cpp.o: ../src/InputReader.h
 CMakeFiles/c4.dir/src/StringInputReader.cpp.o: ../src/StringInputReader.cpp
 CMakeFiles/c4.dir/src/StringInputReader.cpp.o: ../src/StringInputReader.h
 
+CMakeFiles/c4.dir/src/Token.cpp.o: ../src/Token.cpp
+CMakeFiles/c4.dir/src/Token.cpp.o: ../src/Token.h
+
 CMakeFiles/c4.dir/src/TreeNode.cpp.o: ../src/TreeNode.cpp
 CMakeFiles/c4.dir/src/TreeNode.cpp.o: ../src/TreeNode.h
 
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/InputReader.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/Lexer.h
-CMakeFiles/c4.dir/src/main.cpp.o: ../src/RegExParser.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/StreamInputReader.h
-CMakeFiles/c4.dir/src/main.cpp.o: ../src/StringInputReader.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/Token.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/main.cpp
 

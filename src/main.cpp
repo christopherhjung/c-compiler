@@ -2,7 +2,7 @@
 #include <iostream>
 
 #include "StreamInputReader.h"
-#include "RegExParser.h"
+#include "StateMachineBuilder.h"
 #include "Lexer.h"
 
 #include <functional>
