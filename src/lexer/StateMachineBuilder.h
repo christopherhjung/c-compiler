@@ -57,7 +57,7 @@ public:
     std::unordered_map<std::unordered_set<int>, State*, SetHash> states;
 
     virtual ~StateMachineBuilder() {
-        for(std::pair<int, Info*> infoEntry : infos){
+        for(const auto& infoEntry : infos){
             delete infoEntry.second;
         }
     }
@@ -149,7 +149,6 @@ public:
                 for(int value = 0; value < CHAR_COUNT; value++){
                     if(arr[value]){
                         if(next.find(value) == next.end()){
-                            //next.insert(pair<char, unordered_set<int>>(value, unordered_set<int>()));
                             next[value] = std::unordered_set<int>();
                         }
 
@@ -164,13 +163,11 @@ public:
             }
         }
 
-        State* state = new State(isFinish, rule, kinds[rule]);
-        //states.insert(pair<unordered_set<int>, State*>(set, state));
+        auto* state = new State(isFinish, rule, kinds[rule]);
         states[set] = state;
-        for (std::pair<char, std::unordered_set<int>> element : next)
+        for (const auto& element : next)
         {
             State* following = compile(element.second);
-            //state->transitions.insert(pair<char, State*>(element.first, following));
             state->transitions[element.first] = following;
         }
 
