@@ -289,8 +289,7 @@ public:
                 Info* state = parseOr();
                 if (!eat(')'))
                 {
-                    //exit
-                    //throw new RuntimeException("No Parenthesis closing!");
+                    //error
                 }
 
                 return state;
