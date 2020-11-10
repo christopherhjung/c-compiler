@@ -13,12 +13,12 @@
 
 #include "InputReader.h"
 
-using namespace std;
+
 
 class StreamInputReader : public InputReader{
 
 public:
-    StreamInputReader(ifstream *stream){
+    StreamInputReader(std::ifstream *stream){
         this->stream = stream;
     };
 
@@ -26,17 +26,21 @@ public:
         return current;
     }
 
-    virtual char next(){
-        stream->get(current);
-        return current;
+    virtual void next(){
+        if(stream->eof()){
+            finished = true;
+        }else{
+            stream->get(current);
+        }
     }
 
     virtual bool hasNext(){
-        return !stream->eof();
+        return !finished;
     }
 private:
-    ifstream *stream;
+    std::ifstream *stream;
     char current;
+    bool finished = false;
 };
 
 

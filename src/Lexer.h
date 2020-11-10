@@ -13,18 +13,19 @@
 
 #include "InputReader.h"
 #include "RegExParser.h"
+#include "Token.h"
 
-using namespace std;
+
 
 class Lexer {
 
 public:
-    Lexer(const string& file) : state(readStateMachine(file)){
+    Lexer(const std::string& file) : state(readStateMachine(file)){
 
     };
 
-    static State* readStateMachine(const string& file){
-        ifstream source (file);
+    static State* readStateMachine(const std::string& file){
+        std::ifstream source (file);
 
         State* state = nullptr;
         RegExParser regExParser;
@@ -33,8 +34,8 @@ public:
             for( std::string line; getline( source, line ); )
             {
                 int position = line.find(':');
-                string key = line.substr(0, position);
-                string value = line.substr(position + 1);
+                std::string key = line.substr(0, position);
+                std::string value = line.substr(position + 1);
 
                 regExParser.add(key, value);
             }
@@ -56,6 +57,8 @@ public:
         finish = false;
         currentState = state;
         ss.str(std::string());
+        int currentLine = line;
+        int currentColumn = column;
         while(reader->hasNext()){
             if(currentState == nullptr){
                 break;
@@ -71,22 +74,35 @@ public:
                 break;
             }
 
+            updatePosition(c);
             reader->next();
 
             ss << c;
             currentState = currentState->transitions[c];
         }
 
-        ss << ":" << currentState->name;
+        token = Token(currentLine,currentColumn,currentState->id,new std::string(ss.str()));
 
         return finish;
     }
 
-    string fetchToken(){
-        return ss.str();
+    void updatePosition(char c){
+        if(c == '\n'){
+            line++;
+            column=1;
+        }else{
+            column++;
+        }
+    }
+
+    Token fetchToken(){
+        return token;
     }
 private:
+    int line = 1;
+    int column = 1;
     bool finish = false;
+    Token token = {0,0,0,new std::string()};
     State* state;
     State* currentState;
     InputReader* reader;

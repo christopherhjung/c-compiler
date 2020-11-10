@@ -11,13 +11,14 @@
 
 #include <unordered_set>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 #include "StringInputReader.h"
 
-using namespace std;
+
 
 struct SetHash {
-    size_t operator()(const unordered_set<int>& s) const {
+    size_t operator()(const std::unordered_set<int>& s) const {
         size_t sum{31};
         for ( int e : s )
             sum *= e;
@@ -29,28 +30,31 @@ class Info{
 public:
     int index;
     bool nullifies;
-    unordered_set<int> firstPositions;
-    unordered_set<int> lastPositions;
-    unordered_set<int> followPositions;
+    std::unordered_set<int> firstPositions;
+    std::unordered_set<int> lastPositions;
+    std::unordered_set<int> followPositions;
 };
 
 class State{
 public:
     bool finish;
-    string name;
-    State(bool finish, string name) : finish(finish), name(name){};
-    unordered_map<char, State*> transitions;
+    std::string name;
+    int id;
+    State(bool finish, int id, std::string name) : finish(finish), id(id), name(std::move(name)){};
+    std::unordered_map<char, State*> transitions;
 };
 
 class RegExParser {
 public:
     StringInputReader reader;
     int currentIndex = 0;
+    int currentRule = 0;
     Info* finish = nullptr;
-    unordered_map<int, Info*> infos;
-    unordered_map<int, bool*> values;
-    unordered_map<int, string> finalState;
-    unordered_map<unordered_set<int>, State*, SetHash> states;
+    std::unordered_map<int, Info*> infos;
+    std::unordered_map<int, bool*> values;
+    std::unordered_map<int, int> rules;
+    std::unordered_map<int, std::string> kinds;
+    std::unordered_map<std::unordered_set<int>, State*, SetHash> states;
 
     char eat(){
         char result = reader.peek();
@@ -79,16 +83,14 @@ public:
     Info* createInfo(){
         Info* info = new Info();
         info->index = currentIndex++;
-        //infos.insert(pair<int,Info*>(info->index,info));
         infos[info->index] = info;
         return info;
     }
 
-    void add(const string& name, const string& regex)
+    void add(const std::string& name, const std::string& regex)
     {
         reader.reset(regex);
         Info* newInfo = parseOr();
-        //Info* last = createInfo();
         int finalIndex = currentIndex++;
 
         if (newInfo->nullifies)
@@ -101,23 +103,11 @@ public:
             infos[lastPosition]->followPositions.insert(finalIndex);
         }
 
-        //finalState.insert(pair<int, string>(last->index, name));
-        finalState[finalIndex] = name;
+        rules[finalIndex] = currentRule++;
+        kinds[currentRule] = name;
 
         if(finish != nullptr){
-            Info* left = finish;
-            Info* right = newInfo;
-
-            Info* result = createInfo();
-            result->nullifies = left->nullifies || right->nullifies;
-
-            result->firstPositions.insert(left->firstPositions.begin(), left->firstPositions.end());
-            result->firstPositions.insert(right->firstPositions.begin(), right->firstPositions.end());
-
-            result->lastPositions.insert(left->lastPositions.begin(), left->lastPositions.end());
-            result->lastPositions.insert(right->lastPositions.begin(), right->lastPositions.end());
-
-            finish = result;
+            finish = wrapOr(finish, newInfo);
         }else{
             finish = newInfo;
         }
@@ -127,24 +117,23 @@ public:
         return compile(finish->firstPositions);
     }
 
-    State* compile(const unordered_set<int>& set)
+    State* compile(const std::unordered_set<int>& set)
     {
         if(states.find(set) != states.end()){
             return states[set];
         }
 
         bool isFinish = false;
-        unordered_map<char, unordered_set<int>> next;
-        string name;
-        int usedKey = -1;
+        std::unordered_map<char, std::unordered_set<int>> next;
+        std::string name;
+        int rule = -1;
         for (int key : set)
         {
-            if (finalState.find(key) != finalState.end())
+            if (rules.find(key) != rules.end())
             {
                 isFinish = true;
-                if(usedKey == -1 || key < usedKey){
-                    name = finalState[key];
-                    usedKey = key;
+                if(rule == -1 || key < rule){
+                    rule = rules[key];
                 }
             }
             else
@@ -154,10 +143,10 @@ public:
                     if(arr[value]){
                         if(next.find(value) == next.end()){
                             //next.insert(pair<char, unordered_set<int>>(value, unordered_set<int>()));
-                            next[value] = unordered_set<int>();
+                            next[value] = std::unordered_set<int>();
                         }
 
-                        unordered_set<int>& nextSet = next[value];
+                        std::unordered_set<int>& nextSet = next[value];
 
                         if(infos.find(key) != infos.end()){
                             Info* info = infos[key];
@@ -168,10 +157,10 @@ public:
             }
         }
 
-        State* state = new State(isFinish, name);
+        State* state = new State(isFinish, rule, kinds[rule]);
         //states.insert(pair<unordered_set<int>, State*>(set, state));
         states[set] = state;
-        for (pair<char, unordered_set<int>> element : next)
+        for (std::pair<char, std::unordered_set<int>> element : next)
         {
             State* following = compile(element.second);
             //state->transitions.insert(pair<char, State*>(element.first, following));
@@ -185,25 +174,25 @@ public:
     {
         Info* left = parseConcat();
 
-        if (hasNext())
+        if ( eat('|'))
         {
-            if (eat('|'))
-            {
-                Info* right = parseOr();
-                Info* result = createInfo();
-                result->nullifies = left->nullifies || right->nullifies;
-
-                result->firstPositions.insert(left->firstPositions.begin(), left->firstPositions.end());
-                result->firstPositions.insert(right->firstPositions.begin(), right->firstPositions.end());
-
-                result->lastPositions.insert(left->lastPositions.begin(), left->lastPositions.end());
-                result->lastPositions.insert(right->lastPositions.begin(), right->lastPositions.end());
-
-                return result;
-            }
+            return wrapOr(left, parseOr());
         }
 
         return left;
+    }
+
+    Info* wrapOr(Info* left, Info* right)
+    {
+        Info* result = createInfo();
+        result->nullifies = left->nullifies || right->nullifies;
+
+        result->firstPositions.insert(left->firstPositions.begin(), left->firstPositions.end());
+        result->firstPositions.insert(right->firstPositions.begin(), right->firstPositions.end());
+
+        result->lastPositions.insert(left->lastPositions.begin(), left->lastPositions.end());
+        result->lastPositions.insert(right->lastPositions.begin(), right->lastPositions.end());
+        return result;
     }
 
     Info* parseConcat()

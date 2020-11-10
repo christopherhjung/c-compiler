@@ -9,7 +9,7 @@
 class InputReader {
 public:
     virtual char peek() = 0;
-    virtual char next() = 0;
+    virtual void next() = 0;
     virtual bool hasNext() = 0;
 };
 

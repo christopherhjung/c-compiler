@@ -8,22 +8,20 @@
 #include <functional>
 
 
-using namespace std;
 
 
-
-
-
-
-int main(int, char **const) {
+int main(int, char **const args) {
     Lexer lexer("../resources/c.lexer");
-    ifstream source("../resources/test.c");
+    std::ifstream source(args[2]);
     if (source.is_open())
     {
         InputReader* reader = new StreamInputReader(&source);
         lexer.reset(reader);
         while(lexer.hasNextToken()){
-            cout << lexer.fetchToken() << endl;
+            Token token = lexer.fetchToken();
+            if(token.id != 7){ //whitespace
+                std::cout << token << std::endl;
+            }
         }
     }
     return 0;

@@ -7,6 +7,7 @@ CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/Lexer.cpp
 CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/Lexer.h
 CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/RegExParser.h
 CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/StringInputReader.h
+CMakeFiles/c4.dir/src/Lexer.cpp.o: ../src/Token.h
 
 CMakeFiles/c4.dir/src/RegExParser.cpp.o: ../src/InputReader.h
 CMakeFiles/c4.dir/src/RegExParser.cpp.o: ../src/RegExParser.cpp
@@ -29,5 +30,6 @@ CMakeFiles/c4.dir/src/main.cpp.o: ../src/Lexer.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/RegExParser.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/StreamInputReader.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/StringInputReader.h
+CMakeFiles/c4.dir/src/main.cpp.o: ../src/Token.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/main.cpp
 

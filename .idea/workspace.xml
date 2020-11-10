@@ -12,37 +12,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a1e4184-8b91-48c7-ba19-c4ea78b1ce09" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/c.lexer" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/test.c" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Lexer.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/StreamInputReader.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/StreamInputReader.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/StringInputReader.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/StringInputReader.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/reader/FileInputReader.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/reader/FileInputReader.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/7" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Progress/count.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/DependInfo.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/DependInfo.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/build.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/cmake_clean.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.internal" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/link.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/progress.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/progress.make" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/InputReader.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/InputReader.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/InputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/InputReader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/resources/test.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/RegExParser.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/RegExParser.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/c.lexer" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/Lexer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -57,6 +34,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectId" id="1jwDRlQdNzzWCXV9a5DSnBEFjxe" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
@@ -91,7 +69,7 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="c4" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="c4" TARGET_NAME="c4" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="c4" RUN_TARGET_NAME="c4">
+    <configuration name="c4" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="--tokenize ../resources/test.c" PASS_PARENT_ENVS_2="true" PROJECT_NAME="c4" TARGET_NAME="c4" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="c4" RUN_TARGET_NAME="c4">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -111,7 +89,7 @@
       <workItem from="1604706497311" duration="4000" />
       <workItem from="1604919324833" duration="1355000" />
       <workItem from="1604932765009" duration="3888000" />
-      <workItem from="1604936713118" duration="14810000" />
+      <workItem from="1604936713118" duration="18706000" />
     </task>
     <servers />
   </component>

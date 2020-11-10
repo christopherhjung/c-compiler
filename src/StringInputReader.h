@@ -12,27 +12,26 @@
 
 #include "InputReader.h"
 
-using namespace std;
+
 
 class StringInputReader : public InputReader {
-    string str;
+    std::string str;
     int index;
 public:
-    void reset(const string& str){
+    void reset(const std::string& str){
         this->str = str;
         index = 0;
     };
 
-    char peek(){
+    virtual char peek(){
         return str[index];
     }
 
-    char next(){
+    virtual void next(){
         index++;
-        return peek();
     }
 
-    bool hasNext(){
+    virtual bool hasNext(){
         return index < str.length();
     }
 };

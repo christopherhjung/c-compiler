@@ -8,6 +8,7 @@ CMakeFiles/c4.dir/src/Lexer.cpp.o
  /Users/chris/CLionProjects/c4/src/Lexer.h
  /Users/chris/CLionProjects/c4/src/RegExParser.h
  /Users/chris/CLionProjects/c4/src/StringInputReader.h
+ /Users/chris/CLionProjects/c4/src/Token.h
 CMakeFiles/c4.dir/src/RegExParser.cpp.o
  /Users/chris/CLionProjects/c4/src/InputReader.h
  /Users/chris/CLionProjects/c4/src/RegExParser.cpp
@@ -30,4 +31,5 @@ CMakeFiles/c4.dir/src/main.cpp.o
  /Users/chris/CLionProjects/c4/src/RegExParser.h
  /Users/chris/CLionProjects/c4/src/StreamInputReader.h
  /Users/chris/CLionProjects/c4/src/StringInputReader.h
+ /Users/chris/CLionProjects/c4/src/Token.h
  /Users/chris/CLionProjects/c4/src/main.cpp
