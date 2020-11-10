@@ -2,8 +2,7 @@
 // Created by Christopher Jung on 09.11.20.
 //
 
-#ifndef C4_INPUTREADER_H
-#define C4_INPUTREADER_H
+#pragma once
 
 
 class InputReader {
@@ -13,5 +12,3 @@ public:
     virtual bool hasNext() = 0;
 };
 
-
-#endif //C4_INPUTREADER_H

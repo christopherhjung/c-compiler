@@ -2,8 +2,8 @@
 // Created by Christopher Jung on 2020-11-06.
 //
 
-#ifndef C4_STREAMINPUTREADER_H
-#define C4_STREAMINPUTREADER_H
+#pragma once
+
 
 
 #include <iostream>
@@ -41,5 +41,3 @@ protected:
     bool finished = false;
 };
 
-
-#endif //C4_STREAMINPUTREADER_H

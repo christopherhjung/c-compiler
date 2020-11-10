@@ -2,8 +2,8 @@
 // Created by Christopher Jung on 2020-11-06.
 //
 
-#ifndef C4_LEXER_H
-#define C4_LEXER_H
+#pragma once
+
 
 #include <iostream>
 #include <fstream>
@@ -112,6 +112,3 @@ private:
     InputReader* reader;
     std::stringstream ss;
 };
-
-
-#endif //C4_LEXER_H

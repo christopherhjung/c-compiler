@@ -2,8 +2,7 @@
 // Created by Christopher Jung on 10.11.20.
 //
 
-#ifndef C4_TOKEN_H
-#define C4_TOKEN_H
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -27,5 +26,3 @@ public:
 };
 
 
-
-#endif //C4_TOKEN_H

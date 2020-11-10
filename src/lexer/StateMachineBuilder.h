@@ -2,8 +2,7 @@
 // Created by Christopher Jung on 2020-11-06.
 //
 
-#ifndef C4_STATEMACHINEBUILDER_H
-#define C4_STATEMACHINEBUILDER_H
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -419,6 +418,3 @@ public:
         }
     }
 };
-
-
-#endif //C4_STATEMACHINEBUILDER_H

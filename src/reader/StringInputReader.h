@@ -2,8 +2,8 @@
 // Created by Christopher Jung on 2020-11-06.
 //
 
-#ifndef C4_STRINGINPUTREADER_H
-#define C4_STRINGINPUTREADER_H
+#pragma once
+
 
 
 #include <iostream>
@@ -37,4 +37,3 @@ public:
 };
 
 
-#endif //C4_STRINGINPUTREADER_H
