@@ -15,7 +15,7 @@
 #include <vector>
 #include "../reader/StringInputReader.h"
 
-
+#define CHAR_COUNT 256
 
 struct SetHash {
     size_t operator()(const std::unordered_set<int>& s) const {
@@ -145,7 +145,7 @@ public:
             else
             {
                 bool* arr = values[key];
-                for(int value = 0; value < 128; value++){
+                for(int value = 0; value < CHAR_COUNT; value++){
                     if(arr[value]){
                         if(next.find(value) == next.end()){
                             //next.insert(pair<char, unordered_set<int>>(value, unordered_set<int>()));
@@ -316,12 +316,12 @@ public:
     }
 
     bool* computeValue(){
-        bool* arr = new bool[128]{false};
+        bool* arr = new bool[CHAR_COUNT]{false};
 
         char specifier = eat();
         if(specifier == '.')
         {
-            for(int i = 0 ; i < 127 ; i++){
+            for(int i = 0 ; i < CHAR_COUNT ; i++){
                 arr[i] = true;
             }
 
@@ -371,7 +371,7 @@ public:
 
             if (negate)
             {
-                for(int i = 0 ; i < 128 ; i++){
+                for(int i = 0 ; i < CHAR_COUNT ; i++){
                     arr[i] ^= !arr[i];
                 }
             }
