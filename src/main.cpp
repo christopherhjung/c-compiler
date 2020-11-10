@@ -12,7 +12,7 @@
 
 
 int main(int, char **const args) {
-    Lexer lexer("../resources/c.lexer");
+    Lexer lexer("./resources/c.lexer");
 
     InputReader* fileInputReader = new FileInputReader(args[2]);
 

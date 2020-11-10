@@ -1,7 +1,4 @@
 /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/chris/CLionProjects/c4
 -- Configuring done
-CMake Error at CMakeLists.txt:11 (add_executable):
-  No SOURCES given to target: c4
-
-
-CMake Generate step failed.  Build files cannot be regenerated correctly.
+-- Generating done
+-- Build files have been written to: /Users/chris/CLionProjects/c4/cmake-build-debug

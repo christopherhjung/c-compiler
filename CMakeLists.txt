@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 3.2)
 project(c4)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB SRC
-        "src/*.h"
-        "src/*.cpp"
+file(GLOB RES
+        "resources/*"
         )
 
-add_executable(c4 ${SRC})
+foreach(FILE ${RES})
+    file(RELATIVE_PATH REL ${PROJECT_SOURCE_DIR} ${FILE})
+    configure_file(${REL} ${REL} COPYONLY)
+endforeach()
+
+add_executable(c4 src/main.cpp)
