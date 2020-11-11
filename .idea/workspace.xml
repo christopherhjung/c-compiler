@@ -12,15 +12,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4a1e4184-8b91-48c7-ba19-c4ea78b1ce09" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/lexer/Error.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lexer/Error.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lexer/Location.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/lexer/Location.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/c.lexer" beforeDir="false" afterPath="$PROJECT_DIR$/resources/c.lexer" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lexer/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/Lexer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lexer/Token.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/Token.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/reader/FileInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/FileInputReader.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/reader/InputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/InputReader.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reader/StreamInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/StreamInputReader.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reader/StringInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/StringInputReader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/test/test.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -142,5 +150,16 @@
         <option value="1" />
       </set>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/lexer/Lexer.h</url>
+          <line>55</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

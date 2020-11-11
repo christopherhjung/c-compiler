@@ -23,5 +23,12 @@ int main(int, char **const args) {
             std::cout << token << std::endl;
         }
     }
+
+    std::cout << std::flush;
+    if(lexer.isError()){
+        Error error = lexer.getError();
+        std::cerr << error << std::endl;
+    }
+
     return 0;
 }

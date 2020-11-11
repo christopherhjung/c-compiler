@@ -50,7 +50,7 @@ public:
     int currentRule = 0;
     Info* finish = nullptr;
     std::unordered_map<int, Info*> infos;
-    std::unordered_map<int, bool*> values;
+    std::unordered_map<int, std::unique_ptr<bool>> values;
     std::unordered_map<int, int> rules;
     std::unordered_map<int, std::string> kinds;
     std::unordered_map<std::unordered_set<int>, State*, SetHash> states;
@@ -119,8 +119,8 @@ public:
         }
     }
 
-    State* build(){
-        return compile(finish->firstPositions);
+    std::unique_ptr<State> build(){
+        return std::unique_ptr<State>(compile(finish->firstPositions));
     }
 
     State* compile(const std::unordered_set<int>& set)
@@ -144,9 +144,9 @@ public:
             }
             else
             {
-                bool* arr = values[key];
+                auto& arr = values[key];
                 for(int value = 0; value < CHAR_COUNT; value++){
-                    if(arr[value]){
+                    if(arr.get()[value]){
                         if(next.find(value) == next.end()){
                             next[value] = std::unordered_set<int>();
                         }
@@ -301,8 +301,7 @@ public:
                 result->firstPositions.insert(result->index);
                 result->lastPositions.insert(result->index);
 
-                bool* arr = computeValue();
-                values[result->index] = arr;
+                values[result->index] = std::unique_ptr<bool>(computeValue());
 
                 return result;
             }

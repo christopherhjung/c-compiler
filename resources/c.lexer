@@ -10,7 +10,7 @@ keyword:return
 keyword:this
 constant:[0-9]+
 identifier:[a-zA-Z_]\w*
-string-literal:\"[^\"]*\"
+string-literal:"[^"\n]*"
 punctuator:\+\+
 punctuator:\+=
 punctuator:\+

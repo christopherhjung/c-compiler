@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+/Users/chris/CLionProjects/c4/src/lexer/Error.h
+utility
+-
+Location.h
+/Users/chris/CLionProjects/c4/src/lexer/Location.h
+
 /Users/chris/CLionProjects/c4/src/lexer/Lexer.h
 iostream
 -
@@ -21,6 +27,10 @@ StateMachineBuilder.h
 /Users/chris/CLionProjects/c4/src/lexer/StateMachineBuilder.h
 Token.h
 /Users/chris/CLionProjects/c4/src/lexer/Token.h
+Error.h
+/Users/chris/CLionProjects/c4/src/lexer/Error.h
+
+/Users/chris/CLionProjects/c4/src/lexer/Location.h
 
 /Users/chris/CLionProjects/c4/src/lexer/StateMachineBuilder.h
 iostream
@@ -47,6 +57,8 @@ iostream
 -
 utility
 -
+Location.h
+/Users/chris/CLionProjects/c4/src/lexer/Location.h
 
 /Users/chris/CLionProjects/c4/src/main.cpp
 iostream

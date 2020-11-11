@@ -11,9 +11,9 @@
 
 class FileInputReader : public StreamInputReader  {
 
+    std::string file;
 public:
-    explicit FileInputReader(const std::string& file) : StreamInputReader( new std::ifstream(file)) {
-
+    explicit FileInputReader(const std::string& file) : StreamInputReader( new std::ifstream(file)), file(file) {
     }
 
     virtual ~FileInputReader() {
@@ -27,6 +27,10 @@ public:
         }
 
         return false;
+    }
+
+    std::string getOrigin() override {
+        return file;
     }
 };
 

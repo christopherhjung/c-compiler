@@ -8,13 +8,12 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-
 #include <sstream>
 
 #include "../reader/InputReader.h"
 #include "StateMachineBuilder.h"
 #include "Token.h"
-
+#include "Error.h"
 
 
 class Lexer {
@@ -24,10 +23,10 @@ public:
 
     };
 
-    static State* readStateMachine(const std::string& file){
+    static std::unique_ptr<State> readStateMachine(const std::string& file){
         std::ifstream source (file);
 
-        State* state = nullptr;
+        std::unique_ptr<State> state;
         StateMachineBuilder builder;
         if (source.is_open())
         {
@@ -53,14 +52,27 @@ public:
         finish = false;
     }
 
+    void triggerError(const Location& location){
+        errorObj = Error(location, std::string(ss.str()) + " <-----" );
+        error = true;
+    }
+
     bool hasNextToken(){
         finish = false;
-        currentState = state;
+        currentState = state.get();
         ss.str(std::string());
-        int currentLine = line;
-        int currentColumn = column;
+
+        if(!reader->hasNext()){
+            return false;
+        }
+
+        Location location(reader->getOrigin(),line,column);
         while(true){
             if(currentState == nullptr){
+                if(!finish){
+                    triggerError(location);
+                    return false;
+                }
                 break;
             }else if(currentState->finish){
                 finish = true;
@@ -69,13 +81,23 @@ public:
             }
 
             if(!reader->hasNext()){
-                break;
+                if(!finish){
+                    triggerError(location);
+                    return false;
+                }else{
+                    break;
+                }
             }
 
             char c = reader->peek();
 
             if(currentState->transitions.find(c) == currentState->transitions.end()){
-                break;
+                if(finish){
+                    break;
+                }else{
+                    triggerError(location);
+                    return false;
+                }
             }
 
             updatePosition(c);
@@ -85,7 +107,7 @@ public:
             currentState = currentState->transitions[c];
         }
 
-        token = Token(currentLine,currentColumn,currentState->id,currentState->name, new std::string(ss.str()));
+        token = Token(location,currentState->id,currentState->name, new std::string(ss.str()));
 
         return finish;
     }
@@ -102,12 +124,22 @@ public:
     Token fetchToken(){
         return token;
     }
+
+    Error getError(){
+        return errorObj;
+    }
+
+    bool isError(){
+        return error;
+    }
 private:
     int line = 1;
     int column = 1;
     bool finish = false;
-    Token token = {0,0,0,"",new std::string()};
-    State* state;
+    bool error = false;
+    Error errorObj = {Location("",0,0),""};
+    Token token = {Location("",0,0),0,"",new std::string()};
+    std::unique_ptr<State> state;
     State* currentState;
     InputReader* reader;
     std::stringstream ss;
