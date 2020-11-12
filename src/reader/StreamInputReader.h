@@ -78,7 +78,7 @@ public:
             std::copy(buffer, buffer + rest, arr + rest);
         }
 
-        return std::string(arr);
+        return std::string(arr, count);
     }
 
     void setMarker(uint32_t index) override {

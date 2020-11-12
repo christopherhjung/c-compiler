@@ -387,6 +387,14 @@ public:
         {
             arr['\n'] = true;
         }
+        else if (specifier == 'r')
+        {
+            arr['\r'] = true;
+        }
+        else if (specifier == 't')
+        {
+            arr['\t'] = true;
+        }
         else if (specifier == 'd')
         {
             addRange('0', '9', arr);
