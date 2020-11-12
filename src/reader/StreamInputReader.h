@@ -21,7 +21,7 @@ protected:
     std::ifstream *stream;
     uint32_t marker = 0;
     uint32_t capacity = 8;
-    uint32_t size = 1 << capacity;
+    uint32_t size = 1u << capacity;
     uint32_t mask = size - 1;
     uint32_t tail = 0;
     uint32_t head = mask;
