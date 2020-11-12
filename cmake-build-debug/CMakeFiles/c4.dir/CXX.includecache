@@ -7,10 +7,12 @@
 #IncludeRegexTransform: 
 
 /Users/chris/CLionProjects/c4/src/lexer/Error.h
-utility
--
 Location.h
 /Users/chris/CLionProjects/c4/src/lexer/Location.h
+string
+-
+iostream
+-
 
 /Users/chris/CLionProjects/c4/src/lexer/Lexer.h
 iostream
@@ -31,6 +33,10 @@ Error.h
 /Users/chris/CLionProjects/c4/src/lexer/Error.h
 
 /Users/chris/CLionProjects/c4/src/lexer/Location.h
+string
+-
+iostream
+-
 
 /Users/chris/CLionProjects/c4/src/lexer/StateMachineBuilder.h
 iostream
@@ -81,6 +87,8 @@ iostream
 -
 
 /Users/chris/CLionProjects/c4/src/reader/InputReader.h
+string
+-
 
 /Users/chris/CLionProjects/c4/src/reader/StreamInputReader.h
 iostream
@@ -93,6 +101,8 @@ cstdio
 -
 InputReader.h
 /Users/chris/CLionProjects/c4/src/reader/InputReader.h
+algorithm
+-
 
 /Users/chris/CLionProjects/c4/src/reader/StringInputReader.h
 iostream

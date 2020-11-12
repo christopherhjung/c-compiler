@@ -48,41 +48,37 @@ public:
 
     void reset(InputReader* reader){
         this->reader = reader;
-        this->reader->next();
-        finish = false;
-    }
-
-    void triggerError(const Location& location){
-        errorObj = Error(location, std::string(ss.str()) + " <-----" );
-        error = true;
+        this->reader->mark();
     }
 
     bool hasNextToken(){
-        finish = false;
-        currentState = state.get();
-        ss.str(std::string());
+        reader->reset();
 
         if(!reader->hasNext()){
             return false;
         }
 
+        int32_t acceptPosition = -1;
+        State* currentState = state.get();
+        State* acceptState = nullptr;
         Location location(reader->getOrigin(),line,column);
         while(true){
             if(currentState == nullptr){
-                if(!finish){
-                    triggerError(location);
+                if(acceptPosition == -1){
+                    errorObj = Error(location, reader->readString(reader->getPosition()) );
+                    error = true;
                     return false;
                 }
                 break;
             }else if(currentState->finish){
-                finish = true;
-            }else if(finish){
-                break;
+                acceptPosition = reader->getPosition();
+                acceptState = currentState;
             }
 
             if(!reader->hasNext()){
-                if(!finish){
-                    triggerError(location);
+                if(acceptPosition == -1){
+                    errorObj = Error(location, reader->readString(reader->getPosition()));
+                    error = true;
                     return false;
                 }else{
                     break;
@@ -90,26 +86,14 @@ public:
             }
 
             char c = reader->peek();
-
-            if(currentState->transitions.find(c) == currentState->transitions.end()){
-                if(finish){
-                    break;
-                }else{
-                    triggerError(location);
-                    return false;
-                }
-            }
-
             updatePosition(c);
             reader->next();
-
-            ss << c;
             currentState = currentState->transitions[c];
         }
 
-        token = Token(location,currentState->id,currentState->name, new std::string(ss.str()));
-
-        return finish;
+        token = Token(location,acceptState->id,acceptState->name, reader->readString(acceptPosition));
+        reader->setMarker(acceptPosition);
+        return true;
     }
 
     void updatePosition(char c){
@@ -135,12 +119,9 @@ public:
 private:
     int line = 1;
     int column = 1;
-    bool finish = false;
     bool error = false;
     Error errorObj = {Location("",0,0),""};
-    Token token = {Location("",0,0),0,"",new std::string()};
+    Token token = {Location("",0,0),0,"",""};
     std::unique_ptr<State> state;
-    State* currentState;
     InputReader* reader;
-    std::stringstream ss;
 };
