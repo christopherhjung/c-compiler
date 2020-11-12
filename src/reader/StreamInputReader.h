@@ -34,6 +34,7 @@ public:
         }
 
         tail++;
+        tail &= mask;
     }
 
     bool hasNext() override{
@@ -99,6 +100,9 @@ public:
             }
 
             uint32_t start = (( head + 1 ) & mask);
+            if(start > end){
+                end = size;
+            }
             uint32_t count = end - start;
             stream->read(buffer + start, count);
             count = stream->gcount();
@@ -117,6 +121,6 @@ protected:
     uint32_t head = mask;
     bool initialized = false;
     bool finished = false;
-    char *buffer = new char[size];
+    char *buffer = new char[size + 1]{0};
 };
 

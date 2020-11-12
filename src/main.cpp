@@ -17,10 +17,12 @@ int main(int, char **const args) {
     InputReader* fileInputReader = new FileInputReader(args[2]);
 
     lexer.reset(fileInputReader);
+    int i = 0;
     while(lexer.hasNextToken()){
         Token token = lexer.fetchToken();
         if(token.id != 0){ //whitespace
-            std::cout << token << std::endl;
+            std::cout << i << token << std::endl;
+            i++;
         }
     }
 
