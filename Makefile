@@ -2,6 +2,7 @@ BUILDDIR ?= build
 CFG      ?= debug
 NAME     ?= c4
 SRCDIR   ?= src
+RESDIR   ?= resources
 
 all:
 
@@ -12,9 +13,12 @@ Q ?= @
 
 BINDIR := $(BUILDDIR)/$(CFG)
 BIN    := $(BINDIR)/$(NAME)
-SRC    := $(sort $(wildcard $(SRCDIR)/*.cpp))
+RES_BUILD    := $(BINDIR)/$(RESDIR)
+SRC    := $(sort $(wildcard $(SRCDIR)/**/*.cpp) $(wildcard $(SRCDIR)/*.cpp))
 OBJ    := $(SRC:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
 DEP    := $(OBJ:%.o=%.d)
+
+
 
 # Try to locate llvm-config, a tool that produces command line flags for the
 # build process.
@@ -39,9 +43,10 @@ LDFLAGS  += $(LLVM_LDFLAGS)
 
 DUMMY := $(shell mkdir -p $(sort $(dir $(OBJ))))
 
-.PHONY: all clean
+.PHONY: all clean develop
 
-all: $(BIN)
+all: $(BIN) $(RES_BUILD)
+
 
 -include $(DEP)
 
@@ -56,3 +61,11 @@ $(BIN): $(OBJ)
 $(BINDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "===> CXX $<"
 	$(Q)$(CXX) $(CXXFLAGS) -MMD -c -o $@ $<
+
+$(RES_BUILD): $(RESDIR)
+	@echo "===> CP $< to $@"
+	$(Q)cp -r $< $(BINDIR)
+
+develop: all
+	./build/debug/c4
+
