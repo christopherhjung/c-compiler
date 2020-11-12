@@ -17,9 +17,20 @@
 
 class StreamInputReader : public InputReader{
 
+protected:
+    std::ifstream *stream;
+    uint32_t marker = 0;
+    uint32_t capacity = 8;
+    uint32_t size = 1 << capacity;
+    uint32_t mask = size - 1;
+    uint32_t tail = 0;
+    uint32_t head = mask;
+    bool finished = false;
+    char *buffer = new char[size + 1]{0};
 public:
     explicit StreamInputReader(std::ifstream *stream){
         this->stream = stream;
+        fetch();
     };
 
     char peek() override{
@@ -85,42 +96,29 @@ public:
     }
 
     void check(){
-        if (tail == head || !initialized)
+        if (tail == head)
         {
-            /* zif(marker == tail){
-                //error
-                throw std::exception();
-            }*/
-
-            uint32_t end;
-            if(marker > 0){
-                end = std::min(marker + 1, size);
-            }else{
-                end = size;
-            }
-
-            uint32_t start = (( head + 1 ) & mask);
-            if(start > end){
-                end = size;
-            }
-            uint32_t count = end - start;
-            stream->read(buffer + start, count);
-            count = stream->gcount();
-            head = (head + count) & mask;
-            initialized = true;
+            fetch();
         }
     }
 
-protected:
-    std::ifstream *stream;
-    uint32_t marker = -1;
-    uint32_t capacity = 8;
-    uint32_t size = 1 << capacity;
-    uint32_t mask = size - 1;
-    uint32_t tail = 0;
-    uint32_t head = mask;
-    bool initialized = false;
-    bool finished = false;
-    char *buffer = new char[size + 1]{0};
+    void fetch(){
+        uint32_t end;
+        if(marker > 0){
+            end = std::min(marker + 1, size);
+        }else{
+            end = size;
+        }
+
+        uint32_t start = (( head + 1 ) & mask);
+        if(start > end){
+            end = size;
+        }
+        uint32_t count = end - start;
+        stream->read(buffer + start, count);
+        count = stream->gcount();
+        head = (head + count) & mask;
+    }
+
 };
 
