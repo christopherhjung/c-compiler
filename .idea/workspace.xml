@@ -13,13 +13,7 @@
   <component name="ChangeListManager">
     <list default="true" id="4a1e4184-8b91-48c7-ba19-c4ea78b1ce09" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/c.lexer" beforeDir="false" afterPath="$PROJECT_DIR$/resources/c.lexer" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/Lexer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reader/StreamInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/StreamInputReader.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test.c" beforeDir="false" afterPath="$PROJECT_DIR$/test/test.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/test2.c" beforeDir="false" afterPath="$PROJECT_DIR$/test/test2.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/reader/StringInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/StringInputReader.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

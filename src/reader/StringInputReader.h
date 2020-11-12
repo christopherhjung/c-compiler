@@ -56,7 +56,7 @@ public:
         char arr[count];
         const char* src = str.c_str();
         std::copy(src, src + count, arr);
-        return std::string(arr);
+        return std::string(arr, count);
     }
 };
 
