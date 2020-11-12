@@ -13,7 +13,7 @@ struct Token {
 
 public:
     std::unique_ptr<Location> location;
-    int id;
+    uint32_t id;
     std::string name;
     std::shared_ptr<std::string> value;
     Token(std::unique_ptr<Location>& location, int id, std::string  name, const std::shared_ptr<std::string>& value) : location(std::move(location)), id(id), name(std::move(name)), value(value){
