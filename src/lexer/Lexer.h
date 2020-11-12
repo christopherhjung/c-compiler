@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <memory>
 #include <string>
 #include <sstream>
 
@@ -14,6 +15,7 @@
 #include "StateMachineBuilder.h"
 #include "Token.h"
 #include "Error.h"
+#import "SymbolCache.h"
 
 
 class Lexer {
@@ -54,44 +56,41 @@ public:
     bool hasNextToken(){
         reader->reset();
 
-        if(!reader->hasNext()){
+        if(!reader->hasCurrent()){
             return false;
         }
 
         int32_t acceptPosition = -1;
         State* currentState = state.get();
         State* acceptState = nullptr;
-        Location location(reader->getOrigin(),line,column);
+        auto location = std::make_unique<Location>(reader->getOrigin(),line,column);
         while(true){
-            if(currentState == nullptr){
+            if(currentState == nullptr || !reader->hasCurrent()){
                 if(acceptPosition == -1){
-                    errorObj = Error(location, reader->readString(reader->getPosition()) );
+                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getPosition()) );
                     error = true;
                     return false;
                 }
                 break;
-            }else if(currentState->finish){
-                acceptPosition = reader->getPosition();
-                acceptState = currentState;
-            }
-
-            if(!reader->hasNext()){
-                if(acceptPosition == -1){
-                    errorObj = Error(location, reader->readString(reader->getPosition()));
-                    error = true;
-                    return false;
-                }else{
-                    break;
-                }
             }
 
             char c = reader->peek();
-            updatePosition(c);
             reader->next();
             currentState = currentState->transitions[c];
+
+            if(currentState != nullptr && currentState->finish){
+                acceptPosition = reader->getPosition();
+                acceptState = currentState;
+            }
         }
 
-        token = Token(location,acceptState->id,acceptState->name, reader->readString(acceptPosition));
+        std::shared_ptr<std::string> value = symbolCache.internalize(reader->readString(acceptPosition));
+
+        for(auto& c : *value){
+            updatePosition(c);
+        }
+
+        token = std::make_shared<Token>(location,acceptState->id,acceptState->name, value );
         reader->setMarker(acceptPosition);
         return true;
     }
@@ -105,11 +104,11 @@ public:
         }
     }
 
-    Token fetchToken(){
+    std::shared_ptr<Token> fetchToken(){
         return token;
     }
 
-    Error getError(){
+    std::shared_ptr<Error> getError(){
         return errorObj;
     }
 
@@ -120,8 +119,9 @@ private:
     int line = 1;
     int column = 1;
     bool error = false;
-    Error errorObj = {Location("",0,0),""};
-    Token token = {Location("",0,0),0,"",""};
+    std::shared_ptr<Error> errorObj;
+    std::shared_ptr<Token> token;
     std::unique_ptr<State> state;
     InputReader* reader;
+    SymbolCache symbolCache;
 };

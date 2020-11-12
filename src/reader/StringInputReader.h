@@ -48,7 +48,7 @@ public:
         index = marker;
     }
 
-    bool hasNext() override{
+    bool hasCurrent() override{
         return index < str.length();
     }
 

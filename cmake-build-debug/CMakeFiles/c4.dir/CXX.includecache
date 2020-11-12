@@ -19,6 +19,8 @@ iostream
 -
 fstream
 -
+memory
+-
 string
 -
 sstream
@@ -31,6 +33,8 @@ Token.h
 /Users/chris/CLionProjects/c4/src/lexer/Token.h
 Error.h
 /Users/chris/CLionProjects/c4/src/lexer/Error.h
+SymbolCache.h
+/Users/chris/CLionProjects/c4/src/lexer/SymbolCache.h
 
 /Users/chris/CLionProjects/c4/src/lexer/Location.h
 string
@@ -55,6 +59,8 @@ vector
 -
 ../reader/StringInputReader.h
 /Users/chris/CLionProjects/c4/src/reader/StringInputReader.h
+
+/Users/chris/CLionProjects/c4/src/lexer/SymbolCache.h
 
 /Users/chris/CLionProjects/c4/src/lexer/Token.h
 string

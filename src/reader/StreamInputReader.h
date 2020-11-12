@@ -37,7 +37,7 @@ public:
         tail &= mask;
     }
 
-    bool hasNext() override{
+    bool hasCurrent() override{
         return !finished;
     }
 

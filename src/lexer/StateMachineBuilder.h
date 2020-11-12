@@ -70,7 +70,7 @@ public:
     }
 
     bool eat(char cha){
-        if(reader.hasNext() && reader.peek() == cha){
+        if(reader.hasCurrent() && reader.peek() == cha){
             reader.next();
             return true;
         }
@@ -78,11 +78,11 @@ public:
     }
 
     bool is(char cha){
-        return reader.hasNext() && reader.peek() == cha;
+        return reader.hasCurrent() && reader.peek() == cha;
     }
 
     bool hasNext(){
-        return reader.hasNext();
+        return reader.hasCurrent();
     }
 
     Info* createInfo(){

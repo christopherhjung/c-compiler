@@ -20,10 +20,10 @@ public:
         delete stream;
     }
 
-    bool hasNext() override {
+    bool hasCurrent() override {
         if (stream->is_open())
         {
-            return StreamInputReader::hasNext();
+            return StreamInputReader::hasCurrent();
         }
 
         return false;

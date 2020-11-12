@@ -12,16 +12,16 @@
 struct Token {
 
 public:
-    Location location;
+    std::unique_ptr<Location> location;
     int id;
     std::string name;
-    std::string value;
-    Token(Location location, int id, std::string  name, std::string value) : location(std::move(location)), id(id), name(std::move(name)), value(value){
+    std::shared_ptr<std::string> value;
+    Token(std::unique_ptr<Location>& location, int id, std::string  name, const std::shared_ptr<std::string>& value) : location(std::move(location)), id(id), name(std::move(name)), value(value){
 
     };
 
     friend std::ostream& operator<<(std::ostream& stream, const Token& tok){
-        return stream << tok.location << ": " << tok.name << " " << (tok.value) ;
+        return stream << *tok.location << ": " << tok.name << " " << *tok.value;
     }
 };
 
