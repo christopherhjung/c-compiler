@@ -19,7 +19,15 @@
 
 
 class Lexer {
-
+private:
+    uint32_t line = 1;
+    uint32_t column = 1;
+    bool error = false;
+    std::shared_ptr<Error> errorObj;
+    std::shared_ptr<Token> token;
+    std::unique_ptr<State> state;
+    InputReader* reader;
+    SymbolCache symbolCache;
 public:
     Lexer(const std::string& file) : state(readStateMachine(file)){
 
@@ -77,7 +85,7 @@ public:
         while(true){
             if(currentState == nullptr || !reader->hasCurrent()){
                 if(acceptPosition == -1){
-                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getPosition() - 1) + "_<-- char " + escaping(c) + " wrong!" );
+                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getPosition() - 1) + "_<-- char \"" + escaping(c) + "\" wrong!" );
                     error = true;
                     return false;
                 }
@@ -125,13 +133,4 @@ public:
     bool isError(){
         return error;
     }
-private:
-    int line = 1;
-    int column = 1;
-    bool error = false;
-    std::shared_ptr<Error> errorObj;
-    std::shared_ptr<Token> token;
-    std::unique_ptr<State> state;
-    InputReader* reader;
-    SymbolCache symbolCache;
 };

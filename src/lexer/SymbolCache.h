@@ -17,7 +17,7 @@ struct SharedPtrHash {
 
 struct SharedPtrEqualTo {
 
-    bool operator() ( const std::shared_ptr<std::string>& lhs, const std::shared_ptr<std::string>& rhs)
+    bool operator() ( const std::shared_ptr<std::string>& lhs, const std::shared_ptr<std::string>& rhs) const
     {
         return *lhs == *rhs;
     }

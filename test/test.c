@@ -3,8 +3,11 @@ int main()
     char name[50];
     int marks, i, num;
 
-    printf("Enter number of students: ");
+    printf("Enter number of students:\" ");
     scanf("%d", &num);
+
+    char cha = 't';
+    char cha2 = '\t';
 
     FILE *fptr;
     fptr = (fopen("C:\\student.txt", "w"));

@@ -17,9 +17,21 @@
 
 class StreamInputReader : public InputReader{
 
+protected:
+    std::ifstream *stream;
+    int32_t marker = -1;
+    uint32_t capacity = 8;
+    uint32_t size = 1u << capacity;
+    uint32_t mask = size - 1;
+    uint32_t tail = 0;
+    uint32_t head = mask;
+    bool finished = false;
+    char *buffer = new char[size + 1]{0};
 public:
     explicit StreamInputReader(std::ifstream *stream){
         this->stream = stream;
+        fetch();
+        marker = 0;
     };
 
     char peek() override{
@@ -33,8 +45,7 @@ public:
             finished = true;
         }
 
-        tail++;
-        tail &= mask;
+        tail = (tail + 1) & mask;
     }
 
     bool hasCurrent() override{
@@ -53,21 +64,17 @@ public:
     }
 
     std::string readString(uint32_t count) override {
-        int start = tail;
-        if(marker >= 0){
-            start = marker;
-        }
-
         char arr[count];
         uint32_t last = std::min(marker + count, size);
 
-        std::copy(buffer + start, buffer + last, arr);
+        std::copy(buffer + marker, buffer + last, arr);
         if(marker + count >= size){
-            uint32_t rest = marker + count - size;
-            std::copy(buffer, buffer + rest, arr + rest);
+            uint32_t already = last - marker;
+            uint32_t rest = count - already;
+            std::copy(buffer, buffer + rest, arr + already);
         }
 
-        return std::string(arr);
+        return std::string(arr, count);
     }
 
     void setMarker(uint32_t index) override {
@@ -75,9 +82,7 @@ public:
     }
 
     uint32_t getPosition() override {
-        if(marker == -1){
-            return 0;
-        }else if(marker <= tail){
+        if(marker <= tail){
             return tail - marker;
         }else{
             return size - marker + tail;
@@ -85,42 +90,27 @@ public:
     }
 
     void check(){
-        if (tail == head || !initialized)
+        if (tail == head)
         {
-            /* zif(marker == tail){
-                //error
-                throw std::exception();
-            }*/
-
-            uint32_t end;
-            if(marker > 0){
-                end = std::min(marker + 1, size);
-            }else{
-                end = size;
-            }
-
-            uint32_t start = (( head + 1 ) & mask);
-            if(start > end){
-                end = size;
-            }
-            uint32_t count = end - start;
-            stream->read(buffer + start, count);
-            count = stream->gcount();
-            head = (head + count) & mask;
-            initialized = true;
+            fetch();
         }
     }
 
-protected:
-    std::ifstream *stream;
-    uint32_t marker = -1;
-    uint32_t capacity = 8;
-    uint32_t size = 1 << capacity;
-    uint32_t mask = size - 1;
-    uint32_t tail = 0;
-    uint32_t head = mask;
-    bool initialized = false;
-    bool finished = false;
-    char *buffer = new char[size + 1]{0};
+    void fetch(){
+        int32_t start = (( head + 1 ) & mask);
+
+        uint32_t end;
+        if(marker > start){
+            end = std::min((uint32_t)marker - 1, mask);
+        }else{
+            end = mask;
+        }
+
+        uint32_t count = end - start + 1;
+        stream->read(buffer + start, count);
+        count = stream->gcount();
+        head = (head + count) & mask;
+    }
+
 };
 

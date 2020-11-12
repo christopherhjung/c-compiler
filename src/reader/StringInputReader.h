@@ -17,7 +17,7 @@
 class StringInputReader : public InputReader {
     std::string str;
     uint32_t index;
-    uint32_t marker = -1;
+    uint32_t marker = 0;
 public:
     void reset(const std::string& str){
         this->str = str;
@@ -56,7 +56,7 @@ public:
         char arr[count];
         const char* src = str.c_str();
         std::copy(src, src + count, arr);
-        return std::string(arr);
+        return std::string(arr, count);
     }
 };
 

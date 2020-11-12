@@ -17,7 +17,7 @@
 #define CHAR_COUNT 256
 
 struct SetHash {
-    size_t operator()(const std::unordered_set<int>& s) const {
+    size_t operator()(const std::unordered_set<uint32_t>& s) const {
         size_t sum{31};
         for ( int e : s )
             sum *= e;
@@ -29,31 +29,32 @@ struct Info{
 public:
     int index;
     bool nullifies;
-    std::unordered_set<int> firstPositions;
-    std::unordered_set<int> lastPositions;
-    std::unordered_set<int> followPositions;
+    std::unordered_set<uint32_t> firstPositions;
+    std::unordered_set<uint32_t> lastPositions;
+    std::unordered_set<uint32_t> followPositions;
 };
 
 struct State{
 public:
     bool finish;
     std::string name;
-    int id;
-    State(bool finish, int id, std::string name) : finish(finish), id(id), name(std::move(name)){};
+    uint32_t id;
+    State(bool finish, uint32_t id, std::string name) : finish(finish), id(id), name(std::move(name)){};
+    State(bool finish) : finish(finish){};
     std::unordered_map<char, State*> transitions;
 };
 
 class StateMachineBuilder {
 public:
     StringInputReader reader;
-    int currentIndex = 0;
-    int currentRule = 0;
+    uint32_t currentIndex = 0;
+    uint32_t currentRule = 0;
     Info* finish = nullptr;
-    std::unordered_map<int, Info*> infos;
-    std::unordered_map<int, std::unique_ptr<bool>> values;
-    std::unordered_map<int, int> rules;
-    std::unordered_map<int, std::string> kinds;
-    std::unordered_map<std::unordered_set<int>, State*, SetHash> states;
+    std::unordered_map<uint32_t, Info*> infos;
+    std::unordered_map<uint32_t, std::unique_ptr<bool>> values;
+    std::unordered_map<uint32_t, int> rules;
+    std::unordered_map<uint32_t, std::string> kinds;
+    std::unordered_map<std::unordered_set<uint32_t>, State*, SetHash> states;
 
     virtual ~StateMachineBuilder() {
         for(const auto& infoEntry : infos){
@@ -120,20 +121,21 @@ public:
     }
 
     std::unique_ptr<State> build(){
+        states.clear();
         return std::unique_ptr<State>(compile(finish->firstPositions));
     }
 
-    State* compile(const std::unordered_set<int>& set)
+    State* compile(const std::unordered_set<uint32_t>& set)
     {
         if(states.find(set) != states.end()){
             return states[set];
         }
 
         bool isFinish = false;
-        std::unordered_map<char, std::unordered_set<int>> next;
+        std::unordered_map<char, std::unordered_set<uint32_t>> next;
         std::string name;
-        int rule = -1;
-        for (int key : set)
+        int32_t rule = -1;
+        for (uint32_t key : set)
         {
             if (rules.find(key) != rules.end())
             {
@@ -145,13 +147,13 @@ public:
             else
             {
                 auto& arr = values[key];
-                for(int value = 0; value < CHAR_COUNT; value++){
+                for(uint32_t value = 0; value < CHAR_COUNT; value++){
                     if(arr.get()[value]){
                         if(next.find(value) == next.end()){
-                            next[value] = std::unordered_set<int>();
+                            next[value] = std::unordered_set<uint32_t>();
                         }
 
-                        std::unordered_set<int>& nextSet = next[value];
+                        std::unordered_set<uint32_t>& nextSet = next[value];
 
                         if(infos.find(key) != infos.end()){
                             Info* info = infos[key];
@@ -162,7 +164,12 @@ public:
             }
         }
 
-        auto* state = new State(isFinish, rule, kinds[rule]);
+        State* state;
+        if(rule == -1){
+            state = new State(isFinish);
+        }else{
+            state = new State(isFinish, rule, kinds[rule]);
+        }
         states[set] = state;
         for (const auto& element : next)
         {
@@ -242,7 +249,7 @@ public:
 
         if (hasNext())
         {
-            int type;
+            uint8_t type;
             if (eat('*'))
             {
                 type = 1;
@@ -267,7 +274,7 @@ public:
 
             if (type != 0)
             {
-                for (int child : state->lastPositions)
+                for (uint32_t child : state->lastPositions)
                 {
                     infos[child]->followPositions.insert(result->firstPositions.begin(), result->firstPositions.end());
                 }
@@ -288,7 +295,7 @@ public:
                 Info* state = parseOr();
                 if (!eat(')'))
                 {
-                    //error
+                    throw std::exception();
                 }
 
                 return state;
@@ -316,7 +323,7 @@ public:
         char specifier = eat();
         if(specifier == '.')
         {
-            for(int i = 0 ; i < CHAR_COUNT ; i++){
+            for(uint32_t i = 0 ; i < CHAR_COUNT ; i++){
                 arr[i] = true;
             }
 
@@ -327,15 +334,16 @@ public:
         {
             bool negate = eat('^');
 
-            int save = -1;
+            int32_t save = -1;
 
             while (true)
             {
                 if (save >= 0 && eat('-'))
                 {
+                    char end;
                     if (is('\\'))
                     {
-                        //error
+                        throw std::exception();
                     }
 
                     addRange((char)save, eat(), arr);
@@ -366,7 +374,7 @@ public:
 
             if (negate)
             {
-                for(int i = 0 ; i < CHAR_COUNT ; i++){
+                for(uint32_t i = 0 ; i < CHAR_COUNT ; i++){
                     arr[i] ^= true;
                 }
             }
@@ -386,6 +394,14 @@ public:
         if (specifier == 'n')
         {
             arr['\n'] = true;
+        }
+        else if (specifier == 'r')
+        {
+            arr['\r'] = true;
+        }
+        else if (specifier == 't')
+        {
+            arr['\t'] = true;
         }
         else if (specifier == 'd')
         {
