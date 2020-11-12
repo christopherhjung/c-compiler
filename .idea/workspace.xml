@@ -13,7 +13,10 @@
   <component name="ChangeListManager">
     <list default="true" id="4a1e4184-8b91-48c7-ba19-c4ea78b1ce09" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer/SymbolCache.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/SymbolCache.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer/Lexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/Lexer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test/test2.c" beforeDir="false" afterPath="$PROJECT_DIR$/test/test2.c" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,7 +69,7 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="c4" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="--tokenize ../test/test.c" PASS_PARENT_ENVS_2="true" PROJECT_NAME="c4" TARGET_NAME="c4" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="c4" RUN_TARGET_NAME="c4">
+    <configuration name="c4" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="--tokenize ../test/test2.c" PASS_PARENT_ENVS_2="true" PROJECT_NAME="c4" TARGET_NAME="c4" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="c4" RUN_TARGET_NAME="c4">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -145,9 +148,9 @@
           <option name="timeStamp" value="108" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file:///Library/Developer/CommandLineTools/usr/include/c++/v1/__hash_table</url>
-          <line>2103</line>
-          <option name="timeStamp" value="109" />
+          <url>file://$PROJECT_DIR$/src/lexer/Lexer.h</url>
+          <line>79</line>
+          <option name="timeStamp" value="110" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

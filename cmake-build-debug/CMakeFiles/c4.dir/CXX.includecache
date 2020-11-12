@@ -61,6 +61,10 @@ vector
 /Users/chris/CLionProjects/c4/src/reader/StringInputReader.h
 
 /Users/chris/CLionProjects/c4/src/lexer/SymbolCache.h
+string
+-
+unordered_set
+-
 
 /Users/chris/CLionProjects/c4/src/lexer/Token.h
 string

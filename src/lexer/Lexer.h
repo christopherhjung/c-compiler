@@ -53,6 +53,15 @@ public:
         this->reader->mark();
     }
 
+    std::string escaping(char cha){
+        switch(cha){
+            case '\n': return "\\n";
+            case '\t': return "\\t";
+            case '\r': return "\\r";
+            default: return std::string(cha, 1);
+        }
+    }
+
     bool hasNextToken(){
         reader->reset();
 
@@ -64,17 +73,18 @@ public:
         State* currentState = state.get();
         State* acceptState = nullptr;
         auto location = std::make_unique<Location>(reader->getOrigin(),line,column);
+        char c = -1;
         while(true){
             if(currentState == nullptr || !reader->hasCurrent()){
                 if(acceptPosition == -1){
-                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getPosition()) );
+                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getPosition() - 1) + "_<-- char " + escaping(c) + " wrong!" );
                     error = true;
                     return false;
                 }
                 break;
             }
 
-            char c = reader->peek();
+            c = reader->peek();
             reader->next();
             currentState = currentState->transitions[c];
 
