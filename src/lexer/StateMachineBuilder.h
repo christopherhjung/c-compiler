@@ -295,7 +295,7 @@ public:
                 Info* state = parseOr();
                 if (!eat(')'))
                 {
-                    //error
+                    throw std::exception();
                 }
 
                 return state;
@@ -340,9 +340,10 @@ public:
             {
                 if (save >= 0 && eat('-'))
                 {
+                    char end;
                     if (is('\\'))
                     {
-                        //error
+                        throw std::exception();
                     }
 
                     addRange((char)save, eat(), arr);
