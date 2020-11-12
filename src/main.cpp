@@ -17,7 +17,7 @@ int main(int, char **const args) {
     lexer.reset(fileInputReader);
     while(lexer.hasNextToken()){
         auto token = lexer.fetchToken();
-        if(token->id != 0){ //whitespace
+        if(token->id >= 3){ //whitespace
             std::cout << *token << std::endl;
         }
     }

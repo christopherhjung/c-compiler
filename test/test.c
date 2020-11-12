@@ -13,8 +13,12 @@ int main()
     fptr = (fopen("C:\\student.txt", "w"));
     if(fptr == NULL)
     {
-        printf("Error!");
-        exit(1);
+        printf("Error!"); //test
+        exit(1); /*dsadsda
+ *
+ *
+ *
+ * */
     }
 
     for(i = 0; i < num; ++i)
