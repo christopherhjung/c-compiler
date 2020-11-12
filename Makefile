@@ -66,6 +66,6 @@ $(RES_BUILD): $(RESDIR)
 	@echo "===> CP $< to $@"
 	$(Q)cp -r $< $(BINDIR)
 
-develop: all
-	./build/debug/c4
+test: all
+	./build/debug/c4 --tokenize test/test.c
 
