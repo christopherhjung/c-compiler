@@ -10,10 +10,20 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <fstream>
+#include <map>
 
 #include "StateMachineLexer.h"
 
 #define READER_NAME reader
+
+bool cmpState (State* l, State* r) {
+    return l->index < r->index;
+}
+
+template <class T>
+bool cmpPairState(std::pair<State*, T>& l, std::pair<State*, T>& r) {
+    return cmpState(l.first, r.first);
+}
 
 class LexerGenerator {
     std::ofstream ss;
@@ -39,6 +49,8 @@ public:
 
             std::vector<State*> states = builder.getStates();
             std::unordered_map<uint32_t, std::string> kinds = builder.getKinds();
+
+            std::sort(states.begin(), states.end(), cmpState);
 
             ss.open("./src/lexer/GeneratedLexer.h");
             writeClass(states , state.get(), kinds);
@@ -72,7 +84,7 @@ public:
 
         offset(0) << "public:" << std::endl;
 
-        offset(1) << "bool hasNextToken() override {" << std::endl;
+        offset(1) << "bool hasNextToken(Token& token) override {" << std::endl;
         offset(2) << "accept = -1;" << std::endl;
         offset(2) << "offset = 0;" << std::endl;
 
@@ -80,7 +92,7 @@ public:
         callRule(start);
         ss << std::endl;
 
-        offset(2) << "auto* location = new Location(reader->getOrigin(),line,column);" << std::endl;
+        offset(2) << "token.location = new Location(reader->getOrigin(),line,column);" << std::endl;
         offset(2) << "std::string value = reader->readString(offset);" << std::endl;
         offset(2) << "reader->setMarker(offset);" << std::endl;
 
@@ -94,7 +106,7 @@ public:
         offset(3) << "if(offset < 0){" << std::endl;
         offset(4) << "offset = 0;" << std::endl;
         offset(3) << "}" << std::endl;
-        offset(3) << R"(errorObj =new Error(location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );)" << std::endl;
+        offset(3) << R"(errorObj =new Error(token.location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );)" << std::endl;
 
         offset(3) << "error = true;" << std::endl;
         offset(3) << "return false;" << std::endl;
@@ -105,7 +117,9 @@ public:
         offset(3) << "updatePosition(c);" << std::endl;
         offset(2) << "}" << std::endl;
 
-        offset(2) << "token = new Token(location,accept,types[accept], new std::string(value));" << std::endl;
+        offset(2) << "token.id = accept;" << std::endl;
+        offset(2) << "token.name = types[accept];" << std::endl;
+        offset(2) << "token.value = value;" << std::endl;
 
         offset(2) << "return true;" << std::endl;
         offset(1) << "}" << std::endl;
@@ -167,13 +181,21 @@ public:
 
     void writeSwitch(State* state, uint32_t depth){
         offset(depth) << "switch(current){" << std::endl;
-        std::unordered_map<State*, std::unordered_set<char>> test;
+        std::map<State*, std::unordered_set<char>> unsorted;
         for(const auto& pair : state->transitions){
-            std::unordered_set<char>& set = test[pair.second];
-            test[pair.second].insert(pair.first);
+            std::unordered_set<char>& set = unsorted[pair.second];
+            unsorted[pair.second].insert(pair.first);
         }
 
-        for(const auto& pair : test){
+        std::vector<std::pair<State*, std::unordered_set<char>> > sorted;
+
+        for (auto& it : unsorted) {
+            sorted.push_back(it);
+        }
+
+        std::sort(sorted.begin(), sorted.end(), cmpPairState<std::unordered_set<char>>);
+
+        for(const auto& pair : sorted){
             offset(depth + 1);
             uint32_t caseCount = 0;
             for(const char& c : pair.second){
