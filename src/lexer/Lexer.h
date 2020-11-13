@@ -102,7 +102,7 @@ public:
             }
         }
 
-        std::string* value = symbolCache.internalize(reader->readString(acceptPosition));
+        const std::string* value = symbolCache.internalize(reader->readString(acceptPosition));
 
         for(auto& c : *value){
             updatePosition(c);
