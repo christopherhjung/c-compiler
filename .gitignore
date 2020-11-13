@@ -1,7 +1,7 @@
 build/
 llvm/
 
-
+test
 .DS_Store
 # Created by https://www.gitignore.io/api/c,c++
 

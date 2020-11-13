@@ -7,6 +7,7 @@ CMakeFiles/c4.dir/src/main.cpp.o
  /Users/chris/CLionProjects/c4/src/lexer/Lexer.h
  /Users/chris/CLionProjects/c4/src/lexer/Location.h
  /Users/chris/CLionProjects/c4/src/lexer/StateMachineBuilder.h
+ /Users/chris/CLionProjects/c4/src/lexer/StateMachineLexer.h
  /Users/chris/CLionProjects/c4/src/lexer/SymbolCache.h
  /Users/chris/CLionProjects/c4/src/lexer/Token.h
  /Users/chris/CLionProjects/c4/src/main.cpp

@@ -4,16 +4,16 @@
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
 #include "lexer/StateMachineBuilder.h"
-#include "lexer/Lexer.h"
+#include "lexer/StateMachineLexer.h"
 #include "Queue.h"
 
 #include <functional>
 #include <thread>
 
 static Queue<Token> tokenQueue;
-static Lexer lexer("./resources/c.lexer");
+static StateMachineLexer lexer("./resources/c.lexer");
 
-void search(std::string path){
+void search(const std::string& path){
     InputReader* fileInputReader = new FileInputReader(path);
 
     lexer.reset(fileInputReader);

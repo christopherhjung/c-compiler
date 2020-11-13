@@ -1,7 +1,5 @@
 //
-// Created by Christopher Jung on 2020-11-06.
+// Created by Christopher Jung on 13.11.20.
 //
 
-
 #include "Lexer.h"
-

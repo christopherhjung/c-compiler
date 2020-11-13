@@ -6,6 +6,7 @@ CMakeFiles/c4.dir/src/main.cpp.o: ../src/lexer/Error.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/lexer/Lexer.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/lexer/Location.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/lexer/StateMachineBuilder.h
+CMakeFiles/c4.dir/src/main.cpp.o: ../src/lexer/StateMachineLexer.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/lexer/SymbolCache.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/lexer/Token.h
 CMakeFiles/c4.dir/src/main.cpp.o: ../src/main.cpp
