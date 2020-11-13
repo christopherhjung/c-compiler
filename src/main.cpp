@@ -41,14 +41,13 @@ int main(int, char **const args) {
     InputReader* fileInputReader = new FileInputReader(args[2]);
 
     lexer.reset(fileInputReader);
-    while(lexer.hasNextToken()){
-        auto* token = lexer.fetchToken();
-        if(token->id >= 3){ //whitespace
+    Token token;
+    while(lexer.hasNextToken(token)){
+        if(token.id >= 3){ //whitespace
 #ifdef OUTPUT
-            std::cout << *token << std::endl;
+            std::cout << token << std::endl;
 #endif
         }
-        delete(token);
     }
 
     std::cout << std::flush;

@@ -9,14 +9,18 @@
 #include <utility>
 #include "Location.h"
 
+static std::string ss = "";
+
 struct Token {
 
 public:
     Location* location;
     uint32_t id;
-    const std::string& name;
-    const std::string value;
-    Token(Location* location, int id, const std::string&  name, const std::string& value) : location(location), id(id), name(name), value(value){
+    std::string& name;
+    std::string value;
+    Token( ) : name(ss) {
+    };
+    Token(Location* location, int id, std::string&  name, std::string& value) : location(location), id(id), name(name), value(value){
 
     };
 

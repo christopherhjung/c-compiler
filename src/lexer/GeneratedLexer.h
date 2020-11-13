@@ -107,11 +107,11 @@ class GeneratedLexer : public Lexer{
         "punctuator",
     };
 public:
-    bool hasNextToken() override {
+    bool hasNextToken(Token& token) override {
         accept = -1;
         offset = 0;
         parse0();
-        auto* location = new Location(reader->getOrigin(),line,column);
+        token.location = new Location(reader->getOrigin(),line,column);
         std::string value = reader->readString(offset);
         reader->setMarker(offset);
         if(accept == -1){
@@ -122,14 +122,17 @@ public:
             if(offset < 0){
                 offset = 0;
             }
-            errorObj =new Error(location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );
+            errorObj =new Error(token.location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );
             error = true;
             return false;
         }
         for(auto& c : value){
             updatePosition(c);
         }
-        token = new Token(location,accept,types[accept], value);
+
+        token.id = accept;
+        token.name = types[accept];
+        token.value = value;
         return true;
     }
     void updatePosition(char c){

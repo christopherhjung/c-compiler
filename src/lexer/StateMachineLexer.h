@@ -67,7 +67,7 @@ public:
         }
     }
 
-    bool hasNextToken() override {
+    bool hasNextToken(Token& token) override {
         reader->reset();
 
         if(!reader->hasCurrent()){
@@ -99,13 +99,13 @@ public:
             }
         }
 
-        const std::string value = symbolCache.internalize(reader->readString(acceptPosition));
+        std::string value = symbolCache.internalize(reader->readString(acceptPosition));
 
         for(auto& c : value){
             updatePosition(c);
         }
 
-        token = new Token(location,acceptState->id,acceptState->name, value);
+        this->token = new Token(location,acceptState->id,acceptState->name, value);
         reader->setMarker(acceptPosition);
         return true;
     }

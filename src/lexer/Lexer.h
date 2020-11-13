@@ -18,7 +18,7 @@ public:
         this->reader->mark();
     }
 
-    virtual bool hasNextToken() = 0;
+    virtual bool hasNextToken(Token& token) = 0;
 
     virtual Token* fetchToken() = 0;
 
