@@ -111,24 +111,25 @@ public:
         accept = -1;
         offset = 0;
         parse0();
-        token.location = new Location(reader->getOrigin(),line,column);
-        std::string value = reader->readString(offset);
-        reader->setMarker(offset);
-        if(accept == -1){
-            if(current == 0){
+        auto* location = new Location(reader->getOrigin(),line,column);
+        if(accept == -1 || (current == 0 && offset < reader->getSize()) ){
+            if(current == 0 && offset == 0){
                 return false;
             }
             int32_t offset = reader->getOffset() - 1;
             if(offset < 0){
                 offset = 0;
             }
-            errorObj =new Error(token.location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );
+            errorObj =new Error(location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );
             error = true;
             return false;
         }
+        std::string value = reader->readString(offset);
+        reader->setMarker(offset);
         for(auto& c : value){
             updatePosition(c);
         }
+        token.location = location;
         token.id = accept;
         token.name = types[accept];
         token.value = value;
@@ -1049,38 +1050,38 @@ public:
     }
     void parse61(){
         switch(current){
-            case 47: case -52: case 45: case -54: case 51: case -48: case 50:
-            case -49: case -60: case 98: case -1: case -61: case 38: case 97: case -2:
-            case 40: case -59: case 41: case -58: case -57: case 42: case -56: case 43:
-            case -55: case 44: case -53: case 46: case 48: case -51: case 49: case -50:
-            case 52: case -47: case 53: case -46: case -7: case -45: case 54: case 55:
-            case -44: case 56: case -43: case 57: case -42: case -41: case 58: case -40:
-            case 59: case -39: case 60: case 61: case -38: case 62: case -37: case 63:
-            case -36: case -35: case 64: case -34: case 65: case -33: case 66: case -32:
-            case 67: case -31: case 68: case -30: case 69: case -29: case 70: case -28:
-            case 71: case -27: case 72: case -26: case 73: case -25: case 74: case -24:
-            case 75: case 76: case -23: case 77: case -22: case 78: case -21: case 79:
-            case -20: case 80: case -19: case 81: case -18: case 82: case -17: case 83:
-            case -16: case 84: case -15: case 85: case -14: case 86: case -13: case 87:
-            case -12: case 88: case -11: case 89: case -10: case 90: case -9: case 91:
-            case -8: case 93: case -6: case 94: case -5: case 95: case -4: case 96:
-            case -3: case 99: case 100: case 101: case 102: case 103: case 104: case 105:
-            case 106: case 107: case 108: case 109: case 110: case 111: case 112: case 113:
-            case 114: case 115: case 116: case 117: case 118: case 119: case 120: case 121:
-            case 122: case 123: case 124: case 125: case 126: case 127: case -128: case -127:
-            case -126: case -125: case -124: case -123: case -122: case -120: case -119: case -118:
-            case -117: case -116: case -115: case -114: case -113: case -112: case -111: case -110:
-            case -109: case -108: case -107: case -106: case -105: case -104: case -103: case -102:
-            case -101: case -100: case -99: case 0: case -98: case 1: case -97: case 2:
-            case -96: case 3: case -95: case 4: case -94: case 5: case -93: case 6:
-            case -92: case 7: case -91: case 8: case -90: case 9: case -89: case -88:
-            case 11: case -87: case 12: case -86: case 13: case -85: case 14: case -84:
-            case 15: case -83: case 16: case -82: case 17: case -81: case 18: case -80:
-            case 19: case -79: case 20: case -78: case 21: case -77: case 22: case -76:
-            case 23: case -75: case 24: case -74: case 25: case -73: case 26: case -72:
-            case 27: case -71: case 28: case -70: case 29: case -69: case 30: case -68:
-            case 31: case -67: case 32: case -66: case 33: case -65: case 34: case -64:
-            case 35: case -63: case 36: case 37: case -62: case -121:
+            case -60: case 51: case -48: case -51: case 48: case 99: case -1:
+            case 98: case -54: case 45: case 40: case -59: case -58: case 41: case -57:
+            case 42: case -56: case 43: case -55: case 44: case 46: case -53: case -52:
+            case 47: case 49: case -50: case 50: case -49: case -47: case 52: case 53:
+            case -46: case -7: case -45: case 54: case 55: case -44: case 56: case -43:
+            case 57: case -42: case 58: case -41: case -40: case 59: case -39: case 60:
+            case 61: case -38: case 62: case -37: case 63: case -36: case 64: case -35:
+            case -34: case 65: case -33: case 66: case -32: case 67: case -31: case 68:
+            case -30: case 69: case -29: case 70: case -28: case 71: case -27: case 72:
+            case -26: case 73: case -25: case 74: case -24: case 75: case -23: case 76:
+            case 77: case -22: case 78: case -21: case 79: case -20: case 80: case -19:
+            case 81: case -18: case 82: case -17: case 83: case -16: case 84: case -15:
+            case 85: case -14: case 86: case -13: case 87: case -12: case 88: case -11:
+            case 89: case -10: case 90: case -9: case 91: case -8: case 93: case -6:
+            case 94: case -5: case 95: case -4: case 96: case -3: case 97: case -2:
+            case 100: case 101: case 102: case 103: case 104: case 105: case 106: case 107:
+            case 108: case 109: case 110: case 111: case 112: case 113: case 114: case 115:
+            case 116: case 117: case 118: case 119: case 120: case 121: case 122: case 123:
+            case 124: case 125: case 126: case 127: case -128: case -127: case -126: case -125:
+            case -124: case -123: case -122: case -121: case -119: case -118: case -117: case -116:
+            case -115: case -114: case -113: case -112: case -111: case -110: case -109: case -108:
+            case -107: case -106: case -105: case -104: case -103: case -102: case -101: case -100:
+            case -99: case -98: case 1: case -97: case 2: case -96: case 3: case -95:
+            case 4: case -94: case 5: case -93: case 6: case -92: case 7: case -91:
+            case 8: case -90: case 9: case -89: case -88: case 11: case -87: case 12:
+            case -86: case 13: case -85: case 14: case -84: case 15: case -83: case 16:
+            case -82: case 17: case -81: case 18: case -80: case 19: case -79: case 20:
+            case -78: case 21: case -77: case 22: case -76: case 23: case -75: case 24:
+            case -74: case 25: case -73: case 26: case -72: case 27: case -71: case 28:
+            case -70: case 29: case -69: case 30: case -68: case 31: case -67: case 32:
+            case -66: case 33: case -65: case 34: case -64: case 35: case -63: case 36:
+            case -62: case 37: case 38: case -61: case -120:
                 next();parse62();break;
             case 92:
                 next();parse64();break;
@@ -1484,16 +1485,16 @@ public:
     }
     void parse95(){
         switch(current){
-            case -61: case 38: case -60: case 39: case -57: case -58: case 41:
-            case 40: case -59: case -56: case 43: case 44: case -55: case -54: case 45:
-            case -53: case 46: case -52: case 47: case -51: case 48: case -50: case 49:
-            case 50: case -49: case 51: case -48: case 52: case -47: case 53: case -46:
-            case 54: case -45: case 55: case -44: case 56: case -43: case 57: case -42:
-            case -41: case 58: case -40: case 59: case -39: case 60: case -38: case 61:
-            case 62: case -37: case 63: case -36: case 64: case -35: case 65: case -34:
-            case 66: case -33: case -31: case 68: case -30: case 69: case -29: case 70:
+            case -60: case 39: case -57: case -58: case 41: case 40: case -59:
+            case -55: case 44: case 43: case -56: case 45: case -54: case -53: case 46:
+            case -52: case 47: case -51: case 48: case -50: case 49: case -49: case 50:
+            case 51: case -48: case 52: case -47: case 53: case -46: case 54: case -45:
+            case 55: case -44: case 56: case -43: case 57: case -42: case 58: case -41:
+            case -40: case 59: case -39: case 60: case -38: case 61: case -37: case 62:
+            case 63: case -36: case 64: case -35: case 65: case -34: case 66: case -33:
+            case 67: case -32: case -31: case 68: case -30: case 69: case -29: case 70:
             case -28: case 71: case -27: case 72: case -26: case 73: case -25: case 74:
-            case -24: case 75: case 76: case -23: case 77: case -22: case 78: case -21:
+            case -24: case 75: case -23: case 76: case 77: case -22: case 78: case -21:
             case 79: case -20: case 80: case -19: case 81: case -18: case 82: case -17:
             case 83: case -16: case 84: case -15: case 85: case -14: case 86: case -13:
             case 87: case -12: case 88: case -11: case 89: case -10: case 90: case -9:
@@ -1506,16 +1507,16 @@ public:
             case -125: case -124: case -123: case -122: case -121: case -120: case -119: case -118:
             case -117: case -116: case -115: case -114: case -113: case -112: case -111: case -110:
             case -109: case -108: case -107: case -106: case -105: case -104: case -103: case -102:
-            case -101: case -100: case -99: case 0: case -98: case 1: case -97: case 2:
-            case -96: case 3: case -95: case 4: case -94: case 5: case -93: case 6:
-            case -92: case 7: case -91: case 8: case -90: case 9: case -89: case 10:
-            case -88: case 11: case -87: case 12: case -86: case 13: case -85: case 14:
-            case -84: case 15: case -83: case 16: case -82: case 17: case -81: case 18:
-            case -80: case 19: case -79: case 20: case -78: case 21: case -77: case 22:
-            case -76: case 23: case -75: case 24: case -74: case 25: case -73: case 26:
-            case -72: case 27: case -71: case 28: case 29: case -70: case 67: case -32:
-            case -69: case 30: case -68: case 31: case -67: case 32: case -66: case 33:
-            case -65: case 34: case -64: case 35: case -63: case 36: case -62: case 37:
+            case -101: case -100: case -99: case -98: case 1: case -97: case 2: case -96:
+            case 3: case -95: case 4: case -94: case 5: case -93: case 6: case -92:
+            case 7: case -91: case 8: case -90: case 9: case -89: case 10: case -88:
+            case 11: case -87: case 12: case -86: case 13: case -85: case 14: case -84:
+            case 15: case -83: case 16: case -82: case 17: case -81: case 18: case -80:
+            case 19: case -79: case 20: case -78: case 21: case -77: case 22: case -76:
+            case 23: case -75: case 24: case -74: case 25: case -73: case 26: case -72:
+            case 27: case -71: case 28: case -70: case 29: case -69: case 30: case -68:
+            case 31: case -67: case 32: case -66: case 33: case -65: case 34: case -64:
+            case 35: case -63: case 36: case -62: case 37: case -61: case 38:
                 next();parse95();break;
             case 42:
                 next();parse96();break;
@@ -1523,21 +1524,21 @@ public:
     }
     void parse96(){
         switch(current){
-            case -49: case 50: case 97: case -2: case 38: case -61: case 39:
+            case 51: case -48: case -51: case 48: case 98: case -1: case 39:
             case -60: case -57: case -58: case 41: case 40: case -59: case 43: case -56:
-            case 44: case -55: case -54: case 45: case -53: case 46: case 48: case -51:
-            case 49: case -50: case 51: case -48: case 52: case -47: case 53: case -46:
-            case 54: case -45: case 55: case -44: case 56: case -43: case 57: case -42:
-            case -41: case 58: case -40: case 59: case -39: case 60: case -38: case 61:
-            case 62: case -37: case 63: case -36: case 64: case -35: case 65: case -34:
-            case 66: case -33: case -31: case 68: case -30: case 69: case -29: case 70:
+            case 44: case -55: case -54: case 45: case -53: case 46: case 49: case -50:
+            case -49: case 50: case 52: case -47: case 53: case -46: case 54: case -45:
+            case 55: case -44: case 56: case -43: case 57: case -42: case 58: case -41:
+            case -40: case 59: case -39: case 60: case -38: case 61: case -37: case 62:
+            case 63: case -36: case 64: case -35: case 65: case -34: case 66: case -33:
+            case 67: case -32: case -31: case 68: case -30: case 69: case -29: case 70:
             case -28: case 71: case -27: case 72: case -26: case 73: case -25: case 74:
-            case -24: case 75: case 76: case -23: case 77: case -22: case 78: case -21:
+            case -24: case 75: case -23: case 76: case 77: case -22: case 78: case -21:
             case 79: case -20: case 80: case -19: case 81: case -18: case 82: case -17:
             case 83: case -16: case 84: case -15: case -14: case 85: case 86: case -13:
             case 87: case -12: case 88: case -11: case 89: case -10: case 90: case -9:
             case 91: case -8: case 92: case -7: case 93: case -6: case 94: case -5:
-            case 95: case -4: case 96: case -3: case 98: case -1: case 99: case 100:
+            case 95: case -4: case 96: case -3: case 97: case -2: case 99: case 100:
             case 101: case 102: case 103: case 104: case 105: case 106: case 107: case 108:
             case 109: case 110: case 111: case 112: case 113: case 114: case 115: case 116:
             case 117: case 118: case 119: case 120: case 121: case 122: case 123: case 124:
@@ -1545,16 +1546,16 @@ public:
             case -123: case -122: case -121: case -120: case -119: case -118: case -117: case -116:
             case -115: case -114: case -113: case -112: case -110: case -109: case -108: case -107:
             case -106: case -105: case -104: case -103: case -102: case -101: case -100: case -99:
-            case 0: case -98: case 1: case -97: case 2: case -96: case 3: case -95:
-            case 4: case -94: case 5: case -93: case 6: case -92: case 7: case -91:
-            case 8: case 9: case -90: case -89: case 10: case -88: case 11: case -87:
-            case 12: case -86: case 13: case -85: case 14: case -84: case 15: case -83:
-            case 16: case -82: case 17: case -81: case 18: case -80: case 19: case 20:
-            case -79: case -78: case 21: case -77: case 22: case -76: case 23: case -75:
-            case 24: case -74: case 25: case -73: case 26: case -72: case 27: case -71:
-            case 28: case 29: case -70: case 67: case -32: case -69: case 30: case -68:
-            case 31: case -67: case 32: case -66: case 33: case -65: case 34: case 35:
-            case -64: case 36: case -63: case -111: case -52: case -62: case 37:
+            case -98: case 1: case -97: case 2: case -96: case 3: case -95: case 4:
+            case -94: case 5: case -93: case 6: case -92: case 7: case -91: case 8:
+            case 9: case -90: case -89: case 10: case -88: case 11: case -87: case 12:
+            case -86: case 13: case -85: case 14: case -84: case 15: case -83: case 16:
+            case -82: case 17: case -81: case 18: case -80: case 19: case 20: case -79:
+            case -78: case 21: case -77: case 22: case -76: case 23: case -75: case 24:
+            case -74: case 25: case -73: case 26: case -72: case 27: case -71: case 28:
+            case -70: case 29: case -69: case 30: case -68: case 31: case -67: case 32:
+            case -66: case 33: case -65: case 34: case 35: case -64: case -63: case 36:
+            case -62: case 37: case -61: case 38: case -52: case -111:
                 next();parse95();break;
             case 42:
                 next();parse96();break;
@@ -1570,38 +1571,38 @@ public:
     void parseFinal98(){
         set(2);
         switch(current){
-            case 50: case -49: case -52: case 47: case 97: case -2: case 38:
-            case -61: case -58: case 41: case -59: case 40: case 39: case -60: case 42:
-            case -57: case -56: case 43: case -55: case 44: case -54: case 45: case -53:
-            case 46: case 48: case -51: case 49: case -50: case 51: case -48: case 52:
-            case -47: case 53: case -46: case 54: case -45: case 55: case -44: case 56:
-            case -43: case 57: case -42: case -41: case 58: case -40: case 59: case -39:
-            case 60: case 61: case -38: case 62: case -37: case 63: case -36: case 64:
-            case -35: case 65: case -34: case -33: case 66: case -32: case 67: case -31:
-            case 68: case -30: case 69: case -29: case 70: case -28: case 71: case -27:
-            case 72: case -26: case 73: case -25: case 74: case -24: case 75: case 76:
-            case -23: case 77: case -22: case 78: case -21: case 79: case -20: case 80:
-            case -19: case 81: case -18: case 82: case -17: case 83: case -16: case 84:
-            case -15: case 85: case -14: case 86: case -13: case 87: case -12: case 88:
-            case -11: case 89: case -10: case 90: case -9: case 91: case -8: case 92:
-            case -7: case 93: case -6: case 94: case -5: case 95: case -4: case 96:
-            case -3: case 98: case -1: case 99: case 100: case 101: case 102: case 103:
-            case 104: case 105: case 106: case 107: case 108: case 109: case 110: case 111:
-            case 112: case 113: case 114: case 115: case 116: case 117: case 118: case 119:
-            case 120: case 121: case 122: case 123: case 124: case 125: case 126: case 127:
-            case -128: case -127: case -126: case -125: case -124: case -123: case -122: case -120:
-            case -119: case -118: case -117: case -116: case -115: case -114: case -113: case -112:
-            case -111: case -110: case -109: case -108: case -107: case -106: case -105: case -104:
-            case -103: case -102: case -101: case -100: case -99: case 0: case -98: case 1:
-            case -97: case 2: case -96: case 3: case -95: case 4: case -94: case 5:
-            case -93: case 6: case -92: case 7: case -91: case 8: case -90: case 9:
-            case -89: case -88: case 11: case -87: case 12: case -86: case 13: case -85:
-            case 14: case -84: case 15: case -83: case 16: case -82: case 17: case -81:
-            case 18: case -80: case 19: case -79: case 20: case -78: case 21: case -77:
-            case 22: case -76: case 23: case -75: case 24: case -74: case 25: case -73:
-            case 26: case -72: case 27: case -71: case 28: case -70: case 29: case -69:
-            case 30: case -68: case 31: case -67: case 32: case -66: case 33: case -65:
-            case 34: case -64: case 35: case -63: case 36: case 37: case -62: case -121:
+            case 51: case -48: case -51: case 48: case 98: case -1: case 39:
+            case -60: case -57: case 42: case -58: case 41: case 40: case -59: case 43:
+            case -56: case -55: case 44: case -54: case 45: case -53: case 46: case -52:
+            case 47: case 49: case -50: case 50: case -49: case 52: case -47: case 53:
+            case -46: case 54: case -45: case 55: case -44: case 56: case -43: case 57:
+            case -42: case 58: case -41: case -40: case 59: case -39: case 60: case -38:
+            case 61: case 62: case -37: case 63: case -36: case 64: case -35: case 65:
+            case -34: case -32: case 67: case -31: case 68: case -30: case 69: case -29:
+            case 70: case -28: case 71: case -27: case 72: case -26: case 73: case -25:
+            case 74: case -24: case 75: case -23: case 76: case 77: case -22: case 78:
+            case -21: case 79: case -20: case 80: case -19: case 81: case -18: case 82:
+            case -17: case 83: case -16: case 84: case -15: case 85: case -14: case 86:
+            case -13: case 87: case -12: case 88: case -11: case 89: case -10: case 90:
+            case -9: case 91: case -8: case 92: case -7: case 93: case -6: case 94:
+            case -5: case 95: case -4: case 96: case -3: case 97: case -2: case 99:
+            case 100: case 101: case 102: case 103: case 104: case 105: case 106: case 107:
+            case 108: case 109: case 110: case 111: case 112: case 113: case 114: case 115:
+            case 116: case 117: case 118: case 119: case 120: case 121: case 122: case 123:
+            case 124: case 125: case 126: case 127: case -128: case -127: case -126: case -125:
+            case -124: case -123: case -122: case -121: case -119: case -118: case -117: case -116:
+            case -115: case -114: case -113: case -112: case -111: case -110: case -109: case -108:
+            case -107: case -106: case -105: case -104: case -103: case -102: case -101: case -100:
+            case -99: case -98: case 1: case -97: case 2: case -96: case 3: case -95:
+            case 4: case -94: case 5: case -93: case 6: case -92: case 7: case -91:
+            case 8: case -90: case 9: case -89: case -88: case 11: case -87: case 12:
+            case -86: case 13: case -85: case 14: case -84: case 15: case -83: case 16:
+            case -82: case 17: case -81: case 18: case -80: case 19: case -79: case 20:
+            case -78: case 21: case -77: case 22: case -76: case 23: case -75: case 24:
+            case -74: case 25: case -73: case 26: case -72: case 27: case 28: case -71:
+            case 66: case -33: case -70: case 29: case -69: case 30: case -68: case 31:
+            case -67: case 32: case -66: case 33: case -65: case 34: case -64: case 35:
+            case -63: case 36: case -62: case 37: case 38: case -61: case -120:
                 next();parseFinal98();break;
         }
     }
@@ -1669,38 +1670,38 @@ public:
     }
     void parse103(){
         switch(current){
-            case -49: case 50: case 45: case -54: case 39: case -60: case -2:
-            case 97: case 38: case -61: case 40: case -59: case -58: case 41: case -57:
-            case 42: case -56: case 43: case -55: case 44: case 46: case -53: case -52:
-            case 47: case 48: case -51: case 49: case -50: case 51: case -48: case 52:
-            case -47: case 53: case -46: case -7: case -45: case 54: case 55: case -44:
-            case 56: case -43: case 57: case -42: case -41: case 58: case -40: case 59:
-            case 60: case -39: case 61: case -38: case 62: case -37: case 63: case -36:
-            case 64: case -35: case -34: case 65: case -33: case 66: case -32: case 67:
-            case -31: case 68: case -30: case 69: case -29: case 70: case -28: case 71:
-            case -27: case 72: case -26: case 73: case -25: case 74: case -24: case 75:
-            case 76: case -23: case 77: case -22: case 78: case -21: case 79: case -20:
-            case 80: case -19: case 81: case -18: case 82: case -17: case 83: case -16:
-            case 84: case -15: case 85: case -14: case 86: case -13: case 87: case -12:
-            case 88: case -11: case 89: case -10: case 90: case -9: case 91: case -8:
-            case 93: case -6: case 94: case -5: case 95: case -4: case 96: case -3:
-            case 98: case -1: case 99: case 100: case 101: case 102: case 103: case 104:
-            case 105: case 106: case 107: case 108: case 109: case 110: case 111: case 112:
-            case 113: case 114: case 115: case 116: case 117: case 118: case 119: case 120:
-            case 121: case 122: case 123: case 124: case 125: case 126: case 127: case -128:
-            case -127: case -126: case -125: case -124: case -123: case -122: case -120: case -119:
-            case -118: case -117: case -116: case -115: case -114: case -113: case -112: case -111:
-            case -110: case -109: case -108: case -107: case -106: case -105: case -104: case -103:
-            case -102: case -101: case -100: case -99: case 0: case -98: case 1: case -97:
-            case 2: case -96: case 3: case -95: case 4: case -94: case 5: case -93:
-            case 6: case -92: case 7: case -91: case 8: case -90: case 9: case -89:
-            case -88: case 11: case -87: case 12: case -86: case 13: case -85: case 14:
-            case -84: case 15: case -83: case 16: case -82: case 17: case -81: case 18:
-            case -80: case 19: case -79: case 20: case -78: case 21: case -77: case 22:
-            case -76: case 23: case -75: case 24: case -74: case 25: case -73: case 26:
-            case -72: case 27: case -71: case 28: case -70: case 29: case -69: case 30:
-            case -68: case 31: case -67: case 32: case -66: case 33: case -65: case -64:
-            case 35: case -63: case 36: case 37: case -62: case -121:
+            case 45: case -54: case 51: case -48: case -60: case 39: case 98:
+            case -1: case 41: case -58: case 40: case -59: case 42: case -57: case -56:
+            case 43: case -55: case 44: case 46: case -53: case -52: case 47: case -51:
+            case 48: case 49: case -50: case 50: case -49: case 52: case -47: case 53:
+            case -46: case -7: case -45: case 54: case 55: case -44: case 56: case -43:
+            case 57: case -42: case 58: case -41: case -40: case 59: case -39: case 60:
+            case 61: case -38: case 62: case -37: case 63: case -36: case 64: case -35:
+            case -33: case 66: case -32: case 67: case -31: case 68: case -30: case 69:
+            case -29: case 70: case -28: case 71: case -27: case 72: case -26: case 73:
+            case -25: case 74: case -24: case 75: case -23: case 76: case 77: case -22:
+            case 78: case -21: case 79: case -20: case 80: case -19: case 81: case -18:
+            case 82: case -17: case 83: case -16: case 84: case -15: case 85: case -14:
+            case 86: case -13: case 87: case -12: case 88: case -11: case 89: case -10:
+            case 90: case -9: case 91: case -8: case 93: case -6: case 94: case -5:
+            case 95: case -4: case 96: case -3: case 97: case -2: case 99: case 100:
+            case 101: case 102: case 103: case 104: case 105: case 106: case 107: case 108:
+            case 109: case 110: case 111: case 112: case 113: case 114: case 115: case 116:
+            case 117: case 118: case 119: case 120: case 121: case 122: case 123: case 124:
+            case 125: case 126: case 127: case -128: case -127: case -126: case -125: case -124:
+            case -123: case -122: case -121: case -119: case -118: case -117: case -116: case -115:
+            case -114: case -113: case -112: case -111: case -110: case -109: case -108: case -107:
+            case -106: case -105: case -104: case -103: case -102: case -101: case -100: case -99:
+            case -98: case 1: case -97: case 2: case -96: case 3: case -95: case 4:
+            case -94: case 5: case -93: case 6: case -92: case 7: case -91: case 8:
+            case -90: case 9: case -89: case -88: case 11: case -87: case 12: case -86:
+            case 13: case -85: case 14: case -84: case 15: case -83: case 16: case -82:
+            case 17: case -81: case 18: case -80: case 19: case -79: case 20: case -78:
+            case 21: case -77: case 22: case -76: case 23: case -75: case 24: case -74:
+            case 25: case -73: case 26: case 27: case -72: case 65: case -34: case -71:
+            case 28: case -70: case 29: case -69: case 30: case -68: case 31: case -67:
+            case 32: case -66: case 33: case -65: case -64: case 35: case -63: case 36:
+            case -62: case 37: case 38: case -61: case -120:
                 next();parse103();break;
             case 34:
                 next();parseFinal104();break;

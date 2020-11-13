@@ -36,6 +36,10 @@ public:
         marker = index;
     }
 
+    uint32_t getSize() override {
+        return str.length();
+    }
+
     void setMarker(uint32_t index) override {
         marker = index;
     }

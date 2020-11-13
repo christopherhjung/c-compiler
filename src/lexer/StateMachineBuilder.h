@@ -40,7 +40,7 @@ public:
     std::string name;
     int32_t index = -1;
     int32_t id = -1;
-    State(bool finish, uint32_t index ,uint32_t id, std::string name) : finish(finish), index(index), id(id), name(std::move(name)) {};
+    State(bool finish, uint32_t index ,uint32_t id, std::string& name) : finish(finish), index(index), id(id), name(name) {};
     State(bool finish, uint32_t index ) : finish(finish), index(index){};
     std::unordered_map<char, State*> transitions;
     //State* transitions[CHAR_COUNT]{nullptr};
@@ -341,7 +341,7 @@ public:
         char specifier = eat();
         if(specifier == '.')
         {
-            for(uint32_t i = 0 ; i < CHAR_COUNT ; i++){
+            for(uint32_t i = 1 ; i < CHAR_COUNT ; i++){
                 if(i != '\n'){
                     set.insert(i);
                 }
@@ -388,7 +388,7 @@ public:
                 }
             }
 
-            for(uint32_t i = 0 ; i < CHAR_COUNT ; i++){
+            for(uint32_t i = 1 ; i < CHAR_COUNT ; i++){
                 if(set.find(i) != set.end() ^ negate){
                     set.insert(i);
                 }else{

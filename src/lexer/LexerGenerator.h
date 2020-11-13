@@ -103,7 +103,7 @@ public:
 
 
         offset(3) << "int32_t offset = reader->getOffset() - 1;" << std::endl;
-        offset(3) << "if(offset < 0){" << std::endl;
+        offset(3) << "if(current == 0 && offset == 0){" << std::endl;
         offset(4) << "offset = 0;" << std::endl;
         offset(3) << "}" << std::endl;
         offset(3) << R"(errorObj =new Error(token.location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );)" << std::endl;

@@ -14,6 +14,7 @@ public:
     virtual void mark() = 0;
     virtual void setMarker(uint32_t index) = 0;
     virtual uint32_t getOffset() = 0;
+    virtual uint32_t getSize() = 0;
     virtual void reset() = 0;
     virtual std::string readString(uint32_t count) = 0;
     virtual std::string getOrigin(){

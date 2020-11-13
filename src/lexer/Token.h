@@ -14,7 +14,7 @@ static std::string ss = "";
 struct Token {
 
 public:
-    Location* location;
+    Location* location = nullptr;
     uint32_t id;
     std::string& name;
     std::string value;
@@ -26,6 +26,7 @@ public:
 
     virtual ~Token() {
         delete(location);
+        location = nullptr;
     }
 
     friend std::ostream& operator<<(std::ostream& stream, const Token& tok){

@@ -61,6 +61,10 @@ public:
         current = buffer[position];
     }
 
+    uint32_t getSize() override {
+        return size;
+    }
+
     std::string readString(uint32_t count) override {
         char arr[count];
         uint32_t last = tail + count;
