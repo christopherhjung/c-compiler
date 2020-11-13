@@ -9,9 +9,9 @@ keyword:null
 keyword:return
 keyword:this
 constant:[-+]?[0-9]+
-constant:'(\\[^\s]|[^\n\r\t])'
+constant:'(\\['"?\\abfnrtv]|[^'\n\\])'
 identifier:[a-zA-Z_]\w*
-string-literal:"([^\"\n]|\\[^\s])*"
+string-literal:"([^\"\n\\]|\\['"?\\abfnrtv])*"
 punctuator:\+\+
 punctuator:\+=
 punctuator:\+

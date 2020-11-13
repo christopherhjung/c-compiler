@@ -51,6 +51,8 @@ public:
     uint32_t currentRule = 0;
     Info* finish = nullptr;
     std::unordered_map<uint32_t, Info*> infos;
+
+    std::unordered_map<char, char> escaping = {{'a', '\a'}, {'b', '\b'}, {'f', '\f'},{'n', '\n'},{'r', '\r'},{'t', '\t'},{'v', '\v'}};
     std::unordered_map<uint32_t, std::unique_ptr<bool>> values;
     std::unordered_map<uint32_t, int> rules;
     std::unordered_map<uint32_t, std::string> kinds;
@@ -389,23 +391,13 @@ public:
         return arr;
     }
 
+
     void computeEscaped(bool* arr){
         char specifier = eat();
-        if (specifier == 'n')
+        auto result = escaping.find(specifier);
+        if (result != escaping.end())
         {
-            arr['\n'] = true;
-        }
-        else if (specifier == 'r')
-        {
-            arr['\r'] = true;
-        }
-        else if (specifier == 't')
-        {
-            arr['\t'] = true;
-        }
-        else if (specifier == 'd')
-        {
-            addRange('0', '9', arr);
+            arr[result->second] = true;
         }
         else if (specifier == 's')
         {

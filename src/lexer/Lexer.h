@@ -66,7 +66,7 @@ public:
             case '\n': return "\\n";
             case '\t': return "\\t";
             case '\r': return "\\r";
-            default: return std::string(cha, 1);
+            default: return std::string(1,cha);
         }
     }
 
@@ -85,7 +85,7 @@ public:
         while(true){
             if(currentState == nullptr || !reader->hasCurrent()){
                 if(acceptPosition == -1){
-                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getOffset() - 1) + "_<-- char \"" + escaping(c) + "\" wrong!" );
+                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + escaping(c) + "< wrong!" );
                     error = true;
                     return false;
                 }

@@ -7,7 +7,7 @@ int main()
     scanf("%d", &num);
 
     char cha = 't';
-    char cha2 = '\t';
+    char cha2 = '\\';
 
     FILE *fptr;
     fptr = (fopen("C:\\student.txt", "w"));
@@ -23,7 +23,7 @@ int main()
 
     for(i = 0; i < num; ++i)
     {
-        printf("For student%d\nEnter name: ", i+1);
+        printf("For student%d\nEnter name: \\ ", i+1);
         scanf("%s", name);
 
         printf("Enter marks: ");
