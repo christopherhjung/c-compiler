@@ -1,5 +1,3 @@
-#include <map>
-
 class GeneratedLexer : public Lexer{
     char current;
     int32_t accept;
@@ -9,105 +7,105 @@ class GeneratedLexer : public Lexer{
     bool error = false;
     Error* errorObj;
     Token* token;
-    std::string types[100] {
+    std::string types[97] {
         "whitespace",
-         "comment",
-         "comment",
+        "comment",
+        "comment",
         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "keyword",
-         "constant",
-         "constant",
-         "identifier",
-         "string-literal",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-         "punctuator",
-};
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "constant",
+        "constant",
+        "identifier",
+        "string-literal",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+    };
 public:
     bool hasNextToken() override {
         accept = -1;
@@ -457,10 +455,10 @@ public:
     void parseFinal253(){
         set(49);
         switch(current){
-            case 111:
-                next();parseFinal254();break;
             case 97:
                 next();parseFinal256();break;
+            case 111:
+                next();parseFinal254();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 88: case 110: case 87:
@@ -1065,10 +1063,10 @@ public:
     void parseFinal169(){
         set(49);
         switch(current){
-            case 103:
-                next();parseFinal174();break;
             case 122:
                 next();parseFinal170();break;
+            case 103:
+                next();parseFinal174();break;
             case 121: case 120: case 119: case 118: case 117: case 70: case 116:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1382,8 +1380,6 @@ public:
     void parseFinal182(){
         set(49);
         switch(current){
-            case 110:
-                next();parseFinal183();break;
             case 120:
                 next();parseFinal186();break;
             case 122: case 75: case 111: case 88: case 117: case 70: case 121:
@@ -1395,6 +1391,8 @@ public:
             case 48: case 95: case 49: case 72: case 73: case 97: case 50: case 54:
             case 101: case 53: case 100: case 71: case 76:
                 next();parseFinal5();break;
+            case 110:
+                next();parseFinal183();break;
             case 108:
                 next();parseFinal191();break;
         }
@@ -1422,6 +1420,8 @@ public:
                 next();parseFinal151();break;
             case 116:
                 next();parseFinal156();break;
+            case 104:
+                next();parseFinal165();break;
             case 122: case 121: case 120: case 118: case 117: case 70: case 69:
             case 115: case 68: case 114: case 67: case 113: case 66: case 90: case 112:
             case 65: case 89: case 111: case 88: case 110: case 87: case 109: case 86:
@@ -1431,8 +1431,6 @@ public:
             case 50: case 97: case 98: case 51: case 74: case 75: case 72: case 48:
             case 95: case 49: case 71: case 73:
                 next();parseFinal5();break;
-            case 104:
-                next();parseFinal165();break;
             case 105:
                 next();parseFinal169();break;
         }
@@ -1612,10 +1610,10 @@ public:
         switch(current){
             case 111:
                 next();parseFinal135();break;
-            case 97:
-                next();parseFinal147();break;
             case 104:
                 next();parseFinal144();break;
+            case 97:
+                next();parseFinal147();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 88: case 110: case 87:
@@ -1783,10 +1781,10 @@ public:
     void parseFinal77(){
         set(49);
         switch(current){
-            case 101:
-                next();parseFinal83();break;
             case 111:
                 next();parseFinal78();break;
+            case 101:
+                next();parseFinal83();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -2089,12 +2087,12 @@ public:
     void parseFinal107(){
         set(49);
         switch(current){
+            case 115:
+                next();parseFinal112();break;
             case 116:
                 next();parseFinal108();break;
             case 103:
                 next();parseFinal118();break;
-            case 115:
-                next();parseFinal112();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 70: case 114: case 67: case 113: case 66: case 90: case 112:
             case 65: case 89: case 110: case 87: case 109: case 86: case 108: case 85:
@@ -3021,18 +3019,18 @@ public:
         switch(current){
             case 67:
                 next();parseFinal221();break;
+            case 66:
+                next();parseFinal228();break;
             case 78:
                 next();parseFinal213();break;
             case 84:
                 next();parseFinal232();break;
+            case 71:
+                next();parseFinal258();break;
             case 65:
                 next();parseFinal244();break;
             case 73:
                 next();parseFinal265();break;
-            case 66:
-                next();parseFinal228();break;
-            case 71:
-                next();parseFinal258();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 113: case 90:
             case 112: case 89: case 111: case 88: case 110: case 87: case 109: case 86:
@@ -3376,6 +3374,8 @@ public:
     void parseFinal202(){
         set(49);
         switch(current){
+            case 105:
+                next();parseFinal203();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 111: case 88: case 110:
@@ -3385,8 +3385,6 @@ public:
             case 52: case 51: case 98: case 48: case 95: case 49: case 72: case 73:
             case 97: case 50: case 71: case 74: case 100: case 53:
                 next();parseFinal5();break;
-            case 105:
-                next();parseFinal203();break;
             case 108:
                 next();parseFinal205();break;
         }
@@ -3398,103 +3396,103 @@ public:
     }
     void parse0(){
         switch(current){
-            case 108:
-                next();parseFinal22();break;
-            case 102:
-                next();parseFinal26();break;
-            case 32: case 10: case 13: case 9:
-                next();parseFinal3();break;
-            case 116:
-                next();parseFinal52();break;
-            case 40:
-                next();parseFinal2();break;
-            case 63:
-                next();parseFinal60();break;
-            case 33:
-                next();parseFinal75();break;
+            case 98:
+                next();parseFinal33();break;
             case 119:
                 next();parseFinal6();break;
-            case 100:
-                next();parseFinal77();break;
-            case 47:
-                next();parseFinal93();break;
-            case 34:
-                next();parse103();break;
-            case 125:
-                next();parseFinal59();break;
-            case 38:
-                next();parseFinal130();break;
-            case 43:
-                next();parseFinal45();break;
-            case 44:
-                next();parseFinal133();break;
+            case 102:
+                next();parseFinal26();break;
             case 97:
                 next();parseFinal38();break;
-            case 99:
-                next();parseFinal134();break;
-            case 45:
-                next();parseFinal124();break;
-            case 91:
-                next();parseFinal1();break;
-            case 48:
-                next();parseFinal211();break;
-            case 115:
-                next();parseFinal150();break;
+            case 123:
+                next();parseFinal43();break;
             case 60:
                 next();parseFinal48();break;
+            case 125:
+                next();parseFinal59();break;
+            case 32: case 10: case 13: case 9:
+                next();parseFinal3();break;
+            case 39:
+                next();parse61();break;
+            case 59:
+                next();parseFinal74();break;
+            case 33:
+                next();parseFinal75();break;
+            case 108:
+                next();parseFinal22();break;
+            case 47:
+                next();parseFinal93();break;
+            case 117:
+                next();parseFinal11();break;
+            case 114:
+                next();parseFinal106();break;
+            case 58:
+                next();parseFinal4();break;
+            case 43:
+                next();parseFinal45();break;
+            case 48:
+                next();parseFinal211();break;
+            case 45:
+                next();parseFinal124();break;
+            case 61:
+                next();parseFinal128();break;
+            case 41:
+                next();parseFinal65();break;
+            case 38:
+                next();parseFinal130();break;
+            case 105:
+                next();parseFinal66();break;
+            case 95:
+                next();parseFinal212();break;
+            case 34:
+                next();parse103();break;
+            case 99:
+                next();parseFinal134();break;
+            case 101:
+                next();parseFinal182();break;
+            case 42:
+                next();parseFinal287();break;
+            case 93:
+                next();parseFinal178();break;
+            case 103:
+                next();parseFinal99();break;
+            case 46:
+                next();parseFinal179();break;
+            case 63:
+                next();parseFinal60();break;
+            case 100:
+                next();parseFinal77();break;
+            case 124:
+                next();parseFinal194();break;
+            case 116:
+                next();parseFinal52();break;
+            case 115:
+                next();parseFinal150();break;
+            case 57: case 55: case 51: case 50: case 53: case 56: case 52:
+            case 49: case 54:
+                next();parseFinal42();break;
+            case 94:
+                next();parseFinal91();break;
+            case 40:
+                next();parseFinal2();break;
+            case 126:
+                next();parseFinal44();break;
+            case 62:
+                next();parseFinal197();break;
+            case 91:
+                next();parseFinal1();break;
+            case 118:
+                next();parseFinal201();break;
+            case 44:
+                next();parseFinal133();break;
             case 87: case 109: case 70: case 79: case 120: case 73: case 122:
             case 75: case 113: case 66: case 121: case 74: case 72: case 110: case 89:
             case 86: case 85: case 107: case 84: case 106: case 83: case 104: case 81:
             case 77: case 82: case 71: case 80: case 69: case 76: case 111: case 88:
             case 112: case 65: case 78: case 90: case 67: case 68:
                 next();parseFinal5();break;
-            case 123:
-                next();parseFinal43();break;
-            case 42:
-                next();parseFinal287();break;
-            case 46:
-                next();parseFinal179();break;
-            case 57: case 55: case 51: case 50: case 53: case 56: case 52:
-            case 49: case 54:
-                next();parseFinal42();break;
-            case 103:
-                next();parseFinal99();break;
-            case 59:
-                next();parseFinal74();break;
-            case 118:
-                next();parseFinal201();break;
-            case 62:
-                next();parseFinal197();break;
-            case 124:
-                next();parseFinal194();break;
-            case 105:
-                next();parseFinal66();break;
             case 37:
                 next();parseFinal89();break;
-            case 58:
-                next();parseFinal4();break;
-            case 93:
-                next();parseFinal178();break;
-            case 114:
-                next();parseFinal106();break;
-            case 117:
-                next();parseFinal11();break;
-            case 101:
-                next();parseFinal182();break;
-            case 39:
-                next();parse61();break;
-            case 94:
-                next();parseFinal91();break;
-            case 98:
-                next();parseFinal33();break;
-            case 126:
-                next();parseFinal44();break;
-            case 61:
-                next();parseFinal128();break;
-            case 41:
-                next();parseFinal65();break;
-            case 95:
-                next();parseFinal212();break;
         }
     }
     void parseFinal3(){
@@ -3642,6 +3640,8 @@ public:
     void parseFinal67(){
         set(49);
         switch(current){
+            case 116:
+                next();parseFinal68();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3651,8 +3651,6 @@ public:
             case 51: case 98: case 73: case 97: case 50: case 48: case 95: case 72:
             case 49: case 71: case 100: case 53: case 76: case 74:
                 next();parseFinal5();break;
-            case 116:
-                next();parseFinal68();break;
             case 108:
                 next();parseFinal69();break;
         }

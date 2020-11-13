@@ -15,8 +15,6 @@ iostream
 -
 
 /Users/chris/CLionProjects/c4/src/lexer/GeneratedLexer.h
-map
--
 
 /Users/chris/CLionProjects/c4/src/lexer/Lexer.h
 Token.h

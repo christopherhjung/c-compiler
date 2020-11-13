@@ -49,11 +49,11 @@ public:
     }
 
     void writeKinds(std::unordered_map<uint32_t, std::string>& kinds){
-        offset(1) << "std::unordered_map<int32_t, std::string> types = {" << std::endl ;
+        offset(1) << "std::string types["<<  kinds.size() <<"] {" << std::endl ;
         for( const auto& pair : kinds ){
-            offset(2) << "{" << pair.first << ", \"" << pair.second << "\"}," << std::endl;
+            offset(2) << "\"" << pair.second << "\"," << std::endl;
         }
-        ss << "};" << std::endl;
+        offset(1) << "};" << std::endl;
     }
 
     void writeClass(std::vector<State*>& states, State* start, std::unordered_map<uint32_t, std::string>& kinds){
