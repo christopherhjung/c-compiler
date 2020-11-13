@@ -15,8 +15,8 @@ public:
     Location* location;
     uint32_t id;
     const std::string& name;
-    const std::string* value;
-    Token(Location* location, int id, const std::string&  name, const std::string* value) : location(location), id(id), name(name), value(value){
+    const std::string value;
+    Token(Location* location, int id, const std::string&  name, const std::string& value) : location(location), id(id), name(name), value(value){
 
     };
 
@@ -25,7 +25,7 @@ public:
     }
 
     friend std::ostream& operator<<(std::ostream& stream, const Token& tok){
-        return stream << *tok.location << ": " << tok.name << " " << *tok.value;
+        return stream << *tok.location << ": " << tok.name << " " << tok.value;
     }
 };
 

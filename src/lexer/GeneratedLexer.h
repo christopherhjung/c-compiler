@@ -129,7 +129,7 @@ public:
         for(auto& c : value){
             updatePosition(c);
         }
-        token = new Token(location,accept,types[accept], new std::string(value));
+        token = new Token(location,accept,types[accept], value);
         return true;
     }
     void updatePosition(char c){

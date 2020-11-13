@@ -28,7 +28,7 @@ class SymbolCache {
 public:
     explicit SymbolCache(size_t preAllocSize = 512) : cache(preAllocSize) {}
 
-    const std::string* internalize(const std::string& str) {
-        return &(*cache.emplace(str).first);
+    const std::string internalize(const std::string& str) {
+        return (*cache.emplace(str).first);
     }
 };
