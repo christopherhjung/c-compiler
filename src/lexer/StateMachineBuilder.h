@@ -41,7 +41,8 @@ public:
     uint32_t id;
     State(bool finish, uint32_t id, std::string name) : finish(finish), id(id), name(std::move(name)){};
     State(bool finish) : finish(finish){};
-    std::unordered_map<char, State*> transitions;
+    //std::unordered_map<char, State*> transitions;
+    State* transitions[CHAR_COUNT];
 };
 
 class StateMachineBuilder {
