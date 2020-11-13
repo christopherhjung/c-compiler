@@ -25,7 +25,6 @@ private:
     uint32_t column = 1;
     bool error = false;
     Error* errorObj;
-    Token* token;
     std::unique_ptr<State> state;
     SymbolCache symbolCache;
 public:
@@ -105,7 +104,10 @@ public:
             updatePosition(c);
         }
 
-        this->token = new Token(location,acceptState->id,acceptState->name, value);
+        token.location = location;
+        token.id = acceptState->id;
+        token.name = acceptState->name;
+        token.value = value;
         reader->setMarker(acceptPosition);
         return true;
     }
@@ -120,7 +122,7 @@ public:
     }
 
     Token* fetchToken() override {
-        return token;
+        return nullptr;
     }
 
     Error* getError() override {
