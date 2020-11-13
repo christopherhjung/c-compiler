@@ -1,6 +1,6 @@
 whitespace:\s+
 comment:/\*([^*]|\*+[^*/])*\*+/
-comment://[^\n]+
+comment://[^\n]*
 keyword:if
 keyword:else
 keyword:while
