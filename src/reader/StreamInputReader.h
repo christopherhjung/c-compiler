@@ -27,6 +27,7 @@ protected:
     uint32_t head = 0;
     bool full = false;
     bool empty = false;
+    char current = 0;
     char *buffer = new char[capacity + 1]{0};
 public:
     explicit StreamInputReader(std::ifstream *stream){
@@ -35,12 +36,15 @@ public:
     };
 
     char peek() override{
-        return buffer[position];
+        return current;
     }
 
     void next() override{
         if(hasCurrent()){
             position = (position + 1) & mask;
+            current = buffer[position];
+        }else{
+            current = 0;
         }
     }
 
@@ -54,6 +58,7 @@ public:
 
     void reset() override {
         position = tail;
+        current = buffer[position];
     }
 
     std::string readString(uint32_t count) override {
@@ -116,6 +121,7 @@ public:
                 full = true;
             }
         }
+        current = buffer[position];
     }
 
 };

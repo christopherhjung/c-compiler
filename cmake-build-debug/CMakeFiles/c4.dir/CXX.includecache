@@ -6,14 +6,6 @@
 
 #IncludeRegexTransform: 
 
-/Users/chris/CLionProjects/c4/src/Queue.h
-mutex
--
-condition_variable
--
-deque
--
-
 /Users/chris/CLionProjects/c4/src/lexer/Error.h
 Location.h
 /Users/chris/CLionProjects/c4/src/lexer/Location.h
@@ -22,7 +14,33 @@ string
 iostream
 -
 
+/Users/chris/CLionProjects/c4/src/lexer/GeneratedLexer.h
+
 /Users/chris/CLionProjects/c4/src/lexer/Lexer.h
+Token.h
+/Users/chris/CLionProjects/c4/src/lexer/Token.h
+Error.h
+/Users/chris/CLionProjects/c4/src/lexer/Error.h
+Lexer.h
+/Users/chris/CLionProjects/c4/src/lexer/Lexer.h
+../reader/InputReader.h
+/Users/chris/CLionProjects/c4/src/reader/InputReader.h
+
+/Users/chris/CLionProjects/c4/src/lexer/LexerGenerator.h
+sstream
+-
+string
+-
+iostream
+-
+unordered_map
+-
+unordered_set
+-
+fstream
+-
+StateMachineLexer.h
+/Users/chris/CLionProjects/c4/src/lexer/StateMachineLexer.h
 
 /Users/chris/CLionProjects/c4/src/lexer/Location.h
 string
@@ -95,16 +113,14 @@ reader/StreamInputReader.h
 /Users/chris/CLionProjects/c4/src/reader/StreamInputReader.h
 reader/FileInputReader.h
 /Users/chris/CLionProjects/c4/src/reader/FileInputReader.h
-lexer/StateMachineBuilder.h
-/Users/chris/CLionProjects/c4/src/lexer/StateMachineBuilder.h
 lexer/StateMachineLexer.h
 /Users/chris/CLionProjects/c4/src/lexer/StateMachineLexer.h
-Queue.h
-/Users/chris/CLionProjects/c4/src/Queue.h
 functional
 -
-thread
--
+./lexer/LexerGenerator.h
+/Users/chris/CLionProjects/c4/src/lexer/LexerGenerator.h
+lexer/GeneratedLexer.h
+/Users/chris/CLionProjects/c4/src/lexer/GeneratedLexer.h
 
 /Users/chris/CLionProjects/c4/src/reader/FileInputReader.h
 StreamInputReader.h

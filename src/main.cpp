@@ -3,62 +3,70 @@
 
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
-#include "lexer/StateMachineBuilder.h"
 #include "lexer/StateMachineLexer.h"
-#include "Queue.h"
 
 #include <functional>
-#include <thread>
 
-static Queue<Token> tokenQueue;
-static StateMachineLexer lexer("./resources/c.lexer");
+//#define DEBUG
+//#define MEASURE
+#define OUTPUT
 
-void search(const std::string& path){
-    InputReader* fileInputReader = new FileInputReader(path);
+#ifdef MEASURE
+#undef OUTPUT
+#endif
+
+#ifdef DEBUG
+
+#include "./lexer/LexerGenerator.h"
+StateMachineLexer lexer("./resources/c.lexer");
+#else
+#include "lexer/GeneratedLexer.h"
+
+GeneratedLexer lexer;
+#endif
+
+
+
+int main(int, char **const args) {
+
+
+#ifdef DEBUG
+    LexerGenerator generator;
+    generator.build("./resources/c.lexer");
+#endif
+
+#ifdef MEASURE
+    auto start_time = std::chrono::high_resolution_clock::now();
+#endif
+    InputReader* fileInputReader = new FileInputReader(args[2]);
 
     lexer.reset(fileInputReader);
     while(lexer.hasNextToken()){
         auto* token = lexer.fetchToken();
         if(token->id >= 3){ //whitespace
-            tokenQueue.offer(token);
-        }
-    }
-
-    tokenQueue.close();
-}
-
-#define DEBUG
-
-int main(int, char **const args) {
-#ifdef DEBUG
-    auto start_time = std::chrono::high_resolution_clock::now();
+#ifdef OUTPUT
+            std::cout << *token << std::endl;
 #endif
-
-    std::thread lexerThread(search,args[2]);
-
-    for(;;){
-        Token* token = tokenQueue.take();
-        if(token == nullptr){
-            break;
         }
-        std::cout << *token << std::endl;
-        delete token;
+        delete(token);
     }
-
-    lexerThread.join();
 
     std::cout << std::flush;
     if(lexer.isError()){
         auto error = lexer.getError();
+#ifdef OUTPUT
         std::cerr << *error << std::endl;
+#endif
         delete error;
     }
 
-#ifdef DEBUG
+#ifdef MEASURE
     auto end_time = std::chrono::high_resolution_clock::now();
     auto time = end_time - start_time;
 
     std::cout << "time = " << time/std::chrono::milliseconds(1)  << '\n';
 #endif
+
+
     return 0;
 }

@@ -27,12 +27,13 @@ private:
     Error* errorObj;
     Token* token;
     std::unique_ptr<State> state;
-    InputReader* reader;
     SymbolCache symbolCache;
 public:
     StateMachineLexer(const std::string& file) : state(readStateMachine(file)){
 
     };
+
+
 
     static std::unique_ptr<State> readStateMachine(const std::string& file){
         std::ifstream source (file);
@@ -55,11 +56,6 @@ public:
             source.close();
         }
         return state;
-    }
-
-    void reset(InputReader* reader){
-        this->reader = reader;
-        this->reader->mark();
     }
 
     std::string escaping(char cha){

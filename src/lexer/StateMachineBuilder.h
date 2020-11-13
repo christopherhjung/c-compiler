@@ -38,9 +38,10 @@ struct State{
 public:
     bool finish;
     std::string name;
-    uint32_t id;
-    State(bool finish, uint32_t id, std::string name) : finish(finish), id(id), name(std::move(name)) {};
-    State(bool finish) : finish(finish){};
+    int32_t index = -1;
+    int32_t id = -1;
+    State(bool finish, uint32_t index ,uint32_t id, std::string name) : finish(finish), index(index), id(id), name(std::move(name)) {};
+    State(bool finish, uint32_t index ) : finish(finish), index(index){};
     std::unordered_map<char, State*> transitions;
     //State* transitions[CHAR_COUNT]{nullptr};
 
@@ -51,6 +52,7 @@ public:
     StringInputReader reader;
     uint32_t currentIndex = 0;
     uint32_t currentRule = 0;
+    uint32_t stateIndex = 0;
     Info* finish = nullptr;
     std::unordered_map<uint32_t, Info*> infos;
 
@@ -64,6 +66,18 @@ public:
         for(const auto& infoEntry : infos){
             delete infoEntry.second;
         }
+    }
+
+    std::vector<State*> getStates(){
+        std::vector<State*> result;
+        for(const auto& pair : states){
+            result.push_back(pair.second);
+        }
+        return result;
+    }
+
+    std::unordered_map<uint32_t, std::string> getKinds(){
+        return kinds;
     }
 
     char eat(){
@@ -126,6 +140,7 @@ public:
 
     std::unique_ptr<State> build(){
         states.clear();
+        stateIndex = 0;
         return std::unique_ptr<State>(compile(finish->firstPositions));
     }
 
@@ -170,9 +185,9 @@ public:
 
         State* state;
         if(rule == -1){
-            state = new State(isFinish);
+            state = new State(isFinish , stateIndex++);
         }else{
-            state = new State(isFinish, rule, kinds[rule]);
+            state = new State(isFinish, stateIndex++, rule, kinds[rule]);
         }
         states[set] = state;
         for (const auto& element : next)
