@@ -23,8 +23,8 @@ private:
     uint32_t line = 1;
     uint32_t column = 1;
     bool error = false;
-    std::shared_ptr<Error> errorObj;
-    std::shared_ptr<Token> token;
+    Error* errorObj;
+    Token* token;
     std::unique_ptr<State> state;
     InputReader* reader;
     SymbolCache symbolCache;
@@ -85,7 +85,7 @@ public:
         while(true){
             if(currentState == nullptr || !reader->hasCurrent()){
                 if(acceptPosition == -1){
-                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + escaping(c) + "< wrong!" );
+                    errorObj =new Error(location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + escaping(c) + "< wrong!" );
                     error = true;
                     return false;
                 }
@@ -102,13 +102,13 @@ public:
             }
         }
 
-        std::shared_ptr<std::string> value = symbolCache.internalize(reader->readString(acceptPosition));
+        std::string* value = symbolCache.internalize(reader->readString(acceptPosition));
 
         for(auto& c : *value){
             updatePosition(c);
         }
 
-        token = std::make_shared<Token>(location,acceptState->id,acceptState->name, value );
+        token = new Token(location,acceptState->id,acceptState->name, value);
         reader->setMarker(acceptPosition);
         return true;
     }
@@ -122,11 +122,11 @@ public:
         }
     }
 
-    std::shared_ptr<Token> fetchToken(){
+    Token* fetchToken(){
         return token;
     }
 
-    std::shared_ptr<Error> getError(){
+    Error* getError(){
         return errorObj;
     }
 

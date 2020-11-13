@@ -24,12 +24,12 @@ struct SharedPtrEqualTo {
 };
 
 class SymbolCache {
-    std::unordered_set<std::shared_ptr<std::string>, SharedPtrHash, SharedPtrEqualTo> cache;
+    std::unordered_set<std::string*> cache;
 public:
     explicit SymbolCache(size_t preAllocSize = 512) : cache(preAllocSize) {}
 
-    std::shared_ptr<std::string> internalize(const std::string& str) {
-        auto ptr = std::make_shared<std::string>(str);
+    std::string* internalize(const std::string& str) {
+        auto ptr = new std::string(str);
         return *(cache.emplace(ptr).first);
     }
 };
