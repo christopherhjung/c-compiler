@@ -6,6 +6,14 @@
 
 #IncludeRegexTransform: 
 
+/Users/chris/CLionProjects/c4/src/Queue.h
+mutex
+-
+condition_variable
+-
+deque
+-
+
 /Users/chris/CLionProjects/c4/src/lexer/Error.h
 Location.h
 /Users/chris/CLionProjects/c4/src/lexer/Location.h
@@ -87,7 +95,11 @@ lexer/StateMachineBuilder.h
 /Users/chris/CLionProjects/c4/src/lexer/StateMachineBuilder.h
 lexer/Lexer.h
 /Users/chris/CLionProjects/c4/src/lexer/Lexer.h
+Queue.h
+/Users/chris/CLionProjects/c4/src/Queue.h
 functional
+-
+thread
 -
 
 /Users/chris/CLionProjects/c4/src/reader/FileInputReader.h

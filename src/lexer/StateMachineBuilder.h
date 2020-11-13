@@ -19,7 +19,7 @@
 struct SetHash {
     size_t operator()(const std::unordered_set<uint32_t>& s) const {
         size_t sum{31};
-        for ( int e : s )
+        for ( auto& e : s )
             sum *= e;
         return sum;
     }
@@ -39,10 +39,11 @@ public:
     bool finish;
     std::string name;
     uint32_t id;
-    State(bool finish, uint32_t id, std::string name) : finish(finish), id(id), name(std::move(name)){};
+    State(bool finish, uint32_t id, std::string name) : finish(finish), id(id), name(std::move(name)) {};
     State(bool finish) : finish(finish){};
-    //std::unordered_map<char, State*> transitions;
-    State* transitions[CHAR_COUNT]{nullptr};
+    std::unordered_map<char, State*> transitions;
+    //State* transitions[CHAR_COUNT]{nullptr};
+
 };
 
 class StateMachineBuilder {
@@ -54,7 +55,7 @@ public:
     std::unordered_map<uint32_t, Info*> infos;
 
     std::unordered_map<char, char> escaping = {{'a', '\a'}, {'b', '\b'}, {'f', '\f'},{'n', '\n'},{'r', '\r'},{'t', '\t'},{'v', '\v'}};
-    std::unordered_map<uint32_t, std::unique_ptr<bool>> values;
+    std::unordered_map<uint32_t, std::unordered_set<char>> values;
     std::unordered_map<uint32_t, int> rules;
     std::unordered_map<uint32_t, std::string> kinds;
     std::unordered_map<std::unordered_set<uint32_t>, State*, SetHash> states;
@@ -151,7 +152,7 @@ public:
             {
                 auto& arr = values[key];
                 for(uint32_t value = 0; value < CHAR_COUNT; value++){
-                    if(arr.get()[value]){
+                    if(arr.find(value) != arr.end()){
                         if(next.find(value) == next.end()){
                             next[value] = std::unordered_set<uint32_t>();
                         }
@@ -311,7 +312,8 @@ public:
                 result->firstPositions.insert(result->index);
                 result->lastPositions.insert(result->index);
 
-                values[result->index] = std::unique_ptr<bool>(computeValue());
+                values[result->index] = std::unordered_set<char>();
+                computeValue(values[result->index]);
 
                 return result;
             }
@@ -320,18 +322,15 @@ public:
         return nullptr;
     }
 
-    bool* computeValue(){
-        bool* arr = new bool[CHAR_COUNT]{false};
-
+    void computeValue(std::unordered_set<char>& set){
         char specifier = eat();
         if(specifier == '.')
         {
             for(uint32_t i = 0 ; i < CHAR_COUNT ; i++){
-                arr[i] = true;
+                if(i != '\n'){
+                    set.insert(i);
+                }
             }
-
-            arr['\n'] = false;
-
         }
         else if (specifier == '[')
         {
@@ -343,20 +342,19 @@ public:
             {
                 if (save >= 0 && eat('-'))
                 {
-                    char end;
                     if (is('\\'))
                     {
                         throw std::exception();
                     }
 
-                    addRange((char)save, eat(), arr);
+                    addRange((char)save, eat(), set);
                     save = -1;
                 }
                 else
                 {
                     if (save >= 0)
                     {
-                        arr[save] = true;
+                        set.insert(save);
                     }
 
                     if (eat(']'))
@@ -366,7 +364,7 @@ public:
 
                     if (eat('\\'))
                     {
-                        computeEscaped(arr);
+                        computeEscaped(set);
                     }
                     else
                     {
@@ -375,54 +373,53 @@ public:
                 }
             }
 
-            if (negate)
-            {
-                for(uint32_t i = 0 ; i < CHAR_COUNT ; i++){
-                    arr[i] ^= true;
+            for(uint32_t i = 0 ; i < CHAR_COUNT ; i++){
+                if(set.find(i) != set.end() ^ negate){
+                    set.insert(i);
+                }else{
+                    set.erase(i);
                 }
             }
         }
         else if(specifier == '\\'){
-            computeEscaped( arr);
+            computeEscaped( set);
         }
         else{
-            arr[specifier] = true;
+            set.insert(specifier);
         }
-
-        return arr;
     }
 
 
-    void computeEscaped(bool* arr){
+    void computeEscaped(std::unordered_set<char>& set){
         char specifier = eat();
         auto result = escaping.find(specifier);
         if (result != escaping.end())
         {
-            arr[result->second] = true;
+            set.insert(result->second);
         }
         else if (specifier == 's')
         {
-            arr['\n'] = true;
-            arr[' '] = true;
-            arr['\t'] = true;
-            arr['\r'] = true;
+            set.insert('\n');
+            set.insert(' ');
+            set.insert('\t');
+            set.insert('\r');
         }
         else if (specifier == 'w')
         {
-            addRange('a', 'z', arr);
-            addRange('A', 'Z', arr);
-            addRange('0', '9', arr);
-            arr['_'] = true;
+            addRange('a', 'z', set);
+            addRange('A', 'Z', set);
+            addRange('0', '9', set);
+            set.insert('_');
         }
         else
         {
-            arr[specifier] = true;
+            set.insert(specifier);
         }
     }
 
-    static void addRange(char from, char to, bool* vec){
+    static void addRange(char from, char to, std::unordered_set<char>& set){
         for( ; from <= to; from++ ){
-            vec[from] = true;
+            set.insert(from);
         }
     }
 };

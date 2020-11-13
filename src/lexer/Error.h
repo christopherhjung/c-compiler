@@ -12,11 +12,15 @@
 
 class Error {
 public:
-    std::unique_ptr<Location> location;
+    Location* location;
     std::string msg;
-    Error(std::unique_ptr<Location>& location, std::string msg) : location(std::move(location)),  msg(std::move(msg)){
+    Error(Location* location, std::string msg) : location(location),  msg(std::move(msg)){
 
     };
+
+    virtual ~Error() {
+        delete(location);
+    }
 
     friend std::ostream& operator<<(std::ostream& stream, const Error& tok){
         return stream << *(tok.location) << ": error: " << tok.msg;

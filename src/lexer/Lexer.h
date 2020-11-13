@@ -80,7 +80,7 @@ public:
         int32_t acceptPosition = -1;
         State* currentState = state.get();
         State* acceptState = nullptr;
-        auto location = std::make_unique<Location>(reader->getOrigin(),line,column);
+        auto* location = new Location(reader->getOrigin(),line,column);
         char c = -1;
         while(true){
             if(currentState == nullptr || !reader->hasCurrent()){

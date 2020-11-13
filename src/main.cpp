@@ -5,25 +5,47 @@
 #include "reader/FileInputReader.h"
 #include "lexer/StateMachineBuilder.h"
 #include "lexer/Lexer.h"
+#include "Queue.h"
 
 #include <functional>
+#include <thread>
 
+static Queue<Token> tokenQueue;
+static Lexer lexer("./resources/c.lexer");
 
-int main(int, char **const args) {
-    auto start_time = std::chrono::high_resolution_clock::now();
-
-    Lexer lexer("./resources/c.lexer");
-
-    InputReader* fileInputReader = new FileInputReader(args[2]);
+void search(std::string path){
+    InputReader* fileInputReader = new FileInputReader(path);
 
     lexer.reset(fileInputReader);
     while(lexer.hasNextToken()){
-        auto token = lexer.fetchToken();
+        auto* token = lexer.fetchToken();
         if(token->id >= 3){ //whitespace
-            std::cout << *token << std::endl;
+            tokenQueue.push(token);
         }
+    }
+
+    tokenQueue.close();
+}
+
+#define DEBUG
+
+int main(int, char **const args) {
+#ifdef DEBUG
+    auto start_time = std::chrono::high_resolution_clock::now();
+#endif
+
+    std::thread lexerThread(search,args[2]);
+
+    for(;;){
+        Token* token = tokenQueue.pop();
+        if(token == nullptr){
+            break;
+        }
+        std::cout << *token << std::endl;
         delete token;
     }
+
+    lexerThread.join();
 
     std::cout << std::flush;
     if(lexer.isError()){
@@ -32,9 +54,11 @@ int main(int, char **const args) {
         delete error;
     }
 
+#ifdef DEBUG
     auto end_time = std::chrono::high_resolution_clock::now();
     auto time = end_time - start_time;
 
     std::cout << "time = " << time/std::chrono::milliseconds(1)  << '\n';
+#endif
     return 0;
 }
