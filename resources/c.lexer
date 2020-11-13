@@ -8,7 +8,7 @@ keyword:for
 keyword:null
 keyword:return
 keyword:this
-constant:[-+]?[0-9]+
+constant:[1-9][0-9]*
 constant:'(\\['"?\\abfnrtv]|[^'\n\\])'
 identifier:[a-zA-Z_]\w*
 string-literal:"([^\"\n\\]|\\['"?\\abfnrtv])*"
