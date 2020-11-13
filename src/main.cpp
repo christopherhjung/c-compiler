@@ -14,13 +14,11 @@ int main(int, char **const args) {
 
     InputReader* fileInputReader = new FileInputReader(args[2]);
 
-    int i = 0;
     lexer.reset(fileInputReader);
     while(lexer.hasNextToken()){
         auto token = lexer.fetchToken();
-        if(token->id >= 1){ //whitespace
+        if(token->id >= 3){ //whitespace
             std::cout << *token << std::endl;
-            std::cout << std::flush;
         }
     }
 

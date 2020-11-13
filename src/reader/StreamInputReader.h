@@ -20,13 +20,14 @@ class StreamInputReader : public InputReader{
 protected:
     std::ifstream *stream;
     uint32_t tail = 0;
-    uint32_t capacity = 8;
-    uint32_t size = 1u << capacity;
-    uint32_t mask = size - 1;
+    uint32_t capacity = 1u << 8;
+    uint32_t size = 0;
+    uint32_t mask = capacity - 1;
     uint32_t position = 0;
     uint32_t head = 0;
     bool full = false;
-    char *buffer = new char[size + 1]{0};
+    bool empty = false;
+    char *buffer = new char[capacity + 1]{0};
 public:
     explicit StreamInputReader(std::ifstream *stream){
         this->stream = stream;
@@ -57,10 +58,10 @@ public:
 
     std::string readString(uint32_t count) override {
         char arr[count];
-        uint32_t last = std::min(tail + count, size);
+        uint32_t last = std::min(tail + count, capacity);
 
         std::copy(buffer + tail, buffer + last, arr);
-        if(tail + count >= size){
+        if(tail + count >= capacity){
             uint32_t already = last - tail;
             uint32_t rest = count - already;
             std::copy(buffer, buffer + rest, arr + already);
@@ -71,6 +72,7 @@ public:
 
     void setMarker(uint32_t index) override {
         tail = (tail + index) & mask;
+        size -= index;
         check();
     }
 
@@ -78,22 +80,17 @@ public:
         if(tail <= position){
             return position - tail;
         }else{
-            return size - tail + position;
+            return capacity - tail + position;
         }
     }
 
     void check(){
-        if (tail == head)
+        if ( size < ( capacity >> 1u ) && !empty )
         {
-            if(!full)
-            {
-                fetch();
-            }
+            fetch();
         }
-        else
-        {
-            full = false;
-        }
+
+        full &= tail == head;
     }
 
     void fetch(){
@@ -102,7 +99,7 @@ public:
             stream->read(buffer + head, tail - head);
             readCount = stream->gcount();
         }else{
-            stream->read(buffer + head, size - head);
+            stream->read(buffer + head, capacity - head);
             readCount = stream->gcount();
             if(readCount > 0){
                 stream->read(buffer, tail);
@@ -110,8 +107,12 @@ public:
             }
         }
 
-        head = (head + readCount) & mask;
+        if(readCount == 0){
+            empty = true;
+        }
 
+        head = (head + readCount) & mask;
+        size += readCount;
         if(head == tail && readCount > 0){
             full = true;
         }
