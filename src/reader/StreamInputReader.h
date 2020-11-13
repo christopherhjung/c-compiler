@@ -28,7 +28,7 @@ protected:
     bool full = false;
     bool empty = false;
     char current = 0;
-    char *buffer = new char[capacity + 1]{0};
+    char *buffer = new char[capacity]{0};
 public:
     explicit StreamInputReader(std::ifstream *stream){
         this->stream = stream;
@@ -63,7 +63,11 @@ public:
 
     std::string readString(uint32_t count) override {
         char arr[count];
-        uint32_t last = std::min(tail + count, capacity);
+        uint32_t last = tail + count;
+
+        if(last > capacity){
+            last = capacity;
+        }
 
         std::copy(buffer + tail, buffer + last, arr);
         if(tail + count >= capacity){

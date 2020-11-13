@@ -14,9 +14,9 @@ struct Token {
 public:
     Location* location;
     uint32_t id;
-    std::string name;
+    const std::string& name;
     const std::string* value;
-    Token(Location* location, int id, std::string  name, const std::string* value) : location(location), id(id), name(std::move(name)), value(value){
+    Token(Location* location, int id, const std::string&  name, const std::string* value) : location(location), id(id), name(name), value(value){
 
     };
 

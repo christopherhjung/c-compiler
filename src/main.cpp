@@ -8,11 +8,11 @@
 #include <functional>
 
 //#define DEBUG
-#define MEASURE
+//#define MEASURE
 #define OUTPUT
 
 #ifdef MEASURE
-//#undef OUTPUT
+#undef OUTPUT
 #endif
 
 #ifdef DEBUG
@@ -43,7 +43,7 @@ int main(int, char **const args) {
     lexer.reset(fileInputReader);
     while(lexer.hasNextToken()){
         auto* token = lexer.fetchToken();
-        if(token->id >= 0){ //whitespace
+        if(token->id >= 3){ //whitespace
 #ifdef OUTPUT
             std::cout << *token << std::endl;
 #endif

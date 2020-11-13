@@ -1,3 +1,5 @@
+#include <map>
+
 class GeneratedLexer : public Lexer{
     char current;
     int32_t accept;
@@ -7,104 +9,104 @@ class GeneratedLexer : public Lexer{
     bool error = false;
     Error* errorObj;
     Token* token;
-    std::unordered_map<int32_t, std::string> types = {
-        {0, "whitespace"},
-        {1, "comment"},
-        {2, "comment"},
-        {3, "keyword"},
-        {4, "keyword"},
-        {5, "keyword"},
-        {6, "keyword"},
-        {7, "keyword"},
-        {8, "keyword"},
-        {9, "keyword"},
-        {10, "keyword"},
-        {11, "keyword"},
-        {12, "keyword"},
-        {13, "keyword"},
-        {14, "keyword"},
-        {15, "keyword"},
-        {16, "keyword"},
-        {17, "keyword"},
-        {18, "keyword"},
-        {19, "keyword"},
-        {20, "keyword"},
-        {21, "keyword"},
-        {22, "keyword"},
-        {23, "keyword"},
-        {24, "keyword"},
-        {25, "keyword"},
-        {26, "keyword"},
-        {27, "keyword"},
-        {28, "keyword"},
-        {29, "keyword"},
-        {30, "keyword"},
-        {31, "keyword"},
-        {32, "keyword"},
-        {33, "keyword"},
-        {34, "keyword"},
-        {35, "keyword"},
-        {36, "keyword"},
-        {37, "keyword"},
-        {38, "keyword"},
-        {39, "keyword"},
-        {40, "keyword"},
-        {41, "keyword"},
-        {42, "keyword"},
-        {43, "keyword"},
-        {44, "keyword"},
-        {45, "keyword"},
-        {46, "keyword"},
-        {47, "constant"},
-        {48, "constant"},
-        {49, "identifier"},
-        {50, "string-literal"},
-        {51, "punctuator"},
-        {52, "punctuator"},
-        {53, "punctuator"},
-        {54, "punctuator"},
-        {55, "punctuator"},
-        {56, "punctuator"},
-        {57, "punctuator"},
-        {58, "punctuator"},
-        {59, "punctuator"},
-        {60, "punctuator"},
-        {61, "punctuator"},
-        {62, "punctuator"},
-        {63, "punctuator"},
-        {64, "punctuator"},
-        {65, "punctuator"},
-        {66, "punctuator"},
-        {67, "punctuator"},
-        {68, "punctuator"},
-        {69, "punctuator"},
-        {70, "punctuator"},
-        {71, "punctuator"},
-        {72, "punctuator"},
-        {73, "punctuator"},
-        {74, "punctuator"},
-        {75, "punctuator"},
-        {76, "punctuator"},
-        {77, "punctuator"},
-        {78, "punctuator"},
-        {79, "punctuator"},
-        {80, "punctuator"},
-        {81, "punctuator"},
-        {82, "punctuator"},
-        {83, "punctuator"},
-        {84, "punctuator"},
-        {85, "punctuator"},
-        {86, "punctuator"},
-        {87, "punctuator"},
-        {88, "punctuator"},
-        {89, "punctuator"},
-        {90, "punctuator"},
-        {91, "punctuator"},
-        {92, "punctuator"},
-        {93, "punctuator"},
-        {94, "punctuator"},
-        {95, "punctuator"},
-        {96, "punctuator"},
+    std::string types[100] {
+        "whitespace",
+         "comment",
+         "comment",
+        "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "keyword",
+         "constant",
+         "constant",
+         "identifier",
+         "string-literal",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
+         "punctuator",
 };
 public:
     bool hasNextToken() override {
@@ -177,18 +179,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal282(){
         set(49);
         switch(current){
             case 115:
-                next();
-                parseFinal283();
-                break;
+                next();parseFinal283();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 70: case 116: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -197,18 +195,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 75: case 51: case 98: case 69: case 72: case 48:
             case 95: case 49: case 71: case 74: case 50: case 97: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal281(){
         set(49);
         switch(current){
             case 115:
-                next();
-                parseFinal282();
-                break;
+                next();parseFinal282();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -217,18 +211,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal279(){
         set(49);
         switch(current){
             case 95:
-                next();
-                parseFinal280();
-                break;
+                next();parseFinal280();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -237,18 +227,14 @@ public:
             case 57: case 103: case 56: case 102: case 55: case 101: case 54: case 53:
             case 100: case 76: case 52: case 99: case 71: case 48: case 75: case 51:
             case 98: case 50: case 97: case 74: case 73: case 49: case 72:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal278(){
         set(49);
         switch(current){
             case 99:
-                next();
-                parseFinal279();
-                break;
+                next();parseFinal279();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -257,9 +243,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 98: case 51: case 50: case 97: case 74: case 75:
             case 52: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal277(){
@@ -273,22 +257,16 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 50: case 97: case 98: case 51: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 105:
-                next();
-                parseFinal278();
-                break;
+                next();parseFinal278();break;
         }
     }
     void parseFinal276(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal277();
-                break;
+                next();parseFinal277();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -297,18 +275,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal272(){
         set(49);
         switch(current){
             case 121:
-                next();
-                parseFinal273();
-                break;
+                next();parseFinal273();break;
             case 122: case 120: case 119: case 118: case 117: case 70: case 116:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -317,18 +291,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal271(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal272();
-                break;
+                next();parseFinal272();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -337,18 +307,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal270(){
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal271();
-                break;
+                next();parseFinal271();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 111: case 88: case 110:
@@ -357,9 +323,7 @@ public:
             case 104: case 57: case 103: case 56: case 102: case 55: case 54: case 101:
             case 48: case 95: case 72: case 49: case 71: case 99: case 52: case 51:
             case 98: case 100: case 53: case 76: case 74: case 50: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal268(){
@@ -373,22 +337,16 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 50: case 97: case 98: case 51: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 105:
-                next();
-                parseFinal269();
-                break;
+                next();parseFinal269();break;
         }
     }
     void parseFinal267(){
         set(49);
         switch(current){
             case 103:
-                next();
-                parseFinal268();
-                break;
+                next();parseFinal268();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -397,18 +355,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal266(){
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal267();
-                break;
+                next();parseFinal267();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -417,18 +371,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 75: case 98: case 51: case 74:
             case 73: case 50: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal262(){
         set(49);
         switch(current){
             case 105:
-                next();
-                parseFinal263();
-                break;
+                next();parseFinal263();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -437,18 +387,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal259(){
         set(49);
         switch(current){
             case 110:
-                next();
-                parseFinal260();
-                break;
+                next();parseFinal260();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 87: case 109:
@@ -457,18 +403,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal258(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal259();
-                break;
+                next();parseFinal259();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -477,18 +419,14 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal256(){
         set(49);
         switch(current){
             case 115:
-                next();
-                parseFinal257();
-                break;
+                next();parseFinal257();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -497,18 +435,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal254(){
         set(49);
         switch(current){
             case 102:
-                next();
-                parseFinal255();
-                break;
+                next();parseFinal255();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -517,22 +451,16 @@ public:
             case 57: case 103: case 56: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal253(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal254();
-                break;
+                next();parseFinal254();break;
             case 97:
-                next();
-                parseFinal256();
-                break;
+                next();parseFinal256();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 88: case 110: case 87:
@@ -541,9 +469,7 @@ public:
             case 57: case 103: case 56: case 102: case 55: case 54: case 101: case 48:
             case 95: case 72: case 49: case 71: case 99: case 52: case 51: case 98:
             case 100: case 53: case 76: case 74: case 50: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal252(){
@@ -557,22 +483,16 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 99: case 52: case 51: case 98: case 72: case 48: case 95: case 49:
             case 71: case 74: case 97: case 50: case 73: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 110:
-                next();
-                parseFinal253();
-                break;
+                next();parseFinal253();break;
         }
     }
     void parseFinal251(){
         set(49);
         switch(current){
             case 103:
-                next();
-                parseFinal252();
-                break;
+                next();parseFinal252();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -581,9 +501,7 @@ public:
             case 104: case 57: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal249(){
@@ -597,18 +515,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal242(){
         set(49);
         switch(current){
             case 108:
-                next();
-                parseFinal243();
-                break;
+                next();parseFinal243();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -617,18 +531,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal241(){
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal242();
-                break;
+                next();parseFinal242();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 111: case 88: case 110:
@@ -637,18 +547,14 @@ public:
             case 104: case 57: case 103: case 56: case 102: case 55: case 54: case 101:
             case 48: case 95: case 72: case 49: case 71: case 99: case 52: case 51:
             case 98: case 100: case 53: case 76: case 74: case 50: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal240(){
         set(49);
         switch(current){
             case 99:
-                next();
-                parseFinal241();
-                break;
+                next();parseFinal241();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -657,18 +563,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 98: case 51: case 50: case 97: case 74: case 75:
             case 52: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal239(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal240();
-                break;
+                next();parseFinal240();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -677,9 +579,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal238(){
@@ -693,22 +593,16 @@ public:
             case 57: case 103: case 56: case 102: case 55: case 54: case 101: case 99:
             case 52: case 51: case 98: case 73: case 97: case 50: case 48: case 95:
             case 72: case 49: case 71: case 100: case 53: case 76: case 74:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 108:
-                next();
-                parseFinal239();
-                break;
+                next();parseFinal239();break;
         }
     }
     void parseFinal234(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal235();
-                break;
+                next();parseFinal235();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -717,18 +611,14 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal233(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal234();
-                break;
+                next();parseFinal234();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 70: case 116: case 69: case 115: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -737,18 +627,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 75: case 51: case 98: case 74: case 50: case 97:
             case 68: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal230(){
         set(49);
         switch(current){
             case 108:
-                next();
-                parseFinal231();
-                break;
+                next();parseFinal231();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -757,18 +643,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal229(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal230();
-                break;
+                next();parseFinal230();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -777,9 +659,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal228(){
@@ -793,22 +673,16 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 52: case 99:
             case 73: case 97: case 50: case 48: case 95: case 72: case 49: case 71:
             case 98: case 51: case 74: case 112: case 65: case 103: case 56:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 111:
-                next();
-                parseFinal229();
-                break;
+                next();parseFinal229();break;
         }
     }
     void parseFinal225(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal226();
-                break;
+                next();parseFinal226();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -817,18 +691,14 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal224(){
         set(49);
         switch(current){
             case 108:
-                next();
-                parseFinal225();
-                break;
+                next();parseFinal225();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -837,18 +707,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal223(){
         set(49);
         switch(current){
             case 112:
-                next();
-                parseFinal224();
-                break;
+                next();parseFinal224();break;
             case 122: case 75: case 111: case 88: case 121: case 120: case 119:
             case 118: case 117: case 70: case 116: case 69: case 115: case 68: case 114:
             case 67: case 90: case 110: case 87: case 109: case 86: case 108: case 85:
@@ -857,18 +723,14 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 99: case 52:
             case 51: case 98: case 74: case 50: case 97: case 73: case 49: case 72:
             case 95: case 48: case 71: case 104: case 57: case 113: case 66:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal222(){
         set(49);
         switch(current){
             case 109:
-                next();
-                parseFinal223();
-                break;
+                next();parseFinal223();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -877,9 +739,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal221(){
@@ -893,13 +753,9 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 52: case 99:
             case 73: case 97: case 50: case 48: case 95: case 72: case 49: case 71:
             case 98: case 51: case 74: case 112: case 65: case 103: case 56:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 111:
-                next();
-                parseFinal222();
-                break;
+                next();parseFinal222();break;
         }
     }
     void parseFinal220(){
@@ -913,18 +769,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal217(){
         set(49);
         switch(current){
             case 117:
-                next();
-                parseFinal218();
-                break;
+                next();parseFinal218();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 110: case 87: case 109: case 86:
@@ -933,18 +785,14 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 71: case 95: case 48: case 50: case 97:
             case 98: case 51: case 74: case 75: case 49: case 72: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal216(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal217();
-                break;
+                next();parseFinal217();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -953,18 +801,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal215(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal216();
-                break;
+                next();parseFinal216();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -973,9 +817,7 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal250(){
@@ -989,13 +831,9 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 50: case 97: case 98: case 51: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 105:
-                next();
-                parseFinal251();
-                break;
+                next();parseFinal251();break;
         }
     }
     void parseFinal213(){
@@ -1009,13 +847,9 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 52: case 99:
             case 73: case 97: case 50: case 48: case 95: case 72: case 49: case 71:
             case 98: case 51: case 74: case 112: case 65: case 103: case 56:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 111:
-                next();
-                parseFinal214();
-                break;
+                next();parseFinal214();break;
         }
     }
     void parseFinal211(){
@@ -1034,18 +868,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal209(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal210();
-                break;
+                next();parseFinal210();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1054,18 +884,14 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal208(){
         set(49);
         switch(current){
             case 108:
-                next();
-                parseFinal209();
-                break;
+                next();parseFinal209();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1074,18 +900,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal207(){
         set(49);
         switch(current){
             case 105:
-                next();
-                parseFinal208();
-                break;
+                next();parseFinal208();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1094,18 +916,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal206(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal207();
-                break;
+                next();parseFinal207();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -1114,18 +932,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 70: case 74: case 98: case 51: case 50: case 97:
             case 73: case 48: case 95: case 72: case 49: case 71: case 75:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal203(){
         set(49);
         switch(current){
             case 100:
-                next();
-                parseFinal204();
-                break;
+                next();parseFinal204();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1134,18 +948,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 76:
             case 53: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal201(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal202();
-                break;
+                next();parseFinal202();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -1154,9 +964,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal200(){
@@ -1173,9 +981,7 @@ public:
         set(70);
         switch(current){
             case 61:
-                next();
-                parseFinal199();
-                break;
+                next();parseFinal199();break;
         }
     }
     void parseFinal195(){
@@ -1187,9 +993,7 @@ public:
         set(49);
         switch(current){
             case 115:
-                next();
-                parseFinal192();
-                break;
+                next();parseFinal192();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1198,26 +1002,20 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parse62(){
         switch(current){
             case 39:
-                next();
-                parseFinal63();
-                break;
+                next();parseFinal63();break;
         }
     }
     void parseFinal184(){
         set(49);
         switch(current){
             case 109:
-                next();
-                parseFinal185();
-                break;
+                next();parseFinal185();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1226,9 +1024,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal181(){
@@ -1247,18 +1043,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal109(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal110();
-                break;
+                next();parseFinal110();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1267,22 +1059,16 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal169(){
         set(49);
         switch(current){
-            case 122:
-                next();
-                parseFinal170();
-                break;
             case 103:
-                next();
-                parseFinal174();
-                break;
+                next();parseFinal174();break;
+            case 122:
+                next();parseFinal170();break;
             case 121: case 120: case 119: case 118: case 117: case 70: case 116:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1291,9 +1077,7 @@ public:
             case 57: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 98: case 51: case 50: case 97: case 74: case 75:
             case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal168(){
@@ -1307,18 +1091,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal167(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal168();
-                break;
+                next();parseFinal168();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1327,18 +1107,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal166(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal167();
-                break;
+                next();parseFinal167();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1347,9 +1123,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal165(){
@@ -1363,22 +1137,16 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 52: case 99:
             case 73: case 97: case 50: case 48: case 95: case 72: case 49: case 71:
             case 98: case 51: case 74: case 112: case 65: case 103: case 56:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 111:
-                next();
-                parseFinal166();
-                break;
+                next();parseFinal166();break;
         }
     }
     void parseFinal163(){
         set(49);
         switch(current){
             case 99:
-                next();
-                parseFinal164();
-                break;
+                next();parseFinal164();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1387,18 +1155,14 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 52: case 75: case 51: case 98: case 74: case 97: case 50: case 73:
             case 72: case 49: case 95: case 48: case 71: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal33(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal34();
-                break;
+                next();parseFinal34();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 70: case 116: case 69: case 115: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -1407,22 +1171,20 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 75: case 51: case 98: case 74: case 50: case 97:
             case 68: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parse180(){
         switch(current){
             case 46:
-                next();
-                parseFinal181();
-                break;
+                next();parseFinal181();break;
         }
     }
     void parseFinal244(){
         set(49);
         switch(current){
+            case 116:
+                next();parseFinal245();break;
             case 122: case 75: case 111: case 88: case 121: case 120: case 119:
             case 118: case 117: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 110: case 87: case 109: case 86:
@@ -1431,26 +1193,16 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 99: case 52:
             case 51: case 98: case 73: case 97: case 50: case 48: case 95: case 72:
             case 49: case 71: case 53: case 100: case 70: case 74:
-                next();
-                parseFinal5();
-                break;
-            case 116:
-                next();
-                parseFinal245();
-                break;
+                next();parseFinal5();break;
             case 108:
-                next();
-                parseFinal250();
-                break;
+                next();parseFinal250();break;
         }
     }
     void parseFinal162(){
         set(49);
         switch(current){
             case 105:
-                next();
-                parseFinal163();
-                break;
+                next();parseFinal163();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1459,18 +1211,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal192(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal193();
-                break;
+                next();parseFinal193();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1479,9 +1227,7 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal160(){
@@ -1495,18 +1241,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal159(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal160();
-                break;
+                next();parseFinal160();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -1515,18 +1257,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 70: case 74: case 98: case 51: case 50: case 97:
             case 73: case 48: case 95: case 72: case 49: case 71: case 75:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal158(){
         set(49);
         switch(current){
             case 99:
-                next();
-                parseFinal159();
-                break;
+                next();parseFinal159();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1535,35 +1273,25 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 98: case 51: case 50: case 97: case 74: case 75:
             case 52: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal124(){
         set(64);
         switch(current){
             case 45:
-                next();
-                parseFinal125();
-                break;
+                next();parseFinal125();break;
             case 62:
-                next();
-                parseFinal126();
-                break;
+                next();parseFinal126();break;
             case 61:
-                next();
-                parseFinal127();
-                break;
+                next();parseFinal127();break;
         }
     }
     void parseFinal157(){
         set(49);
         switch(current){
             case 117:
-                next();
-                parseFinal158();
-                break;
+                next();parseFinal158();break;
             case 122: case 121: case 120: case 119: case 118: case 70: case 116:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1572,18 +1300,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal214(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal215();
-                break;
+                next();parseFinal215();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1592,9 +1316,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal185(){
@@ -1608,9 +1330,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal155(){
@@ -1624,18 +1344,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal154(){
         set(49);
         switch(current){
             case 104:
-                next();
-                parseFinal155();
-                break;
+                next();parseFinal155();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1644,18 +1360,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal152(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal153();
-                break;
+                next();parseFinal153();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1664,22 +1376,16 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal182(){
         set(49);
         switch(current){
-            case 120:
-                next();
-                parseFinal186();
-                break;
             case 110:
-                next();
-                parseFinal183();
-                break;
+                next();parseFinal183();break;
+            case 120:
+                next();parseFinal186();break;
             case 122: case 75: case 111: case 88: case 117: case 70: case 121:
             case 74: case 119: case 118: case 116: case 69: case 115: case 68: case 114:
             case 67: case 113: case 66: case 90: case 112: case 65: case 89: case 87:
@@ -1688,22 +1394,16 @@ public:
             case 103: case 56: case 55: case 102: case 99: case 52: case 51: case 98:
             case 48: case 95: case 49: case 72: case 73: case 97: case 50: case 54:
             case 101: case 53: case 100: case 71: case 76:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 108:
-                next();
-                parseFinal191();
-                break;
+                next();parseFinal191();break;
         }
     }
     void parseFinal188(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal189();
-                break;
+                next();parseFinal189();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1712,26 +1412,16 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal150(){
         set(49);
         switch(current){
             case 119:
-                next();
-                parseFinal151();
-                break;
+                next();parseFinal151();break;
             case 116:
-                next();
-                parseFinal156();
-                break;
-            case 104:
-                next();
-                parseFinal165();
-                break;
+                next();parseFinal156();break;
             case 122: case 121: case 120: case 118: case 117: case 70: case 69:
             case 115: case 68: case 114: case 67: case 113: case 66: case 90: case 112:
             case 65: case 89: case 111: case 88: case 110: case 87: case 109: case 86:
@@ -1740,13 +1430,11 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 52: case 99:
             case 50: case 97: case 98: case 51: case 74: case 75: case 72: case 48:
             case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
+            case 104:
+                next();parseFinal165();break;
             case 105:
-                next();
-                parseFinal169();
-                break;
+                next();parseFinal169();break;
         }
     }
     void parseFinal149(){
@@ -1760,9 +1448,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal247(){
@@ -1776,13 +1462,9 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 50: case 97: case 98: case 51: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 105:
-                next();
-                parseFinal248();
-                break;
+                next();parseFinal248();break;
         }
     }
     void parseFinal146(){
@@ -1796,9 +1478,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal143(){
@@ -1812,18 +1492,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal142(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal143();
-                break;
+                next();parseFinal143();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1832,18 +1508,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal226(){
         set(49);
         switch(current){
             case 120:
-                next();
-                parseFinal227();
-                break;
+                next();parseFinal227();break;
             case 122: case 121: case 119: case 118: case 117: case 70: case 116:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -1852,9 +1524,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal141(){
@@ -1868,18 +1538,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal175(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal176();
-                break;
+                next();parseFinal176();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1888,18 +1554,14 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal140(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal141();
-                break;
+                next();parseFinal141();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -1908,18 +1570,14 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal138(){
         set(49);
         switch(current){
             case 110:
-                next();
-                parseFinal139();
-                break;
+                next();parseFinal139();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 87: case 109:
@@ -1928,22 +1586,16 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal136(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal137();
-                break;
+                next();parseFinal137();break;
             case 115:
-                next();
-                parseFinal142();
-                break;
+                next();parseFinal142();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 68: case 114: case 67: case 113: case 66: case 90: case 112:
             case 65: case 89: case 111: case 88: case 110: case 87: case 109: case 86:
@@ -1952,26 +1604,18 @@ public:
             case 102: case 55: case 54: case 101: case 77: case 53: case 100: case 76:
             case 52: case 99: case 98: case 51: case 50: case 97: case 74: case 75:
             case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal134(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal135();
-                break;
-            case 104:
-                next();
-                parseFinal144();
-                break;
+                next();parseFinal135();break;
             case 97:
-                next();
-                parseFinal147();
-                break;
+                next();parseFinal147();break;
+            case 104:
+                next();parseFinal144();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 88: case 110: case 87:
@@ -1980,9 +1624,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 48: case 95: case 72:
             case 49: case 71: case 99: case 52: case 51: case 98: case 100: case 53:
             case 76: case 74: case 50: case 73: case 77:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal190(){
@@ -1996,9 +1638,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal133(){
@@ -2017,9 +1657,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal151(){
@@ -2033,22 +1671,16 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 50: case 97: case 98: case 51: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 105:
-                next();
-                parseFinal152();
-                break;
+                next();parseFinal152();break;
         }
     }
     void parseFinal285(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal286();
-                break;
+                next();parseFinal286();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -2057,9 +1689,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal131(){
@@ -2078,35 +1708,25 @@ public:
             case 57: case 103: case 56: case 102: case 55: case 54: case 101: case 99:
             case 52: case 51: case 98: case 73: case 97: case 50: case 48: case 95:
             case 72: case 49: case 71: case 100: case 53: case 76: case 74:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 108:
-                next();
-                parseFinal9();
-                break;
+                next();parseFinal9();break;
         }
     }
     void parseFinal130(){
         set(61);
         switch(current){
             case 61:
-                next();
-                parseFinal131();
-                break;
+                next();parseFinal131();break;
             case 38:
-                next();
-                parseFinal132();
-                break;
+                next();parseFinal132();break;
         }
     }
     void parseFinal161(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal162();
-                break;
+                next();parseFinal162();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -2115,18 +1735,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 70: case 74: case 98: case 51: case 50: case 97:
             case 73: case 48: case 95: case 72: case 49: case 71: case 75:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal122(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal123();
-                break;
+                next();parseFinal123();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 70: case 116: case 69: case 115: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -2135,18 +1751,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 75: case 51: case 98: case 74: case 50: case 97:
             case 68: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal128(){
         set(85);
         switch(current){
             case 61:
-                next();
-                parseFinal129();
-                break;
+                next();parseFinal129();break;
         }
     }
     void parseFinal204(){
@@ -2160,9 +1772,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal126(){
@@ -2173,14 +1783,10 @@ public:
     void parseFinal77(){
         set(49);
         switch(current){
-            case 111:
-                next();
-                parseFinal78();
-                break;
             case 101:
-                next();
-                parseFinal83();
-                break;
+                next();parseFinal83();break;
+            case 111:
+                next();parseFinal78();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -2189,9 +1795,7 @@ public:
             case 56: case 102: case 55: case 77: case 54: case 53: case 100: case 76:
             case 52: case 99: case 98: case 51: case 50: case 97: case 74: case 75:
             case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal123(){
@@ -2205,18 +1809,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal121(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal122();
-                break;
+                next();parseFinal122();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -2225,18 +1825,14 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal120(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal121();
-                break;
+                next();parseFinal121();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -2245,9 +1841,7 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 70: case 74: case 98: case 51: case 50: case 97:
             case 73: case 48: case 95: case 72: case 49: case 71: case 75:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal118(){
@@ -2261,22 +1855,16 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 50: case 97: case 98: case 51: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 105:
-                next();
-                parseFinal119();
-                break;
+                next();parseFinal119();break;
         }
     }
     void parseFinal119(){
         set(49);
         switch(current){
             case 115:
-                next();
-                parseFinal120();
-                break;
+                next();parseFinal120();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -2285,18 +1873,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal179(){
         set(57);
         switch(current){
             case 46:
-                next();
-                parse180();
-                break;
+                next();parse180();break;
         }
     }
     void parseFinal51(){
@@ -2315,18 +1899,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal106(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal107();
-                break;
+                next();parseFinal107();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -2335,9 +1915,7 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal114(){
@@ -2351,31 +1929,23 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 50: case 97: case 98: case 51: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 105:
-                next();
-                parseFinal115();
-                break;
+                next();parseFinal115();break;
         }
     }
     void parseFinal91(){
         set(77);
         switch(current){
             case 61:
-                next();
-                parseFinal92();
-                break;
+                next();parseFinal92();break;
         }
     }
     void parseFinal113(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal114();
-                break;
+                next();parseFinal114();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -2384,18 +1954,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal112(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal113();
-                break;
+                next();parseFinal113();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -2404,9 +1970,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal110(){
@@ -2420,13 +1984,9 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 99: case 52: case 51: case 98: case 72: case 48: case 95: case 49:
             case 71: case 74: case 97: case 50: case 73: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 110:
-                next();
-                parseFinal111();
-                break;
+                next();parseFinal111();break;
         }
     }
     void parseFinal257(){
@@ -2440,18 +2000,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal35(){
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal36();
-                break;
+                next();parseFinal36();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -2460,9 +2016,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 75: case 98: case 51: case 74:
             case 73: case 50: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal196(){
@@ -2474,9 +2028,7 @@ public:
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal146();
-                break;
+                next();parseFinal146();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -2485,18 +2037,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal144(){
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal145();
-                break;
+                next();parseFinal145();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 111: case 88: case 110:
@@ -2505,18 +2053,14 @@ public:
             case 104: case 57: case 103: case 56: case 102: case 55: case 54: case 101:
             case 48: case 95: case 72: case 49: case 71: case 99: case 52: case 51:
             case 98: case 100: case 53: case 76: case 74: case 50: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal108(){
         set(49);
         switch(current){
             case 117:
-                next();
-                parseFinal109();
-                break;
+                next();parseFinal109();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 110: case 87: case 109: case 86:
@@ -2525,9 +2069,7 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 71: case 95: case 48: case 50: case 97:
             case 98: case 51: case 74: case 75: case 49: case 72: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal177(){
@@ -2541,26 +2083,18 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal107(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal108();
-                break;
-            case 115:
-                next();
-                parseFinal112();
-                break;
+                next();parseFinal108();break;
             case 103:
-                next();
-                parseFinal118();
-                break;
+                next();parseFinal118();break;
+            case 115:
+                next();parseFinal112();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 70: case 114: case 67: case 113: case 66: case 90: case 112:
             case 65: case 89: case 110: case 87: case 109: case 86: case 108: case 85:
@@ -2569,9 +2103,7 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 52: case 99:
             case 75: case 51: case 98: case 69: case 72: case 48: case 95: case 49:
             case 71: case 74: case 50: case 97: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal273(){
@@ -2585,18 +2117,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal183(){
         set(49);
         switch(current){
             case 117:
-                next();
-                parseFinal184();
-                break;
+                next();parseFinal184();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 110: case 87: case 109: case 86:
@@ -2605,27 +2133,21 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 71: case 95: case 48: case 50: case 97:
             case 98: case 51: case 74: case 75: case 49: case 72: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parse105(){
         switch(current){
             case 110: case 102: case 97: case 98: case 114: case 92: case 118:
             case 63: case 116: case 39: case 34:
-                next();
-                parse103();
-                break;
+                next();parse103();break;
         }
     }
     void parseFinal147(){
         set(49);
         switch(current){
             case 115:
-                next();
-                parseFinal148();
-                break;
+                next();parseFinal148();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -2634,9 +2156,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal227(){
@@ -2650,18 +2170,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal87(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal88();
-                break;
+                next();parseFinal88();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -2670,9 +2186,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal104(){
@@ -2684,9 +2198,7 @@ public:
         set(49);
         switch(current){
             case 110:
-                next();
-                parseFinal175();
-                break;
+                next();parseFinal175();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 87: case 109:
@@ -2695,21 +2207,15 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parse103(){
         switch(current){
             case 34:
-                next();
-                parseFinal104();
-                break;
+                next();parseFinal104();break;
             case 92:
-                next();
-                parse105();
-                break;
+                next();parse105();break;
             case -121: case -62: case 37: case 36: case -63: case 35: case -64:
             case -65: case 33: case -66: case 32: case -67: case 31: case -68: case 30:
             case -69: case 29: case -70: case 28: case -71: case 27: case -72: case 26:
@@ -2742,9 +2248,7 @@ public:
             case -53: case 46: case 44: case -55: case 43: case -56: case 42: case -57:
             case 41: case -58: case -59: case 40: case -61: case 38: case 97: case -2:
             case -60: case 39: case -54: case 45: case 50: case -49:
-                next();
-                parse103();
-                break;
+                next();parse103();break;
         }
     }
     void parseFinal42(){
@@ -2752,9 +2256,7 @@ public:
         switch(current){
             case 57: case 56: case 55: case 54: case 53: case 52: case 51:
             case 50: case 49: case 48:
-                next();
-                parseFinal42();
-                break;
+                next();parseFinal42();break;
         }
     }
     void parseFinal102(){
@@ -2768,18 +2270,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal261(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal262();
-                break;
+                next();parseFinal262();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -2788,9 +2286,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal88(){
@@ -2804,18 +2300,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal86(){
         set(49);
         switch(current){
             case 108:
-                next();
-                parseFinal87();
-                break;
+                next();parseFinal87();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -2824,18 +2316,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal78(){
         set(10);
         switch(current){
             case 117:
-                next();
-                parseFinal79();
-                break;
+                next();parseFinal79();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 110: case 87: case 109: case 86:
@@ -2844,18 +2332,14 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 71: case 95: case 48: case 50: case 97:
             case 98: case 51: case 74: case 75: case 49: case 72: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal81(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal82();
-                break;
+                next();parseFinal82();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -2864,9 +2348,7 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal80(){
@@ -2880,13 +2362,9 @@ public:
             case 57: case 103: case 56: case 102: case 55: case 54: case 101: case 99:
             case 52: case 51: case 98: case 73: case 97: case 50: case 48: case 95:
             case 72: case 49: case 71: case 100: case 53: case 76: case 74:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 108:
-                next();
-                parseFinal81();
-                break;
+                next();parseFinal81();break;
         }
     }
     void parseFinal164(){
@@ -2900,9 +2378,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal111(){
@@ -2916,9 +2392,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal127(){
@@ -2930,9 +2404,7 @@ public:
         set(66);
         switch(current){
             case 61:
-                next();
-                parseFinal76();
-                break;
+                next();parseFinal76();break;
         }
     }
     void parseFinal264(){
@@ -2946,18 +2418,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal79(){
         set(49);
         switch(current){
             case 98:
-                next();
-                parseFinal80();
-                break;
+                next();parseFinal80();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -2966,9 +2434,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 75: case 51: case 74: case 50:
             case 97: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal73(){
@@ -2982,9 +2448,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal13(){
@@ -2998,13 +2462,9 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 50: case 97: case 98: case 51: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 105:
-                next();
-                parseFinal14();
-                break;
+                next();parseFinal14();break;
         }
     }
     void parseFinal28(){
@@ -3018,18 +2478,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal263(){
         set(49);
         switch(current){
             case 99:
-                next();
-                parseFinal264();
-                break;
+                next();parseFinal264();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3038,17 +2494,13 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 52: case 75: case 51: case 98: case 74: case 97: case 50: case 73:
             case 72: case 49: case 95: case 48: case 71: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parse96(){
         switch(current){
             case 47:
-                next();
-                parseFinal97();
-                break;
+                next();parseFinal97();break;
             case 37: case -62: case -52: case -111: case -63: case 36: case -64:
             case 35: case 34: case -65: case 33: case -66: case 32: case -67: case 31:
             case -68: case 30: case -69: case -32: case 67: case -70: case 29: case 28:
@@ -3081,13 +2533,9 @@ public:
             case -51: case 48: case 46: case -53: case 45: case -54: case -55: case 44:
             case -56: case 43: case -59: case 40: case 41: case -58: case -57: case -60:
             case 39: case -61: case 38: case -2: case 97: case 50: case -49:
-                next();
-                parse95();
-                break;
+                next();parse95();break;
             case 42:
-                next();
-                parse96();
-                break;
+                next();parse96();break;
         }
     }
     void parseFinal40(){
@@ -3101,22 +2549,16 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 52: case 99:
             case 73: case 97: case 50: case 48: case 95: case 72: case 49: case 71:
             case 98: case 51: case 74: case 112: case 65: case 103: case 56:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 111:
-                next();
-                parseFinal41();
-                break;
+                next();parseFinal41();break;
         }
     }
     void parseFinal248(){
         set(49);
         switch(current){
             case 99:
-                next();
-                parseFinal249();
-                break;
+                next();parseFinal249();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3125,9 +2567,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 98: case 51: case 50: case 97: case 74: case 75:
             case 52: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal94(){
@@ -3146,9 +2586,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal135(){
@@ -3162,22 +2600,16 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 99: case 52: case 51: case 98: case 72: case 48: case 95: case 49:
             case 71: case 74: case 97: case 50: case 73: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 110:
-                next();
-                parseFinal136();
-                break;
+                next();parseFinal136();break;
         }
     }
     void parseFinal232(){
         set(49);
         switch(current){
             case 104:
-                next();
-                parseFinal233();
-                break;
+                next();parseFinal233();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3186,27 +2618,21 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal89(){
         set(68);
         switch(current){
             case 61:
-                next();
-                parseFinal90();
-                break;
+                next();parseFinal90();break;
         }
     }
     void parseFinal172(){
         set(49);
         switch(current){
             case 102:
-                next();
-                parseFinal173();
-                break;
+                next();parseFinal173();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3215,18 +2641,14 @@ public:
             case 103: case 56: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal57(){
         set(49);
         switch(current){
             case 102:
-                next();
-                parseFinal58();
-                break;
+                next();parseFinal58();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3235,22 +2657,16 @@ public:
             case 57: case 103: case 56: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal156(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal157();
-                break;
+                next();parseFinal157();break;
             case 97:
-                next();
-                parseFinal161();
-                break;
+                next();parseFinal161();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 70: case 116: case 69: case 115: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -3259,18 +2675,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 98: case 51: case 74: case 75: case 68: case 72:
             case 48: case 95: case 49: case 71: case 73: case 50:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal85(){
         set(49);
         switch(current){
             case 117:
-                next();
-                parseFinal86();
-                break;
+                next();parseFinal86();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 110: case 87: case 109: case 86:
@@ -3279,18 +2691,14 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 71: case 95: case 48: case 50: case 97:
             case 98: case 51: case 74: case 75: case 49: case 72: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal237(){
         set(49);
         switch(current){
             case 95:
-                next();
-                parseFinal238();
-                break;
+                next();parseFinal238();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3299,18 +2707,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 75: case 51: case 98: case 50:
             case 97: case 74: case 73: case 72: case 49: case 71: case 48:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal71(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal72();
-                break;
+                next();parseFinal72();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3319,9 +2723,7 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal68(){
@@ -3335,9 +2737,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal265(){
@@ -3351,21 +2751,15 @@ public:
             case 57: case 103: case 56: case 55: case 102: case 76: case 100: case 53:
             case 99: case 52: case 51: case 98: case 74: case 97: case 50: case 73:
             case 49: case 72: case 48: case 95: case 71: case 101: case 54:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 109:
-                next();
-                parseFinal266();
-                break;
+                next();parseFinal266();break;
         }
     }
     void parse61(){
         switch(current){
             case 92:
-                next();
-                parse64();
-                break;
+                next();parse64();break;
             case -121: case -62: case 37: case 36: case -63: case 35: case -64:
             case 34: case -65: case 33: case -66: case 32: case -67: case 31: case -68:
             case 30: case -69: case 29: case -70: case 28: case -71: case 27: case -72:
@@ -3398,9 +2792,7 @@ public:
             case -56: case 42: case -57: case -58: case 41: case -59: case 40: case -2:
             case 97: case 38: case -61: case -1: case 98: case -60: case -49: case 50:
             case -48: case 51: case -54: case 45: case -52: case 47:
-                next();
-                parse62();
-                break;
+                next();parse62();break;
         }
     }
     void parseFinal65(){
@@ -3412,9 +2804,7 @@ public:
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal284();
-                break;
+                next();parseFinal284();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3423,9 +2813,7 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal60(){
@@ -3444,9 +2832,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal59(){
@@ -3458,13 +2844,9 @@ public:
         set(49);
         switch(current){
             case 110:
-                next();
-                parseFinal67();
-                break;
+                next();parseFinal67();break;
             case 102:
-                next();
-                parseFinal73();
-                break;
+                next();parseFinal73();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 87: case 109:
@@ -3473,18 +2855,14 @@ public:
             case 56: case 55: case 54: case 101: case 77: case 53: case 100: case 76:
             case 52: case 99: case 98: case 51: case 50: case 97: case 74: case 75:
             case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal189(){
         set(49);
         switch(current){
             case 110:
-                next();
-                parseFinal190();
-                break;
+                next();parseFinal190();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 87: case 109:
@@ -3493,31 +2871,23 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal45(){
         set(63);
         switch(current){
             case 43:
-                next();
-                parseFinal46();
-                break;
+                next();parseFinal46();break;
             case 61:
-                next();
-                parseFinal47();
-                break;
+                next();parseFinal47();break;
         }
     }
     void parseFinal56(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal57();
-                break;
+                next();parseFinal57();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3526,18 +2896,14 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal219(){
         set(49);
         switch(current){
             case 110:
-                next();
-                parseFinal220();
-                break;
+                next();parseFinal220();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 87: case 109:
@@ -3546,18 +2912,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal187(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal188();
-                break;
+                next();parseFinal188();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3566,18 +2928,14 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal54(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal55();
-                break;
+                next();parseFinal55();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3586,18 +2944,14 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal218(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal219();
-                break;
+                next();parseFinal219();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -3606,18 +2960,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal186(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal187();
-                break;
+                next();parseFinal187();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -3626,18 +2976,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal53(){
         set(49);
         switch(current){
             case 112:
-                next();
-                parseFinal54();
-                break;
+                next();parseFinal54();break;
             case 122: case 75: case 111: case 88: case 121: case 120: case 119:
             case 118: case 117: case 70: case 116: case 69: case 115: case 68: case 114:
             case 67: case 90: case 110: case 87: case 109: case 86: case 108: case 85:
@@ -3646,9 +2992,7 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 99: case 52:
             case 51: case 98: case 74: case 50: case 97: case 73: case 49: case 72:
             case 95: case 48: case 71: case 104: case 57: case 113: case 66:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal1(){
@@ -3660,9 +3004,7 @@ public:
         set(49);
         switch(current){
             case 121:
-                next();
-                parseFinal53();
-                break;
+                next();parseFinal53();break;
             case 122: case 120: case 119: case 118: case 117: case 70: case 116:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -3671,38 +3013,26 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal212(){
         set(49);
         switch(current){
-            case 66:
-                next();
-                parseFinal228();
-                break;
             case 67:
-                next();
-                parseFinal221();
-                break;
+                next();parseFinal221();break;
             case 78:
-                next();
-                parseFinal213();
-                break;
+                next();parseFinal213();break;
             case 84:
-                next();
-                parseFinal232();
-                break;
-            case 71:
-                next();
-                parseFinal258();
-                break;
+                next();parseFinal232();break;
             case 65:
-                next();
-                parseFinal244();
-                break;
+                next();parseFinal244();break;
+            case 73:
+                next();parseFinal265();break;
+            case 66:
+                next();parseFinal228();break;
+            case 71:
+                next();parseFinal258();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 113: case 90:
             case 112: case 89: case 111: case 88: case 110: case 87: case 109: case 86:
@@ -3710,30 +3040,18 @@ public:
             case 79: case 104: case 57: case 103: case 56: case 55: case 102: case 76:
             case 100: case 53: case 52: case 99: case 72: case 48: case 95: case 49:
             case 98: case 51: case 50: case 97: case 74: case 54: case 101: case 77:
-                next();
-                parseFinal5();
-                break;
-            case 73:
-                next();
-                parseFinal265();
-                break;
+                next();parseFinal5();break;
             case 83:
-                next();
-                parseFinal274();
-                break;
+                next();parseFinal274();break;
         }
     }
     void parseFinal194(){
         set(78);
         switch(current){
             case 124:
-                next();
-                parseFinal195();
-                break;
+                next();parseFinal195();break;
             case 61:
-                next();
-                parseFinal196();
-                break;
+                next();parseFinal196();break;
         }
     }
     void parseFinal58(){
@@ -3747,9 +3065,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal132(){
@@ -3761,9 +3077,7 @@ public:
         set(49);
         switch(current){
             case 110:
-                next();
-                parseFinal270();
-                break;
+                next();parseFinal270();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 87: case 109:
@@ -3772,9 +3086,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal82(){
@@ -3788,18 +3100,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal9(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal10();
-                break;
+                next();parseFinal10();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3808,27 +3116,21 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal287(){
         set(62);
         switch(current){
             case 61:
-                next();
-                parseFinal288();
-                break;
+                next();parseFinal288();break;
         }
     }
     void parseFinal50(){
         set(69);
         switch(current){
             case 61:
-                next();
-                parseFinal51();
-                break;
+                next();parseFinal51();break;
         }
     }
     void parseFinal178(){
@@ -3840,9 +3142,7 @@ public:
         set(49);
         switch(current){
             case 99:
-                next();
-                parseFinal116();
-                break;
+                next();parseFinal116();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3851,22 +3151,16 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 98: case 51: case 50: case 97: case 74: case 75:
             case 52: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal48(){
         set(71);
         switch(current){
             case 61:
-                next();
-                parseFinal49();
-                break;
+                next();parseFinal49();break;
             case 60:
-                next();
-                parseFinal50();
-                break;
+                next();parseFinal50();break;
         }
     }
     void parseFinal47(){
@@ -3890,18 +3184,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal24(){
         set(49);
         switch(current){
             case 103:
-                next();
-                parseFinal25();
-                break;
+                next();parseFinal25();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3910,18 +3200,14 @@ public:
             case 104: case 57: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal153(){
         set(49);
         switch(current){
             case 99:
-                next();
-                parseFinal154();
-                break;
+                next();parseFinal154();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -3930,9 +3216,7 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 52: case 75: case 51: case 98: case 74: case 97: case 50: case 73:
             case 72: case 49: case 95: case 48: case 71: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal43(){
@@ -3951,13 +3235,9 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 73: case 97: case 50: case 48: case 95: case 72: case 49: case 71:
             case 74: case 51: case 98: case 99: case 52: case 75: case 76:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 107:
-                next();
-                parseFinal37();
-                break;
+                next();parseFinal37();break;
         }
     }
     void parseFinal20(){
@@ -3971,13 +3251,9 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 99: case 52: case 51: case 98: case 72: case 48: case 95: case 49:
             case 71: case 74: case 97: case 50: case 73: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 110:
-                next();
-                parseFinal21();
-                break;
+                next();parseFinal21();break;
         }
     }
     void parseFinal76(){
@@ -3989,9 +3265,7 @@ public:
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal281();
-                break;
+                next();parseFinal281();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4000,22 +3274,16 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 75: case 98: case 51: case 74:
             case 73: case 50: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal12(){
         set(49);
         switch(current){
             case 115:
-                next();
-                parseFinal13();
-                break;
+                next();parseFinal13();break;
             case 105:
-                next();
-                parseFinal19();
-                break;
+                next();parseFinal19();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -4024,9 +3292,7 @@ public:
             case 102: case 55: case 54: case 101: case 77: case 53: case 100: case 76:
             case 52: case 99: case 98: case 51: case 50: case 97: case 74: case 75:
             case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal32(){
@@ -4040,18 +3306,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal170(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal171();
-                break;
+                next();parseFinal171();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4060,18 +3322,14 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal83(){
         set(49);
         switch(current){
             case 102:
-                next();
-                parseFinal84();
-                break;
+                next();parseFinal84();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4080,18 +3338,14 @@ public:
             case 57: case 103: case 56: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal235(){
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal236();
-                break;
+                next();parseFinal236();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4100,18 +3354,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 75: case 98: case 51: case 74:
             case 73: case 50: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal69(){
         set(49);
         switch(current){
             case 105:
-                next();
-                parseFinal70();
-                break;
+                next();parseFinal70();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4120,18 +3370,12 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal202(){
         set(49);
         switch(current){
-            case 105:
-                next();
-                parseFinal203();
-                break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 111: case 88: case 110:
@@ -4140,13 +3384,11 @@ public:
             case 57: case 103: case 56: case 102: case 55: case 54: case 101: case 99:
             case 52: case 51: case 98: case 48: case 95: case 49: case 72: case 73:
             case 97: case 50: case 71: case 74: case 100: case 53:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
+            case 105:
+                next();parseFinal203();break;
             case 108:
-                next();
-                parseFinal205();
-                break;
+                next();parseFinal205();break;
         }
     }
     void parseFinal90(){
@@ -4156,204 +3398,110 @@ public:
     }
     void parse0(){
         switch(current){
-            case 40:
-                next();
-                parseFinal2();
-                break;
-            case 58:
-                next();
-                parseFinal4();
-                break;
-            case 98:
-                next();
-                parseFinal33();
-                break;
-            case 119:
-                next();
-                parseFinal6();
-                break;
-            case 97:
-                next();
-                parseFinal38();
-                break;
-            case 126:
-                next();
-                parseFinal44();
-                break;
-            case 43:
-                next();
-                parseFinal45();
-                break;
-            case 116:
-                next();
-                parseFinal52();
-                break;
-            case 105:
-                next();
-                parseFinal66();
-                break;
-            case 41:
-                next();
-                parseFinal65();
-                break;
-            case 59:
-                next();
-                parseFinal74();
-                break;
-            case 117:
-                next();
-                parseFinal11();
-                break;
-            case 100:
-                next();
-                parseFinal77();
-                break;
-            case 37:
-                next();
-                parseFinal89();
-                break;
-            case 33:
-                next();
-                parseFinal75();
-                break;
-            case 94:
-                next();
-                parseFinal91();
-                break;
             case 108:
-                next();
-                parseFinal22();
-                break;
-            case 62:
-                next();
-                parseFinal197();
-                break;
-            case 34:
-                next();
-                parse103();
-                break;
-            case 125:
-                next();
-                parseFinal59();
-                break;
-            case 45:
-                next();
-                parseFinal124();
-                break;
-            case 46:
-                next();
-                parseFinal179();
-                break;
-            case 38:
-                next();
-                parseFinal130();
-                break;
+                next();parseFinal22();break;
             case 102:
-                next();
-                parseFinal26();
-                break;
-            case 115:
-                next();
-                parseFinal150();
-                break;
-            case 101:
-                next();
-                parseFinal182();
-                break;
-            case 44:
-                next();
-                parseFinal133();
-                break;
+                next();parseFinal26();break;
+            case 32: case 10: case 13: case 9:
+                next();parseFinal3();break;
+            case 116:
+                next();parseFinal52();break;
+            case 40:
+                next();parseFinal2();break;
+            case 63:
+                next();parseFinal60();break;
+            case 33:
+                next();parseFinal75();break;
+            case 119:
+                next();parseFinal6();break;
+            case 100:
+                next();parseFinal77();break;
             case 47:
-                next();
-                parseFinal93();
-                break;
+                next();parseFinal93();break;
+            case 34:
+                next();parse103();break;
+            case 125:
+                next();parseFinal59();break;
+            case 38:
+                next();parseFinal130();break;
+            case 43:
+                next();parseFinal45();break;
+            case 44:
+                next();parseFinal133();break;
+            case 97:
+                next();parseFinal38();break;
             case 99:
-                next();
-                parseFinal134();
-                break;
-            case 114:
-                next();
-                parseFinal106();
-                break;
-            case 123:
-                next();
-                parseFinal43();
-                break;
+                next();parseFinal134();break;
+            case 45:
+                next();parseFinal124();break;
+            case 91:
+                next();parseFinal1();break;
+            case 48:
+                next();parseFinal211();break;
+            case 115:
+                next();parseFinal150();break;
+            case 60:
+                next();parseFinal48();break;
             case 87: case 109: case 70: case 79: case 120: case 73: case 122:
             case 75: case 113: case 66: case 121: case 74: case 72: case 110: case 89:
             case 86: case 85: case 107: case 84: case 106: case 83: case 104: case 81:
             case 77: case 82: case 71: case 80: case 69: case 76: case 111: case 88:
             case 112: case 65: case 78: case 90: case 67: case 68:
-                next();
-                parseFinal5();
-                break;
-            case 103:
-                next();
-                parseFinal99();
-                break;
-            case 91:
-                next();
-                parseFinal1();
-                break;
+                next();parseFinal5();break;
+            case 123:
+                next();parseFinal43();break;
             case 42:
-                next();
-                parseFinal287();
-                break;
-            case 63:
-                next();
-                parseFinal60();
-                break;
-            case 118:
-                next();
-                parseFinal201();
-                break;
+                next();parseFinal287();break;
+            case 46:
+                next();parseFinal179();break;
             case 57: case 55: case 51: case 50: case 53: case 56: case 52:
             case 49: case 54:
-                next();
-                parseFinal42();
-                break;
+                next();parseFinal42();break;
+            case 103:
+                next();parseFinal99();break;
+            case 59:
+                next();parseFinal74();break;
+            case 118:
+                next();parseFinal201();break;
+            case 62:
+                next();parseFinal197();break;
             case 124:
-                next();
-                parseFinal194();
-                break;
-            case 32: case 10: case 13: case 9:
-                next();
-                parseFinal3();
-                break;
-            case 39:
-                next();
-                parse61();
-                break;
-            case 61:
-                next();
-                parseFinal128();
-                break;
-            case 48:
-                next();
-                parseFinal211();
-                break;
-            case 60:
-                next();
-                parseFinal48();
-                break;
-            case 95:
-                next();
-                parseFinal212();
-                break;
+                next();parseFinal194();break;
+            case 105:
+                next();parseFinal66();break;
+            case 37:
+                next();parseFinal89();break;
+            case 58:
+                next();parseFinal4();break;
             case 93:
-                next();
-                parseFinal178();
-                break;
+                next();parseFinal178();break;
+            case 114:
+                next();parseFinal106();break;
+            case 117:
+                next();parseFinal11();break;
+            case 101:
+                next();parseFinal182();break;
+            case 39:
+                next();parse61();break;
+            case 94:
+                next();parseFinal91();break;
+            case 98:
+                next();parseFinal33();break;
+            case 126:
+                next();parseFinal44();break;
+            case 61:
+                next();parseFinal128();break;
+            case 41:
+                next();parseFinal65();break;
+            case 95:
+                next();parseFinal212();break;
         }
     }
     void parseFinal3(){
         set(0);
         switch(current){
             case 32: case 13: case 10: case 9:
-                next();
-                parseFinal3();
-                break;
+                next();parseFinal3();break;
         }
     }
     void parseFinal46(){
@@ -4365,9 +3513,7 @@ public:
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal276();
-                break;
+                next();parseFinal276();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 111: case 88: case 110:
@@ -4376,18 +3522,14 @@ public:
             case 104: case 57: case 103: case 56: case 102: case 55: case 54: case 101:
             case 48: case 95: case 72: case 49: case 71: case 99: case 52: case 51:
             case 98: case 100: case 53: case 76: case 74: case 50: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal31(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal32();
-                break;
+                next();parseFinal32();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -4396,18 +3538,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal176(){
         set(49);
         switch(current){
             case 100:
-                next();
-                parseFinal177();
-                break;
+                next();parseFinal177();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4416,31 +3554,23 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 76:
             case 53: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal197(){
         set(72);
         switch(current){
             case 62:
-                next();
-                parseFinal198();
-                break;
+                next();parseFinal198();break;
             case 61:
-                next();
-                parseFinal200();
-                break;
+                next();parseFinal200();break;
         }
     }
     void parseFinal23(){
         set(49);
         switch(current){
             case 110:
-                next();
-                parseFinal24();
-                break;
+                next();parseFinal24();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 87: case 109:
@@ -4449,35 +3579,25 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal93(){
         set(67);
         switch(current){
             case 61:
-                next();
-                parseFinal94();
-                break;
+                next();parseFinal94();break;
             case 42:
-                next();
-                parse95();
-                break;
+                next();parse95();break;
             case 47:
-                next();
-                parseFinal98();
-                break;
+                next();parseFinal98();break;
         }
     }
     void parseFinal274(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal275();
-                break;
+                next();parseFinal275();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -4486,18 +3606,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal30(){
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal31();
-                break;
+                next();parseFinal31();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 111: case 88: case 110:
@@ -4506,9 +3622,7 @@ public:
             case 104: case 57: case 103: case 56: case 102: case 55: case 54: case 101:
             case 48: case 95: case 72: case 49: case 71: case 99: case 52: case 51:
             case 98: case 100: case 53: case 76: case 74: case 50: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal255(){
@@ -4522,18 +3636,12 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal67(){
         set(49);
         switch(current){
-            case 116:
-                next();
-                parseFinal68();
-                break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4542,22 +3650,18 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 99: case 52:
             case 51: case 98: case 73: case 97: case 50: case 48: case 95: case 72:
             case 49: case 71: case 100: case 53: case 76: case 74:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
+            case 116:
+                next();parseFinal68();break;
             case 108:
-                next();
-                parseFinal69();
-                break;
+                next();parseFinal69();break;
         }
     }
     void parseFinal29(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal30();
-                break;
+                next();parseFinal30();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -4566,18 +3670,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal245(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal246();
-                break;
+                next();parseFinal246();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -4586,9 +3686,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal44(){
@@ -4600,9 +3698,7 @@ public:
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal40();
-                break;
+                next();parseFinal40();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 69: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 111: case 88: case 110: case 87: case 109:
@@ -4611,9 +3707,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal98(){
@@ -4651,18 +3745,14 @@ public:
             case 46: case -53: case 45: case -54: case 44: case -55: case 43: case -56:
             case -57: case 42: case -60: case 39: case 40: case -59: case 41: case -58:
             case -61: case 38: case -2: case 97: case 47: case -52: case -49: case 50:
-                next();
-                parseFinal98();
-                break;
+                next();parseFinal98();break;
         }
     }
     void parseFinal284(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal285();
-                break;
+                next();parseFinal285();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 70: case 116: case 69: case 115: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -4671,18 +3761,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 75: case 51: case 98: case 74: case 50: case 97:
             case 68: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal27(){
         set(49);
         switch(current){
             case 114:
-                next();
-                parseFinal28();
-                break;
+                next();parseFinal28();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 70: case 116: case 69: case 115: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -4691,18 +3777,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 75: case 51: case 98: case 74: case 50: case 97:
             case 68: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal26(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal27();
-                break;
+                next();parseFinal27();break;
             case 122: case 75: case 121: case 120: case 119: case 118: case 117:
             case 70: case 116: case 69: case 115: case 68: case 114: case 67: case 113:
             case 66: case 90: case 112: case 65: case 89: case 88: case 110: case 87:
@@ -4711,22 +3793,16 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 99: case 52:
             case 51: case 98: case 73: case 97: case 50: case 48: case 95: case 72:
             case 49: case 71: case 100: case 53: case 76: case 74:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 108:
-                next();
-                parseFinal29();
-                break;
+                next();parseFinal29();break;
         }
     }
     void parseFinal38(){
         set(49);
         switch(current){
             case 117:
-                next();
-                parseFinal39();
-                break;
+                next();parseFinal39();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 110: case 87: case 109: case 86:
@@ -4735,9 +3811,7 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 71: case 95: case 48: case 50: case 97:
             case 98: case 51: case 74: case 75: case 49: case 72: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal125(){
@@ -4756,18 +3830,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal171(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal172();
-                break;
+                next();parseFinal172();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -4776,18 +3846,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal84(){
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal85();
-                break;
+                next();parseFinal85();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4796,18 +3862,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 75: case 98: case 51: case 74:
             case 73: case 50: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal260(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal261();
-                break;
+                next();parseFinal261();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4816,9 +3878,7 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal92(){
@@ -4830,18 +3890,14 @@ public:
         switch(current){
             case 110: case 102: case 97: case 98: case 114: case 92: case 118:
             case 63: case 116: case 39: case 34:
-                next();
-                parse62();
-                break;
+                next();parse62();break;
         }
     }
     void parseFinal19(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal20();
-                break;
+                next();parseFinal20();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -4850,9 +3906,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal63(){
@@ -4869,9 +3923,7 @@ public:
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal149();
-                break;
+                next();parseFinal149();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4880,9 +3932,7 @@ public:
             case 56: case 102: case 55: case 54: case 53: case 100: case 76: case 52:
             case 99: case 73: case 97: case 50: case 49: case 48: case 95: case 72:
             case 71: case 75: case 98: case 51: case 74: case 104: case 57:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal11(){
@@ -4896,13 +3946,9 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 99: case 52: case 51: case 98: case 72: case 48: case 95: case 49:
             case 71: case 74: case 97: case 50: case 73: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 110:
-                next();
-                parseFinal12();
-                break;
+                next();parseFinal12();break;
         }
     }
     void parseFinal18(){
@@ -4916,18 +3962,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal116(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal117();
-                break;
+                next();parseFinal117();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -4936,9 +3978,7 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 70: case 74: case 98: case 51: case 50: case 97:
             case 73: case 48: case 95: case 72: case 49: case 71: case 75:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal37(){
@@ -4952,18 +3992,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal100(){
         set(49);
         switch(current){
             case 116:
-                next();
-                parseFinal101();
-                break;
+                next();parseFinal101();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 117: case 115: case 68: case 114: case 67: case 113: case 66: case 90:
             case 112: case 65: case 89: case 110: case 87: case 109: case 86: case 108:
@@ -4972,18 +4008,14 @@ public:
             case 56: case 102: case 55: case 101: case 54: case 53: case 100: case 76:
             case 52: case 99: case 70: case 74: case 98: case 51: case 50: case 97:
             case 73: case 48: case 95: case 72: case 49: case 71: case 75:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal17(){
         set(49);
         switch(current){
             case 100:
-                next();
-                parseFinal18();
-                break;
+                next();parseFinal18();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -4992,18 +4024,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 76:
             case 53: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal101(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal102();
-                break;
+                next();parseFinal102();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -5012,9 +4040,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal74(){
@@ -5033,9 +4059,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal137(){
@@ -5049,22 +4073,16 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 50: case 97: case 98: case 51: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 105:
-                next();
-                parseFinal138();
-                break;
+                next();parseFinal138();break;
         }
     }
     void parseFinal246(){
         set(49);
         switch(current){
             case 109:
-                next();
-                parseFinal247();
-                break;
+                next();parseFinal247();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -5073,9 +4091,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal49(){
@@ -5094,13 +4110,9 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 99: case 52: case 51: case 98: case 72: case 48: case 95: case 49:
             case 71: case 74: case 97: case 50: case 73: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 110:
-                next();
-                parseFinal16();
-                break;
+                next();parseFinal16();break;
         }
     }
     void parse95(){
@@ -5137,13 +4149,9 @@ public:
             case 50: case 49: case -50: case 48: case -51: case 47: case -52: case 46:
             case -53: case 45: case -54: case -55: case 44: case 43: case -56: case -59:
             case 40: case 41: case -58: case -57: case 39: case -60: case 38: case -61:
-                next();
-                parse95();
-                break;
+                next();parse95();break;
             case 42:
-                next();
-                parse96();
-                break;
+                next();parse96();break;
         }
     }
     void parseFinal22(){
@@ -5157,22 +4165,16 @@ public:
             case 55: case 101: case 54: case 53: case 100: case 76: case 52: case 99:
             case 73: case 97: case 50: case 48: case 95: case 72: case 49: case 71:
             case 98: case 51: case 74: case 112: case 65: case 103: case 56:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 111:
-                next();
-                parseFinal23();
-                break;
+                next();parseFinal23();break;
         }
     }
     void parseFinal14(){
         set(49);
         switch(current){
             case 103:
-                next();
-                parseFinal15();
-                break;
+                next();parseFinal15();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -5181,18 +4183,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal55(){
         set(49);
         switch(current){
             case 100:
-                next();
-                parseFinal56();
-                break;
+                next();parseFinal56();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -5201,9 +4199,7 @@ public:
             case 55: case 101: case 54: case 53: case 76: case 52: case 99: case 75:
             case 51: case 98: case 48: case 95: case 72: case 49: case 71: case 74:
             case 97: case 50: case 73: case 104: case 57: case 103: case 56:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal129(){
@@ -5215,9 +4211,7 @@ public:
         set(49);
         switch(current){
             case 100:
-                next();
-                parseFinal237();
-                break;
+                next();parseFinal237();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -5226,9 +4220,7 @@ public:
             case 55: case 101: case 54: case 53: case 76: case 52: case 99: case 75:
             case 51: case 98: case 48: case 95: case 72: case 49: case 71: case 74:
             case 97: case 50: case 73: case 104: case 57: case 103: case 56:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal70(){
@@ -5242,22 +4234,16 @@ public:
             case 57: case 56: case 103: case 101: case 54: case 53: case 100: case 76:
             case 99: case 52: case 51: case 98: case 72: case 48: case 95: case 49:
             case 71: case 74: case 97: case 50: case 73: case 102: case 55:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
             case 110:
-                next();
-                parseFinal71();
-                break;
+                next();parseFinal71();break;
         }
     }
     void parseFinal205(){
         set(49);
         switch(current){
             case 97:
-                next();
-                parseFinal206();
-                break;
+                next();parseFinal206();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -5266,9 +4252,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 75: case 98: case 51: case 74:
             case 73: case 50: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal5(){
@@ -5282,18 +4266,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal7(){
         set(49);
         switch(current){
             case 105:
-                next();
-                parseFinal8();
-                break;
+                next();parseFinal8();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -5302,9 +4282,7 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal21(){
@@ -5318,9 +4296,7 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal2(){
@@ -5332,9 +4308,7 @@ public:
         set(49);
         switch(current){
             case 104:
-                next();
-                parseFinal7();
-                break;
+                next();parseFinal7();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -5343,9 +4317,7 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 72: case 48: case 95: case 49: case 71: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal231(){
@@ -5359,18 +4331,14 @@ public:
             case 103: case 56: case 102: case 55: case 54: case 101: case 77: case 53:
             case 100: case 76: case 52: case 99: case 98: case 51: case 50: case 97:
             case 74: case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal139(){
         set(49);
         switch(current){
             case 117:
-                next();
-                parseFinal140();
-                break;
+                next();parseFinal140();break;
             case 122: case 111: case 88: case 121: case 120: case 119: case 118:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 110: case 87: case 109: case 86:
@@ -5379,18 +4347,14 @@ public:
             case 103: case 56: case 102: case 55: case 101: case 54: case 53: case 100:
             case 76: case 52: case 99: case 71: case 95: case 48: case 50: case 97:
             case 98: case 51: case 74: case 75: case 49: case 72: case 73:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal99(){
         set(49);
         switch(current){
             case 111:
-                next();
-                parseFinal100();
-                break;
+                next();parseFinal100();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 88: case 110: case 87: case 109:
@@ -5399,18 +4363,14 @@ public:
             case 56: case 102: case 55: case 54: case 101: case 77: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal16(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal17();
-                break;
+                next();parseFinal17();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -5419,18 +4379,14 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
     void parseFinal34(){
         set(49);
         switch(current){
             case 101:
-                next();
-                parseFinal35();
-                break;
+                next();parseFinal35();break;
             case 122: case 121: case 120: case 119: case 118: case 117: case 70:
             case 116: case 69: case 115: case 68: case 114: case 67: case 113: case 66:
             case 90: case 112: case 65: case 89: case 111: case 88: case 110: case 87:
@@ -5439,9 +4395,7 @@ public:
             case 103: case 56: case 102: case 55: case 77: case 54: case 53: case 100:
             case 76: case 52: case 99: case 98: case 51: case 50: case 97: case 74:
             case 75: case 73: case 48: case 95: case 72: case 49: case 71:
-                next();
-                parseFinal5();
-                break;
+                next();parseFinal5();break;
         }
     }
 };

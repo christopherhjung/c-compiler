@@ -14,7 +14,7 @@ class Error {
 public:
     Location* location;
     std::string msg;
-    Error(Location* location, std::string msg) : location(location),  msg(std::move(msg)){
+    Error(Location* location, const std::string& msg) : location(location),  msg(msg){
 
     };
 

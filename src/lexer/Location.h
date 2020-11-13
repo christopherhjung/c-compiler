@@ -11,7 +11,7 @@ class Location {
     int line;
     int column;
 public:
-    Location(std::string fileName, int line, int column) : fileName(std::move(fileName)), line(line), column(column){
+    Location(const std::string& fileName, int line, int column) : fileName(fileName), line(line), column(column){
 
     };
 

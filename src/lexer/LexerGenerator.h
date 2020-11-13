@@ -75,7 +75,10 @@ public:
         offset(1) << "bool hasNextToken() override {" << std::endl;
         offset(2) << "accept = -1;" << std::endl;
         offset(2) << "offset = 0;" << std::endl;
-        callRule(start, 2);
+
+        offset(2);
+        callRule(start);
+        ss << std::endl;
 
         offset(2) << "auto* location = new Location(reader->getOrigin(),line,column);" << std::endl;
         offset(2) << "std::string value = reader->readString(offset);" << std::endl;
@@ -86,7 +89,13 @@ public:
         offset(4) << "return false;" << std::endl;
         offset(3) << "}" << std::endl;
 
-        offset(3) << R"(errorObj =new Error(location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + current + "< wrong!" );)" << std::endl;
+
+        offset(3) << "int32_t offset = reader->getOffset() - 1;" << std::endl;
+        offset(3) << "if(offset < 0){" << std::endl;
+        offset(4) << "offset = 0;" << std::endl;
+        offset(3) << "}" << std::endl;
+        offset(3) << R"(errorObj =new Error(location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );)" << std::endl;
+
         offset(3) << "error = true;" << std::endl;
         offset(3) << "return false;" << std::endl;
         offset(2) << "}" << std::endl;
@@ -179,10 +188,9 @@ public:
             }
             ss << std::endl;
 
-            offset(depth + 2) << "next();" << std::endl;
-            callRule(pair.first, depth + 2);
-
-            offset(depth + 2) << "break;" << std::endl;
+            offset(depth + 2) << "next();" ;
+            callRule(pair.first);
+            ss << "break;" << std::endl;
         }
 
         offset(depth) << "}" << std::endl;
@@ -225,10 +233,9 @@ public:
         offset(0) << ":";
     }
 
-    void callRule(State* state, uint32_t depth){
-        offset(depth);
+    void callRule(State* state){
         writeRuleName(state);
-        ss << "();" << std::endl;
+        ss << "();";
     }
 
     void writeRuleName(State* state){
