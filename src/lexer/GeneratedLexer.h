@@ -118,7 +118,11 @@ public:
             if(current == 0){
                 return false;
             }
-            errorObj =new Error(location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + current + "< wrong!" );
+            int32_t offset = reader->getOffset() - 1;
+            if(offset < 0){
+                offset = 0;
+            }
+            errorObj =new Error(location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );
             error = true;
             return false;
         }
