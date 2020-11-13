@@ -76,12 +76,13 @@ public:
         int32_t acceptPosition = -1;
         State* currentState = state.get();
         State* acceptState = nullptr;
-        auto* location = new Location(reader->getOrigin(),line,column);
+        token.location.line = line;
+        token.location.column = column;
         char c = -1;
         while(true){
             if(currentState == nullptr || !reader->hasCurrent()){
                 if(acceptPosition == -1){
-                    errorObj =new Error(location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + escaping(c) + "< wrong!" );
+                    errorObj =new Error(&token.location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + escaping(c) + "< wrong!" );
                     error = true;
                     return false;
                 }
@@ -104,7 +105,6 @@ public:
             updatePosition(c);
         }
 
-        token.location = location;
         token.id = acceptState->id;
         token.name = acceptState->name;
         token.value = value;

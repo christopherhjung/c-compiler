@@ -92,7 +92,10 @@ public:
         callRule(start);
         ss << std::endl;
 
-        offset(2) << "auto* location = new Location(reader->getOrigin(),line,column);" << std::endl;
+
+
+        offset(2) << "token.location.line = line;" << std::endl;
+        offset(2) << "token.location.column = column;" << std::endl;
 
         offset(2) << "if(accept == -1 || (current == 0 && offset < reader->getSize()) ){" << std::endl;
         offset(3) << "if(current == 0 && offset == 0){" << std::endl;
@@ -104,7 +107,7 @@ public:
         offset(3) << "if(offset < 0){" << std::endl;
         offset(4) << "offset = 0;" << std::endl;
         offset(3) << "}" << std::endl;
-        offset(3) << R"(errorObj =new Error(location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );)" << std::endl;
+        offset(3) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );)" << std::endl;
 
         offset(3) << "error = true;" << std::endl;
         offset(3) << "return false;" << std::endl;
@@ -117,7 +120,6 @@ public:
         offset(3) << "updatePosition(c);" << std::endl;
         offset(2) << "}" << std::endl;
 
-        offset(2) << "token.location = location;" << std::endl;
         offset(2) << "token.id = accept;" << std::endl;
         offset(2) << "token.name = types[accept];" << std::endl;
         offset(2) << "token.value = value;" << std::endl;

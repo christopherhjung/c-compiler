@@ -15,7 +15,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lexer/LexerGenerator.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/LexerGenerator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer/StateMachineLexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/StateMachineLexer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -156,7 +156,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/lexer/GeneratedLexer.h</url>
-          <line>128</line>
+          <line>129</line>
           <option name="timeStamp" value="88" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
@@ -166,7 +166,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/lexer/GeneratedLexer.h</url>
-          <line>119</line>
+          <line>120</line>
           <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>

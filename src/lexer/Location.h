@@ -7,13 +7,10 @@
 #include <iostream>
 
 class Location {
+public:
     std::string fileName;
     int line;
     int column;
-public:
-    Location(const std::string& fileName, int line, int column) : fileName(fileName), line(line), column(column){
-
-    };
 
     friend std::ostream& operator<<(std::ostream& stream, const Location& tok){
         return stream << tok.fileName << ":" << tok.line << ":" << tok.column;

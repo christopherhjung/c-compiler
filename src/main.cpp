@@ -7,7 +7,7 @@
 
 #include <functional>
 
-//#define DEBUG
+#define DEBUG
 //#define MEASURE
 #define OUTPUT
 
@@ -42,6 +42,7 @@ int main(int, char **const args) {
 
     lexer.reset(fileInputReader);
     Token token;
+    token.location.fileName = args[2];
     while(lexer.hasNextToken(token)){
         if(token.id >= 3){ //whitespace
 #ifdef OUTPUT

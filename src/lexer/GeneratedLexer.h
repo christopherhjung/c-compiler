@@ -111,7 +111,8 @@ public:
         accept = -1;
         offset = 0;
         parse0();
-        auto* location = new Location(reader->getOrigin(),line,column);
+        token.location.line = line;
+        token.location.column = column;
         if(accept == -1 || (current == 0 && offset < reader->getSize()) ){
             if(current == 0 && offset == 0){
                 return false;
@@ -120,7 +121,7 @@ public:
             if(offset < 0){
                 offset = 0;
             }
-            errorObj =new Error(location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );
+            errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );
             error = true;
             return false;
         }
@@ -129,7 +130,6 @@ public:
         for(auto& c : value){
             updatePosition(c);
         }
-        token.location = location;
         token.id = accept;
         token.name = types[accept];
         token.value = value;
