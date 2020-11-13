@@ -18,7 +18,7 @@ private:
     std::deque<T*> queue;
     bool closed;
 public:
-    void push(T* value) {
+    void offer(T* value) {
         {
             std::unique_lock<std::mutex> lock(this->mutex);
             queue.push_front(value);
@@ -27,10 +27,10 @@ public:
     }
 
     void close(){
-        push(nullptr);
+        offer(nullptr);
     }
 
-    T* pop() {
+    T* take() {
         if(closed){
             throw std::exception();
         }

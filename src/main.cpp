@@ -20,7 +20,7 @@ void search(std::string path){
     while(lexer.hasNextToken()){
         auto* token = lexer.fetchToken();
         if(token->id >= 3){ //whitespace
-            tokenQueue.push(token);
+            tokenQueue.offer(token);
         }
     }
 
@@ -37,7 +37,7 @@ int main(int, char **const args) {
     std::thread lexerThread(search,args[2]);
 
     for(;;){
-        Token* token = tokenQueue.pop();
+        Token* token = tokenQueue.take();
         if(token == nullptr){
             break;
         }
