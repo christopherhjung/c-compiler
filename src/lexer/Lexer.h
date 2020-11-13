@@ -4,6 +4,10 @@
 
 #pragma once
 
+#include "Token.h"
+#include "Error.h"
+#include "Lexer.h"
+#include "../reader/InputReader.h"
 
 class Lexer {
 private:
