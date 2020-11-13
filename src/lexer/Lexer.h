@@ -85,7 +85,7 @@ public:
         while(true){
             if(currentState == nullptr || !reader->hasCurrent()){
                 if(acceptPosition == -1){
-                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getPosition() - 1) + "_<-- char \"" + escaping(c) + "\" wrong!" );
+                    errorObj = std::make_shared<Error>(location, reader->readString(reader->getOffset() - 1) + "_<-- char \"" + escaping(c) + "\" wrong!" );
                     error = true;
                     return false;
                 }
@@ -97,7 +97,7 @@ public:
             currentState = currentState->transitions[c];
 
             if(currentState != nullptr && currentState->finish){
-                acceptPosition = reader->getPosition();
+                acceptPosition = reader->getOffset();
                 acceptState = currentState;
             }
         }

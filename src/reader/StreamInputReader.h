@@ -20,7 +20,7 @@ class StreamInputReader : public InputReader{
 protected:
     std::ifstream *stream;
     uint32_t tail = 0;
-    uint32_t capacity = 1u << 8;
+    uint32_t capacity = 1u << 8u;
     uint32_t size = 0;
     uint32_t mask = capacity - 1;
     uint32_t position = 0;
@@ -76,7 +76,7 @@ public:
         check();
     }
 
-    uint32_t getPosition() override {
+    uint32_t getOffset() override {
         if(tail <= position){
             return position - tail;
         }else{
@@ -109,12 +109,12 @@ public:
 
         if(readCount == 0){
             empty = true;
-        }
-
-        head = (head + readCount) & mask;
-        size += readCount;
-        if(head == tail && readCount > 0){
-            full = true;
+        }else{
+            head = (head + readCount) & mask;
+            size += readCount;
+            if( head == tail ){
+                full = true;
+            }
         }
     }
 

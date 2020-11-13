@@ -40,7 +40,7 @@ public:
         marker = index;
     }
 
-    uint32_t getPosition() override {
+    uint32_t getOffset() override {
         return index;
     }
 
