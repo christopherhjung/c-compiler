@@ -45,7 +45,7 @@ DUMMY := $(shell mkdir -p $(sort $(dir $(OBJ))))
 
 .PHONY: all clean develop
 
-all: $(BIN) $(RES_BUILD)
+all: $(BIN) #$(RES_BUILD)
 
 
 -include $(DEP)
