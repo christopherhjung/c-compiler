@@ -2,7 +2,7 @@ BUILDDIR ?= build
 CFG      ?= debug
 NAME     ?= c4
 SRCDIR   ?= src
-RESDIR   ?= resources
+#RESDIR   ?= resources
 
 all:
 
@@ -13,7 +13,7 @@ Q ?= @
 
 BINDIR := $(BUILDDIR)/$(CFG)
 BIN    := $(BINDIR)/$(NAME)
-RES_BUILD    := $(BINDIR)/$(RESDIR)
+#RES_BUILD    := $(BINDIR)/$(RESDIR)
 SRC    := $(sort $(wildcard $(SRCDIR)/**/*.cpp) $(wildcard $(SRCDIR)/*.cpp))
 OBJ    := $(SRC:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
 DEP    := $(OBJ:%.o=%.d)
