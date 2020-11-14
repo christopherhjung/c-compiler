@@ -12,7 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="184abdf8-6e5d-4d9f-8f68-641ff26a5467" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/lexer/Error.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/Error.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
