@@ -390,7 +390,7 @@ public:
             }
 
             for(uint32_t i = 1 ; i < CHAR_COUNT ; i++){
-                if(set.find(i) != set.end() ^ negate){
+                if((set.find(i) != set.end()) ^ negate){
                     set.insert(i);
                 }else{
                     set.erase(i);
