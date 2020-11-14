@@ -138,7 +138,7 @@ public:
         offset(1) << "}" << std::endl;
 
 
-        offset(1) << "bool next() {" << std::endl;
+        offset(1) << "void next() {" << std::endl;
         offset(2) << "reader->next();" << std::endl;
         offset(2) << "current = reader->peek();" << std::endl;
         offset(1) << "}" << std::endl;
@@ -186,7 +186,6 @@ public:
         offset(depth) << "switch(current){" << std::endl;
         std::map<State*, std::unordered_set<char>> unsorted;
         for(const auto& pair : state->transitions){
-            std::unordered_set<char>& set = unsorted[pair.second];
             unsorted[pair.second].insert(pair.first);
         }
 

@@ -143,7 +143,7 @@ public:
             column++;
         }
     }
-    bool next() {
+    void next() {
         reader->next();
         current = reader->peek();
     }

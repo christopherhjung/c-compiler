@@ -7,7 +7,7 @@
 
 #include <functional>
 
-#define DEBUG
+//#define DEBUG
 //#define MEASURE
 #define OUTPUT
 

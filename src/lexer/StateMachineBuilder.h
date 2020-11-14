@@ -40,7 +40,7 @@ public:
     std::string name;
     int32_t index = -1;
     int32_t id = -1;
-    State(bool finish, uint32_t index ,uint32_t id, std::string& name) : finish(finish), index(index), id(id), name(name) {};
+    State(bool finish, uint32_t index ,uint32_t id, std::string& name) : finish(finish), name(name), index(index), id(id) {};
     State(bool finish, uint32_t index ) : finish(finish), index(index){};
     std::unordered_map<char, State*> transitions;
     //State* transitions[CHAR_COUNT]{nullptr};
@@ -153,15 +153,15 @@ public:
         bool isFinish = false;
         std::unordered_map<char, std::unordered_set<uint32_t>> next;
         std::string name;
-        int32_t rule = -1;
+        uint32_t rule = 0;
         for (uint32_t key : set)
         {
             if (rules.find(key) != rules.end())
             {
-                isFinish = true;
-                if(rule == -1 || key < rule){
+                if(!isFinish || key < rule){
                     rule = rules[key];
                 }
+                isFinish = true;
             }
             else
             {
@@ -184,10 +184,10 @@ public:
         }
 
         State* state;
-        if(rule == -1){
-            state = new State(isFinish , stateIndex++);
-        }else{
+        if(isFinish){
             state = new State(isFinish, stateIndex++, rule, kinds[rule]);
+        }else{
+            state = new State(isFinish , stateIndex++);
         }
         states[set] = state;
         for (const auto& element : next)

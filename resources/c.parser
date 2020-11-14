@@ -1,0 +1,10 @@
+
+12 + 13 * 9
+
+
+
+
+init -> .add
+add -> .add + mul | val
+mul -> mul + val | val
+val -> (add) | id
