@@ -15,6 +15,12 @@ iostream
 -
 
 /Users/chris/CLionProjects/c4/src/lexer/GeneratedLexer.h
+Error.h
+/Users/chris/CLionProjects/c4/src/lexer/Error.h
+Lexer.h
+/Users/chris/CLionProjects/c4/src/lexer/Lexer.h
+string
+-
 
 /Users/chris/CLionProjects/c4/src/lexer/Lexer.h
 Token.h
@@ -38,8 +44,6 @@ unordered_map
 unordered_set
 -
 fstream
--
-map
 -
 StateMachineLexer.h
 /Users/chris/CLionProjects/c4/src/lexer/StateMachineLexer.h
@@ -79,6 +83,8 @@ string
 -
 sstream
 -
+functional
+-
 ../reader/InputReader.h
 /Users/chris/CLionProjects/c4/src/reader/InputReader.h
 StateMachineBuilder.h
@@ -96,6 +102,8 @@ Lexer.h
 string
 -
 unordered_set
+-
+functional
 -
 
 /Users/chris/CLionProjects/c4/src/lexer/Token.h
@@ -128,6 +136,8 @@ lexer/GeneratedLexer.h
 StreamInputReader.h
 /Users/chris/CLionProjects/c4/src/reader/StreamInputReader.h
 iostream
+-
+string
 -
 
 /Users/chris/CLionProjects/c4/src/reader/InputReader.h

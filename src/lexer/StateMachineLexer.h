@@ -10,6 +10,7 @@
 #include <memory>
 #include <string>
 #include <sstream>
+#include <functional>
 
 #include "../reader/InputReader.h"
 #include "StateMachineBuilder.h"

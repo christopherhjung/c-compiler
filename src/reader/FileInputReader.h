@@ -8,6 +8,7 @@
 #include "StreamInputReader.h"
 
 #include <iostream>
+#include <string>
 
 class FileInputReader : public StreamInputReader  {
 

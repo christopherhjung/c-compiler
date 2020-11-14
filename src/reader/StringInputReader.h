@@ -12,8 +12,6 @@
 
 #include "InputReader.h"
 
-
-
 class StringInputReader : public InputReader {
     std::string str;
     uint32_t index;

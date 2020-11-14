@@ -13,9 +13,16 @@
   <component name="ChangeListManager">
     <list default="true" id="10afe655-36c1-4a1a-91f8-cc4a081fb77d" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4.cbp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lexer/GeneratedLexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/GeneratedLexer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lexer/LexerGenerator.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/LexerGenerator.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer/StateMachineLexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/StateMachineLexer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer/SymbolCache.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/SymbolCache.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/reader/FileInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/FileInputReader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/reader/StringInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/StringInputReader.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -44,18 +51,18 @@
     <property name="settings.editor.selected.configurable" value="dynamic.analysis.tools.valgrind" />
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/resources" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/cmake-build-debug" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/test" />
       <recent name="$PROJECT_DIR$/src/lexer" />
       <recent name="$PROJECT_DIR$/src/reader" />
       <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/resources" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/cmake-build-debug" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -146,27 +153,27 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/lexer/StateMachineLexer.h</url>
-          <line>84</line>
+          <line>85</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/reader/FileInputReader.h</url>
-          <line>19</line>
+          <line>20</line>
           <option name="timeStamp" value="75" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/lexer/GeneratedLexer.h</url>
-          <line>129</line>
+          <line>134</line>
           <option name="timeStamp" value="88" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/lexer/GeneratedLexer.h</url>
-          <line>112</line>
+          <line>117</line>
           <option name="timeStamp" value="100" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/lexer/GeneratedLexer.h</url>
-          <line>120</line>
+          <line>125</line>
           <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>

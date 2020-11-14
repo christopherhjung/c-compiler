@@ -6,22 +6,7 @@
 
 #include <string>
 #include <unordered_set>
-
-struct SharedPtrHash {
-    std::hash<std::string> hash = std::hash<std::string>();
-
-    size_t operator()(const std::shared_ptr<std::string> & s) const {
-        return hash(*s);
-    }
-};
-
-struct SharedPtrEqualTo {
-
-    bool operator() ( const std::shared_ptr<std::string>& lhs, const std::shared_ptr<std::string>& rhs) const
-    {
-        return *lhs == *rhs;
-    }
-};
+#include <functional>
 
 class SymbolCache {
     std::unordered_set<std::string> cache;

@@ -1,3 +1,9 @@
+#pragma once
+
+#include "Error.h"
+#include "Lexer.h"
+#include <string>
+
 class GeneratedLexer : public Lexer{
     char current;
     int32_t accept;
@@ -6,7 +12,6 @@ class GeneratedLexer : public Lexer{
     uint32_t column = 1;
     bool error = false;
     Error* errorObj;
-    Token* token;
     std::string types[97] {
         "whitespace",
         "comment",
@@ -156,7 +161,7 @@ public:
         current = reader->peek();
     }
     Token *fetchToken() override {
-        return token;
+        return nullptr;
     }
     Error *getError() override {
         return errorObj;

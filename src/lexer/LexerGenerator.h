@@ -10,18 +10,15 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <fstream>
-#include <map>
 
 #include "StateMachineLexer.h"
 
-#define READER_NAME reader
-
-bool cmpState (State* l, State* r) {
+inline bool cmpState (State* l, State* r) {
     return l->index < r->index;
 }
 
 template <class T>
-bool cmpPairState(std::pair<State*, T>& l, std::pair<State*, T>& r) {
+inline bool cmpPairState(std::pair<State*, T>& l, std::pair<State*, T>& r) {
     return cmpState(l.first, r.first);
 }
 
@@ -186,7 +183,7 @@ public:
     }
 
     void writeSwitch(State* state, uint32_t depth){
-        std::map<State*, std::unordered_set<char>> unsorted;
+        std::unordered_map<State*, std::unordered_set<char>> unsorted;
         for(const auto& pair : state->transitions){
             unsorted[pair.second].insert(pair.first);
         }
