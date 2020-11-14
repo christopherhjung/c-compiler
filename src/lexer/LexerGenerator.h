@@ -175,6 +175,9 @@ public:
         offset(depth) << "void ";
         writeRuleName(state);
         ss << "(){" << std::endl;
+        if(state->index > 0){
+            offset(depth + 1) << "next();" << std::endl;
+        }
         if(state->finish){
             offset(depth + 1) << "set("<< state->id <<");" << std::endl;
         }
@@ -183,12 +186,16 @@ public:
     }
 
     void writeSwitch(State* state, uint32_t depth){
-        offset(depth) << "switch(current){" << std::endl;
         std::map<State*, std::unordered_set<char>> unsorted;
         for(const auto& pair : state->transitions){
             unsorted[pair.second].insert(pair.first);
         }
 
+        if(unsorted.size() == 0){
+            return;
+        }
+
+        offset(depth) << "switch(current){" << std::endl;
         std::vector<std::pair<State*, std::unordered_set<char>> > sorted;
 
         for (auto& it : unsorted) {
@@ -212,7 +219,7 @@ public:
             }
             ss << std::endl;
 
-            offset(depth + 2) << "next();" ;
+            offset(depth + 2);
             callRule(pair.first);
             ss << "break;" << std::endl;
         }
