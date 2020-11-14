@@ -1,8 +1,10 @@
 BUILDDIR ?= build
 CFG      ?= debug
 NAME     ?= c4
+BUILD_NAME     ?= build
 SRCDIR   ?= src
-#RESDIR   ?= resources
+RESDIR   ?= resources
+GENERATED   ?= generated
 
 all:
 
@@ -12,10 +14,16 @@ all:
 Q ?= @
 
 BINDIR := $(BUILDDIR)/$(CFG)
+GENERATED_DIR := $(SRCDIR)/$(GENERATED)
 BIN    := $(BINDIR)/$(NAME)
-#RES_BUILD    := $(BINDIR)/$(RESDIR)
-SRC    := $(sort $(wildcard $(SRCDIR)/**/*.cpp) $(wildcard $(SRCDIR)/*.cpp))
+BUILD_BIN    := $(BINDIR)/$(BUILD_NAME)
+RES_BUILD    := $(BINDIR)/$(RESDIR)
+SRC    := $(sort $(wildcard $(SRCDIR)/**/*.cpp))
+MAIN_SRC := $(SRCDIR)/main.cpp
+BUILD_SRC := $(SRCDIR)/build.cpp
 OBJ    := $(SRC:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
+MAIN_OBJ    := $(MAIN_SRC:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
+BUILD_OBJ    := $(BUILD_SRC:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
 DEP    := $(OBJ:%.o=%.d)
 
 
@@ -45,18 +53,34 @@ DUMMY := $(shell mkdir -p $(sort $(dir $(OBJ))))
 
 .PHONY: all clean develop
 
-all: $(BIN) #$(RES_BUILD)
+all: build main
 
+build: $(BUILD_BIN)
+
+main: before $(BIN)
+
+before:
+	@echo "===> generate lexer"
+	$(Q)mkdir -p $(GENERATED_DIR)
+	$(Q)$(BUILD_BIN) "./resources/c.lexer" "./src/generated/GeneratedLexer.h"
+
+after:
+	$(Q)rm -fr $(GENERATED_DIR)
 
 -include $(DEP)
 
 clean:
 	@echo "===> CLEAN"
 	$(Q)rm -fr $(BINDIR)
+	$(Q)rm -fr $(GENERATED_DIR)
 
-$(BIN): $(OBJ)
+$(BIN): $(OBJ)  $(MAIN_OBJ)
 	@echo "===> LD $@"
-	$(Q)$(CXX) -o $(BIN) $(OBJ) $(LDFLAGS)
+	$(Q)$(CXX) -o $(BIN) $(OBJ) $(MAIN_OBJ)  $(LDFLAGS)
+
+$(BUILD_BIN): $(OBJ) $(BUILD_OBJ)
+	@echo "===> LD $@"
+	$(Q)$(CXX) -o $(BUILD_BIN) $(OBJ) $(BUILD_OBJ) $(LDFLAGS)
 
 $(BINDIR)/%.o: $(SRCDIR)/%.cpp
 	@echo "===> CXX $<"

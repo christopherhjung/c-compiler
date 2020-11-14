@@ -7,33 +7,13 @@
 
 #include <functional>
 
-//#define DEBUG
 //#define MEASURE
 #define OUTPUT
 
-#ifdef MEASURE
-#undef OUTPUT
-#endif
-
-#ifdef DEBUG
-
-#include "./lexer/LexerGenerator.h"
-StateMachineLexer lexer("./resources/c.lexer");
-#else
-#include "lexer/GeneratedLexer.h"
-
-GeneratedLexer lexer;
-#endif
-
-
+#include "generated/GeneratedLexer.h"
 
 int main(int, char **const args) {
-
-
-#ifdef DEBUG
-    LexerGenerator generator;
-    generator.build("./resources/c.lexer");
-#endif
+    GeneratedLexer lexer;
 
 #ifdef MEASURE
     auto start_time = std::chrono::high_resolution_clock::now();
@@ -66,7 +46,6 @@ int main(int, char **const args) {
 
     std::cout << "time = " << time/std::chrono::milliseconds(1)  << '\n';
 #endif
-
 
     return 0;
 }

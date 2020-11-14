@@ -26,8 +26,8 @@ class LexerGenerator {
     std::ofstream ss;
     std::string tab = "    ";
 public:
-    void build(const std::string& file){
-        std::ifstream source (file);
+    void build(const std::string& src, const std::string& target){
+        std::ifstream source (src);
 
         std::unique_ptr<State> state;
         StateMachineBuilder builder;
@@ -49,7 +49,7 @@ public:
 
             std::sort(states.begin(), states.end(), cmpState);
 
-            ss.open("./src/lexer/GeneratedLexer.h");
+            ss.open(target);
             writeClass(states , state.get(), kinds);
             ss << std::flush;
             ss.close();

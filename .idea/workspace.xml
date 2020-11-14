@@ -12,17 +12,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10afe655-36c1-4a1a-91f8-cc4a081fb77d" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/build.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/c4.dir/CXX.includecache" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/c4.cbp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer/GeneratedLexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/GeneratedLexer.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/c4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/lexer/GeneratedLexer.h" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/lexer/LexerGenerator.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/LexerGenerator.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer/StateMachineLexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/StateMachineLexer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer/SymbolCache.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/SymbolCache.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reader/FileInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/FileInputReader.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/reader/StringInputReader.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/reader/StringInputReader.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -46,23 +44,23 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/resources" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="dynamic.analysis.tools.valgrind" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/resources" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/cmake-build-debug" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/generated" />
       <recent name="$PROJECT_DIR$/test" />
       <recent name="$PROJECT_DIR$/src/lexer" />
       <recent name="$PROJECT_DIR$/src/reader" />
       <recent name="$PROJECT_DIR$/resources" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/resources" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/cmake-build-debug" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -153,28 +151,13 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/lexer/StateMachineLexer.h</url>
-          <line>85</line>
+          <line>84</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/src/reader/FileInputReader.h</url>
-          <line>20</line>
+          <line>19</line>
           <option name="timeStamp" value="75" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/lexer/GeneratedLexer.h</url>
-          <line>134</line>
-          <option name="timeStamp" value="88" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/lexer/GeneratedLexer.h</url>
-          <line>117</line>
-          <option name="timeStamp" value="100" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/src/lexer/GeneratedLexer.h</url>
-          <line>125</line>
-          <option name="timeStamp" value="103" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
