@@ -19,7 +19,7 @@ public:
     };
 
     virtual ~Error() {
-        delete(location);
+
     }
 
     friend std::ostream& operator<<(std::ostream& stream, const Error& tok){
