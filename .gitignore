@@ -4,6 +4,7 @@ src/generated
 test
 cmake-build-debug/c4
 .DS_Store
+.idea
 # Created by https://www.gitignore.io/api/c,c++
 
 ### C ###

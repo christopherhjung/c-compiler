@@ -138,6 +138,7 @@ public:
         offset(2) << "}else{" << std::endl;
         offset(3) << "column++;" << std::endl;
         offset(2) << "}" << std::endl;
+        offset(2) << "last = c;" << std::endl;
         offset(1) << "}" << std::endl;
 
 
