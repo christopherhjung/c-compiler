@@ -77,6 +77,7 @@ public:
         offset(1) << "uint32_t column = 1;" << std::endl;
         offset(1) << "bool error = false;" << std::endl;
         offset(1) << "Error* errorObj;" << std::endl;
+        offset(1) << "char last = 0;" << std::endl;
 
         writeKinds(kinds);
 
@@ -125,8 +126,15 @@ public:
 
         offset(1) << "void updatePosition(char c){" << std::endl;
         offset(2) << "if(c == '\\n'){" << std::endl;
-        offset(3) << "line++;" << std::endl;
-        offset(3) << "column=1;" << std::endl;
+        offset(3) << "if(last != '\\r'){" << std::endl;
+        offset(4) << "line++;" << std::endl;
+        offset(4) << "column=1;" << std::endl;
+        offset(3) << "}" << std::endl;
+        offset(2) << "}else if(c == '\\r') {" << std::endl;
+        offset(3) << "if(last != '\\n'){" << std::endl;
+        offset(4) << "line++;" << std::endl;
+        offset(4) << "column=1;" << std::endl;
+        offset(3) << "}" << std::endl;
         offset(2) << "}else{" << std::endl;
         offset(3) << "column++;" << std::endl;
         offset(2) << "}" << std::endl;
