@@ -35,6 +35,7 @@ int main(int, char **const args) {
         auto error = lexer.getError();
 #ifdef OUTPUT
         std::cerr << *error << std::endl;
+        std::cout << std::flush;
 #endif
         delete error;
         return 1;
