@@ -91,5 +91,5 @@ $(RES_BUILD): $(RESDIR)
 	$(Q)cp -r $< $(BINDIR)
 
 test: all
-	./build/debug/c4 --tokenize test/test.c
+	./build/debug/c4 --tokenize test/test2.c
 

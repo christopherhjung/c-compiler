@@ -3,7 +3,6 @@
 
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
-#include "lexer/StateMachineLexer.h"
 
 #include <functional>
 

@@ -9,9 +9,7 @@
 class InputReader {
 public:
     virtual char peek() = 0;
-    virtual void next() = 0;
-    virtual bool hasCurrent() = 0;
-    virtual void mark() = 0;
+    virtual char next() = 0;
     virtual void setMarker(uint32_t index) = 0;
     virtual uint32_t getOffset() = 0;
     virtual uint32_t getSize() = 0;

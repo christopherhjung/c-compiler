@@ -5,7 +5,7 @@
 		<Option title="c4"/>
 		<Option makefile_is_custom="1"/>
 		<Option compiler="gcc"/>
-		<Option virtualFolders="CMake Files\;CMake Files\resources\;"/>
+		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
 				<Option working_dir="/Users/chris/CLionProjects/c4/cmake-build-debug"/>
@@ -85,12 +85,6 @@
 		</Unit>
 		<Unit filename="/Users/chris/CLionProjects/c4/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/resources/c.lexer">
-			<Option virtualFolder="CMake Files\resources\"/>
-		</Unit>
-		<Unit filename="/Users/chris/CLionProjects/c4/resources/c.parser">
-			<Option virtualFolder="CMake Files\resources\"/>
 		</Unit>
 	</Project>
 </CodeBlocks_project_file>

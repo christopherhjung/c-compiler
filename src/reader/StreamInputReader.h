@@ -23,7 +23,7 @@ protected:
     uint32_t capacity = 1u << 8u;
     uint32_t size = 0;
     uint32_t mask = capacity - 1;
-    uint32_t position = 0;
+    uint32_t offset = 0;
     uint32_t head = 0;
     bool full = false;
     bool empty = false;
@@ -39,26 +39,21 @@ public:
         return current;
     }
 
-    void next() override{
-        if(hasCurrent()){
-            position = (position + 1) & mask;
-            current = buffer[position];
-        }else{
+    char next() override{
+        offset++;
+        if(offset < size){
+            current = buffer[(tail + offset) & mask];
+        }else if(empty){
             current = 0;
+        }else{
+            sizeUp();
+            current = buffer[(tail + offset) & mask];
         }
-    }
-
-    bool hasCurrent() override{
-        return position != head || full;
-    }
-
-    void mark() override {
-        tail = position;
+        return current;
     }
 
     void reset() override {
-        position = tail;
-        current = buffer[position];
+        current = buffer[(tail + offset) & mask];
     }
 
     uint32_t getSize() override {
@@ -83,18 +78,38 @@ public:
         return std::string(arr, count);
     }
 
+    void sizeUp()  {
+        uint32_t nextCapacity = capacity << 1u;
+
+        char* arr = new char[nextCapacity];
+
+        if(head > tail){
+            std::copy(buffer + tail, buffer + head, arr);
+        }else{
+            std::copy(buffer + tail, buffer + capacity, arr);
+            std::copy(buffer, buffer + head, arr + capacity - tail);
+        }
+
+        capacity = nextCapacity;
+        mask = capacity - 1;
+        tail = 0;
+        head = size;
+
+        delete[](buffer);
+        buffer = arr;
+
+        fetch();
+    }
+
     void setMarker(uint32_t index) override {
         tail = (tail + index) & mask;
+        offset = 0;
         size -= index;
         check();
     }
 
     uint32_t getOffset() override {
-        if(tail <= position){
-            return position - tail;
-        }else{
-            return capacity - tail + position;
-        }
+        return offset;
     }
 
     void check(){
@@ -120,16 +135,14 @@ public:
             }
         }
 
-        if(readCount == 0){
-            empty = true;
+        head = (head + readCount) & mask;
+        size += readCount;
+        if( head == tail ){
+            full = true;
         }else{
-            head = (head + readCount) & mask;
-            size += readCount;
-            if( head == tail ){
-                full = true;
-            }
+            empty = true;
         }
-        current = buffer[position];
+        //current = buffer[position];
     }
 
 };

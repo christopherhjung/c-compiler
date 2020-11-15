@@ -15,7 +15,7 @@ protected:
 public:
     virtual void reset(InputReader* reader){
         this->reader = reader;
-        this->reader->mark();
+        this->reader->reset();
     }
 
     virtual bool hasNextToken(Token& token) = 0;

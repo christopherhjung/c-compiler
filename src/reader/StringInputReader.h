@@ -26,12 +26,9 @@ public:
         return str[index];
     }
 
-    void next() override{
+    char next() override{
         index++;
-    }
-
-    void mark() override {
-        marker = index;
+        return str[index];
     }
 
     uint32_t getSize() override {
@@ -48,10 +45,6 @@ public:
 
     void reset() override {
         index = marker;
-    }
-
-    bool hasCurrent() override{
-        return index < str.length();
     }
 
     std::string readString(uint32_t count) override {

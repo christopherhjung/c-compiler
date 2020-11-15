@@ -21,15 +21,6 @@ public:
         delete stream;
     }
 
-    bool hasCurrent() override {
-        if (stream->is_open())
-        {
-            return StreamInputReader::hasCurrent();
-        }
-
-        return false;
-    }
-
     std::string getOrigin() override {
         return file;
     }

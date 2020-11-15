@@ -11,7 +11,7 @@
 #include <unordered_set>
 #include <fstream>
 
-#include "StateMachineLexer.h"
+#include "StateMachineBuilder.h"
 
 inline bool cmpState (State* l, State* r) {
     return l->index < r->index;
@@ -50,6 +50,7 @@ public:
             std::sort(states.begin(), states.end(), cmpState);
 
             ss.open(target);
+            ss << "#include \"../lexer/Lexer.h\"" << std::endl;
             writeClass(states , state.get(), kinds);
             ss << std::flush;
             ss.close();
@@ -136,8 +137,7 @@ public:
 
 
         offset(1) << "void next() {" << std::endl;
-        offset(2) << "reader->next();" << std::endl;
-        offset(2) << "current = reader->peek();" << std::endl;
+        offset(2) << "current = reader->next();" << std::endl;
         offset(1) << "}" << std::endl;
 
         offset(1) << "void set(int32_t index) {" << std::endl;
