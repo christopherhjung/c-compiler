@@ -1,9 +1,16 @@
 /Applications/CLion.app/Contents/bin/cmake/mac/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /Users/chris/CLionProjects/c4
+-- Configuring done
 CMake Error at CMakeLists.txt:7 (add_executable):
-  The target name "src/main.cpp" is reserved or not valid for certain CMake
-  features, such as generator expressions, and may result in undefined
-  behavior.
+  Cannot find source file:
+
+    rc/main.cpp
+
+  Tried extensions .c .C .c++ .cc .cpp .cxx .cu .m .M .mm .h .hh .h++ .hm
+  .hpp .hxx .in .txx
 
 
--- Configuring incomplete, errors occurred!
-See also "/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/CMakeOutput.log".
+CMake Error at CMakeLists.txt:7 (add_executable):
+  No SOURCES given to target: c4
+
+
+CMake Generate step failed.  Build files cannot be regenerated correctly.

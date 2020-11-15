@@ -11,9 +11,10 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="184abdf8-6e5d-4d9f-8f68-641ff26a5467" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/StateMachineBuilder.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lexer/StateMachineLexer.h" beforeDir="false" afterPath="$PROJECT_DIR$/src/lexer/StateMachineLexer.h" afterDir="false" />
+    <list default="true" id="10afe655-36c1-4a1a-91f8-cc4a081fb77d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.cpp" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -42,18 +43,18 @@
     <property name="settings.editor.selected.configurable" value="dynamic.analysis.tools.valgrind" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src" />
-      <recent name="$PROJECT_DIR$/resources" />
-      <recent name="$PROJECT_DIR$" />
-      <recent name="$PROJECT_DIR$/cmake-build-debug" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/src/generated" />
       <recent name="$PROJECT_DIR$/test" />
       <recent name="$PROJECT_DIR$/src/lexer" />
       <recent name="$PROJECT_DIR$/src/reader" />
       <recent name="$PROJECT_DIR$/resources" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src" />
+      <recent name="$PROJECT_DIR$/resources" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/cmake-build-debug" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -122,6 +123,11 @@
                 </map>
               </option>
             </State>
+          </value>
+        </entry>
+        <entry key="2">
+          <value>
+            <State />
           </value>
         </entry>
         <entry key="MAIN">

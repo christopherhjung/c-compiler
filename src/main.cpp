@@ -38,6 +38,7 @@ int main(int, char **const args) {
         std::cerr << *error << std::endl;
 #endif
         delete error;
+        return 1;
     }
 
 #ifdef MEASURE
