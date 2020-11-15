@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <fstream>
+#include <algorithm>
 
 #include "StateMachineBuilder.h"
 
