@@ -61,7 +61,9 @@ public:
     }
 
     std::string readString(uint32_t count) override {
-        char arr[count];
+        std::string result(count, 0);
+        auto* arr = const_cast<char*>(result.c_str());
+
         uint32_t last = tail + count;
 
         if(last > capacity){
@@ -75,7 +77,7 @@ public:
             std::copy(buffer, buffer + rest, arr + already);
         }
 
-        return std::string(arr, count);
+        return result;
     }
 
     void sizeUp()  {
