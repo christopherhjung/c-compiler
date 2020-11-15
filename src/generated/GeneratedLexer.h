@@ -7,7 +7,6 @@ class GeneratedLexer : public Lexer{
     uint32_t column = 1;
     bool error = false;
     Error* errorObj;
-    Token* token;
     std::string types[97] {
         "whitespace",
         "comment",
@@ -154,9 +153,6 @@ public:
     void reset(InputReader* reader) override {
         Lexer::reset(reader);
         current = reader->peek();
-    }
-    Token *fetchToken() override {
-        return token;
     }
     Error *getError() override {
         return errorObj;

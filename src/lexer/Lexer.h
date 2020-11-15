@@ -20,8 +20,6 @@ public:
 
     virtual bool hasNextToken(Token& token) = 0;
 
-    virtual Token* fetchToken() = 0;
-
     virtual Error* getError() = 0;
 
     virtual bool isError() = 0;

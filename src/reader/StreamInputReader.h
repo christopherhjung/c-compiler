@@ -142,7 +142,6 @@ public:
         }else{
             empty = true;
         }
-        //current = buffer[position];
     }
 
 };

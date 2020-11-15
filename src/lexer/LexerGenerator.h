@@ -76,7 +76,6 @@ public:
         offset(1) << "uint32_t column = 1;" << std::endl;
         offset(1) << "bool error = false;" << std::endl;
         offset(1) << "Error* errorObj;" << std::endl;
-        offset(1) << "Token* token;" << std::endl;
 
         writeKinds(kinds);
 
@@ -148,10 +147,6 @@ public:
         offset(1) << "void reset(InputReader* reader) override {" << std::endl;
         offset(2) << "Lexer::reset(reader);" << std::endl;
         offset(2) << "current = reader->peek();" << std::endl;
-        offset(1) << "}" << std::endl;
-
-        offset(1) << "Token *fetchToken() override {" << std::endl;
-        offset(2) << "return token;" << std::endl;
         offset(1) << "}" << std::endl;
 
         offset(1) << "Error *getError() override {" << std::endl;
