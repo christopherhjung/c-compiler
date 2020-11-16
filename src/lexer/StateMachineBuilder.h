@@ -59,8 +59,8 @@ public:
 
     std::unordered_map<char, char> escaping = {{'a', '\a'}, {'b', '\b'}, {'f', '\f'},{'n', '\n'},{'r', '\r'},{'t', '\t'},{'v', '\v'}};
     std::unordered_map<uint32_t, std::unordered_set<char>> values;
-    std::unordered_map<uint32_t, int> rules;
-    std::unordered_map<uint32_t, std::string> kinds;
+    std::unordered_map<uint32_t, uint32_t> rules;
+    std::vector<std::string> kinds;
     std::unordered_map<std::unordered_set<uint32_t>, State*, SetHash> states;
 
     virtual ~StateMachineBuilder() {
@@ -77,7 +77,7 @@ public:
         return result;
     }
 
-    std::unordered_map<uint32_t, std::string> getKinds(){
+    std::vector<std::string> getKinds(){
         return kinds;
     }
 
@@ -130,7 +130,7 @@ public:
 
         int rule = currentRule++;
         rules[finalIndex] = rule;
-        kinds[rule] = name;
+        kinds.push_back(name);
 
         if(finish != nullptr){
             finish = wrapOr(finish, newInfo);

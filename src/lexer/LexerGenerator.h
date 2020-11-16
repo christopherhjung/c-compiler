@@ -46,7 +46,7 @@ public:
             state = builder.build();
 
             std::vector<State*> states = builder.getStates();
-            std::unordered_map<uint32_t, std::string> kinds = builder.getKinds();
+            std::vector<std::string> kinds = builder.getKinds();
 
             std::sort(states.begin(), states.end(), cmpState);
 
@@ -59,15 +59,15 @@ public:
         }
     }
 
-    void writeKinds(std::unordered_map<uint32_t, std::string>& kinds){
+    void writeKinds(std::vector<std::string>& kinds){
         offset(1) << "std::string types["<<  kinds.size() <<"] {" << std::endl ;
-        for( const auto& pair : kinds ){
-            offset(2) << "\"" << pair.second << "\"," << std::endl;
+        for( const auto& kind : kinds ){
+            offset(2) << "\"" << kind << "\"," << std::endl;
         }
         offset(1) << "};" << std::endl;
     }
 
-    void writeClass(std::vector<State*>& states, State* start, std::unordered_map<uint32_t, std::string>& kinds){
+    void writeClass(std::vector<State*>& states, State* start, std::vector<std::string>& kinds){
         offset(0) << "class GeneratedLexer : public Lexer{" << std::endl;
 
         offset(1) << "char current;" << std::endl;
@@ -237,7 +237,7 @@ public:
                 break;
             case '\?': ss << "\\?";
                 break;
-            case '\a': ss << "\\a;";
+            case '\a': ss << "\\a";
                 break;
             case '\b': ss << "\\b";
                 break;
