@@ -9,6 +9,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <unordered_set>
+#include <set>
 #include <fstream>
 #include <algorithm>
 
@@ -193,7 +194,7 @@ public:
     }
 
     void writeSwitch(State* state, uint32_t depth){
-        std::unordered_map<State*, std::unordered_set<char>> unsorted;
+        std::unordered_map<State*, std::set<char>> unsorted;
         for(const auto& pair : state->transitions){
             unsorted[pair.second].insert(pair.first);
         }
@@ -204,20 +205,20 @@ public:
 
         if(!unsorted.empty()) {
             offset(depth) << "switch(current){" << std::endl;
-            std::vector<std::pair<State *, std::unordered_set<char>>> sorted;
+            std::vector<std::pair<State*, std::set<char>>> sorted;
 
             sorted.reserve(unsorted.size());
             for (auto &pair : unsorted) {
                 sorted.emplace_back(pair);
             }
 
-            std::sort(sorted.begin(), sorted.end(), cmpPairState<std::unordered_set<char>>);
+            std::sort(sorted.begin(), sorted.end(), cmpPairState<std::set<char>>);
 
             for (const auto &pair : sorted) {
                 offset(depth + 1);
                 uint32_t caseCount = 0;
                 for (const char &c : pair.second) {
-                    if ((caseCount & 7u) == 7u) {
+                    if (caseCount != 0 && caseCount % 8 == 0) {
                         ss << std::endl;
                         offset(depth + 1);
                     } else if (caseCount != 0) {
@@ -242,35 +243,36 @@ public:
         }
     }
 
-    void writeEscaped(char c){
-
-        switch(c){
-            case '\'': ss << "\\\'";
-                break;
-            case '\"': ss << "\\\"";
-                break;
-            case '\?': ss << "\\?";
-                break;
-            case '\a': ss << "\\a";
-                break;
-            case '\b': ss << "\\b";
-                break;
-            case '\f': ss << "\\f";
-                break;
-            case '\n': ss << "\\n";
-                break;
-            case '\r': ss << "\\r";
-                break;
-            case '\t': ss << "\\t";
-                break;
-            case '\v': ss << "\\v";
-                break;
-            default: ss << c;
-        }
-    }
-
     void writeChar(char c){
-        ss << (int32_t)c;
+        switch(c){
+            case '\\': ss << "'\\\\'";
+                break;
+            case '\'': ss << "'\\''";
+                break;
+            case '\?': ss << "'\\?'";
+                break;
+            case '\a': ss << "'\\a'";
+                break;
+            case '\b': ss << "'\\b'";
+                break;
+            case '\f': ss << "'\\f'";
+                break;
+            case '\n': ss << "'\\n'";
+                break;
+            case '\r': ss << "'\\r'";
+                break;
+            case '\t': ss << "'\\t'";
+                break;
+            case '\v': ss << "'\\v'";
+                break;
+            default:
+                if(c < 32){
+                    ss << (int32_t)c;
+                }else{
+                    ss << "'"  << c << "'";
+                }
+
+        }
     }
 
     void writeCase(char c){
