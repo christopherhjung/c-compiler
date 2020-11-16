@@ -105,7 +105,9 @@ public:
         tail = (tail + index) & mask;
         offset = 0;
         size -= index;
-        current = buffer[(tail + offset) & mask];
+        if(size != 0){
+            current = buffer[(tail + offset) & mask];
+        }
         check();
     }
 
