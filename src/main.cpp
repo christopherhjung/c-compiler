@@ -1,10 +1,10 @@
 
 #include <iostream>
+#include <functional>
+#include <sstream>
 
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
-
-#include <functional>
 
 //#define MEASURE
 #define OUTPUT
@@ -19,23 +19,35 @@ int main(int, char **const args) {
 #endif
     InputReader* fileInputReader = new FileInputReader(args[2]);
 
+
+#ifdef MEASURE
+    //std::ofstream ss("test/out");
+    std::stringstream ss;
+    std::ostream& out = ss;
+    std::ostream& err = ss;
+    std::ostream& msg = std::cout;
+#else
+    std::ostream& out = std::cout;
+    std::ostream& err = std::cerr;
+#endif
+
     lexer.reset(fileInputReader);
     Token token;
     token.location.fileName = args[2];
     while(lexer.hasNextToken(token)){
         if(token.id >= 3){ //whitespace
 #ifdef OUTPUT
-            std::cout << token << std::endl;
+            out << token << std::endl;
 #endif
         }
     }
 
-    std::cout << std::flush;
+    out << std::flush;
     if(lexer.isError()){
         auto error = lexer.getError();
 #ifdef OUTPUT
-        std::cerr << *error << std::endl;
-        std::cerr << std::flush;
+        err << *error << std::endl;
+        err << std::flush;
 #endif
         delete error;
         return 1;
@@ -45,7 +57,7 @@ int main(int, char **const args) {
     auto end_time = std::chrono::high_resolution_clock::now();
     auto time = end_time - start_time;
 
-    std::cout << "time = " << time/std::chrono::milliseconds(1)  << '\n';
+    msg << "time = " << time/std::chrono::milliseconds(1)  << '\n';
 #endif
 
     return 0;

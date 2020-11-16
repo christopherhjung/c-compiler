@@ -112,6 +112,7 @@ public:
 
         offset(2) << "std::string value = reader->readString(offset);" << std::endl;
         offset(2) << "reader->setMarker(offset);" << std::endl;
+        offset(2) << "current = reader->peek();" << std::endl;
 
         offset(2) << "for(auto& c : value){" << std::endl;
         offset(3) << "updatePosition(c);" << std::endl;
