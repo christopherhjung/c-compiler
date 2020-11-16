@@ -45,7 +45,7 @@ public:
                 std::string key = line.substr(0, position);
                 std::string value = line.substr(position + 1);
 
-                builder.add(key, value, greedy);
+                builder.add(key, value);
             }
 
             state = builder.build();
@@ -186,9 +186,7 @@ public:
             offset(depth + 1) << "next();" << std::endl;
         }
         if(state->finish){
-            offset(depth + 1) << "set("<< state->id <<");" << std::endl;
-        }else if(state->greedy){
-            offset(depth + 1) << "accept = -1;" << std::endl;
+            offset(depth + 1) << "set("<< state->id <<"); //" << state->name << std::endl;
         }
         writeSwitch(state, depth + 1);
         offset(depth) << "}" << std::endl;
@@ -200,40 +198,48 @@ public:
             unsorted[pair.second].insert(pair.first);
         }
 
-        if(unsorted.size() == 0){
+        if(unsorted.empty() && !state->greedy){
             return;
         }
 
-        offset(depth) << "switch(current){" << std::endl;
-        std::vector<std::pair<State*, std::unordered_set<char>> > sorted;
+        if(!unsorted.empty()) {
+            offset(depth) << "switch(current){" << std::endl;
+            std::vector<std::pair<State *, std::unordered_set<char>>> sorted;
 
-        for (auto& it : unsorted) {
-            sorted.push_back(it);
-        }
-
-        std::sort(sorted.begin(), sorted.end(), cmpPairState<std::unordered_set<char>>);
-
-        for(const auto& pair : sorted){
-            offset(depth + 1);
-            uint32_t caseCount = 0;
-            for(const char& c : pair.second){
-                if((caseCount & 7u) == 7u){
-                    ss << std::endl;
-                    offset(depth + 1);
-                }else if(caseCount != 0){
-                    ss << " ";
-                }
-                writeCase(c);
-                caseCount++;
+            sorted.reserve(unsorted.size());
+            for (auto &pair : unsorted) {
+                sorted.emplace_back(pair);
             }
-            ss << std::endl;
 
-            offset(depth + 2);
-            callRule(pair.first);
-            ss << "break;" << std::endl;
+            std::sort(sorted.begin(), sorted.end(), cmpPairState<std::unordered_set<char>>);
+
+            for (const auto &pair : sorted) {
+                offset(depth + 1);
+                uint32_t caseCount = 0;
+                for (const char &c : pair.second) {
+                    if ((caseCount & 7u) == 7u) {
+                        ss << std::endl;
+                        offset(depth + 1);
+                    } else if (caseCount != 0) {
+                        ss << " ";
+                    }
+                    writeCase(c);
+                    caseCount++;
+                }
+                ss << std::endl;
+
+                offset(depth + 2);
+                callRule(pair.first);
+                ss << "break;" << std::endl;
+            }
+
+            if(!state->finish){
+                offset(depth + 1) << "default:" << std::endl;
+                offset(depth + 2) << "accept = -1;" << std::endl;
+            }
+
+            offset(depth) << "}" << std::endl;
         }
-
-        offset(depth) << "}" << std::endl;
     }
 
     void writeEscaped(char c){
@@ -282,8 +288,7 @@ public:
         ss << "parse" ;
         if(state->finish){
             ss << "Final";
-        }
-        if(state->greedy){
+        }else if(state->greedy){
             ss << "Greedy";
         }
         ss << state->index;

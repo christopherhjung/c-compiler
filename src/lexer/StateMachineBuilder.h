@@ -46,8 +46,6 @@ public:
     State(bool finish, uint32_t index ,uint32_t id, std::string& name) : finish(finish), name(name), index(index), id(id) {};
     State(bool finish, uint32_t index ) : finish(finish), index(index){};
     std::unordered_map<char, State*> transitions;
-    //State* transitions[CHAR_COUNT]{nullptr};
-
 };
 
 class StateMachineBuilder {
@@ -63,7 +61,6 @@ public:
     std::unordered_map<uint32_t, std::unordered_set<char>> values;
     std::unordered_map<uint32_t, uint32_t> rules;
     std::vector<std::string> kinds;
-    std::unordered_set<uint32_t> greedys;
     std::unordered_map<std::unordered_set<uint32_t>, State*, SetHash> states;
 
     virtual ~StateMachineBuilder() {
@@ -116,7 +113,7 @@ public:
         return info;
     }
 
-    void add(const std::string& name, const std::string& regex, bool greedy)
+    void add(const std::string& name, const std::string& regex)
     {
         reader.reset(regex);
         Info* newInfo = parseOr();
@@ -133,9 +130,6 @@ public:
         }
 
         uint32_t rule = currentRule++;
-        if(greedy){
-            greedys.insert(rule);
-        }
         rules[finalIndex] = rule;
         kinds.push_back(name);
 
@@ -192,10 +186,6 @@ public:
                 uint32_t infoKey = *element.second.begin();
                 Info* info = infos[infoKey];
                 following = compile(info->followPositions);
-
-                if(greedys.find(info->rule) != greedys.end()){
-                    following->greedy = true;
-                }
             }else{
                 std::unordered_set<uint32_t> followingPos;
                 for(const auto& infoKey : element.second){

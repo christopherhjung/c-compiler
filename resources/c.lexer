@@ -1,5 +1,5 @@
 whitespace:\s+
-!comment:/\*([^*]|\*+[^*/])*\*+/
+comment:/\*([^*]|\*+[^*/])*\*+/
 comment://[^\n\r]*
 keyword:auto
 keyword:break
