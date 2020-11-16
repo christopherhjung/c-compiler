@@ -36,11 +36,16 @@ public:
         {
             for( std::string line; getline( source, line ); )
             {
+                bool greedy = line[0] == '!';
+                if(greedy){
+                    line = line.substr(1);
+                }
+
                 int position = line.find(':');
                 std::string key = line.substr(0, position);
                 std::string value = line.substr(position + 1);
 
-                builder.add(key, value);
+                builder.add(key, value, greedy);
             }
 
             state = builder.build();
@@ -182,6 +187,8 @@ public:
         }
         if(state->finish){
             offset(depth + 1) << "set("<< state->id <<");" << std::endl;
+        }else if(state->greedy){
+            offset(depth + 1) << "accept = -1;" << std::endl;
         }
         writeSwitch(state, depth + 1);
         offset(depth) << "}" << std::endl;
@@ -275,6 +282,9 @@ public:
         ss << "parse" ;
         if(state->finish){
             ss << "Final";
+        }
+        if(state->greedy){
+            ss << "Greedy";
         }
         ss << state->index;
     }

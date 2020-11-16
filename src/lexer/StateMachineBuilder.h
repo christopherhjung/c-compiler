@@ -28,6 +28,7 @@ struct SetHash {
 
 struct Info{
 public:
+    int rule;
     int index;
     bool nullifies;
     std::unordered_set<uint32_t> firstPositions;
@@ -38,6 +39,7 @@ public:
 struct State{
 public:
     bool finish;
+    bool greedy;
     std::string name;
     int32_t index = -1;
     int32_t id = -1;
@@ -61,6 +63,7 @@ public:
     std::unordered_map<uint32_t, std::unordered_set<char>> values;
     std::unordered_map<uint32_t, uint32_t> rules;
     std::vector<std::string> kinds;
+    std::unordered_set<uint32_t> greedys;
     std::unordered_map<std::unordered_set<uint32_t>, State*, SetHash> states;
 
     virtual ~StateMachineBuilder() {
@@ -108,11 +111,12 @@ public:
     Info* createInfo(){
         Info* info = new Info();
         info->index = currentIndex++;
+        info->rule = currentRule;
         infos[info->index] = info;
         return info;
     }
 
-    void add(const std::string& name, const std::string& regex)
+    void add(const std::string& name, const std::string& regex, bool greedy)
     {
         reader.reset(regex);
         Info* newInfo = parseOr();
@@ -128,7 +132,10 @@ public:
             infos[lastPosition]->followPositions.insert(finalIndex);
         }
 
-        int rule = currentRule++;
+        uint32_t rule = currentRule++;
+        if(greedy){
+            greedys.insert(rule);
+        }
         rules[finalIndex] = rule;
         kinds.push_back(name);
 
@@ -152,8 +159,7 @@ public:
         }
 
         bool isFinish = false;
-        std::unordered_map<char, std::unordered_set<uint32_t>> next;
-        std::string name;
+        std::unordered_map<char, std::unordered_set<uint32_t>> followingStates;
         uint32_t rule = 0;
         for (uint32_t key : set)
         {
@@ -166,20 +172,8 @@ public:
             }
             else
             {
-                auto& arr = values[key];
-                for(uint32_t value = 0; value < CHAR_COUNT; value++){
-                    if(arr.find(value) != arr.end()){
-                        if(next.find(value) == next.end()){
-                            next[value] = std::unordered_set<uint32_t>();
-                        }
-
-                        std::unordered_set<uint32_t>& nextSet = next[value];
-
-                        if(infos.find(key) != infos.end()){
-                            Info* info = infos[key];
-                            nextSet.insert(info->followPositions.begin(), info->followPositions.end());
-                        }
-                    }
+                for(const char& value : values[key]){
+                    followingStates[value].insert(key);
                 }
             }
         }
@@ -191,9 +185,26 @@ public:
             state = new State(isFinish , stateIndex++);
         }
         states[set] = state;
-        for (const auto& element : next)
+        for (const auto& element : followingStates)
         {
-            State* following = compile(element.second);
+            State* following;
+            if(element.second.size() == 1){
+                uint32_t infoKey = *element.second.begin();
+                Info* info = infos[infoKey];
+                following = compile(info->followPositions);
+
+                if(greedys.find(info->rule) != greedys.end()){
+                    following->greedy = true;
+                }
+            }else{
+                std::unordered_set<uint32_t> followingPos;
+                for(const auto& infoKey : element.second){
+                    Info* info = infos[infoKey];
+                    followingPos.insert(info->followPositions.begin(), info->followPositions.end());
+                }
+                following = compile(followingPos);
+            }
+
             state->transitions[element.first] = following;
         }
 

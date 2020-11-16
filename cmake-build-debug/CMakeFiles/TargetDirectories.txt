@@ -1,3 +1,4 @@
 /Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
 /Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/build.dir
 /Users/chris/CLionProjects/c4/cmake-build-debug/CMakeFiles/c4.dir

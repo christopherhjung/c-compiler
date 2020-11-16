@@ -111,6 +111,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named build
+
+# Build rule for target.
+build: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 build
+.PHONY : build
+
+# fast build rule for target.
+build/fast:
+	$(MAKE) -f CMakeFiles/build.dir/build.make CMakeFiles/build.dir/build
+.PHONY : build/fast
+
+#=============================================================================
 # Target rules for targets named c4
 
 # Build rule for target.
@@ -122,6 +135,33 @@ c4: cmake_check_build_system
 c4/fast:
 	$(MAKE) -f CMakeFiles/c4.dir/build.make CMakeFiles/c4.dir/build
 .PHONY : c4/fast
+
+src/build.o: src/build.cpp.o
+
+.PHONY : src/build.o
+
+# target to build an object file
+src/build.cpp.o:
+	$(MAKE) -f CMakeFiles/build.dir/build.make CMakeFiles/build.dir/src/build.cpp.o
+.PHONY : src/build.cpp.o
+
+src/build.i: src/build.cpp.i
+
+.PHONY : src/build.i
+
+# target to preprocess a source file
+src/build.cpp.i:
+	$(MAKE) -f CMakeFiles/build.dir/build.make CMakeFiles/build.dir/src/build.cpp.i
+.PHONY : src/build.cpp.i
+
+src/build.s: src/build.cpp.s
+
+.PHONY : src/build.s
+
+# target to generate assembly for a file
+src/build.cpp.s:
+	$(MAKE) -f CMakeFiles/build.dir/build.make CMakeFiles/build.dir/src/build.cpp.s
+.PHONY : src/build.cpp.s
 
 src/main.o: src/main.cpp.o
 
@@ -158,7 +198,11 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
+	@echo "... build"
 	@echo "... c4"
+	@echo "... src/build.o"
+	@echo "... src/build.i"
+	@echo "... src/build.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
