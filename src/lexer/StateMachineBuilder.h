@@ -107,7 +107,6 @@ public:
     Info* createInfo(){
         Info* info = new Info();
         info->index = currentIndex++;
-        info->rule = currentRule;
         infos[info->index] = info;
         return info;
     }
