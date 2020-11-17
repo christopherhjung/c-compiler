@@ -243,42 +243,68 @@ public:
         }
     }
 
-    void writeChar(char c){
+    uint32_t writeChar(char c){
         switch(c){
-            case '\\': ss << "'\\\\'";
-                break;
-            case '\'': ss << "'\\''";
-                break;
-            case '\?': ss << "'\\?'";
-                break;
-            case '\a': ss << "'\\a'";
-                break;
-            case '\b': ss << "'\\b'";
-                break;
-            case '\f': ss << "'\\f'";
-                break;
-            case '\n': ss << "'\\n'";
-                break;
-            case '\r': ss << "'\\r'";
-                break;
-            case '\t': ss << "'\\t'";
-                break;
-            case '\v': ss << "'\\v'";
-                break;
+            case '\\':
+                ss << "'\\\\'";
+                return 4;
+            case '\'':
+                ss << "'\\''";
+                return 4;
+            case '\?':
+                ss << "'\\?'";
+                return 4;
+            case '\a':
+                ss << "'\\a'";
+                return 4;
+            case '\b':
+                ss << "'\\b'";
+                return 4;
+            case '\f':
+                ss << "'\\f'";
+                return 4;
+            case '\n':
+                ss << "'\\n'";
+                return 4;
+            case '\r':
+                ss << "'\\r'";
+                return 4;
+            case '\t':
+                ss << "'\\t'";
+                return 4;
+            case '\v':
+                ss << "'\\v'";
+                return 4;
             default:
-                if(c < 32){
+                if(c < 32 || c == 127){
                     ss << (int32_t)c;
+                    if(c == 127){
+                        return 3;
+                    }else if(c > 9) {
+                        return 2;
+                    }else if(c > 0){
+                        return 1;
+                    }else  if(c < -99){
+                        return 4;
+                    }else if(c < -9){
+                        return 3;
+                    }else{
+                        return 2;
+                    }
                 }else{
                     ss << "'"  << c << "'";
+                    return 3;
                 }
-
         }
     }
 
     void writeCase(char c){
         ss << "case ";
-        writeChar(c);
-        offset(0) << ":";
+        uint32_t count = writeChar(c);
+        for(;count < 4;count++){
+            ss << " ";
+        }
+        ss << ":";
     }
 
     void callRule(State* state){
