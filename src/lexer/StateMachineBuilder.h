@@ -28,8 +28,7 @@ struct SetHash {
 
 struct Info{
 public:
-    int rule;
-    int index;
+    uint32_t index;
     bool nullifies;
     std::unordered_set<uint32_t> firstPositions;
     std::unordered_set<uint32_t> lastPositions;
@@ -159,7 +158,7 @@ public:
         {
             if (rules.find(key) != rules.end())
             {
-                if(!isFinish || key < rule){
+                if(!isFinish || rules[key] < rule){
                     rule = rules[key];
                 }
                 isFinish = true;
@@ -250,7 +249,7 @@ public:
                     result->lastPositions.insert(leftState->lastPositions.begin(), leftState->lastPositions.end());
                 }
 
-                for(int lastPosition : leftState->lastPositions)
+                for(uint32_t lastPosition : leftState->lastPositions)
                 {
                     infos[lastPosition]->followPositions.insert(rightState->firstPositions.begin(), rightState->firstPositions.end());
                 }
