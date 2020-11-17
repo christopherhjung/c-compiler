@@ -83,8 +83,7 @@ public:
         offset(1) << "uint32_t column = 1;" << std::endl;
         offset(1) << "bool error = false;" << std::endl;
         offset(1) << "Error* errorObj;" << std::endl;
-        offset(1) << "char activeNewLine = 0;" << std::endl;
-        offset(1) << "char lazyNewLine = 0;" << std::endl;
+        offset(1) << "char last = 0;" << std::endl;
 
         writeKinds(kinds);
 
@@ -131,23 +130,26 @@ public:
         offset(2) << "return true;" << std::endl;
         offset(1) << "}" << std::endl;
 
-
         offset(1) << "void updatePosition(char c){" << std::endl;
-        offset(2) << "if(activeNewLine == 0){" << std::endl;
-        offset(3) << "if(c == '\\n'){" << std::endl;
-        offset(4) << "activeNewLine = '\\n';" << std::endl;
-        offset(4) << "lazyNewLine = '\\r';" << std::endl;
-        offset(3) << "}else if(c == '\\r') {" << std::endl;
-        offset(4) << "activeNewLine = '\\r';" << std::endl;
-        offset(4) << "lazyNewLine = '\\n';" << std::endl;
+        offset(2) << "if(c == '\\r'){" << std::endl;
+        offset(3) << "if(last == '\\n'){" << std::endl;
+        offset(4) << "last = 0;" << std::endl;
+        offset(3) << "}else{" << std::endl;
+        offset(4) << "column=1;" << std::endl;
+        offset(4) << "line++;" << std::endl;
+        offset(4) << "last = c;" << std::endl;
         offset(3) << "}" << std::endl;
-        offset(2) << "}" << std::endl;
-
-        offset(2) << "if(activeNewLine == c){" << std::endl;
-        offset(3) << "line++;" << std::endl;
-        offset(3) << "column=1;" << std::endl;
-        offset(2) << "}else if(lazyNewLine != c ){" << std::endl;
+        offset(2) << "}else if(c == '\\n'){" << std::endl;
+        offset(3) << "if(last == '\\r'){" << std::endl;
+        offset(4) << "last = 0;" << std::endl;
+        offset(3) << "}else{" << std::endl;
+        offset(4) << "column=1;" << std::endl;
+        offset(4) << "line++;" << std::endl;
+        offset(4) << "last = c;" << std::endl;
+        offset(3) << "}" << std::endl;
+        offset(2) << "}else{" << std::endl;
         offset(3) << "column++;" << std::endl;
+        offset(3) << "last = c;" << std::endl;
         offset(2) << "}" << std::endl;
         offset(1) << "}" << std::endl;
 

@@ -20,9 +20,5 @@ public:
     virtual ~FileInputReader() {
         delete stream;
     }
-
-    std::string getOrigin() override {
-        return file;
-    }
 };
 
