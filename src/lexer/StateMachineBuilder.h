@@ -159,6 +159,7 @@ public:
 
         bool isFinish = false;
         std::unordered_map<char, std::unordered_set<uint32_t>> followingStates;
+        std::unordered_map<char, std::unordered_set<uint32_t>> followingRules;
         uint32_t rule = 0;
         for (uint32_t key : set)
         {
@@ -173,6 +174,8 @@ public:
             {
                 for(const char& value : values[key]){
                     followingStates[value].insert(key);
+                    Info* info = infos[key];
+                    followingRules[value].insert(info->rule);
                 }
             }
         }
@@ -186,15 +189,12 @@ public:
         states[set] = state;
         for (const auto& element : followingStates)
         {
+            std::unordered_set<uint32_t>& followingRule = followingRules[element.first];
             State* following;
             if(element.second.size() == 1){
                 uint32_t infoKey = *element.second.begin();
                 Info* info = infos[infoKey];
                 following = compile(info->followPositions);
-
-                if(greedys.find(info->rule) != greedys.end()){
-                    following->greedy = true;
-                }
             }else{
                 std::unordered_set<uint32_t> followingPos;
                 for(const auto& infoKey : element.second){
@@ -202,6 +202,13 @@ public:
                     followingPos.insert(info->followPositions.begin(), info->followPositions.end());
                 }
                 following = compile(followingPos);
+            }
+
+            if(followingRule.size() == 1){
+                uint32_t singleRule = *followingRule.begin();
+                if(greedys.find(singleRule) != greedys.end()){
+                    following->greedy = true;
+                }
             }
 
             state->transitions[element.first] = following;

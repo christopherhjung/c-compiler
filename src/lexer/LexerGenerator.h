@@ -236,7 +236,7 @@ public:
                 ss << "break;" << std::endl;
             }
 
-            if(!state->finish && state->greedy){
+            if(state->greedy){
                 offset(depth + 1) << "default:" << std::endl;
                 offset(depth + 2) << "accept = -1;" << std::endl;
             }
