@@ -2,6 +2,7 @@
 #include <iostream>
 #include <functional>
 #include <sstream>
+#include <istream>
 
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
@@ -17,9 +18,9 @@ int main(int, char **const args) {
 #ifdef MEASURE
     auto start_time = std::chrono::high_resolution_clock::now();
 #endif
+    //InputReader* fileInputReader = new StreamInputReader(&std::cin);
+
     InputReader* fileInputReader = new FileInputReader(args[2]);
-
-
 #ifdef MEASURE
     //std::ofstream ss("test/out");
     std::stringstream ss;

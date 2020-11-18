@@ -18,7 +18,7 @@
 class StreamInputReader : public InputReader{
 
 protected:
-    std::ifstream *stream;
+    std::istream *stream;
     uint32_t tail = 0;
     uint32_t capacity = 1u << 8u;
     uint32_t size = 0;
@@ -27,33 +27,29 @@ protected:
     uint32_t head = 0;
     bool full = false;
     bool empty = false;
-    char current = 0;
+    int16_t current = 256;
     char *buffer = new char[capacity]{0};
 public:
-    explicit StreamInputReader(std::ifstream *stream){
+    explicit StreamInputReader(std::istream* stream){
         this->stream = stream;
         fetch();
     };
 
-    char peek() override{
+    int16_t peek() override{
         return current;
     }
 
-    char next() override{
+    int16_t next() override{
         offset++;
         if(offset < size){
             current = buffer[(tail + offset) & mask];
         }else if(empty){
-            current = 0;
+            current = 256;
         }else{
             sizeUp();
             current = buffer[(tail + offset) & mask];
         }
         return current;
-    }
-
-    void reset() override {
-        current = buffer[(tail + offset) & mask];
     }
 
     uint32_t getSize() override {
@@ -101,16 +97,16 @@ public:
         fetch();
     }
 
-    void setMarker(uint32_t index) override {
+    void reset(uint32_t index) override {
         tail = (tail + index) & mask;
         offset = 0;
         size -= index;
+        check();
         if(size > 0){
             current = buffer[(tail + offset) & mask];
         }else{
-            current = 0;
+            current = 256;
         }
-        check();
     }
 
     uint32_t getOffset() override {

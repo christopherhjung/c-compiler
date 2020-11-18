@@ -29,6 +29,7 @@ struct SetHash {
 struct Info{
 public:
     uint32_t index;
+    uint32_t rule;
     bool nullifies;
     std::unordered_set<uint32_t> firstPositions;
     std::unordered_set<uint32_t> lastPositions;
@@ -60,6 +61,7 @@ public:
     std::unordered_map<uint32_t, std::unordered_set<char>> values;
     std::unordered_map<uint32_t, uint32_t> rules;
     std::vector<std::string> kinds;
+    std::unordered_set<uint32_t> greedys;
     std::unordered_map<std::unordered_set<uint32_t>, State*, SetHash> states;
 
     virtual ~StateMachineBuilder() {
@@ -107,15 +109,17 @@ public:
     Info* createInfo(){
         Info* info = new Info();
         info->index = currentIndex++;
+        info->rule = currentRule;
         infos[info->index] = info;
         return info;
     }
 
-    void add(const std::string& name, const std::string& regex)
+    void add(const std::string& name, const std::string& regex, bool greedy)
     {
         reader.reset(regex);
         Info* newInfo = parseOr();
-        int finalIndex = currentIndex++;
+        Info* endInfo = createInfo();
+        int finalIndex = endInfo->index;
 
         if (newInfo->nullifies)
         {
@@ -128,6 +132,9 @@ public:
         }
 
         uint32_t rule = currentRule++;
+        if(greedy){
+            greedys.insert(endInfo->rule);
+        }
         rules[finalIndex] = rule;
         kinds.push_back(name);
 
@@ -184,6 +191,10 @@ public:
                 uint32_t infoKey = *element.second.begin();
                 Info* info = infos[infoKey];
                 following = compile(info->followPositions);
+
+                if(greedys.find(info->rule) != greedys.end()){
+                    following->greedy = true;
+                }
             }else{
                 std::unordered_set<uint32_t> followingPos;
                 for(const auto& infoKey : element.second){
@@ -341,7 +352,7 @@ public:
         char specifier = eat();
         if(specifier == '.')
         {
-            for(uint32_t i = 1 ; i < CHAR_COUNT ; i++){
+            for(uint32_t i = 0 ; i < CHAR_COUNT ; i++){
                 if(i != '\n'){
                     set.insert(i);
                 }
@@ -388,7 +399,7 @@ public:
                 }
             }
 
-            for(uint32_t i = 1 ; i < CHAR_COUNT ; i++){
+            for(uint32_t i = 0 ; i < CHAR_COUNT ; i++){
                 if((set.find(i) != set.end()) ^ negate){
                     set.insert(i);
                 }else{

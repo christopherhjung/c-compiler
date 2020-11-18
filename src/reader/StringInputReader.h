@@ -22,11 +22,11 @@ public:
         index = 0;
     };
 
-    char peek() override{
+    int16_t peek() override{
         return str[index];
     }
 
-    char next() override{
+    int16_t next() override{
         index++;
         return str[index];
     }
@@ -35,16 +35,12 @@ public:
         return str.length();
     }
 
-    void setMarker(uint32_t index) override {
+    void reset(uint32_t index) override {
         marker = index;
     }
 
     uint32_t getOffset() override {
         return index;
-    }
-
-    void reset() override {
-        index = marker;
     }
 
     std::string readString(uint32_t count) override {

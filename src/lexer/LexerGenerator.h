@@ -46,7 +46,7 @@ public:
                 std::string key = line.substr(0, position);
                 std::string value = line.substr(position + 1);
 
-                builder.add(key, value);
+                builder.add(key, value, greedy);
             }
 
             state = builder.build();
@@ -76,7 +76,7 @@ public:
     void writeClass(std::vector<State*>& states, State* start, std::vector<std::string>& kinds){
         offset(0) << "class GeneratedLexer : public Lexer{" << std::endl;
 
-        offset(1) << "char current;" << std::endl;
+        offset(1) << "int16_t current;" << std::endl;
         offset(1) << "int32_t accept;" << std::endl;
         offset(1) << "uint32_t offset;" << std::endl;
         offset(1) << "uint32_t line = 1;" << std::endl;
@@ -91,7 +91,7 @@ public:
 
         offset(1) << "bool hasNextToken(Token& token) override {" << std::endl;
 
-        offset(2) << "if(current == 0){" << std::endl;
+        offset(2) << "if(current == 256){" << std::endl;
         offset(3) << "return false;" << std::endl;
         offset(2) << "}" << std::endl;
 
@@ -109,14 +109,14 @@ public:
         offset(2) << "if(accept == -1){" << std::endl;
 
         offset(3) << "offset = reader->getOffset();" << std::endl;
-        offset(3) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >" + current + "< wrong!" );)" << std::endl;
+        offset(3) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >" + ((char)current) + "< wrong!" );)" << std::endl;
 
         offset(3) << "error = true;" << std::endl;
         offset(3) << "return false;" << std::endl;
         offset(2) << "}" << std::endl;
 
         offset(2) << "std::string value = reader->readString(offset);" << std::endl;
-        offset(2) << "reader->setMarker(offset);" << std::endl;
+        offset(2) << "reader->reset(offset);" << std::endl;
         offset(2) << "current = reader->peek();" << std::endl;
 
         offset(2) << "for(auto& c : value){" << std::endl;
@@ -236,7 +236,7 @@ public:
                 ss << "break;" << std::endl;
             }
 
-            if(!state->finish){
+            if(!state->finish && state->greedy){
                 offset(depth + 1) << "default:" << std::endl;
                 offset(depth + 2) << "accept = -1;" << std::endl;
             }
@@ -284,7 +284,7 @@ public:
                         return 3;
                     }else if(c > 9) {
                         return 2;
-                    }else if(c > 0){
+                    }else if(c >= 0){
                         return 1;
                     }else  if(c < -99){
                         return 4;
