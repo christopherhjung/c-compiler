@@ -109,7 +109,14 @@ public:
         offset(2) << "if(accept == -1){" << std::endl;
 
         offset(3) << "offset = reader->getOffset();" << std::endl;
-        offset(3) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >" + ((char)current) + "< wrong!" );)" << std::endl;
+
+        offset(3) << "if(current == 256){" << std::endl;
+        offset(4) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >EOL< wrong!" );)" << std::endl;
+        offset(3) << "}else if(current == 0){" << std::endl;
+        offset(4) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >NULL< wrong!" );)" << std::endl;
+        offset(3) << "}else{" << std::endl;
+        offset(4) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >" + ((char)current) + "< wrong!" );)" << std::endl;
+        offset(3) << "}" << std::endl;
 
         offset(3) << "error = true;" << std::endl;
         offset(3) << "return false;" << std::endl;

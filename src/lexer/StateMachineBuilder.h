@@ -38,8 +38,8 @@ public:
 
 struct State{
 public:
-    bool finish;
-    bool greedy;
+    bool finish = false;
+    bool greedy = false;
     std::string name;
     int32_t index = -1;
     int32_t id = -1;
@@ -131,11 +131,10 @@ public:
             infos[lastPosition]->followPositions.insert(finalIndex);
         }
 
-        uint32_t rule = currentRule++;
         if(greedy){
             greedys.insert(endInfo->rule);
         }
-        rules[finalIndex] = rule;
+        rules[finalIndex] = endInfo->rule;
         kinds.push_back(name);
 
         if(finish != nullptr){
@@ -143,6 +142,8 @@ public:
         }else{
             finish = newInfo;
         }
+
+        currentRule++;
     }
 
     std::unique_ptr<State> build(){

@@ -21,7 +21,7 @@ namespace{
             lexer.reset(&reader);
         }
 
-        bool tokenEquals(int line, int column, std::string type, std::string value){
+        void tokenEquals(int line, int column, std::string type, std::string value){
             Token token;
             bool found = false;
             while(lexer.hasNextToken(token)){
@@ -29,6 +29,11 @@ namespace{
                     found = true;
                     break;
                 }
+            }
+
+            if(token.id < 3){
+                EXPECT_TRUE(false);
+                return;
             }
 
             EXPECT_TRUE(found);
@@ -39,17 +44,17 @@ namespace{
             EXPECT_FALSE(lexer.isError());
         }
 
-        bool noToken(){
+        void noToken(){
             Token token;
             EXPECT_FALSE(lexer.hasNextToken(token));
         }
 
-        bool hasError(){
+        void hasError(){
             Token token;
             EXPECT_TRUE(lexer.isError());
         }
 
-        bool hasError(std::string msg){
+        void hasError(std::string msg){
             Token token;
             hasError();
             Error* error = lexer.getError();

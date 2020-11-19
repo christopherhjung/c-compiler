@@ -28,10 +28,10 @@ public:
     }
 
     int16_t next() override{
-        if(index + marker >= getSize()){
+        if(index + ++marker>= getSize()){
             return 256;
         }else{
-            return str[index + ++marker];
+            return str[index + marker];
         }
     }
 
