@@ -57,7 +57,7 @@ public:
     Info* finish = nullptr;
     std::unordered_map<uint32_t, Info*> infos;
 
-    std::unordered_map<char, char> escaping = {{'a', '\a'}, {'b', '\b'}, {'f', '\f'},{'n', '\n'},{'r', '\r'},{'t', '\t'},{'v', '\v'}};
+    std::unordered_map<char, char> escaping = {{'0', '\0'}, {'a', '\a'}, {'b', '\b'}, {'f', '\f'},{'n', '\n'},{'r', '\r'},{'t', '\t'},{'v', '\v'}};
     std::unordered_map<uint32_t, std::unordered_set<char>> values;
     std::unordered_map<uint32_t, uint32_t> rules;
     std::vector<std::string> kinds;
