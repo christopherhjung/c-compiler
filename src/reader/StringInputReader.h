@@ -20,15 +20,19 @@ public:
     void reset(const std::string& str){
         this->str = str;
         index = 0;
+        marker = 0;
     };
 
     int16_t peek() override{
-        return str[index];
+        return str[index + marker];
     }
 
     int16_t next() override{
-        index++;
-        return str[index];
+        if(index + marker >= getSize()){
+            return 256;
+        }else{
+            return str[index + ++marker];
+        }
     }
 
     uint32_t getSize() override {
@@ -36,17 +40,18 @@ public:
     }
 
     void reset(uint32_t index) override {
-        marker = index;
+        marker = 0;
+        this->index += index;
     }
 
     uint32_t getOffset() override {
-        return index;
+        return marker;
     }
 
     std::string readString(uint32_t count) override {
         char arr[count];
         const char* src = str.c_str();
-        std::copy(src, src + count, arr);
+        std::copy(src + index, src + index + count, arr);
         return std::string(arr, count);
     }
 };
