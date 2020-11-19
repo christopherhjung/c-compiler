@@ -132,3 +132,9 @@ TEST(Sheet_Test, CommentTestA) {
     body.tokenEquals(1,9,"punctuator", ";");
     body.tokenEquals(3,7,"identifier", "a");
 }
+
+TEST(Sheet_Test, StringTest) {
+    Body body("\"hello");
+    body.noToken();
+    body.hasError("\"hello_<-- char >EOL< wrong!");
+}
