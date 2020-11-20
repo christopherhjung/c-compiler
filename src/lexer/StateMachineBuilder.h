@@ -103,7 +103,7 @@ public:
     }
 
     bool hasNext(){
-        return reader.peek() != 0;
+        return reader.peek() != 256;
     }
 
     Info* createInfo(){
@@ -146,10 +146,10 @@ public:
         currentRule++;
     }
 
-    std::unique_ptr<State> build(){
+    std::shared_ptr<State> build(){
         states.clear();
         stateIndex = 0;
-        return std::unique_ptr<State>(compile(finish->firstPositions));
+        return std::shared_ptr<State>(compile(finish->firstPositions));
     }
 
     State* compile(const std::unordered_set<uint32_t>& set)

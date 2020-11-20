@@ -31,7 +31,7 @@ public:
     void build(const std::string& src, const std::string& target){
         std::ifstream source (src);
 
-        std::unique_ptr<State> state;
+        std::shared_ptr<State> state;
         StateMachineBuilder builder;
         if (source.is_open())
         {
@@ -164,8 +164,8 @@ public:
         offset(2) << "current = reader->next();" << std::endl;
         offset(1) << "}" << std::endl;
 
-        offset(1) << "void set(int32_t index) {" << std::endl;
-        offset(2) << "accept = index;" << std::endl;
+        offset(1) << "void set(int32_t id) {" << std::endl;
+        offset(2) << "accept = id;" << std::endl;
         offset(2) << "offset = reader->getOffset();" << std::endl;
         offset(1) << "}" << std::endl;
 

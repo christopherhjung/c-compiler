@@ -2567,7 +2567,7 @@ function can be reused. For example, given
  public:
   MOCK_METHOD(double, Foo, double(const string& label, double x, double y),
               (override));
-  MOCK_METHOD(double, Bar, (int index, double x, double y), (override));
+  MOCK_METHOD(double, Bar, (int id, double x, double y), (override));
 ```
 
 instead of
@@ -2579,7 +2579,7 @@ using ::testing::Invoke;
 double DistanceToOriginWithLabel(const string& label, double x, double y) {
   return sqrt(x*x + y*y);
 }
-double DistanceToOriginWithIndex(int index, double x, double y) {
+double DistanceToOriginWithIndex(int id, double x, double y) {
   return sqrt(x*x + y*y);
 }
 ...

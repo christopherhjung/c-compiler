@@ -53,7 +53,7 @@
 
 namespace testing {
 // Input to a parameterized test name generator, describing a test parameter.
-// Consists of the parameter value and the integer parameter index.
+// Consists of the parameter value and the integer parameter id.
 template <class ParamType>
 struct TestParamInfo {
   TestParamInfo(const ParamType& a_param, size_t an_index) :
@@ -278,7 +278,7 @@ class RangeGenerator : public ParamGeneratorInterface<T> {
   const T begin_;
   const T end_;
   const IncrementT step_;
-  // The index for the end() iterator. All the elements in the generated
+  // The id for the end() iterator. All the elements in the generated
   // sequence are indexed (0-based) to aid iterator comparison.
   const int end_index_;
 };  // class RangeGenerator
@@ -371,7 +371,7 @@ class ValuesInIteratorRangeGenerator : public ParamGeneratorInterface<T> {
 // INTERNAL IMPLEMENTATION - DO NOT USE IN USER CODE.
 //
 // Default parameterized test name generator, returns a string containing the
-// integer test parameter index.
+// integer test parameter id.
 template <class ParamType>
 std::string DefaultParamName(const TestParamInfo<ParamType>& info) {
   Message name_stream;
@@ -517,7 +517,7 @@ class ParameterizedTestSuiteInfo : public ParameterizedTestSuiteInfoBase {
   // about a single test in a LocalTestInfo structure.
   // test_suite_name is the base name of the test suite (without invocation
   // prefix). test_base_name is the name of an individual test without
-  // parameter index. For the test SequenceA/FooTest.DoBar/1 FooTest is
+  // parameter id. For the test SequenceA/FooTest.DoBar/1 FooTest is
   // test suite base name and DoBar is test base name.
   void AddTestPattern(const char* test_suite_name, const char* test_base_name,
                       TestMetaFactoryBase<ParamType>* meta_factory,

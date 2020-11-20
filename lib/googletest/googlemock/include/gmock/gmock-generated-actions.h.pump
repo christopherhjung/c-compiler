@@ -328,15 +328,15 @@ auto InvokeArgument(F f, Args... args) -> decltype(f(args...)) {
   return f(args...);
 }
 
-template <std::size_t index, typename... Params>
+template <std::size_t id, typename... Params>
 struct InvokeArgumentAction {
   template <typename... Args>
   auto operator()(Args&&... args) const -> decltype(internal::InvokeArgument(
-      std::get<index>(std::forward_as_tuple(std::forward<Args>(args)...)),
+      std::get<id>(std::forward_as_tuple(std::forward<Args>(args)...)),
       std::declval<const Params&>()...)) {
     internal::FlatTuple<Args&&...> args_tuple(std::forward<Args>(args)...);
     return params.Apply([&](const Params&... unpacked_params) {
-      auto&& callable = args_tuple.template Get<index>();
+      auto&& callable = args_tuple.template Get<id>();
       return internal::InvokeArgument(
           std::forward<decltype(callable)>(callable), unpacked_params...);
     });
@@ -374,8 +374,8 @@ struct InvokeArgumentAction {
 //   to the callable.  This makes it easy for a user to define an
 //   InvokeArgument action from temporary values and have it performed
 //   later.
-template <std::size_t index, typename... Params>
-internal::InvokeArgumentAction<index, typename std::decay<Params>::type...>
+template <std::size_t id, typename... Params>
+internal::InvokeArgumentAction<id, typename std::decay<Params>::type...>
 InvokeArgument(Params&&... params) {
   return {internal::FlatTuple<typename std::decay<Params>::type...>(
       std::forward<Params>(params)...)};

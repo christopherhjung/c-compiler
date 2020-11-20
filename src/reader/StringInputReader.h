@@ -15,37 +15,55 @@
 class StringInputReader : public InputReader {
     std::string str;
     uint32_t index;
-    uint32_t marker = 0;
+    uint32_t offset = 0;
+    int16_t current;
+
+    void assign(){
+        if(index + offset >= getSize()){
+            current = 256;
+        }else{
+            current = str[index + offset];
+        }
+    }
+
 public:
+    StringInputReader(){
+
+    }
+
+    StringInputReader(const std::string& str){
+        reset(str);
+    }
+
     void reset(const std::string& str){
         this->str = str;
         index = 0;
-        marker = 0;
+        offset = 0;
+        assign();
     };
 
     int16_t peek() override{
-        return str[index + marker];
+        return current;
     }
 
     int16_t next() override{
-        if(index + ++marker>= getSize()){
-            return 256;
-        }else{
-            return str[index + marker];
-        }
+        offset++;
+        assign();
+        return current;
     }
 
     uint32_t getSize() override {
         return str.length();
     }
 
-    void reset(uint32_t index) override {
-        marker = 0;
-        this->index += index;
+    void reset(uint32_t offset) override {
+        this->index += offset;
+        this->offset = 0;
+        assign();
     }
 
     uint32_t getOffset() override {
-        return marker;
+        return offset;
     }
 
     std::string readString(uint32_t count) override {
