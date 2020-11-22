@@ -12,22 +12,27 @@ class Grammar : public Component {
 
 public:
     Entity* end;
-    Rule* init;
+    Rule* root;
     std::vector<Rule*> rules;
     std::vector<Entity*> terminals;
     std::vector<Entity*> nonTerminals;
 
-    Grammar(Entity* end, Rule* init, std::vector<Entity*> entities, std::vector<Rule*> rules) : end(end), init(init), rules(rules){
+    Grammar(Entity* end, Rule* init, std::vector<Entity*> entities, const std::vector<Rule*>& rules) : end(end), root(init), rules(rules){
         for(Entity*& entity : entities){
             if(entity->terminal){
                 terminals.push_back(entity);
             }else{
                 nonTerminals.push_back(entity);
+                if(entity->id == 6){
+                    entity = entity;
+                }
             }
         }
+
+        //std::sort(nonTerminals.begin(), nonTerminals.end(), [](Entity* a,Entity* b){return a->id < b->id ? 1 : a->id == b->id ? 0 : -1; });
     }
 
-    void build() override {
+    void update() override {
         for(Rule* rule : rules){
             rule->initialize();
         }
@@ -36,8 +41,10 @@ public:
             entity->initialize();
         }
 
-        for(Entity*& entity : nonTerminals){
-            entity->initialize();
+        for(uint32_t i = 0 ; i < rules.size(); i++){
+            for(Entity*& entity : nonTerminals){
+                entity->update();
+            }
         }
     }
 

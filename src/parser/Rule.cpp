@@ -5,7 +5,7 @@
 #include "Rule.h"
 #include "Entity.h"
 
-void Rule::build() {
+void Rule::update() {
     this->owner->productions.push_back(this);
 }
 

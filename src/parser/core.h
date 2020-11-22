@@ -14,6 +14,8 @@
 #include "../transformer/ParserCodeGenerator.h"
 #include "../reader/FileInputReader.h"
 
+#include "../utils/PrintUtils.h"
+
 int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err){
 
     auto* a = new Entity(0, "a", true);
@@ -51,7 +53,7 @@ int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err
     StateMachineLexer lexer(StateMachineBuilder::build(lexerGrammar));
     lexer.reset(new FileInputReader("./test/test6.c"));
 
-    auto* element = parser.parse(&lexer);
+    Element* element = parser.parse(&lexer);
 
     if(element != nullptr){
         return 0;

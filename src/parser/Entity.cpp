@@ -6,15 +6,12 @@
 #include "Entity.h"
 #include "Rule.h"
 
-void Entity::build() {
-
-    for(Rule* rule : this->productions){
-        Entity* start = rule->keys[0];
-
-        if(start->terminal){
-            this->lookahead.insert(start);
-        }else{
-            start->initialize();
+void Entity::update() {
+    if(terminal){
+        this->lookahead.insert(this);
+    }else{
+        for(Rule* rule : this->productions){
+            Entity* start = rule->keys[0];
             this->lookahead.insert(start->lookahead.begin(), start->lookahead.end());
         }
     }

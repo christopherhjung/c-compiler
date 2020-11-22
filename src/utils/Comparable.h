@@ -23,4 +23,8 @@ public:
 
     virtual uint64_t hash() const = 0;
     virtual bool equals(const Comparable* other) const = 0;
+
+    virtual bool operator==(const Comparable& other) const {
+        return this->equals(&other);
+    }
 };

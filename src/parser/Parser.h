@@ -13,29 +13,22 @@
 class Element{
 public:
     uint32_t id;
+    Token* token = nullptr;
+    std::vector<Element*> tokens;
 
     Element(uint32_t id) : id(id){
 
     }
-};
 
-class LeafElement : public Element{
-public:
-    Token* token;
+    Element(Token* token) : id(token->id), token(token){
 
-    LeafElement(Token* token) : Element(token->id), token(token){
+    }
+
+    Element(uint32_t id, const std::vector<Element*>& tokens) : id(id), tokens(tokens){
 
     }
 };
 
-class NodeElement : public Element{
-public:
-    std::vector<Element*> tokens;
-
-    NodeElement(uint32_t id, std::vector<Element*> tokens) : Element(id), tokens(tokens){
-
-    }
-};
 
 class Parser {
 public:
@@ -62,7 +55,7 @@ public:
         {
             throw std::exception();
         }
-        Element* currentElement = new LeafElement(token);
+        Element* currentElement = new Element(token);
 
         for (; ; )
         {
@@ -76,8 +69,6 @@ public:
                 {
                     currentPosition = nextPosition;
                     path.push_back(currentPosition);
-
-                    //stack.push_back(parser::identifier("hello"));
                     stack.push_back(currentElement);
 
                     token = new Token();
@@ -88,19 +79,18 @@ public:
                             currentElement = nullptr;
                         }
                     }else{
-                        currentElement = new LeafElement(token);
+                        currentElement = new Element(token);
                     }
                 }
                 else
                 {
                     Rule* restoreRule = entry->restore[currentElement->id];
-                    std::vector<Element*> elements;
                     if (restoreRule != nullptr)
                     {
-                        //Modifier modifier = source.getModifier(restoreRule);
+                        std::vector<Element*> elements(restoreRule->keys.size());
+
                         for (unsigned long i = restoreRule->keys.size(); i > 0; i--)
                         {
-                            //std::string key = restoreRule.getKey(i);
                             Element* restoreElement = stack.back();
                             stack.pop_back();
 
@@ -109,15 +99,13 @@ public:
                                 throw std::exception();
                             }
 
-                            elements.push_back(restoreElement);
-
-                            //modifier.register(i, restoreToken.getValue());
+                            elements[i-1] = restoreElement;
                             path.pop_back();
                         }
 
                         currentPosition = path.back();
 
-                        auto* element = new NodeElement(restoreRule->owner->id, elements);
+                        auto* element = new Element(restoreRule->owner->id, elements);
                         stack.push_back(element);
                     }
                     else break;
@@ -138,10 +126,15 @@ public:
             }
         }
 
+        uint32_t size = stack.size();
+
         if (stack.size() == 1)
         {
-           return stack.back();
+           Element* result = stack.back();
 
+           if(result->id == grammar->root->id){
+                return result;
+           }
         }
 
         return nullptr;

@@ -72,9 +72,7 @@ UnaryOperator
     ;
 
 CastExpression
-    :   '(' TypeName ')' CastExpression
-    |   UnaryExpression
-    |   'constant'
+    :   'sizeof' 'sizeof'
     ;
 
 MultiplicativeExpression
@@ -167,10 +165,6 @@ DeclarationSpecifiers
     :   DeclarationSpecifier+
     ;
 
-DeclarationSpecifiers2
-    :   DeclarationSpecifier+
-    ;
-
 DeclarationSpecifier
     :   TypeSpecifier
     ;
@@ -217,7 +211,6 @@ StructDeclaration
 
 SpecifierQualifierList
     :   TypeSpecifier SpecifierQualifierList?
-    |   SpecifierQualifierList
     ;
 
 StructDeclaratorList
@@ -235,22 +228,12 @@ Declarator
     ;
 
 DirectDeclarator
-    :   'identifier'
-    |   '(' Declarator ')'
-    |   DirectDeclarator '['  AssignmentExpression ']'
-    |   DirectDeclarator '(' ParameterTypeList ')'
-    |   DirectDeclarator '(' IdentifierList? ')'
-    |   '(' TypeSpecifier? Pointer DirectDeclarator ')'
+    :   'identifier' '(' ParameterList ')'
     ;
 
 Pointer
     :   '*' Pointer
     |   '^' Pointer
-    ;
-
-ParameterTypeList
-    :   ParameterList
-    |   ParameterList ',' '...'
     ;
 
 ParameterList
@@ -260,7 +243,6 @@ ParameterList
 
 ParameterDeclaration
     :   DeclarationSpecifiers Declarator
-    |   DeclarationSpecifiers2 Pointer?
     ;
 
 IdentifierList

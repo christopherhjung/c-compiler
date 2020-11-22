@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <iostream>
 #include "../utils/Comparable.h"
 
 class Component : public Comparable{
@@ -14,9 +15,9 @@ public:
     void initialize() {
         if(flag){
             flag = false;
-            build();
+            update();
         }
     }
 
-    virtual void build(){};
+    virtual void update(){};
 };

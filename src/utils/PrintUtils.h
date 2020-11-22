@@ -53,19 +53,6 @@ void printItem(const Item* item){
     std::cout << std::endl;
 }
 
-void printClosure(const Closure* closure){
-    std::cout << closure->id << std::endl;
-    for(Item* item: closure->items){
-        printItem(item);
-    }
-    std::cout << "next:" << std::endl;
-    for(const auto& pair: closure->transitions){
-        std::cout << pair.first->id << ": " << pair.first->name << ": " << pair.second->id << std::endl;
-
-    }
-    std::cout << "---------------------------------------" << std::endl;
-}
-
 
 void printParserEntry(Entry* entry){
     uint32_t width = 10;

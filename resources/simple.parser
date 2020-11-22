@@ -1,91 +1,18 @@
-root -> method
-modifier -> visibility? staticKeyword?
-method -> returnType:type methodName:word '(' declarations:declare{','} ')' inner:block
-block -> '{' statements:statement* '}'
-statement -> if
-statement -> block
-statement -> while
-statement -> for
-statement -> forEach
-statement -> singleLineStatement ';'
-statement -> return ';'
-statement -> throw ';'
-return -> returnKeyword expression:expression
-throw -> throwKeyword expression:expression
-singleLineStatement -> statement:assign
-singleLineStatement -> statement:modifyAssign
-singleLineStatement -> statement:declare
-singleLineStatement -> statement:declareAssign
-singleLineStatement -> statement:methodCall
-singleLineStatement -> statement:newInstance
-declareAssign -> type:identifier name:identifier '=' expression:expression
-declare -> type:identifier name:identifier
-if -> if '(' expression:expression ')' ifBranch:statement
-if -> if '(' expression:expression ')' ifBranch:statement elseKeyword elseBranch:statement
-while -> whileKeyword '(' expression ')' inner:statement
-for -> forKeyword '(' init:singleLineStatement ';' condition:expression ';' increment:expression ')' inner:statement
-forEach -> forKeyword '(' target:declare ':' iterator:expression ')' inner:statement
-expression -> booleanOr
-expression -> assign
-assign -> booleanOr '=' expression
-expression -> modifyAssign
-modifyAssign -> booleanOr '+=' expression
-modifyAssign -> booleanOr '-=' expression
-modifyAssign -> booleanOr '*=' expression
-modifyAssign -> booleanOr '/=' expression
-booleanOr -> booleanOr '||' booleanAnd
-booleanOr -> booleanAnd
-booleanAnd -> booleanAnd '&&' bitwiseOr
-booleanAnd -> bitwiseOr
-bitwiseOr -> bitwiseOr '|' bitwiseAnd
-bitwiseOr -> bitwiseAnd
-bitwiseAnd -> bitwiseAnd '&' equals
-bitwiseAnd -> equals
-equals -> equals '==' comp
-equals -> equals '!=' comp
-equals -> comp
-comp -> comp '<' shift
-comp -> comp '<=' shift
-comp -> comp '>=' shift
-comp -> comp '>' shift
-comp -> shift
-shift -> shift '>>' add
-shift -> shift '<<' add
-shift -> add
-add -> add '+' mul
-add -> add '-' mul
-add -> mul
-mul -> mul '*' cast
-mul -> mul '%' cast
-mul -> mul '/' cast
-mul -> cast
-path -> ( path '.' )? word
-cast -> '(' type:identifier ')' increment
-cast -> '+' increment
-cast -> '-' increment
-cast -> increment
-increment -> member '++'
-increment -> member '--'
-increment -> '++' member
-increment -> '--' member
-increment -> '!' member
-increment -> '~' member
-increment -> member
-member -> newInstance
-member -> newArray
-newInstance -> newKeyword type expressions:expressionParenthesis
-newArray -> newKeyword type '[' dimension:expression ']'
-member -> member '.' name:identifier
-member -> '(' expression ')'
-member -> methodCall
-member -> target:member '[' index:expression ']'
-member -> rawExpression
-methodCall -> member expressions:expressionParenthesis
-expressionParenthesis -> '(' expressions:expression{','} ')'
-rawExpression -> variable
-variable -> key:word
-rawExpression -> key:number
-rawExpression -> key:string
-rawExpression -> key:booleanValue
-rawExpression -> nullKeyword
-rawExpression -> thisKeyword
+Root: Declaration;
+
+Declaration
+    :   TypeSpecifier TypeSpecifier ';'
+    ;
+
+TypeSpecifier
+    :   'void'
+    |   'char'
+    |   'short'
+    |   'int'
+    |   'long'
+    |   'float'
+    |   'double'
+    |   'signed'
+    |   'unsigned'
+    |   'identifier'
+    ;

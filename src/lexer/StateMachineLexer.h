@@ -62,7 +62,6 @@ public:
                     return false;
                 }else{
                     token.id = machine->eof;
-                    token.name = "eof";
                     token.value = "";
                     finish = true;
                     return true;
@@ -110,7 +109,6 @@ public:
         }
 
         token.id = acceptState->id;
-        token.name = acceptState->name;
         token.value = value;
         return true;
     }

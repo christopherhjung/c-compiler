@@ -20,7 +20,8 @@ uint64_t Item::hash() const {
 
 bool Item::equals(const Comparable *other) const {
     if(const Item* item = dynamic_cast<const Item*>(other)) {
-        return this->dot == item->dot && this->lookahead == item->lookahead && rule->equals(item->rule);
+        bool result = this->dot == item->dot && this->lookahead == item->lookahead && rule->equals(item->rule);
+        return result;
     }
     return false;
 }

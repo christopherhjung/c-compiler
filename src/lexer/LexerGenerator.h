@@ -146,7 +146,7 @@ public:
 
 
         offset(2) << "token.id = accept;" << std::endl;
-        offset(2) << "token.name = types[accept];" << std::endl;
+        //offset(2) << "token.name = types[accept];" << std::endl;
         offset(2) << "token.value = value;" << std::endl;
 
 

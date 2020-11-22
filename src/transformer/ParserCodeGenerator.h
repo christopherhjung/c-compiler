@@ -21,6 +21,7 @@
 #include "../lexer/StateMachine.h"
 #include "../lexer/StateMachineLexer.h"
 
+#define EOF 0
 #define PARSER_NAME 4
 #define LEXER_NAME 5
 #define LEXER_VALUE 6
@@ -43,6 +44,7 @@ public:
     StringInputReader reader;
     StateMachineLexer stateMachineLexer;
     Token token;
+    uint32_t nonTerminalId = 0;
 
     std::unordered_map<std::string, Entity*> terminals;
     std::unordered_map<std::string, Entity*> nonTerminals;
@@ -79,7 +81,7 @@ public:
                 if(nonTerminals.find(token.value) != nonTerminals.end()){
                     result = nonTerminals[token.value];
                 }else{
-                    result = new Entity(0,token.value, false);
+                    result = new Entity(nonTerminalId++,token.value, false);
                     nonTerminals.emplace(token.value, result );
                 }
 
@@ -122,9 +124,9 @@ public:
         uint32_t ruleId = 0;
         std::vector<Rule*> rules;
         Rule* root = nullptr;
-        while(true){
+        while(!eat(EOF)){
             if(token.id != PARSER_NAME){
-                break;
+                throw std::exception();
             }
 
             Entity* owner = getEntity();

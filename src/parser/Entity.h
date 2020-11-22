@@ -24,7 +24,7 @@ public:
 
     }
 
-    void build() override;
+    void update() override;
 
     uint64_t hash() const override;
 
