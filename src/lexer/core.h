@@ -4,35 +4,134 @@
 
 #pragma once
 
-std::string* array;
+#include "LexerGrammar.h"
+#include "StateMachineBuilder.h"
+#include "StateMachineLexer.h"
+#include "../reader/FileInputReader.h"
 
-void readList(){
-    std::ifstream source ("./resources/c.translate");
-
-    std::vector<std::string> list;
-    if (source.is_open())
-    {
-        for( std::string line; getline( source, line ); )
-        {
-            list.push_back(line);
-        }
-    }
-
-    array =  new std::string[list.size()];
-    std::copy(list.begin(), list.end(), array);
-}
+std::string translate[] = {
+        "eof",
+        "whitespace",
+        "comment",
+        "comment",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "keyword",
+        "constant",
+        "constant",
+        "identifier",
+        "string-literal",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator",
+        "punctuator"
+};
 
 int runLexer(InputReader* fileInputReader,std::string& source, std::ostream& out, std::ostream& err){
-    GeneratedLexer lexer;
-    readList();
+    LexerGrammar lexerGrammar = LexerGrammar::build(new FileInputReader("./resources/c.lexer"));
+    StateMachineLexer lexer(StateMachineBuilder::build(lexerGrammar));
+
+    //GeneratedLexer lexer;
+
 
     lexer.reset(fileInputReader);
     Token token;
     token.location.fileName = source;
     while(lexer.hasNextToken(token)){
-        if(token.id >= 3){ //whitespace
+        if(token.id > 0){ //eof
 #ifdef OUTPUT
-            out << token.location << ": " << array[token.id] << " " << token.value << std::endl;
+            out << token.location << ": " << translate[token.id] << " " << token.value << std::endl;
 #endif
         }
     }

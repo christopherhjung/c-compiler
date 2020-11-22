@@ -6,6 +6,9 @@
 
 #include "../lexer/Lexer.h"
 #include "ParserTable.h"
+#include "Grammar.h"
+#include <vector>
+#include <deque>
 
 class Element{
 public:
@@ -114,7 +117,7 @@ public:
 
                         currentPosition = path.back();
 
-                        auto* element = new NodeElement(restoreRule->id, elements);
+                        auto* element = new NodeElement(restoreRule->owner->id, elements);
                         stack.push_back(element);
                     }
                     else break;

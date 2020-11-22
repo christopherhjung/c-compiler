@@ -8,14 +8,22 @@
 #include <fstream>
 #include <string>
 #include <memory>
+#include <algorithm>
+#include <functional>
+#include <cctype>
+#include <locale>
 
 #include <unordered_set>
 #include <unordered_map>
 #include <utility>
 #include <vector>
 #include "../reader/StringInputReader.h"
+#include "StateMachine.h"
+#include <regex>
+#include "LexerGrammar.h"
 
 #define CHAR_COUNT 256
+
 
 struct SetHash {
     size_t operator()(const std::unordered_set<uint32_t>& s) const {
@@ -36,24 +44,13 @@ public:
     std::unordered_set<uint32_t> followPositions;
 };
 
-struct State{
-public:
-    bool finish = false;
-    bool greedy = false;
-    std::string name;
-    int32_t index = -1;
-    int32_t id = -1;
-    State(bool finish, uint32_t index ,uint32_t id, std::string& name) : finish(finish), name(name), index(index), id(id) {};
-    State(bool finish, uint32_t index ) : finish(finish), index(index){};
-    std::unordered_map<char, State*> transitions;
-};
-
 class StateMachineBuilder {
 public:
     StringInputReader reader;
     uint32_t currentIndex = 0;
     uint32_t currentRule = 0;
     uint32_t stateIndex = 0;
+    int32_t eof = -1;
     Info* finish = nullptr;
     std::unordered_map<uint32_t, Info*> infos;
 
@@ -62,7 +59,23 @@ public:
     std::unordered_map<uint32_t, uint32_t> rules;
     std::vector<std::string> kinds;
     std::unordered_set<uint32_t> greedys;
+    std::unordered_set<uint32_t> hides;
     std::unordered_map<std::unordered_set<uint32_t>, State*, SetHash> states;
+
+    static StateMachine* build(InputReader* inputReader){
+        LexerGrammar grammar = LexerGrammar::build(inputReader);
+
+        return build(grammar);
+    }
+
+    static StateMachine* build(LexerGrammar grammar){
+        StateMachineBuilder builder;
+        for( const auto& entry : grammar.entries )
+        {
+            builder.add(entry.name, entry.regex, entry.greedy, entry.hide);
+        }
+        return builder.build();
+    }
 
     virtual ~StateMachineBuilder() {
         for(const auto& infoEntry : infos){
@@ -114,42 +127,52 @@ public:
         return info;
     }
 
-    void add(const std::string& name, const std::string& regex, bool greedy)
+    void add(const std::string& name, const std::string& regex, bool greedy, bool hide)
     {
-        reader.reset(regex);
-        Info* newInfo = parseOr();
-        Info* endInfo = createInfo();
-        int finalIndex = endInfo->index;
-
-        if (newInfo->nullifies)
-        {
-            newInfo->firstPositions.insert(finalIndex);
-        }
-
-        for (int lastPosition : newInfo->lastPositions)
-        {
-            infos[lastPosition]->followPositions.insert(finalIndex);
-        }
-
-        if(greedy){
-            greedys.insert(endInfo->rule);
-        }
-        rules[finalIndex] = endInfo->rule;
-        kinds.push_back(name);
-
-        if(finish != nullptr){
-            finish = wrapOr(finish, newInfo);
+        if(name == "eof"){
+            eof = currentRule;
         }else{
-            finish = newInfo;
+            reader.reset(regex);
+            Info* newInfo = parseOr();
+            Info* endInfo = createInfo();
+            int finalIndex = endInfo->index;
+
+            if (newInfo->nullifies)
+            {
+                newInfo->firstPositions.insert(finalIndex);
+            }
+
+            for (int lastPosition : newInfo->lastPositions)
+            {
+                infos[lastPosition]->followPositions.insert(finalIndex);
+            }
+
+            if(greedy){
+                greedys.insert(endInfo->rule);
+            }
+
+            if(hide){
+                hides.insert(endInfo->rule);
+            }
+            rules[finalIndex] = endInfo->rule;
+
+            if(finish != nullptr){
+                finish = wrapOr(finish, newInfo);
+            }else{
+                finish = newInfo;
+            }
         }
 
+        kinds.push_back(name);
         currentRule++;
     }
 
-    std::shared_ptr<State> build(){
+    StateMachine* build(){
         states.clear();
         stateIndex = 0;
-        return std::shared_ptr<State>(compile(finish->firstPositions));
+        State* root = compile(finish->firstPositions);
+
+        return new StateMachine(root, eof,getStates(), kinds, hides);
     }
 
     State* compile(const std::unordered_set<uint32_t>& set)

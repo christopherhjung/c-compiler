@@ -33,10 +33,12 @@ private:
     uint32_t column = 1;
     bool error = false;
     Error* errorObj;
-    std::shared_ptr<State> state;
+    std::shared_ptr<State> root;
     SymbolCache symbolCache;
+    StateMachine* machine;
+    bool finish;
 public:
-    StateMachineLexer(const std::shared_ptr<State>& init) : state(init.get()){
+    StateMachineLexer(StateMachine* machine) : machine(machine), root(machine->root){
 
     };
 
@@ -50,46 +52,66 @@ public:
     }
 
     bool hasNextToken(Token& token) override {
-        if(reader->peek() == 256){
-            return false;
-        }
-
-        int32_t acceptPosition = -1;
-        State* currentState = state.get();
+        int32_t acceptPosition;
+        State* currentState;
         State* acceptState = nullptr;
-        token.location.line = line;
-        token.location.column = column;
-        char c = -1;
+        std::string value;
         while(true){
-            if(currentState == nullptr || reader->peek() == 256){
-                if(acceptPosition == -1){
-                    errorObj =new Error(&token.location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + escaping(c) + "< wrong!" );
-                    error = true;
+            if(reader->peek() == 256){
+                if(finish){
                     return false;
+                }else{
+                    token.id = machine->eof;
+                    token.name = "eof";
+                    token.value = "";
+                    finish = true;
+                    return true;
                 }
+            }
+
+            acceptPosition = -1;
+            currentState = root.get();
+            acceptState = nullptr;
+            token.location.line = line;
+            token.location.column = column;
+            char c = -1;
+            while(true){
+                if(currentState == nullptr || reader->peek() == 256){
+                    if(acceptPosition == -1){
+                        token.id = -1;
+                        errorObj =new Error(&token.location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + escaping(c) + "< wrong!" );
+                        error = true;
+                        return false;
+                    }
+                    break;
+                }
+
+                c = reader->peek();
+                reader->next();
+                currentState = currentState->transitions[c];
+
+                if(currentState != nullptr && currentState->finish){
+                    acceptPosition = reader->getOffset();
+                    acceptState = currentState;
+                }
+            }
+
+            value = symbolCache.internalize(reader->readString(acceptPosition));
+
+            for(auto& c2 : value){
+                updatePosition(c2);
+            }
+
+            reader->reset(acceptPosition);
+
+            if(!machine->hides[acceptState->id]){
                 break;
             }
-
-            c = reader->peek();
-            reader->next();
-            currentState = currentState->transitions[c];
-
-            if(currentState != nullptr && currentState->finish){
-                acceptPosition = reader->getOffset();
-                acceptState = currentState;
-            }
-        }
-
-        std::string value = symbolCache.internalize(reader->readString(acceptPosition));
-
-        for(auto& c : value){
-            updatePosition(c);
         }
 
         token.id = acceptState->id;
         token.name = acceptState->name;
         token.value = value;
-        reader->reset(acceptPosition);
         return true;
     }
 

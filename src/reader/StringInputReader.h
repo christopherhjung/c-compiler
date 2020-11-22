@@ -27,6 +27,11 @@ class StringInputReader : public InputReader {
     }
 
 public:
+    ~StringInputReader() override {
+
+    }
+
+public:
     StringInputReader(){
 
     }
@@ -71,6 +76,10 @@ public:
         const char* src = str.c_str();
         std::copy(src + index, src + index + count, arr);
         return std::string(arr, count);
+    }
+
+    bool readLine(std::string &str) override {
+        return false;
     }
 };
 

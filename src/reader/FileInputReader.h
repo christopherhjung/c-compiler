@@ -11,14 +11,19 @@
 #include <string>
 
 class FileInputReader : public StreamInputReader  {
-
+    std::ifstream fileStream;
     std::string file;
 public:
-    explicit FileInputReader(const std::string& file) : StreamInputReader( new std::ifstream(file)), file(file) {
+    explicit FileInputReader(const std::string& file) : StreamInputReader(), fileStream(file), file(file) {
+        stream = &fileStream;
+        init();
     }
 
-    virtual ~FileInputReader() {
-        delete stream;
+    void fetch() override {
+        if (fileStream.is_open())
+        {
+            StreamInputReader::fetch();
+        }
     }
 };
 

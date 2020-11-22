@@ -1,7 +1,7 @@
-Root -> CompilationUnit
+Root: CompilationUnit;
 
 CompilationUnit
-    :   TranslationUnit? EOF
+    :   TranslationUnit
     ;
 
 TranslationUnit
@@ -38,7 +38,7 @@ GenericAssocList
 
 GenericAssociation
     :   TypeName ':' AssignmentExpression
-    |   'Default' ':' AssignmentExpression
+    |   'default' ':' AssignmentExpression
     ;
 
 PostfixExpression
@@ -63,8 +63,8 @@ UnaryExpression
     |   '++' UnaryExpression
     |   '--' UnaryExpression
     |   UnaryOperator CastExpression
-    |   'sizeOf' UnaryExpression
-    |   'sizeOf' '(' TypeName ')'
+    |   'sizeof' UnaryExpression
+    |   'sizeof' '(' TypeName ')'
     ;
 
 UnaryOperator
@@ -142,7 +142,7 @@ ConditionalExpression
 AssignmentExpression
     :   ConditionalExpression
     |   UnaryExpression AssignmentOperator AssignmentExpression
-    |   digitSequence
+    |   'digitSequence'
     ;
 
 AssignmentOperator
@@ -186,23 +186,23 @@ InitDeclarator
     ;
 
 TypeSpecifier
-    :   'Void'
-    |   'Char'
-    |   'Short'
-    |   'Int'
-    |   'Long'
-    |   'Float'
-    |   'Double'
-    |   'Signed'
-    |   'Unsigned'
+    :   'void'
+    |   'char'
+    |   'short'
+    |   'int'
+    |   'long'
+    |   'float'
+    |   'double'
+    |   'signed'
+    |   'unsigned'
     |   StructSpecifier
     |   'identifier'
     |   Pointer
     ;
 
 StructSpecifier
-    :   'Struct' 'identifier'? '{' StructDeclarationList '}'
-    |   'Struct' 'identifier'
+    :   'struct' 'identifier'? '{' StructDeclarationList '}'
+    |   'struct' 'identifier'
     ;
 
 
@@ -217,7 +217,7 @@ StructDeclaration
 
 SpecifierQualifierList
     :   TypeSpecifier SpecifierQualifierList?
-    |   SpecifierQualifierList?
+    |   SpecifierQualifierList
     ;
 
 StructDeclaratorList
@@ -244,7 +244,7 @@ DirectDeclarator
     ;
 
 Pointer
-    |   '*' Pointer
+    :   '*' Pointer
     |   '^' Pointer
     ;
 
@@ -316,8 +316,8 @@ Statement
 
 LabeledStatement
     :   'identifier' ':' Statement
-    |   'Case' ConstantExpression ':' Statement
-    |   'Default' ':' Statement
+    |   'case' ConstantExpression ':' Statement
+    |   'default' ':' Statement
     ;
 
 CompoundStatement
@@ -339,8 +339,8 @@ ExpressionStatement
     ;
 
 SelectionStatement
-    :   'If' '(' Expression ')' Statement ('Else' Statement)?
-    |   'Switch' '(' Expression ')' Statement
+    :   'if' '(' Expression ')' Statement ('else' Statement)?
+    |   'switch' '(' Expression ')' Statement
     ;
 
 IterationStatement
@@ -365,9 +365,9 @@ ForExpression
     ;
 
 JumpStatement
-    :   'Goto' 'identifier' ';'
-    |   'Continue' ';'
-    |   'Break' ';'
-    |   'Return' Expression? ';'
-    |   'Goto' UnaryExpression ';'
+    :   'goto' 'identifier' ';'
+    |   'continue' ';'
+    |   'break' ';'
+    |   'return' Expression? ';'
+    |   'goto' UnaryExpression ';'
     ;

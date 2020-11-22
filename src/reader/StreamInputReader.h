@@ -18,7 +18,7 @@
 class StreamInputReader : public InputReader{
 
 protected:
-    std::istream *stream;
+    std::istream *stream{};
     uint32_t tail = 0;
     uint32_t capacity = 1u << 8u;
     uint32_t size = 0;
@@ -29,10 +29,22 @@ protected:
     bool empty = false;
     int16_t current = 256;
     char *buffer = new char[capacity]{0};
+
+    StreamInputReader(){
+
+    }
+
+    void init(){
+        reset(0);
+    }
+
 public:
-    explicit StreamInputReader(std::istream* stream){
-        this->stream = stream;
-        fetch();
+    ~StreamInputReader() override {
+        delete[](buffer);
+    }
+public:
+    StreamInputReader(std::istream* stream) :stream(stream){
+        init();
     };
 
     int16_t peek() override{
@@ -72,6 +84,32 @@ public:
         }
 
         return std::string(arr, count);
+    }
+
+    bool readLine(std::string& str) override {
+        if(current == 256){
+            return false;
+        }
+
+        for(uint32_t i = 0 ; current != '\n' && current != '\r' && current != 256 ; ){
+            next();
+        }
+        str = readString(offset );
+
+        if(current == '\n'){
+            next();
+            if(current == '\r'){
+                next();
+            }
+        }else if(current == '\r'){
+            next();
+            if(current == '\n'){
+                next();
+            }
+        }
+
+        reset(offset );
+        return true;
     }
 
     void sizeUp()  {
@@ -122,7 +160,7 @@ public:
         full &= tail == head;
     }
 
-    void fetch(){
+    virtual void fetch(){
         uint32_t readCount;
         if(tail > head){
             stream->read(buffer + head, tail - head);

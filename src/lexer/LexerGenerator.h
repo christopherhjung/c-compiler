@@ -14,6 +14,7 @@
 #include <algorithm>
 
 #include "StateMachineBuilder.h"
+#include "../reader/FileInputReader.h"
 
 inline bool cmpState (State* l, State* r) {
     return l->index < r->index;
@@ -29,40 +30,20 @@ class LexerGenerator {
     std::string tab = "    ";
 public:
     void build(const std::string& src, const std::string& target){
-        std::ifstream source (src);
+        FileInputReader inputReader(src);
 
         std::shared_ptr<State> state;
+        StateMachine* machine = StateMachineBuilder::build(&inputReader);
+
         StateMachineBuilder builder;
-        if (source.is_open())
-        {
-            for( std::string line; getline( source, line ); )
-            {
-                bool greedy = line[0] == '!';
-                if(greedy){
-                    line = line.substr(1);
-                }
+        std::vector<State*> states = builder.getStates();
+        std::vector<std::string> kinds = builder.getKinds();
 
-                int position = line.find(':');
-                std::string key = line.substr(0, position);
-                std::string value = line.substr(position + 1);
-
-                builder.add(key, value, greedy);
-            }
-
-            state = builder.build();
-
-            std::vector<State*> states = builder.getStates();
-            std::vector<std::string> kinds = builder.getKinds();
-
-            std::sort(states.begin(), states.end(), cmpState);
-
-            ss.open(target);
-            ss << "#include \"../lexer/Lexer.h\"" << std::endl;
-            writeClass(states , state.get(), kinds);
-            ss << std::flush;
-            ss.close();
-            source.close();
-        }
+        ss.open(target);
+        ss << "#include \"../lexer/Lexer.h\"" << std::endl;
+        writeClass(machine->states , machine->root, machine->kinds);
+        ss << std::flush;
+        ss.close();
     }
 
     void writeKinds(std::vector<std::string>& kinds){
@@ -74,6 +55,8 @@ public:
     }
 
     void writeClass(std::vector<State*>& states, State* start, std::vector<std::string>& kinds){
+        std::sort(states.begin(), states.end(), cmpState);
+
         offset(0) << "class GeneratedLexer : public Lexer{" << std::endl;
 
         offset(1) << "int16_t current;" << std::endl;

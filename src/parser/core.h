@@ -11,18 +11,18 @@
 #include "Parser.h"
 #include "../lexer/StateMachineBuilder.h"
 #include "../lexer/StateMachineLexer.h"
+#include "../transformer/ParserCodeGenerator.h"
+#include "../reader/FileInputReader.h"
 
 int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err){
 
-
-
     auto* a = new Entity(0, "a", true);
     auto* b = new Entity(1, "b", true);
+    auto* eof = new Entity(2, "EOF", true);
 
-    auto* S = new Entity(2, "S");
-    auto* A = new Entity(3, "A");
-    auto* root = new Entity(4, "root");
-    auto* eof = new Entity(5, "EOF", true);
+    auto* S = new Entity(0, "S");
+    auto* A = new Entity(1, "A");
+    auto* root = new Entity(2, "root");
 
     Rule* rootRule = new Rule(0, root, {S});
     Rule* ruleA = new Rule(1, S, {A,A});
@@ -32,25 +32,24 @@ int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err
     std::vector<Rule*> rules = {rootRule, ruleA, ruleB, ruleC};
     std::vector<Entity*> entities = {root, S,A,a,b, eof};
 
-    auto* grammar = new Grammar(eof, rootRule, entities, rules);
-    grammar->initialize();
+    //auto* grammar = new Grammar(eof, rootRule, entities, rules);
+
+
+    //GeneratedLexer lexer;
+
+    LexerGrammar lexerGrammar = LexerGrammar::build(new FileInputReader("./resources/c.lexer"));
+    ParserCodeGenerator parserCodeGenerator(lexerGrammar);
+    parserCodeGenerator.init(new FileInputReader("./resources/c.parser"));
+
+    Grammar* grammar = parserCodeGenerator.parse();
 
     ParserGenerator generator;
-
     auto* table = generator.generateParser(grammar);
 
     Parser parser(table, grammar);
 
-    //GeneratedLexer lexer;
-
-    StateMachineBuilder builder;
-
-    builder.add("a", "a", false);
-    builder.add("b", "b", false);
-
-    std::shared_ptr<State> init = builder.build();
-    StateMachineLexer lexer(init);
-    lexer.reset(new StringInputReader("abb"));
+    StateMachineLexer lexer(StateMachineBuilder::build(lexerGrammar));
+    lexer.reset(new FileInputReader("./test/test6.c"));
 
     auto* element = parser.parse(&lexer);
 
@@ -61,36 +60,3 @@ int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err
     }
 }
 
-
-
-/*
-    identifier
-    constant
-    string-literal
-    parenthesis expression,
-    []
-    function call
-    .
-    sizeof
-    & unary
-    * unary
-    - unary
-    !
-    * binary
-    + binary
-    - binary
-    <
-    ==
-    !=
-    &&
-    ||
-    ?:
-    =
-
-    type-specifier:
-    void
-    char
-    int
-    struct
-
- */

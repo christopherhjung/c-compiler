@@ -7,73 +7,27 @@
 #include <string>
 #include <functional>
 #include <unordered_map>
+#include <iomanip>
+#include <vector>
+#include <unordered_set>
+#include "Item.h"
 #include "Grammar.h"
-#include "Closure.h"
 #include "ParserTable.h"
 
+class Closure {
+public:
+    uint32_t id;
+    std::unordered_set<Item*, Comparable::Hash, Comparable::Equals> items;
+    std::unordered_map<Entity*, Closure*> transitions;
+
+    Closure(uint32_t id) : id(id){
+
+    }
+};
 
 class ParserGenerator {
     uint32_t currentClosure = 0;
     std::unordered_map<Item*, Closure*, Comparable::Hash, Comparable::Equals> closures;
-
-    void printEntity(Entity* item){
-        std::cout << item->name;
-    }
-
-    void printRule(Rule* rule){
-        printEntity(rule->owner);
-
-        std::cout << "->";
-        uint32_t i = 0;
-        for(Entity* entity : rule->keys){
-            std::cout << " ";
-            printEntity(entity);
-            i++;
-        }
-    }
-
-    void printItem(Item* item){
-        printEntity(item->rule->owner);
-
-        std::cout << "->";
-        uint32_t i = 0;
-        for(Entity* entity : item->rule->keys){
-            if(item->dot == i){
-                std::cout << ".";
-            }else if(i>0){
-                std::cout << " ";
-            }
-            printEntity(entity);
-            i++;
-        }
-        if(item->dot ==i){
-            std::cout << ".";
-        }
-
-        std::cout << " / ";
-
-        for(Entity* entity : item->lookahead){
-            printEntity(entity);
-
-            std::cout << ", ";
-        }
-
-        //std::cout << "   ||||   " << item->hash();
-        std::cout << std::endl;
-    }
-
-    void printClosure(Closure* closure){
-        std::cout << closure->id << std::endl;
-        for(Item* item: closure->items){
-            printItem(item);
-        }
-        std::cout << "next:" << std::endl;
-        for(const auto& pair: closure->transitions){
-            std::cout << pair.first->id << ": " << pair.first->name << ": " << pair.second->id << std::endl;
-
-        }
-        std::cout << "---------------------------------------" << std::endl;
-    }
 
     void computeClosure(Closure* closure){
         for(Item* sub : closure->items){
@@ -117,7 +71,6 @@ class ParserGenerator {
                 nextItem->dot = 0;
                 nextItem->rule = nextRule;
                 nextItem->lookahead = *lookahead;
-
                 createClosure(nextItem, closure);
             }
         }
@@ -135,50 +88,10 @@ class ParserGenerator {
         return closure;
     }
 
-    void printParserTable(ParserTable* table){
-        for(uint32_t i = 0 ; i < table->entries[0]->size ; i++){
-            std::cout << std::setw(10) << i;
-        }
-        std::cout << std::setw(10) << "";
-        for(uint32_t i = 0 ; i < table->entries[0]->size ; i++){
-            std::cout << std::setw(10) << i;
-        }
-        std::cout << std::setw(10) << "";
-        for(uint32_t i = 0 ; i < table->entries[0]->size ; i++){
-            std::cout << std::setw(10) << i;
-        }
-        std::cout << std::endl;
-
-        for(uint32_t i = 0 ; i < table->size ; i++){
-            Entry* entry = table->entries[i];
-            printParserEntry(entry);
-        }
-    }
-
-    void printParserEntry(Entry* entry){
-        uint32_t width = 10;
-        for(uint32_t i = 0 ; i < entry->size ; i++){
-            std::cout << std::setw(width) << entry->actions[i];
-        }
-        std::cout << std::setw(width) << "";
-        for(uint32_t i = 0 ; i < entry->size ; i++){
-            std::cout << std::setw(width);
-            if(entry->restore[i] != nullptr){
-                printRule(entry->restore[i]);
-            }else{
-                std::cout <<  "";
-            }
-        }
-        std::cout << std::setw(width) << "";
-        for(uint32_t i = 0 ; i < entry->size ; i++){
-            std::cout << std::setw(width) << entry->jumps[i];
-        }
-        std::cout << std::setw(width) << "";
-        std::cout << std::endl;
-    }
 
 
     void init(Grammar* grammar){
+        grammar->initialize();
         Rule* init = grammar->init;
         Item* item = new Item();
         item->dot = 0;
@@ -194,7 +107,7 @@ public:
         auto* table = new ParserTable(closures.size());
         for(const auto& pair : closures){
             Closure* closure = pair.second;
-            auto* entry = new Entry(grammar->entities.size());
+            auto* entry = new Entry(grammar);
             table->entries[closure->id] = entry;
 
             for( const auto& trigger : closure->transitions ){
@@ -213,11 +126,7 @@ public:
                     }
                 }
             }
-
-            printClosure(pair.second);
         }
-
-        printParserTable(table);
 
         return table;
     }
