@@ -41,7 +41,7 @@ public:
 
         ss.open(target);
         ss << "#include \"../lexer/Lexer.h\"" << std::endl;
-        writeClass(machine->states , machine->root, machine->kinds);
+        writeClass(machine->states , machine->root, machine->kinds, machine->hides);
         ss << std::flush;
         ss.close();
     }
@@ -54,7 +54,15 @@ public:
         offset(1) << "};" << std::endl;
     }
 
-    void writeClass(std::vector<State*>& states, State* start, std::vector<std::string>& kinds){
+    void writeHides(std::vector<bool>& hides){
+        offset(1) << "bool hides["<<  hides.size() <<"] {" << std::endl ;
+        for( const auto& hide : hides ){
+            offset(2) << !hide << "," << std::endl;
+        }
+        offset(1) << "};" << std::endl;
+    }
+
+    void writeClass(std::vector<State*>& states, State* start, std::vector<std::string>& kinds, std::vector<bool>& hides){
         std::sort(states.begin(), states.end(), cmpState);
 
         offset(0) << "class GeneratedLexer : public Lexer{" << std::endl;
@@ -67,55 +75,85 @@ public:
         offset(1) << "bool error = false;" << std::endl;
         offset(1) << "Error* errorObj;" << std::endl;
         offset(1) << "char last = 0;" << std::endl;
+        offset(1) << "bool finish = false;" << std::endl;
 
         writeKinds(kinds);
+        writeHides(hides);
 
         offset(0) << "public:" << std::endl;
 
         offset(1) << "bool hasNextToken(Token& token) override {" << std::endl;
 
-        offset(2) << "if(current == 256){" << std::endl;
-        offset(3) << "return false;" << std::endl;
-        offset(2) << "}" << std::endl;
 
+        offset(2) << "std::string value;" << std::endl;
 
-        offset(2) << "accept = -1;" << std::endl;
-        offset(2) << "offset = 0;" << std::endl;
+        offset(2) << "while(true){" << std::endl;
 
-        offset(2);
+        offset(3) << "if(current == 256){" << std::endl;
+        offset(4) << "if(finish){" << std::endl;
+        offset(5) << "return false;" << std::endl;
+        offset(4) << "}else{" << std::endl;
+        offset(5) << "token.id = 0;" << std::endl;
+        offset(5) << "token.value = \"\";" << std::endl;
+        offset(5) << "finish = true;" << std::endl;
+        offset(5) << "return true;" << std::endl;
+        offset(4) << "}" << std::endl;
+        offset(3) << "}" << std::endl;
+
+        offset(3) << "accept = -1;" << std::endl;
+        offset(3) << "offset = 0;" << std::endl;
+
+        offset(3);
         callRule(start);
         ss << std::endl;
 
-        offset(2) << "token.location.line = line;" << std::endl;
-        offset(2) << "token.location.column = column;" << std::endl;
+        offset(3) << "token.location.line = line;" << std::endl;
+        offset(3) << "token.location.column = column;" << std::endl;
 
-        offset(2) << "if(accept == -1){" << std::endl;
+        offset(3) << "if(accept == -1){" << std::endl;
 
-        offset(3) << "offset = reader->getOffset();" << std::endl;
+        offset(4) << "offset = reader->getOffset();" << std::endl;
 
-        offset(3) << "if(current == 256){" << std::endl;
-        offset(4) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >EOL< wrong!" );)" << std::endl;
-        offset(3) << "}else if(current == 0){" << std::endl;
-        offset(4) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >NULL< wrong!" );)" << std::endl;
-        offset(3) << "}else{" << std::endl;
-        offset(4) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >" + ((char)current) + "< wrong!" );)" << std::endl;
+        offset(4) << "if(current == 256){" << std::endl;
+        offset(5) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >EOL< wrong!" );)" << std::endl;
+        offset(4) << "}else if(current == 0){" << std::endl;
+        offset(5) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >NULL< wrong!" );)" << std::endl;
+        offset(4) << "}else{" << std::endl;
+        offset(5) << R"(errorObj =new Error(&token.location, reader->readString(offset ) + "_<-- char >" + ((char)current) + "< wrong!" );)" << std::endl;
+        offset(4) << "}" << std::endl;
+
+        offset(4) << "error = true;" << std::endl;
+        offset(4) << "return false;" << std::endl;
         offset(3) << "}" << std::endl;
 
-        offset(3) << "error = true;" << std::endl;
-        offset(3) << "return false;" << std::endl;
+        offset(3) << "value = reader->readString(offset);" << std::endl;
+        offset(3) << "reader->reset(offset);" << std::endl;
+        offset(3) << "current = reader->peek();" << std::endl;
+
+        offset(3) << "for(auto& c : value){" << std::endl;
+        offset(4) << "updatePosition(c);" << std::endl;
+        offset(3) << "}" << std::endl;
+
+
+        offset(3) << "if(hides[accept]){" << std::endl;
+        offset(4) << "break;" << std::endl;
+        offset(3) << "}" << std::endl;
+
         offset(2) << "}" << std::endl;
 
-        offset(2) << "std::string value = reader->readString(offset);" << std::endl;
-        offset(2) << "reader->reset(offset);" << std::endl;
-        offset(2) << "current = reader->peek();" << std::endl;
 
-        offset(2) << "for(auto& c : value){" << std::endl;
-        offset(3) << "updatePosition(c);" << std::endl;
-        offset(2) << "}" << std::endl;
+
+
 
         offset(2) << "token.id = accept;" << std::endl;
         offset(2) << "token.name = types[accept];" << std::endl;
         offset(2) << "token.value = value;" << std::endl;
+
+
+
+
+
+
 
         offset(2) << "return true;" << std::endl;
         offset(1) << "}" << std::endl;

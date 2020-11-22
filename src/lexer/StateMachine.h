@@ -34,15 +34,15 @@ public:
     int32_t eof = -1;
     std::vector<State*> states;
     std::vector<std::string> kinds;
-    bool * hides;
+    std::vector<bool> hides;
 
     StateMachine(State *init, int32_t eof, const std::vector<State *> &states, const std::vector<std::string> &kinds,
                  const std::unordered_set<uint32_t>& hides) :
             root(init), eof(eof), states(states), kinds(kinds)
     {
-        this->hides = new bool[kinds.size()];
-        std::fill(this->hides , this->hides + kinds.size(), false);
 
+        this->hides.resize(kinds.size());
+        std::fill(this->hides.begin() , this->hides.end(), false);
         for( const uint32_t& id : hides){
             this->hides[id] = true;
         }

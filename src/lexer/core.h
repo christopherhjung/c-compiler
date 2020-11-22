@@ -119,10 +119,10 @@ std::string translate[] = {
 };
 
 int runLexer(InputReader* fileInputReader,std::string& source, std::ostream& out, std::ostream& err){
-    LexerGrammar lexerGrammar = LexerGrammar::build(new FileInputReader("./resources/c.lexer"));
-    StateMachineLexer lexer(StateMachineBuilder::build(lexerGrammar));
+    //LexerGrammar lexerGrammar = LexerGrammar::build(new FileInputReader("./resources/c.lexer"));
+    //StateMachineLexer lexer(StateMachineBuilder::build(lexerGrammar));
 
-    //GeneratedLexer lexer;
+    GeneratedLexer lexer;
 
 
     lexer.reset(fileInputReader);
