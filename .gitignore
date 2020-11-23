@@ -3,6 +3,7 @@ llvm/
 src/generated
 test
 cmake-build-debug/
+CMakeFiles/
 .DS_Store
 .idea
 # Created by https://www.gitignore.io/api/c,c++

@@ -16,8 +16,8 @@ set(CMAKE_CXX_FLAGS_RELEASE_INIT "-std=c++17 -O2 -DNDEBUG")
 add_executable(c4 src/main.cpp src/parser/Rule.cpp src/parser/Entity.cpp src/parser/Component.cpp src/parser/Item.cpp)
 add_executable(build src/build.cpp src/parser/Rule.cpp src/parser/Entity.cpp src/parser/Component.cpp)
 
-add_executable(test tests/main.cpp)
+add_executable(testC4 tests/main.cpp)
 
-target_link_libraries(test gtest gtest_main)
+target_link_libraries(testC4 gtest gtest_main)
 
 
