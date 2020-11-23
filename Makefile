@@ -57,7 +57,7 @@ all:
 	mkdir -p $(BINDIR)
 	mkdir -p $(GENERATED_DIR)
 
-	cmake -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) -B$(BINDIR) .
+	( cd $(BINDIR) && cmake -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) ../../)
 	make -C $(BINDIR) build
 	$(BINDIR)/build "./resources/c.lexer" "./src/generated/GeneratedLexer.h"
 	make -C $(BINDIR) c4
