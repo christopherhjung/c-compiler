@@ -79,6 +79,7 @@ public:
     }
 
     bool readLine(std::string &str) override {
+        str = "";
         return false;
     }
 };

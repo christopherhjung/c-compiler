@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "../generated/GeneratedLexer.h"
 
 #define EOF 0
 #define AUTO 4
@@ -111,9 +110,19 @@
 #define DOUBLE_HASH_REPLACEMENT 105
 
 
-
+#include "../lexer/Lexer.h"
+#include <vector>
 
 namespace parser{
+    class ParseException : public std::exception{
+    public:
+        Token token;
+
+        ParseException(const Token& token) : token(token){
+
+        }
+    };
+
     class Element{
     public:
         virtual ~Element() = default;
@@ -221,7 +230,7 @@ namespace parser{
         Identifier* name;
     };
 
-    class Struct : public Type{
+    class Struct : public Declaration{
     public:
         Identifier* identifier;
         std::vector<Declaration*> declarations;
@@ -256,14 +265,20 @@ namespace parser{
 
     class SimpleParser {
     public:
+        Lexer* lexer;
+        Token* ring;
 
-        GeneratedLexer lexer;
+
         Token lookA;
         Token lookB;
         Token lookC;
 
+        SimpleParser(Lexer* lexer) : lexer(lexer){
+
+        }
+
         void init(InputReader* parserDescriptor){
-            lexer.reset(parserDescriptor);
+            lexer->reset(parserDescriptor);
             next();
             next();
             next();
@@ -272,7 +287,7 @@ namespace parser{
         void next(){
             lookA = lookB;
             lookB = lookC;
-            lexer.hasNextToken(lookC);
+            lexer->hasNextToken(lookC);
         }
 
         Token eat(){
@@ -281,7 +296,7 @@ namespace parser{
             return result;
         }
 
-        bool eat(uint32_t id){
+        bool eat(int32_t id){
             if(is(id)){
                 next();
                 return true;
@@ -289,18 +304,22 @@ namespace parser{
             return false;
         }
 
-        void shall(uint32_t id){
+        void shall(int32_t id){
             if(!eat(id)){
-                throw std::exception();
+                fatal();
             }
         }
 
-        bool is(uint32_t id){
+        bool is(int32_t id){
             return lookA.id == id;
         }
 
-        bool isB(uint32_t id){
+        bool isB(int32_t id){
             return lookB.id == id;
+        }
+
+        void fatal(){
+            throw ParseException(lookA);
         }
 
         Element* parse(){
@@ -309,8 +328,6 @@ namespace parser{
                 Element* element;
                 if(lookC.id == LEFT_PAREN){
                     element = parseMethod();
-                }else if(is(STRUCT)){
-                    element = parseStruct();
                 }else{
                     element = parseDeclaration();
                 }
@@ -348,7 +365,7 @@ namespace parser{
                 eat();
                 return structType;
             }else{
-                throw std::exception();
+                fatal();
             }
         }
 
@@ -359,16 +376,21 @@ namespace parser{
                 eat();
                 return identifier;
             }else{
-                throw std::exception();
+                fatal();
             }
         }
 
         Declaration* parseDeclaration(){
-            auto declaration = new Declaration();
-            declaration->type = parseType();
-            declaration->name = parseIdentifier();
-            shall(SEMI);
-            return declaration;
+            if(is(STRUCT) && lookC.id == LEFT_BRACE){
+                return parseStruct();
+            }else{
+                auto declaration = new Declaration();
+                declaration->type = parseType();
+                declaration->name = parseIdentifier();
+
+                shall(SEMI);
+                return declaration;
+            }
         }
 
         Struct* parseStruct(){
@@ -389,11 +411,6 @@ namespace parser{
             shall(SEMI);
             return result;
         }
-
-        /*labeled-statement:
-                identifier : statement
-        case constant-expression : statement
-        default : statement*/
 
         Statement* parseStatement(){
             if(is(IF)){
@@ -531,7 +548,7 @@ namespace parser{
                 }
                 return identifier;
             }else{
-                throw std::exception();
+                fatal();
             }
         }
 

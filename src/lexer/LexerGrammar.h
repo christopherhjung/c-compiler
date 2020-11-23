@@ -55,7 +55,7 @@ public:
             value = std::regex_replace (value,e,"");
 
             if(!key.empty() && !value.empty()){
-                auto& entry =lexerGrammar.entries.emplace_back(LexerGrammarEntry(key,value, greedy, hide));
+                lexerGrammar.entries.emplace_back(LexerGrammarEntry(key,value, greedy, hide));
             }
         }
 

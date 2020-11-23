@@ -12,8 +12,8 @@
 #define OUTPUT
 
 #include "generated/GeneratedLexer.h"
-#include "lexer/core.h"
-#include "parser/core.h"
+#include "lexer/lexerCore.h"
+#include "parser/parserCore.h"
 
 int main(int, char **const args) {
 

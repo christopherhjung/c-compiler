@@ -38,7 +38,7 @@ private:
     StateMachine* machine;
     bool finish;
 public:
-    StateMachineLexer(StateMachine* machine) : machine(machine), root(machine->root){
+    StateMachineLexer(StateMachine* machine) : root(machine->root), machine(machine){
 
     };
 

@@ -23,9 +23,6 @@ public:
                 terminals.push_back(entity);
             }else{
                 nonTerminals.push_back(entity);
-                if(entity->id == 6){
-                    entity = entity;
-                }
             }
         }
 

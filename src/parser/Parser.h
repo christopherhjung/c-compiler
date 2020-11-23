@@ -128,7 +128,7 @@ public:
 
         uint32_t size = stack.size();
 
-        if (stack.size() == 1)
+        if (size == 1)
         {
            Element* result = stack.back();
 

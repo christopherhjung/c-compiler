@@ -249,10 +249,7 @@ public:
                 if(item->isFinish()){
                     for( Entity* lookahead : item->lookahead ){
                         if(entry->restore[lookahead->id] != nullptr){
-                            //throw std::exception();
-                            printClosure(closure);
-                            closure = closure;
-
+                            throw std::exception();
                         }
                         entry->restore[lookahead->id] = item->rule;
                     }

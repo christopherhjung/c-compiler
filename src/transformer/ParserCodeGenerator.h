@@ -106,7 +106,7 @@ public:
         return result;
     }
 
-    bool eat(uint32_t id){
+    bool eat(int32_t id){
         if(is(id)){
             next();
             return true;
@@ -114,7 +114,7 @@ public:
         return false;
     }
 
-    bool is(uint32_t id){
+    bool is(int32_t id){
         return token.id == id;
     }
 

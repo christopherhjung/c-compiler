@@ -1,5 +1,5 @@
 BUILDDIR ?= build
-CFG      ?= debug
+CFG      ?= release
 NAME     ?= c4
 BUILD_NAME     ?= build
 SRCDIR   ?= src
@@ -19,7 +19,7 @@ BIN    := $(BINDIR)/$(NAME)
 BUILD_BIN    := $(BINDIR)/$(BUILD_NAME)
 RES_BUILD    := $(BINDIR)/$(RESDIR)
 SRC    := $(sort $(wildcard $(SRCDIR)/**/*.cpp))
-MAIN_SRC := $(SRCDIR)/main.cpp
+MAIN_SRC := $(SRCDIR)/lexerCore.h $(SRCDIR)/parserCore.h $(SRCDIR)/main.cpp
 BUILD_SRC := $(SRCDIR)/build.cpp
 OBJ    := $(SRC:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
 MAIN_OBJ    := $(MAIN_SRC:$(SRCDIR)/%.cpp=$(BINDIR)/%.o)
@@ -51,45 +51,21 @@ LDFLAGS  += $(LLVM_LDFLAGS)
 
 DUMMY := $(shell mkdir -p $(sort $(dir $(OBJ))))
 
-.PHONY: all clean develop
+.PHONY: all clean
 
-all: build main
+all:
+	mkdir -p $(BINDIR)
+	mkdir -p $(GENERATED_DIR)
 
-build: $(BUILD_BIN)
+	cmake -DCMAKE_BUILD_TYPE=$(CMAKE_BUILD_TYPE) -B$(BINDIR) .
+	make -C $(BINDIR) build
+	$(BINDIR)/build "./resources/c.lexer" "./src/generated/GeneratedLexer.h"
+	make -C $(BINDIR) c4
 
-main: before $(BIN)
-
-before:
-	@echo "===> generate lexer"
-	$(Q)mkdir -p $(GENERATED_DIR)
-	$(Q)$(BUILD_BIN) "./resources/c.lexer" "./src/generated/GeneratedLexer.h"
-
-after:
-	$(Q)rm -fr $(GENERATED_DIR)
-
--include $(DEP)
 
 clean:
 	@echo "===> CLEAN"
 	$(Q)rm -fr $(BINDIR)
 	$(Q)rm -fr $(GENERATED_DIR)
 
-$(BIN): $(OBJ)  $(MAIN_OBJ)
-	@echo "===> LD $@"
-	$(Q)$(CXX) -o $(BIN) $(OBJ) $(MAIN_OBJ)  $(LDFLAGS)
-
-$(BUILD_BIN): $(OBJ) $(BUILD_OBJ)
-	@echo "===> LD $@"
-	$(Q)$(CXX) -o $(BUILD_BIN) $(OBJ) $(BUILD_OBJ) $(LDFLAGS)
-
-$(BINDIR)/%.o: $(SRCDIR)/%.cpp
-	@echo "===> CXX $<"
-	$(Q)$(CXX) $(CXXFLAGS) -MMD -c -o $@ $<
-
-$(RES_BUILD): $(RESDIR)
-	@echo "===> CP $< to $@"
-	$(Q)cp -r $< $(BINDIR)
-
-test: all
-	./build/debug/c4 --tokenize test/test2.c
 

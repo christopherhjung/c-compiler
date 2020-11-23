@@ -91,7 +91,7 @@ public:
             return false;
         }
 
-        for(uint32_t i = 0 ; current != '\n' && current != '\r' && current != 256 ; ){
+        for( ; current != '\n' && current != '\r' && current != 256 ; ){
             next();
         }
         str = readString(offset );
