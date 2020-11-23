@@ -134,10 +134,20 @@ class ParserGenerator {
         Rule* rule = base->rule;
         if(rule->keys.size() > base->dot){
             Entity* next = rule->keys[base->dot];
-            std::unordered_set<Entity*>* lookahead;
+            std::unordered_set<Entity*>* lookahead = nullptr;
             if(rule->keys.size() > base->dot + 1){
-                Entity* test = rule->keys[base->dot + 1];
-                lookahead = &test->lookahead;
+                uint32_t i = base->dot;
+                for( ; ++i < rule->keys.size(); ){
+                    Entity* test = rule->keys[i];
+                    lookahead = &test->lookahead;
+                    if(!lookahead->empty()){
+                        break;
+                    }
+                }
+
+                if(lookahead == nullptr || lookahead->empty()){
+                    lookahead = &base->lookahead;
+                }
             }else{
                 lookahead = &base->lookahead;
             }

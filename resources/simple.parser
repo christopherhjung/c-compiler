@@ -1,18 +1,82 @@
-Root: Declaration;
+Root : method;
+method : type 'identifier' '(' declares ')' block;
+declares : declare ',' declares | declare;
 
-Declaration
-    :   TypeSpecifier TypeSpecifier ';'
-    ;
-
-TypeSpecifier
-    :   'void'
-    |   'char'
-    |   'short'
-    |   'int'
-    |   'long'
-    |   'float'
-    |   'double'
-    |   'signed'
-    |   'unsigned'
-    |   'identifier'
-    ;
+type : 'identifier';
+block : '{' statements '}';
+statements: statement statements?;
+statement : if;
+statement : block;
+statement : while;
+statement : for;
+statement : singleLineStatement ';';
+statement : return ';';
+return : 'return' expression;
+singleLineStatement : assign;
+singleLineStatement : modifyAssign;
+singleLineStatement : declare;
+singleLineStatement : declareAssign;
+singleLineStatement : methodCall;
+singleLineStatement : newInstance;
+declareAssign : 'identifier' 'identifier' '=' expression;
+declare : 'identifier' 'identifier';
+if : 'if' '(' expression ')' statement;
+if : 'if' '(' expression ')' statement 'else' statement;
+while : whileKeyword '(' expression ')' statement;
+for : 'for' '(' singleLineStatement ';' expression ';' expression ')' statement;
+expression : booleanOr;
+expression : assign;
+assign : booleanOr '=' expression;
+expression : modifyAssign;
+modifyAssign : booleanOr '+=' expression;
+modifyAssign : booleanOr '-=' expression;
+modifyAssign : booleanOr '*=' expression;
+modifyAssign : booleanOr '/=' expression;
+booleanOr : booleanOr '||' booleanAnd;
+booleanOr : booleanAnd;
+booleanAnd : booleanAnd '&&' bitwiseOr;
+booleanAnd : bitwiseOr;
+bitwiseOr : bitwiseOr '|' bitwiseAnd;
+bitwiseOr : bitwiseAnd;
+bitwiseAnd : bitwiseAnd '&' equals;
+bitwiseAnd : equals;
+equals : equals '==' comp;
+equals : equals '!=' comp;
+equals : comp;
+comp : comp '<' shift;
+comp : comp '<=' shift;
+comp : comp '>=' shift;
+comp : comp '>' shift;
+comp : shift;
+shift : shift '>>' add;
+shift : shift '<<' add;
+shift : add;
+add : add '+' mul;
+add : add '-' mul;
+add : mul;
+mul : mul '*' cast;
+mul : mul '%' cast;
+mul : mul '/' cast;
+mul : cast;
+cast : '(' identifier ')' increment;
+cast : '+' increment;
+cast : '-' increment;
+cast : increment;
+increment : member '++';
+increment : member '--';
+increment : '++' member;
+increment : '--' member;
+increment : '!' member;
+increment : '~' member;
+increment : member;
+member : member '.' identifier;
+member : '(' expression ')';
+member : methodCall;
+member : member '[' expression ']';
+member : rawExpression;
+methodCall : member expressionParenthesis;
+expressionParenthesis : '(' expression ')';
+expressions: expression ',' expressions | expression;
+rawExpression : 'constant';
+rawExpression : 'string-literal';
+rawExpression : 'identifier';

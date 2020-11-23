@@ -11,8 +11,10 @@ void Entity::update() {
         this->lookahead.insert(this);
     }else{
         for(Rule* rule : this->productions){
-            Entity* start = rule->keys[0];
-            this->lookahead.insert(start->lookahead.begin(), start->lookahead.end());
+            if(!rule->keys.empty()){
+                Entity* start = rule->keys[0];
+                this->lookahead.insert(start->lookahead.begin(), start->lookahead.end());
+            }
         }
     }
 }

@@ -1,44 +1,10 @@
 Root: CompilationUnit;
 
-CompilationUnit
-    :   TranslationUnit
-    ;
-
-TranslationUnit
-    :   ExternalDeclaration
-    |   TranslationUnit ExternalDeclaration
-    ;
-
-ExternalDeclaration
-    :   FunctionDefinition
-    |   Declaration
-    |   ';'
-    ;
-
-FunctionDefinition
-    :   DeclarationSpecifiers? Declarator DeclarationList? CompoundStatement
-    ;
-
-DeclarationList
-    :   Declaration
-    |   DeclarationList Declaration
-    ;
-
 PrimaryExpression
-    :   'identifier'
+    :   TypedefName
     |   'constant'
     |   'string-literal'+
     |   '(' Expression ')'
-    ;
-
-GenericAssocList
-    :   GenericAssociation
-    |   GenericAssocList ',' GenericAssociation
-    ;
-
-GenericAssociation
-    :   TypeName ':' AssignmentExpression
-    |   'default' ':' AssignmentExpression
     ;
 
 PostfixExpression
@@ -65,6 +31,7 @@ UnaryExpression
     |   UnaryOperator CastExpression
     |   'sizeof' UnaryExpression
     |   'sizeof' '(' TypeName ')'
+    |   '&&' 'identifier' // 'gcC' Extension Address Of Label
     ;
 
 UnaryOperator
@@ -72,7 +39,9 @@ UnaryOperator
     ;
 
 CastExpression
-    :   'sizeof' 'sizeof'
+    :   '(' TypeName ')' CastExpression
+    |   UnaryExpression
+    |   'digitSequence' // For
     ;
 
 MultiplicativeExpression
@@ -84,7 +53,7 @@ MultiplicativeExpression
 
 AdditiveExpression
     :   MultiplicativeExpression
-    |   AdditiveExpression '+' AdditiveExpression
+    |   AdditiveExpression '+' MultiplicativeExpression
     |   AdditiveExpression '-' MultiplicativeExpression
     ;
 
@@ -140,7 +109,7 @@ ConditionalExpression
 AssignmentExpression
     :   ConditionalExpression
     |   UnaryExpression AssignmentOperator AssignmentExpression
-    |   'digitSequence'
+    |   'digitSequence' // For
     ;
 
 AssignmentOperator
@@ -165,8 +134,15 @@ DeclarationSpecifiers
     :   DeclarationSpecifier+
     ;
 
+DeclarationSpecifiers2
+    :   DeclarationSpecifier+
+    ;
+
 DeclarationSpecifier
-    :   TypeSpecifier
+    :   StorageClassSpecifier
+    |   TypeSpecifier
+    |   TypeQualifier
+    |   FunctionSpecifier
     ;
 
 InitDeclaratorList
@@ -179,8 +155,16 @@ InitDeclarator
     |   Declarator '=' Initializer
     ;
 
+StorageClassSpecifier
+    :   'typedef'
+    |   'extern'
+    |   'static'
+    |   'auto'
+    |   'register'
+    ;
+
 TypeSpecifier
-    :   'void'
+    :   ('void'
     |   'char'
     |   'short'
     |   'int'
@@ -188,17 +172,22 @@ TypeSpecifier
     |   'float'
     |   'double'
     |   'signed'
-    |   'unsigned'
-    |   StructSpecifier
-    |   'identifier'
-    |   Pointer
+    |   'unsigned')
+    |   StructOrUnionSpecifier
+    |   EnumSpecifier
+    |   TypedefName
+    |   TypeSpecifier Pointer
     ;
 
-StructSpecifier
-    :   'struct' 'identifier'? '{' StructDeclarationList '}'
-    |   'struct' 'identifier'
+StructOrUnionSpecifier
+    :   StructOrUnion 'identifier'? '{' StructDeclarationList '}'
+    |   StructOrUnion 'identifier'
     ;
 
+StructOrUnion
+    :   'struct'
+    |   'union'
+    ;
 
 StructDeclarationList
     :   StructDeclaration
@@ -211,6 +200,7 @@ StructDeclaration
 
 SpecifierQualifierList
     :   TypeSpecifier SpecifierQualifierList?
+    |   TypeQualifier SpecifierQualifierList?
     ;
 
 StructDeclaratorList
@@ -223,17 +213,70 @@ StructDeclarator
     |   Declarator? ':' ConstantExpression
     ;
 
+EnumSpecifier
+    :   'enum' 'identifier'? '{' EnumeratorList '}'
+    |   'enum' 'identifier'? '{' EnumeratorList ',' '}'
+    |   'enum' 'identifier'
+    ;
+
+EnumeratorList
+    :   Enumerator
+    |   EnumeratorList ',' Enumerator
+    ;
+
+Enumerator
+    :   EnumerationConstant
+    |   EnumerationConstant '=' ConstantExpression
+    ;
+
+EnumerationConstant
+    :   'identifier'
+    ;
+
+TypeQualifier
+    :   'const'
+    |   'restrict'
+    |   'volatile'
+    ;
+
+FunctionSpecifier
+    :   GccAttributeSpecifier
+    ;
+
 Declarator
     :   Pointer? DirectDeclarator
     ;
 
 DirectDeclarator
-    :   'identifier' '(' ParameterList ')'
+    :   TypedefName
+    |   '(' Declarator ')'
+    |   DirectDeclarator '[' TypeQualifierList? AssignmentExpression? ']'
+    |   DirectDeclarator '[' 'static' TypeQualifierList? AssignmentExpression ']'
+    |   DirectDeclarator '[' TypeQualifierList 'static' AssignmentExpression ']'
+    |   DirectDeclarator '[' TypeQualifierList? '*' ']'
+    |   DirectDeclarator '(' ParameterTypeList ')'
+    |   DirectDeclarator '(' IdentifierList? ')'
+    |   'identifier' ':' 'digitSequence'  // Bit Field
+    |   '(' TypeSpecifier? Pointer DirectDeclarator ')' // Function Pointer Like: (__cdecl *f)
     ;
 
+
+
 Pointer
-    :   '*' Pointer
-    |   '^' Pointer
+    :   '*' TypeQualifierList?
+    |   '*' TypeQualifierList? Pointer
+    |   '^' TypeQualifierList? // 'blocks' Language Extension
+    |   '^' TypeQualifierList? Pointer // 'blocks' Language Extension
+    ;
+
+TypeQualifierList
+    :   TypeQualifier
+    |   TypeQualifierList TypeQualifier
+    ;
+
+ParameterTypeList
+    :   ParameterList
+    |   ParameterList ',' '...'
     ;
 
 ParameterList
@@ -243,6 +286,7 @@ ParameterList
 
 ParameterDeclaration
     :   DeclarationSpecifiers Declarator
+    |   DeclarationSpecifiers2 AbstractDeclarator?
     ;
 
 IdentifierList
@@ -251,15 +295,30 @@ IdentifierList
     ;
 
 TypeName
-    :   SpecifierQualifierList Pointer?
+    :   SpecifierQualifierList AbstractDeclarator?
+    ;
+
+AbstractDeclarator
+    :   Pointer
+    |   Pointer? DirectAbstractDeclarator
     ;
 
 DirectAbstractDeclarator
-    :   '(' Pointer ')'
+    :   '(' AbstractDeclarator ')'
+    |   '[' TypeQualifierList? AssignmentExpression? ']'
+    |   '[' 'static' TypeQualifierList? AssignmentExpression ']'
+    |   '[' TypeQualifierList 'static' AssignmentExpression ']'
+    |   '[' '*' ']'
     |   '(' ParameterTypeList? ')'
-    |   '[' AssignmentExpression? ']'
-    |   DirectAbstractDeclarator '['  AssignmentExpression? ']'
+    |   DirectAbstractDeclarator '[' TypeQualifierList? AssignmentExpression? ']'
+    |   DirectAbstractDeclarator '[' 'static' TypeQualifierList? AssignmentExpression ']'
+    |   DirectAbstractDeclarator '[' TypeQualifierList 'static' AssignmentExpression ']'
+    |   DirectAbstractDeclarator '[' '*' ']'
     |   DirectAbstractDeclarator '(' ParameterTypeList? ')'
+    ;
+
+TypedefName
+    :   'identifier'
     ;
 
 Initializer
@@ -287,9 +346,10 @@ Designator
     |   '.' 'identifier'
     ;
 
+
 Statement
-    :   LabeledStatement
-    |   CompoundStatement
+    :   /*LabeledStatement
+    |   */CompoundStatement
     |   ExpressionStatement
     |   SelectionStatement
     |   IterationStatement
@@ -326,9 +386,9 @@ SelectionStatement
     ;
 
 IterationStatement
-    :   while '(' Expression ')' Statement
-    |   do Statement while '(' Expression ')' ';'
-    |   for '(' ForCondition ')' Statement
+    :   'while' '(' Expression ')' Statement
+    |   'do' Statement 'while' '(' Expression ')' ';'
+    |   'for' '(' ForCondition ')' Statement
     ;
 
 ForCondition
@@ -351,5 +411,29 @@ JumpStatement
     |   'continue' ';'
     |   'break' ';'
     |   'return' Expression? ';'
-    |   'goto' UnaryExpression ';'
+    |   'goto' UnaryExpression ';' // 'gcC' Extension
+    ;
+
+CompilationUnit
+    :   TranslationUnit?
+    ;
+
+TranslationUnit
+    :   ExternalDeclaration
+    |   TranslationUnit ExternalDeclaration
+    ;
+
+ExternalDeclaration
+    :   FunctionDefinition
+    |   Declaration
+    |   ';'
+    ;
+
+FunctionDefinition
+    :   DeclarationSpecifiers? Declarator DeclarationList? CompoundStatement
+    ;
+
+DeclarationList
+    :   Declaration
+    |   DeclarationList Declaration
     ;

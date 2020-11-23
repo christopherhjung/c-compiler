@@ -40,6 +40,7 @@ public:
         std::vector<std::string> kinds = builder.getKinds();
 
         ss.open(target);
+        ss << "#pragma once" << std::endl;
         ss << "#include \"../lexer/Lexer.h\"" << std::endl;
         writeClass(machine->states , machine->root, machine->kinds, machine->hides);
         ss << std::flush;

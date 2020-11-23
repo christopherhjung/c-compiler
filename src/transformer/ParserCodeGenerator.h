@@ -155,6 +155,10 @@ public:
             eat(SEMI);
         }
 
+        if(root == nullptr){
+            throw std::exception();
+        }
+
         Entity* eof = terminals["eof"];
         std::vector<Entity*> entities;
         for(auto& pair : terminals){
