@@ -1,5 +1,5 @@
 BUILDDIR ?= build
-CFG      ?= release
+CFG      ?= debug
 NAME     ?= c4
 BUILD_NAME     ?= build
 SRCDIR   ?= src
