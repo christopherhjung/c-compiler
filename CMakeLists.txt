@@ -10,9 +10,11 @@ include_directories(lib/googletest)
 include_directories(lib/googletest/googletest/include)
 include_directories(lib/googletest/googlemock/include)
 
+set(CMAKE_CXX_FLAGS_DEBUG_INIT "-std=c++17 -g -O0")
+set(CMAKE_CXX_FLAGS_RELEASE_INIT "-std=c++17 -O2 -DNDEBUG")
 
-add_executable(c4 src/main.cpp)
-add_executable(build src/build.cpp)
+add_executable(c4 src/main.cpp src/parser/Rule.cpp src/parser/Entity.cpp src/parser/Component.cpp src/parser/Item.cpp)
+add_executable(build src/build.cpp src/parser/Rule.cpp src/parser/Entity.cpp src/parser/Component.cpp)
 
 add_executable(test tests/main.cpp)
 

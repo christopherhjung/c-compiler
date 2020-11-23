@@ -3,6 +3,7 @@
 #include <functional>
 #include <sstream>
 #include <istream>
+#include <vector>
 
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
@@ -11,16 +12,16 @@
 #define OUTPUT
 
 #include "generated/GeneratedLexer.h"
+#include "lexer/lexerCore.h"
+#include "parser/parserCore.h"
 
 int main(int, char **const args) {
-    GeneratedLexer lexer;
+
 
 #ifdef MEASURE
     auto start_time = std::chrono::high_resolution_clock::now();
 #endif
-    //InputReader* fileInputReader = new StreamInputReader(&std::cin);
 
-    InputReader* fileInputReader = new FileInputReader(args[2]);
 #ifdef MEASURE
     //std::ofstream ss("test/out");
     std::stringstream ss;
@@ -32,27 +33,19 @@ int main(int, char **const args) {
     std::ostream& err = std::cerr;
 #endif
 
-    lexer.reset(fileInputReader);
-    Token token;
-    token.location.fileName = args[2];
-    while(lexer.hasNextToken(token)){
-        if(token.id >= 3){ //whitespace
-#ifdef OUTPUT
-            out << token << std::endl;
-#endif
-        }
+    //InputReader* fileInputReader = new StreamInputReader(&std::cin);
+
+    InputReader* fileInputReader = new FileInputReader(args[2]);
+    std::string command = args[1];
+    std::string source = args[2];
+
+    int code = 1;
+    if(command == "--tokenize"){
+        code = runLexer(fileInputReader, source, out, err);
+    }else{
+        code = runParser(fileInputReader, out, err);
     }
 
-    out << std::flush;
-    if(lexer.isError()){
-        auto error = lexer.getError();
-#ifdef OUTPUT
-        err << *error << std::endl;
-        err << std::flush;
-#endif
-        delete error;
-        return 1;
-    }
 
 #ifdef MEASURE
     auto end_time = std::chrono::high_resolution_clock::now();
@@ -61,5 +54,5 @@ int main(int, char **const args) {
     msg << "time = " << time/std::chrono::milliseconds(1)  << '\n';
 #endif
 
-    return 0;
+    return code;
 }

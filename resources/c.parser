@@ -1,88 +1,439 @@
-root -> statement:method*
-Method  -> returnType:type methodName:{word} ( declarations:declare[,] ) inner:block
-Block -> { statements:MethodStatement* }
-MethodStatement -> statement:if
-MethodStatement -> statement:block
-MethodStatement -> statement:while
-MethodStatement -> statement:for
-MethodStatement -> statement:forEach
-MethodStatement -> statement:singleLineStatement ;
-MethodStatement -> statement:return ;
-MethodStatement -> statement:throw ;
-return -> returnKeyword expression
-singleLineStatement -> statement:assign
-singleLineStatement -> statement:modifyAssign
-singleLineStatement -> statement:declare
-singleLineStatement -> statement:declareAssign
-singleLineStatement -> statement:methodCall
-singleLineStatement -> statement:newInstance
-declareAssign -> varType:word varName:word = expression
-declare -> varType:word varName:word
-If -> if ( expression ) ifBranch:MethodStatement
-If -> if ( expression ) ifBranch:MethodStatement else elseBranch:MethodStatement
-While -> while ( expression ) inner:MethodStatement
-for -> for ( init:singleLineStatement ; condition:expression ; increment:expression ) inner:MethodStatement
-expression -> booleanOr
-expression -> assign
-assign -> booleanOr = expression
-expression -> modifyAssign
-modifyAssign -> booleanOr += expression
-modifyAssign -> booleanOr -= expression
-modifyAssign -> booleanOr *= expression
-modifyAssign -> booleanOr /= expression
-booleanOr -> booleanOr || booleanAnd
-booleanOr -> booleanAnd
-booleanAnd -> booleanAnd && bitwiseOr
-booleanAnd -> bitwiseOr
-bitwiseOr -> bitwiseOr | bitwiseAnd
-bitwiseOr -> bitwiseAnd
-bitwiseAnd -> bitwiseAnd & equals
-bitwiseAnd -> equals
-equals -> equals == comp
-equals -> equals != comp
-equals -> comp
-comp -> comp < shift
-comp -> comp <= shift
-comp -> comp >= shift
-comp -> comp > shift
-comp -> shift
-shift -> shift >> add
-shift -> shift << add
-shift -> add
-add -> add + mul
-add -> add - mul
-add -> mul
-mul -> mul * cast
-mul -> mul % cast
-mul -> mul / cast
-mul -> cast
-path -> ( path . )? word
-cast -> ( type:word ) increment
-cast -> + increment
-cast -> - increment
-cast -> increment
-increment -> member ++
-increment -> member --
-increment -> ++ member
-increment -> -- member
-increment -> ! member
-increment -> ~ member
-increment -> member
-member -> newInstance
-member -> newArray
-newInstance -> newKeyword type expressions:expressionParenthesis
-newArray -> newKeyword type [ dimension:expression ]
-member -> member . name:( word | classKeyword )
-member -> ( expression )
-member -> methodCall
-member -> target:member [ index:expression ]
-member -> rawExpression
-methodCall -> member expressions:expressionParenthesis
-expressionParenthesis -> ( expressions:expression[,] )
-rawExpression -> variable
-variable -> key:word
-rawExpression -> key:number
-rawExpression -> key:string
-rawExpression -> key:booleanValue
-rawExpression -> nullKeyword
-rawExpression -> thisKeyword
+Root: CompilationUnit;
+
+PrimaryExpression
+    :   TypedefName
+    |   'constant'
+    |   'string-literal'+
+    |   '(' Expression ')'
+    ;
+
+PostfixExpression
+    :   PrimaryExpression
+    |   PostfixExpression '[' Expression ']'
+    |   PostfixExpression '(' ArgumentExpressionList? ')'
+    |   PostfixExpression '.' 'identifier'
+    |   PostfixExpression '->' 'identifier'
+    |   PostfixExpression '++'
+    |   PostfixExpression '--'
+    |   '(' TypeName ')' '{' InitializerList '}'
+    |   '(' TypeName ')' '{' InitializerList ',' '}'
+    ;
+
+ArgumentExpressionList
+    :   AssignmentExpression
+    |   ArgumentExpressionList ',' AssignmentExpression
+    ;
+
+UnaryExpression
+    :   PostfixExpression
+    |   '++' UnaryExpression
+    |   '--' UnaryExpression
+    |   UnaryOperator CastExpression
+    |   'sizeof' UnaryExpression
+    |   'sizeof' '(' TypeName ')'
+    |   '&&' 'identifier' // 'gcC' Extension Address Of Label
+    ;
+
+UnaryOperator
+    :   '&' | '*' | '+' | '-' | '~' | '!'
+    ;
+
+CastExpression
+    :   '(' TypeName ')' CastExpression
+    |   UnaryExpression
+    |   'digitSequence' // For
+    ;
+
+MultiplicativeExpression
+    :   CastExpression
+    |   MultiplicativeExpression '*' CastExpression
+    |   MultiplicativeExpression '/' CastExpression
+    |   MultiplicativeExpression '%' CastExpression
+    ;
+
+AdditiveExpression
+    :   MultiplicativeExpression
+    |   AdditiveExpression '+' MultiplicativeExpression
+    |   AdditiveExpression '-' MultiplicativeExpression
+    ;
+
+ShiftExpression
+    :   AdditiveExpression
+    |   ShiftExpression '<<' AdditiveExpression
+    |   ShiftExpression '>>' AdditiveExpression
+    ;
+
+RelationalExpression
+    :   ShiftExpression
+    |   RelationalExpression '<' ShiftExpression
+    |   RelationalExpression '>' ShiftExpression
+    |   RelationalExpression '<=' ShiftExpression
+    |   RelationalExpression '>=' ShiftExpression
+    ;
+
+EqualityExpression
+    :   RelationalExpression
+    |   EqualityExpression '==' RelationalExpression
+    |   EqualityExpression '!=' RelationalExpression
+    ;
+
+AndExpression
+    :   EqualityExpression
+    |   AndExpression '&' EqualityExpression
+    ;
+
+ExclusiveOrExpression
+    :   AndExpression
+    |   ExclusiveOrExpression '^' AndExpression
+    ;
+
+InclusiveOrExpression
+    :   ExclusiveOrExpression
+    |   InclusiveOrExpression '|' ExclusiveOrExpression
+    ;
+
+LogicalAndExpression
+    :   InclusiveOrExpression
+    |   LogicalAndExpression '&&' InclusiveOrExpression
+    ;
+
+LogicalOrExpression
+    :   LogicalAndExpression
+    |   LogicalOrExpression '||' LogicalAndExpression
+    ;
+
+ConditionalExpression
+    :   LogicalOrExpression ('?' Expression ':' ConditionalExpression)?
+    ;
+
+AssignmentExpression
+    :   ConditionalExpression
+    |   UnaryExpression AssignmentOperator AssignmentExpression
+    |   'digitSequence' // For
+    ;
+
+AssignmentOperator
+    :   '=' | '*=' | '/=' | '%=' | '+=' | '-=' | '<<=' | '>>=' | '&=' | '^=' | '|='
+    ;
+
+Expression
+    :   AssignmentExpression
+    |   Expression ',' AssignmentExpression
+    ;
+
+ConstantExpression
+    :   ConditionalExpression
+    ;
+
+Declaration
+    :   DeclarationSpecifiers InitDeclaratorList ';'
+	| 	DeclarationSpecifiers ';'
+    ;
+
+DeclarationSpecifiers
+    :   DeclarationSpecifier+
+    ;
+
+DeclarationSpecifiers2
+    :   DeclarationSpecifier+
+    ;
+
+DeclarationSpecifier
+    :   StorageClassSpecifier
+    |   TypeSpecifier
+    |   TypeQualifier
+    |   FunctionSpecifier
+    ;
+
+InitDeclaratorList
+    :   InitDeclarator
+    |   InitDeclaratorList ',' InitDeclarator
+    ;
+
+InitDeclarator
+    :   Declarator
+    |   Declarator '=' Initializer
+    ;
+
+StorageClassSpecifier
+    :   'typedef'
+    |   'extern'
+    |   'static'
+    |   'auto'
+    |   'register'
+    ;
+
+TypeSpecifier
+    :   ('void'
+    |   'char'
+    |   'short'
+    |   'int'
+    |   'long'
+    |   'float'
+    |   'double'
+    |   'signed'
+    |   'unsigned')
+    |   StructOrUnionSpecifier
+    |   EnumSpecifier
+    |   TypedefName
+    |   TypeSpecifier Pointer
+    ;
+
+StructOrUnionSpecifier
+    :   StructOrUnion 'identifier'? '{' StructDeclarationList '}'
+    |   StructOrUnion 'identifier'
+    ;
+
+StructOrUnion
+    :   'struct'
+    |   'union'
+    ;
+
+StructDeclarationList
+    :   StructDeclaration
+    |   StructDeclarationList StructDeclaration
+    ;
+
+StructDeclaration
+    :   SpecifierQualifierList StructDeclaratorList? ';'
+    ;
+
+SpecifierQualifierList
+    :   TypeSpecifier SpecifierQualifierList?
+    |   TypeQualifier SpecifierQualifierList?
+    ;
+
+StructDeclaratorList
+    :   StructDeclarator
+    |   StructDeclaratorList ',' StructDeclarator
+    ;
+
+StructDeclarator
+    :   Declarator
+    |   Declarator? ':' ConstantExpression
+    ;
+
+EnumSpecifier
+    :   'enum' 'identifier'? '{' EnumeratorList '}'
+    |   'enum' 'identifier'? '{' EnumeratorList ',' '}'
+    |   'enum' 'identifier'
+    ;
+
+EnumeratorList
+    :   Enumerator
+    |   EnumeratorList ',' Enumerator
+    ;
+
+Enumerator
+    :   EnumerationConstant
+    |   EnumerationConstant '=' ConstantExpression
+    ;
+
+EnumerationConstant
+    :   'identifier'
+    ;
+
+TypeQualifier
+    :   'const'
+    |   'restrict'
+    |   'volatile'
+    ;
+
+FunctionSpecifier
+    :   GccAttributeSpecifier
+    ;
+
+Declarator
+    :   Pointer? DirectDeclarator
+    ;
+
+DirectDeclarator
+    :   TypedefName
+    |   '(' Declarator ')'
+    |   DirectDeclarator '[' TypeQualifierList? AssignmentExpression? ']'
+    |   DirectDeclarator '[' 'static' TypeQualifierList? AssignmentExpression ']'
+    |   DirectDeclarator '[' TypeQualifierList 'static' AssignmentExpression ']'
+    |   DirectDeclarator '[' TypeQualifierList? '*' ']'
+    |   DirectDeclarator '(' ParameterTypeList ')'
+    |   DirectDeclarator '(' IdentifierList? ')'
+    |   'identifier' ':' 'digitSequence'  // Bit Field
+    |   '(' TypeSpecifier? Pointer DirectDeclarator ')' // Function Pointer Like: (__cdecl *f)
+    ;
+
+
+
+Pointer
+    :   '*' TypeQualifierList?
+    |   '*' TypeQualifierList? Pointer
+    |   '^' TypeQualifierList? // 'blocks' Language Extension
+    |   '^' TypeQualifierList? Pointer // 'blocks' Language Extension
+    ;
+
+TypeQualifierList
+    :   TypeQualifier
+    |   TypeQualifierList TypeQualifier
+    ;
+
+ParameterTypeList
+    :   ParameterList
+    |   ParameterList ',' '...'
+    ;
+
+ParameterList
+    :   ParameterDeclaration
+    |   ParameterList ',' ParameterDeclaration
+    ;
+
+ParameterDeclaration
+    :   DeclarationSpecifiers Declarator
+    |   DeclarationSpecifiers2 AbstractDeclarator?
+    ;
+
+IdentifierList
+    :   'identifier'
+    |   IdentifierList ',' 'identifier'
+    ;
+
+TypeName
+    :   SpecifierQualifierList AbstractDeclarator?
+    ;
+
+AbstractDeclarator
+    :   Pointer
+    |   Pointer? DirectAbstractDeclarator
+    ;
+
+DirectAbstractDeclarator
+    :   '(' AbstractDeclarator ')'
+    |   '[' TypeQualifierList? AssignmentExpression? ']'
+    |   '[' 'static' TypeQualifierList? AssignmentExpression ']'
+    |   '[' TypeQualifierList 'static' AssignmentExpression ']'
+    |   '[' '*' ']'
+    |   '(' ParameterTypeList? ')'
+    |   DirectAbstractDeclarator '[' TypeQualifierList? AssignmentExpression? ']'
+    |   DirectAbstractDeclarator '[' 'static' TypeQualifierList? AssignmentExpression ']'
+    |   DirectAbstractDeclarator '[' TypeQualifierList 'static' AssignmentExpression ']'
+    |   DirectAbstractDeclarator '[' '*' ']'
+    |   DirectAbstractDeclarator '(' ParameterTypeList? ')'
+    ;
+
+TypedefName
+    :   'identifier'
+    ;
+
+Initializer
+    :   AssignmentExpression
+    |   '{' InitializerList '}'
+    |   '{' InitializerList ',' '}'
+    ;
+
+InitializerList
+    :   Designation? Initializer
+    |   InitializerList ',' Designation? Initializer
+    ;
+
+Designation
+    :   DesignatorList '='
+    ;
+
+DesignatorList
+    :   Designator
+    |   DesignatorList Designator
+    ;
+
+Designator
+    :   '[' ConstantExpression ']'
+    |   '.' 'identifier'
+    ;
+
+
+Statement
+    :   /*LabeledStatement
+    |   */CompoundStatement
+    |   ExpressionStatement
+    |   SelectionStatement
+    |   IterationStatement
+    |   JumpStatement
+    ;
+
+LabeledStatement
+    :   'identifier' ':' Statement
+    |   'case' ConstantExpression ':' Statement
+    |   'default' ':' Statement
+    ;
+
+CompoundStatement
+    :   '{' BlockItemList? '}'
+    ;
+
+BlockItemList
+    :   BlockItem
+    |   BlockItemList BlockItem
+    ;
+
+BlockItem
+    :   Statement
+    |   Declaration
+    ;
+
+ExpressionStatement
+    :   Expression? ';'
+    ;
+
+SelectionStatement
+    :   'if' '(' Expression ')' Statement ('else' Statement)?
+    |   'switch' '(' Expression ')' Statement
+    ;
+
+IterationStatement
+    :   'while' '(' Expression ')' Statement
+    |   'do' Statement 'while' '(' Expression ')' ';'
+    |   'for' '(' ForCondition ')' Statement
+    ;
+
+ForCondition
+	:   ForDeclaration ';' ForExpression? ';' ForExpression?
+	|   Expression? ';' ForExpression? ';' ForExpression?
+	;
+
+ForDeclaration
+    :   DeclarationSpecifiers InitDeclaratorList
+	| 	DeclarationSpecifiers
+    ;
+
+ForExpression
+    :   AssignmentExpression
+    |   ForExpression ',' AssignmentExpression
+    ;
+
+JumpStatement
+    :   'goto' 'identifier' ';'
+    |   'continue' ';'
+    |   'break' ';'
+    |   'return' Expression? ';'
+    |   'goto' UnaryExpression ';' // 'gcC' Extension
+    ;
+
+CompilationUnit
+    :   TranslationUnit?
+    ;
+
+TranslationUnit
+    :   ExternalDeclaration
+    |   TranslationUnit ExternalDeclaration
+    ;
+
+ExternalDeclaration
+    :   FunctionDefinition
+    |   Declaration
+    |   ';'
+    ;
+
+FunctionDefinition
+    :   DeclarationSpecifiers? Declarator DeclarationList? CompoundStatement
+    ;
+
+DeclarationList
+    :   Declaration
+    |   DeclarationList Declaration
+    ;

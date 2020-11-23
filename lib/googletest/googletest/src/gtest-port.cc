@@ -818,8 +818,8 @@ bool AtomMatchesChar(bool escaped, char pattern_char, char ch) {
 }
 
 // Helper function used by ValidateRegex() to format error messages.
-static std::string FormatRegexSyntaxError(const char* regex, int index) {
-  return (Message() << "Syntax error at index " << index
+static std::string FormatRegexSyntaxError(const char* regex, int id) {
+  return (Message() << "Syntax error at id " << id
           << " in simple regular expression \"" << regex << "\": ").GetString();
 }
 

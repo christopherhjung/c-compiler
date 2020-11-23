@@ -1,0 +1,14 @@
+root->Expression
+Expression->Add
+Add->left:Add sign:'-' left:Mul
+Add->right:Add sign:'+' right:Mul
+Add->Mul
+Mul->left:Mul sign:'*' left:Therm
+Mul->right:Mul sign:'/' right:Therm
+Mul->Therm
+Therm->'(' Add ')'
+Therm->key:identifier
+Therm->key:number
+
+
+

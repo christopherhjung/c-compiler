@@ -2567,7 +2567,7 @@ function can be reused. For example, given
  public:
   MOCK_METHOD(double, Foo, double(const string& label, double x, double y),
               (override));
-  MOCK_METHOD(double, Bar, (int index, double x, double y), (override));
+  MOCK_METHOD(double, Bar, (int id, double x, double y), (override));
 ```
 
 instead of
@@ -2579,7 +2579,7 @@ using ::testing::Invoke;
 double DistanceToOriginWithLabel(const string& label, double x, double y) {
   return sqrt(x*x + y*y);
 }
-double DistanceToOriginWithIndex(int index, double x, double y) {
+double DistanceToOriginWithIndex(int id, double x, double y) {
   return sqrt(x*x + y*y);
 }
 ...
@@ -2631,9 +2631,9 @@ using ::testing::SetArgPointee;
 ```
 
 However, if the action has its own state, you may be surprised if you share the
-action object. Suppose you have an action factory `IncrementCounter(init)` which
+action object. Suppose you have an action factory `IncrementCounter(root)` which
 creates an action that increments and returns a counter whose initial value is
-`init`, using two actions created from the same expression and using a shared
+`root`, using two actions created from the same expression and using a shared
 action will exhibit different behaviors. Example:
 
 ```cpp
