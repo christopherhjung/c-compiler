@@ -82,6 +82,10 @@ public:
         str = "";
         return false;
     }
+
+    std::string getContext() override {
+        return "";
+    }
 };
 
 

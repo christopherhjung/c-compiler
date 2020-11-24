@@ -13,9 +13,11 @@
 class FileInputReader : public StreamInputReader  {
     std::ifstream fileStream;
     std::string file;
+    std::string context;
 public:
     explicit FileInputReader(const std::string& file) : StreamInputReader(), fileStream(file), file(file) {
         stream = &fileStream;
+        context = file;
         init();
     }
 
@@ -24,6 +26,10 @@ public:
         {
             StreamInputReader::fetch();
         }
+    }
+
+    std::string getContext() override {
+        return context;
     }
 };
 

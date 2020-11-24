@@ -18,5 +18,6 @@ public:
     virtual uint32_t getSize() = 0;
     virtual std::string readString(uint32_t count) = 0;
     virtual bool readLine(std::string& str) = 0;
+    virtual std::string getContext() = 0;
 };
 

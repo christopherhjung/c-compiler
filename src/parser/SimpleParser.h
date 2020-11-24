@@ -279,6 +279,9 @@ namespace parser{
 
         void init(InputReader* parserDescriptor){
             lexer->reset(parserDescriptor);
+            lookA.location.fileName = parserDescriptor->getContext();
+            lookB.location.fileName = parserDescriptor->getContext();
+            lookC.location.fileName = parserDescriptor->getContext();
             next();
             next();
             next();
@@ -324,7 +327,7 @@ namespace parser{
 
         Element* parse(){
             Unit* unit = new Unit();
-            for(;!is(EOF);){
+            for(;;){
                 Element* element;
                 if(lookC.id == LEFT_PAREN){
                     element = parseMethod();
@@ -332,6 +335,10 @@ namespace parser{
                     element = parseDeclaration();
                 }
                 unit->children.push_back(element);
+
+                if(is(EOF)){
+                    break;
+                }
             }
 
             return unit;

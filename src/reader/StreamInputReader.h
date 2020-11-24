@@ -39,6 +39,11 @@ protected:
     }
 
 public:
+
+    std::string getContext() override {
+        return "";
+    }
+
     ~StreamInputReader() override {
         delete[](buffer);
     }
