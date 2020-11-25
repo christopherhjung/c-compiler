@@ -543,7 +543,9 @@ rightBrace:\}*/
         Return* parseReturn(){
             auto result = new Return();
             eat(RETURN);
-            result->value = parseExpression();
+            if(!is(SEMI)){
+                result->value = parseExpression();
+            }
             shall(SEMI);
             return result;
         }
@@ -551,12 +553,8 @@ rightBrace:\}*/
         Block* parseBlock(){
             auto block = new Block();
             shall(LEFT_BRACE);
-            while(true){
+            while(!eat(RIGHT_BRACE)){
                 block->children.push_back(parseBlockItem());
-
-                if(eat(RIGHT_BRACE)){
-                    break;
-                }
             }
             return block;
         }
@@ -587,7 +585,7 @@ rightBrace:\}*/
             shall(RIGHT_PAREN);
             result->trueBranch = parseStatement();
             if(eat(ELSE)){
-                result->falseBranch = parseBlock();
+                result->falseBranch = parseStatement();
             }
 
             return result;
