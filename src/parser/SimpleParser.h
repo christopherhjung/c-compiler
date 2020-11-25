@@ -276,6 +276,7 @@ namespace parser{
         Lexer* lexer;
         Token* ring;
 
+        Token last;
         Token lookA;
         Token lookB;
 
@@ -285,13 +286,14 @@ namespace parser{
 
         void init(InputReader* parserDescriptor){
             lexer->reset(parserDescriptor);
-            lookA.location.fileName = parserDescriptor->getContext();
             lookB.location.fileName = parserDescriptor->getContext();
+            lookB.end.fileName = parserDescriptor->getContext();
             next();
             next();
         }
 
         void next(){
+            last = lookA;
             lookA = lookB;
             lexer->hasNextToken(lookB);
         }
@@ -325,7 +327,8 @@ namespace parser{
         }
 
         void fatal(){
-            throw ParseException(lookA);
+
+            throw ParseException(last);
         }
 
         Element* parse(){
@@ -407,6 +410,8 @@ rightBrace:\}*/
             }else{
                 fatal();
             }
+
+            return nullptr;
         }
 
         void parseStructDeclarationList(StructType* structType){
@@ -428,6 +433,8 @@ rightBrace:\}*/
             }else{
                 fatal();
             }
+
+            return nullptr;
         }
 
         DirectDeclarator* parseDirectDeclarator(){
@@ -439,7 +446,7 @@ rightBrace:\}*/
             }else if(is(IDENTIFIER)){
                 declaration->identifier = parseIdentifier();
             }else{
-                throw ParseException(lookA);
+                fatal();
             }
 
             while(eat(LEFT_PAREN)){
@@ -447,7 +454,7 @@ rightBrace:\}*/
                 inner->left = declaration;
                 while(true){
                     if(!isType(lookA.id)){
-                        throw ParseException(lookA);
+                         fatal();
                     }
                     parseParameterTypeList(inner);
 
@@ -481,25 +488,6 @@ rightBrace:\}*/
             return declaration;
         }
 
-        Struct* parseStruct(){
-            shall(STRUCT);
-
-            auto result = new Struct();
-            result->identifier = parseIdentifier();
-            shall(LEFT_BRACE);
-            while(true){
-                while(eat(SEMI));
-
-                if(eat(RIGHT_BRACE)){
-                    break;
-                }
-
-                result->declarations.push_back(parseDirectDeclarator());
-            }
-            shall(SEMI);
-            return result;
-        }
-
         Statement* parseStatement(){
             if(is(IF)){
                 return parseIf();
@@ -529,6 +517,8 @@ rightBrace:\}*/
                 shall(SEMI);
                 return expr;
             }
+
+            return nullptr;
         }
 
         GoTo* parseGoTo(){
@@ -644,6 +634,8 @@ rightBrace:\}*/
             }else{
                 fatal();
             }
+
+            return nullptr;
         }
 
 

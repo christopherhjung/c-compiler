@@ -68,6 +68,7 @@ public:
 
         offset(0) << "class GeneratedLexer : public Lexer{" << std::endl;
 
+
         offset(1) << "int16_t current;" << std::endl;
         offset(1) << "int32_t accept;" << std::endl;
         offset(1) << "uint32_t offset;" << std::endl;
@@ -87,6 +88,10 @@ public:
 
 
         offset(2) << "std::string value;" << std::endl;
+        offset(2) << "int32_t startLine = line;" << std::endl;
+        offset(2) << "int32_t startColumn = column;" << std::endl;
+
+
 
         offset(2) << "while(true){" << std::endl;
         offset(3) << "token.location.line = line;" << std::endl;
@@ -95,12 +100,17 @@ public:
         offset(4) << "if(finish){" << std::endl;
         offset(5) << "return false;" << std::endl;
         offset(4) << "}else{" << std::endl;
-        offset(5) << "token.id = 0;" << std::endl;
-        offset(5) << "token.value = \"\";" << std::endl;
+        offset(5) << "accept = 0;" << std::endl;
+        offset(5) << "value = \"\";" << std::endl;
         offset(5) << "finish = true;" << std::endl;
-        offset(5) << "return true;" << std::endl;
+        offset(5) << "break;" << std::endl;
         offset(4) << "}" << std::endl;
         offset(3) << "}" << std::endl;
+
+
+
+
+
 
         offset(3) << "accept = -1;" << std::endl;
         offset(3) << "offset = 0;" << std::endl;
@@ -136,23 +146,20 @@ public:
 
         offset(3) << "if(hides[accept]){" << std::endl;
         offset(4) << "break;" << std::endl;
+        offset(3) << "}else{" << std::endl;
+        offset(4) << "startLine = line;" << std::endl;
+        offset(4) << "startColumn = column;" << std::endl;
         offset(3) << "}" << std::endl;
 
         offset(2) << "}" << std::endl;
 
 
-
-
-
+        offset(2) << "token.location.line = startLine;" << std::endl;
+        offset(2) << "token.location.column = startColumn;" << std::endl;
+        offset(2) << "token.end.line = line;" << std::endl;
+        offset(2) << "token.end.column = column;" << std::endl;
         offset(2) << "token.id = accept;" << std::endl;
-        //offset(2) << "token.name = types[accept];" << std::endl;
         offset(2) << "token.value = value;" << std::endl;
-
-
-
-
-
-
 
         offset(2) << "return true;" << std::endl;
         offset(1) << "}" << std::endl;

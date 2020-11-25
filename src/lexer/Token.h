@@ -13,6 +13,7 @@ struct Token {
 
 public:
     Location location;
+    Location end;
     int32_t id;
     std::string value;
     Token( ){
