@@ -432,13 +432,22 @@ rightBrace:\}*/
                 shall(RIGHT_PAREN);
             }else if(is(IDENTIFIER)){
                 declaration->identifier = parseIdentifier();
+            }else{
+                throw ParseException(lookA);
             }
 
             while(eat(LEFT_PAREN)){
                 auto inner = new DirectDeclarator();
                 inner->left = declaration;
-                if(isType(lookA.id)){
+                while(true){
+                    if(!isType(lookA.id)){
+                        throw ParseException(lookA);
+                    }
                     parseParameterTypeList(inner);
+
+                    if(!eat(COMMA)){
+                        break;
+                    }
                 }
                 declaration = inner;
                 shall(RIGHT_PAREN);
@@ -449,7 +458,9 @@ rightBrace:\}*/
 
         void parseParameterTypeList(DirectDeclarator* inner){
             Type* type = parseType();
-            Declarator* declarator = parseDeclarator();
+            if(!is(COMMA) && !is(RIGHT_PAREN)){
+                Declarator* declarator = parseDeclarator();
+            }
         }
 
         Declarator* parseDeclarator(){
