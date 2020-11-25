@@ -32,7 +32,7 @@ and indexing in data structures.
 The remaining provided code expects `Symbol`s to be internalized via a
 `SymbolInternalizer`.
 
-### Declaration Parser
+### DirectDeclarator Parser
 The `parser.h` and `parser.cpp` files contain parts of the implementation of a
 c4 parser. On the one hand, they contain the declarations of generally helpful
 methods that you might want to implement to use them for parsing.

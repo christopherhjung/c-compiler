@@ -19,7 +19,8 @@
 #include "SimpleParser.h"
 
 int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err){
-    GeneratedLexer lexer;
+
+GeneratedLexer lexer;
     parser::SimpleParser parser(&lexer);
     parser.init(fileInputReader);
 

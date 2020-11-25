@@ -143,30 +143,26 @@ namespace parser{
 
     class Binary : public Expression{
     public:
-        Expression* left;
-        Expression* right;
+        Expression* left = nullptr;
+        Expression* right = nullptr;
         uint32_t op;
     };
 
     class Unary : public Expression{
     public:
-        Expression* value;
-        uint32_t op;
+        Expression* value = nullptr;
+        uint32_t op = 0;
     };
 
     class Return : public Statement{
     public:
-        Expression* value;
+        Expression* value = nullptr;
     };
 
     class Type : public Element{
 
     };
 
-    class StructType : public Type{
-    public:
-        std::string name;
-    };
 
     class Identifier : public Expression{
     public:
@@ -209,44 +205,49 @@ namespace parser{
 
     class LabeledStatement : public Statement{
     public:
-        Statement* statement;
+        Statement* statement = nullptr;
         std::string name;
     };
 
-    class Case : public Statement{
+    class DirectDeclarator;
+
+    class Declarator : public Statement{
     public:
-        Expression* expression;
-        Statement* statement;
+        int pointer = 0;
+        DirectDeclarator* declaration = nullptr;
     };
 
-    class Default : public Statement{
-    public:
-        Statement* statement;
-    };
-
-    class Declaration : public Statement{
-    public:
-        Type* type;
-        Identifier* name;
-    };
-
-    class Struct : public Declaration{
+    class DirectDeclarator : public Statement{
     public:
         Identifier* identifier;
-        std::vector<Declaration*> declarations;
+        Declarator* declarator;
+        DirectDeclarator* left;
+        std::vector<Declarator*> parameter;
+    };
+
+    class Struct : public DirectDeclarator{
+    public:
+        Identifier* identifier = nullptr;
+        std::vector<DirectDeclarator*> declarations;
+    };
+
+    class StructType : public Type{
+    public:
+        std::string name;
+        std::vector<DirectDeclarator*> declarations;
     };
 
     class Method : public Element{
     public:
         Type* type;
-        Identifier* name;
-        std::vector<Declaration*> params;
+        Identifier* name = nullptr;
+        std::vector<DirectDeclarator*> params;
         Block* body;
     };
 
     class Call : public Expression{
     public:
-        Identifier* name;
+        Identifier* name = nullptr;
         std::vector<Expression*> values;
     };
 
@@ -259,8 +260,8 @@ namespace parser{
 
     class While : public Statement{
     public:
-        Expression* condition;
-        Statement* body;
+        Expression* condition = nullptr;
+        Statement* body = nullptr;
     };
 
     class SimpleParser {
@@ -328,13 +329,7 @@ namespace parser{
         Element* parse(){
             Unit* unit = new Unit();
             for(;;){
-                Element* element;
-                if(lookC.id == LEFT_PAREN){
-                    element = parseMethod();
-                }else{
-                    element = parseDeclaration();
-                }
-                unit->children.push_back(element);
+                unit->children.push_back(parseExternalDeclaration());
 
                 if(is(EOF)){
                     break;
@@ -344,20 +339,45 @@ namespace parser{
             return unit;
         }
 
-        Method* parseMethod(){
+        Element* parseExternalDeclaration(){
+            Type* type = parseType();
+            Declarator* declarator = parseDeclarator();
+            if(is(LEFT_BRACE)){
+                Block* block = parseBlock();
+                Method* method = new Method();
+            }else {
+                shall(SEMI);
+            }
+
+            return declarator;
+        }
+
+        Method* parseFunctionDefinition(){
             auto method = new Method();
             method->type = parseType();
             method->name = parseIdentifier();
             shall(LEFT_PAREN);
             if(!is(RIGHT_PAREN)){
-                method->params.push_back(parseDeclaration());
+                method->params.push_back(parseDirectDeclarator());
                 while(eat(COMMA)){
-                    method->params.push_back(parseDeclaration());
+                    method->params.push_back(parseDirectDeclarator());
                 }
             }
             shall(RIGHT_PAREN);
             method->body = parseBlock();
             return method;
+        }
+
+        /*
+         * leftParen:\(
+rightParen:\)
+leftBracket:\[
+rightBracket:\]
+leftBrace:\{
+rightBrace:\}*/
+
+        bool isType(int32_t type){
+            return type == INT || type == (CHAR) || type == (VOID) || type == (STRUCT);
         }
 
         Type* parseType(){
@@ -368,11 +388,28 @@ namespace parser{
             }else if(is(STRUCT)){
                 auto structType = new StructType();
                 eat();
-                structType->name = lookA.value;
-                eat();
+                if(is(IDENTIFIER)){
+                    structType->name = lookA.value;
+                    eat();
+                }
+
+                if(is(LEFT_BRACE)){
+                    parseStructDeclarationList(structType);
+                }
+
                 return structType;
             }else{
                 fatal();
+            }
+        }
+
+        void parseStructDeclarationList(StructType* structType){
+            while(true){
+                structType->declarations.push_back(parseDirectDeclarator());
+
+                if(is(RIGHT_BRACE)){
+                    break;
+                }
             }
         }
 
@@ -387,17 +424,44 @@ namespace parser{
             }
         }
 
-        Declaration* parseDeclaration(){
-            if(is(STRUCT) && lookC.id == LEFT_BRACE){
-                return parseStruct();
-            }else{
-                auto declaration = new Declaration();
-                declaration->type = parseType();
-                declaration->name = parseIdentifier();
+        DirectDeclarator* parseDirectDeclarator(){
+            auto declaration = new DirectDeclarator();
 
-                shall(SEMI);
-                return declaration;
+            if(eat(LEFT_PAREN)){
+                parseDeclarator();
+                shall(RIGHT_PAREN);
+            }else if(is(IDENTIFIER)){
+                declaration->identifier = parseIdentifier();
             }
+
+            while(eat(LEFT_PAREN)){
+                auto inner = new DirectDeclarator();
+                inner->left = declaration;
+                if(isType(lookA.id)){
+                    parseParameterTypeList(inner);
+                }
+                declaration = inner;
+                shall(RIGHT_PAREN);
+            }
+
+            return declaration;
+        }
+
+        void parseParameterTypeList(DirectDeclarator* inner){
+            Type* type = parseType();
+            Declarator* declarator = parseDeclarator();
+        }
+
+        Declarator* parseDeclarator(){
+            auto declaration = new Declarator();
+
+            while(eat(STAR)){
+                declaration->pointer++;
+            }
+
+            declaration->declaration = parseDirectDeclarator();
+
+            return declaration;
         }
 
         Struct* parseStruct(){
@@ -413,7 +477,7 @@ namespace parser{
                     break;
                 }
 
-                result->declarations.push_back(parseDeclaration());
+                result->declarations.push_back(parseDirectDeclarator());
             }
             shall(SEMI);
             return result;
@@ -428,8 +492,6 @@ namespace parser{
                 return parseBlock();
             }else if(is(RETURN)) {
                 return parseReturn();
-            }else if(is(INT) || is(CHAR) || is(STRUCT) ){
-                return parseDeclaration();
             }else if(is(GOTO) ){
                 return parseGoTo();
             }else if(eat(CONTINUE) ){
@@ -438,18 +500,6 @@ namespace parser{
             }else if(eat(BREAK) ){
                 shall(SEMI);
                 return new Break();
-            }else if(eat(CASE)){
-                auto result = new Case();
-                result->expression = parseExpression(13);
-                shall(COLON);
-                result->statement = parseStatement();
-                return result;
-            }else if(eat(DEFAULT)){
-                auto result = new Default();
-                shall(IDENTIFIER);
-                shall(COLON);
-                result->statement = parseStatement();
-                return result;
             }else if(lookA.id == IDENTIFIER && lookB.id == COLON){
                 auto result = new LabeledStatement();
                 result->name = lookA.value;
@@ -491,12 +541,18 @@ namespace parser{
                     break;
                 }
 
-                block->children.push_back(parseStatement());
+                block->children.push_back(parseBlockItem());
             }
             return block;
         }
 
-
+        Statement* parseBlockItem(){
+            if(isType(lookA.id)){
+                return parseDirectDeclarator();
+            }else{
+                return parseStatement();
+            }
+        }
 
         If* parseIf(){
             auto result = new If();

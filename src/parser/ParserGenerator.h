@@ -82,10 +82,18 @@ class ParserGenerator {
 
     void computeClosure(Closure* closure){
         std::unordered_map<Entity*, Kernel*> aggregate;
+        std::unordered_set<Entity*> entities;
 
         printClosure(closure);
         for(Item* sub : closure->items){
             if(sub->dot >= sub->rule->keys.size()){
+
+                Entity* final = sub->rule->keys[sub->dot - 1];
+                if(entities.find(final) != entities.end()){
+                    throw std::exception();
+                }
+
+                entities.insert(final);
                 continue;
             }
 
@@ -106,6 +114,11 @@ class ParserGenerator {
         }
 
         for(auto& pair : aggregate){
+            auto key = pair.first;
+            if(entities.find(key) != entities.end()){
+                throw std::exception();
+            }
+
             printKernel(pair.second);
             std::cout << pair.second->hash() << std::endl;
 

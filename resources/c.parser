@@ -125,7 +125,7 @@ ConstantExpression
     :   ConditionalExpression
     ;
 
-Declaration
+DirectDeclarator
     :   DeclarationSpecifiers InitDeclaratorList ';'
 	| 	DeclarationSpecifiers ';'
     ;
@@ -176,7 +176,7 @@ TypeSpecifier
     |   StructOrUnionSpecifier
     |   EnumSpecifier
     |   TypedefName
-    |   TypeSpecifier Pointer
+    |   TypeSpecifier
     ;
 
 StructOrUnionSpecifier
@@ -373,7 +373,7 @@ BlockItemList
 
 BlockItem
     :   Statement
-    |   Declaration
+    |   DirectDeclarator
     ;
 
 ExpressionStatement
@@ -425,7 +425,7 @@ TranslationUnit
 
 ExternalDeclaration
     :   FunctionDefinition
-    |   Declaration
+    |   DirectDeclarator
     |   ';'
     ;
 
@@ -434,6 +434,6 @@ FunctionDefinition
     ;
 
 DeclarationList
-    :   Declaration
-    |   DeclarationList Declaration
+    :   DirectDeclarator
+    |   DeclarationList DirectDeclarator
     ;
