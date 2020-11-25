@@ -220,7 +220,7 @@ namespace parser{
     class Declaration : public Statement{
     public:
         Type* type;
-        Statement* statement;
+        Declarator* declarator;
     };
 
 
@@ -276,10 +276,8 @@ namespace parser{
         Lexer* lexer;
         Token* ring;
 
-
         Token lookA;
         Token lookB;
-        Token lookC;
 
         SimpleParser(Lexer* lexer) : lexer(lexer){
 
@@ -289,16 +287,13 @@ namespace parser{
             lexer->reset(parserDescriptor);
             lookA.location.fileName = parserDescriptor->getContext();
             lookB.location.fileName = parserDescriptor->getContext();
-            lookC.location.fileName = parserDescriptor->getContext();
-            next();
             next();
             next();
         }
 
         void next(){
             lookA = lookB;
-            lookB = lookC;
-            lexer->hasNextToken(lookC);
+            lexer->hasNextToken(lookB);
         }
 
         Token eat(){
@@ -347,16 +342,19 @@ namespace parser{
         }
 
         Element* parseExternalDeclaration(){
-            Type* type = parseType();
-            Declarator* declarator = parseDeclarator();
-            if(is(LEFT_BRACE)){
-                Block* block = parseBlock();
-                Method* method = new Method();
-            }else {
-                shall(SEMI);
-            }
+            auto declaration = new Declaration();
+            declaration->type = parseType();
+            if(!is(SEMI)){
+                declaration->declarator = parseDeclarator();
+                if(is(LEFT_BRACE)){
+                    Block* block = parseBlock();
+                    Method* method = new Method();
 
-            return declarator;
+                    return declaration;
+                }
+            }
+            shall(SEMI);
+            return declaration;
         }
 
         Method* parseFunctionDefinition(){
@@ -574,17 +572,18 @@ rightBrace:\}*/
         }
 
         Declaration* parseDeclaration(){
-            Type* type = parseType();
-            Declarator* declarator = parseDeclarator();
+            auto declaration = new Declaration();
+            declaration->type = parseType();
+            if(!is(SEMI)){
+                declaration->declarator = parseDeclarator();
+            }
             shall(SEMI);
-
-            return new Declaration();
+            return declaration;
         }
 
         If* parseIf(){
             auto result = new If();
             shall(IF);
-
             shall(LEFT_PAREN);
             result->condition = parseExpression();
             shall(RIGHT_PAREN);
