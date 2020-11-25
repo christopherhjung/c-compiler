@@ -524,7 +524,7 @@ rightBrace:\}*/
                 eat(COLON);
                 result->statement = parseStatement();
                 return result;
-            }else{
+            }else if(!eat(SEMI)){
                 auto expr = parseExpression();
                 shall(SEMI);
                 return expr;
@@ -552,13 +552,11 @@ rightBrace:\}*/
             auto block = new Block();
             shall(LEFT_BRACE);
             while(true){
-                while(eat(SEMI));
+                block->children.push_back(parseBlockItem());
 
                 if(eat(RIGHT_BRACE)){
                     break;
                 }
-
-                block->children.push_back(parseBlockItem());
             }
             return block;
         }
