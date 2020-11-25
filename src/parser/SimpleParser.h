@@ -679,20 +679,6 @@ rightBrace:\}*/
                     left = unary;
                 }
             }
-
-            /*
-             * For expressions (§6.5) we handle identifier,
-             * constant, string-literal, parenthesized expression, [], function
-                call, ., ->, sizeof, & (unary), * (unary),
-             - (unary), !, * (binary),
-             + (binary), - (binary), ,,, &&,
-                ||, ?: and =. For all other expressions only
-                the chain productions (A → B) are used.
-             * */
-
-
-
-            return parseIdentifier();
         }
 
         uint32_t binary(){
@@ -718,6 +704,7 @@ rightBrace:\}*/
         uint32_t unary(){
             uint32_t index = 0;
             switch(lookA.id){
+                case SIZEOF:
                 case AND:
                 case PLUS:
                 case MINUS:
