@@ -634,6 +634,15 @@ rightBrace:\}*/
                     return call;
                 }
                 return identifier;
+            }else if(eat(SIZEOF)){
+                if(eat(LEFT_PAREN)){
+                    auto call = new Call();
+                    parseType();
+
+                    shall(RIGHT_PAREN);
+                    return call;
+                }
+                return nullptr;
             }else{
                 fatal();
             }
@@ -654,7 +663,7 @@ rightBrace:\}*/
             Expression* left = nullptr;
             for(;;){
                 uint32_t precedence = unary();
-                if(precedence == 0 || left != nullptr){
+                if(precedence == 0 || left != nullptr || (is(SIZEOF) && lookB.id == LEFT_PAREN)){
                     if(left == nullptr){
                         left = parseValue();
                     }
