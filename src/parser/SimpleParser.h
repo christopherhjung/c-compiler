@@ -217,6 +217,13 @@ namespace parser{
         DirectDeclarator* declaration = nullptr;
     };
 
+    class Declaration : public Statement{
+    public:
+        Type* type;
+        Statement* statement;
+    };
+
+
     class DirectDeclarator : public Statement{
     public:
         Identifier* identifier;
@@ -234,7 +241,7 @@ namespace parser{
     class StructType : public Type{
     public:
         std::string name;
-        std::vector<DirectDeclarator*> declarations;
+        std::vector<Declaration*> declarations;
     };
 
     class Method : public Element{
@@ -393,8 +400,9 @@ rightBrace:\}*/
                     eat();
                 }
 
-                if(is(LEFT_BRACE)){
+                if(eat(LEFT_BRACE)){
                     parseStructDeclarationList(structType);
+                    shall(RIGHT_BRACE);
                 }
 
                 return structType;
@@ -405,7 +413,7 @@ rightBrace:\}*/
 
         void parseStructDeclarationList(StructType* structType){
             while(true){
-                structType->declarations.push_back(parseDirectDeclarator());
+                structType->declarations.push_back(parseDeclaration());
 
                 if(is(RIGHT_BRACE)){
                     break;
@@ -559,10 +567,18 @@ rightBrace:\}*/
 
         Statement* parseBlockItem(){
             if(isType(lookA.id)){
-                return parseDirectDeclarator();
+                return parseDeclaration();
             }else{
                 return parseStatement();
             }
+        }
+
+        Declaration* parseDeclaration(){
+            Type* type = parseType();
+            Declarator* declarator = parseDeclarator();
+            shall(SEMI);
+
+            return new Declaration();
         }
 
         If* parseIf(){
