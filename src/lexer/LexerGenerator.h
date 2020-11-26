@@ -94,8 +94,8 @@ public:
 
 
         offset(2) << "while(true){" << std::endl;
-        offset(3) << "token.location.line = line;" << std::endl;
-        offset(3) << "token.location.column = column;" << std::endl;
+        //offset(3) << "token.location.line = line;" << std::endl;
+        //offset(3) << "token.location.column = column;" << std::endl;
         offset(3) << "if(current == 256){" << std::endl;
         offset(4) << "if(finish){" << std::endl;
         offset(5) << "return false;" << std::endl;
