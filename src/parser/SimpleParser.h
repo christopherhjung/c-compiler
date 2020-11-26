@@ -116,9 +116,9 @@
 namespace parser{
     class ParseException : public std::exception{
     public:
-        Token token;
+        Error error;
 
-        ParseException(const Token& token) : token(token){
+        ParseException(const Error& error) : error(error){
 
         }
     };
@@ -293,9 +293,13 @@ namespace parser{
         }
 
         void next(){
-            last = lookA;
+            //last = lookA;
             lookA = lookB;
             lexer->hasNextToken(lookB);
+
+            if(lexer->isError()){
+                throw ParseException(*lexer->getError());
+            }
         }
 
         Token eat(){
@@ -327,8 +331,7 @@ namespace parser{
         }
 
         void fatal(){
-
-            throw ParseException(last);
+            throw ParseException(Error(&lookA.location, "wrong token"));
         }
 
         Element* parse(){

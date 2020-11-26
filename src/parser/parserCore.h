@@ -28,8 +28,7 @@ GeneratedLexer lexer;
         auto element = parser.parse();
         return 0;
     }catch(parser::ParseException& e){
-        e.token.location = e.token.end;
-        std::cerr << e.token << std::endl;
+        std::cerr << e.error << std::endl;
         return 1;
     }
 }
