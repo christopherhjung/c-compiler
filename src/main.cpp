@@ -8,7 +8,7 @@
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
 
-#define MEASURE
+//#define MEASURE
 #define OUTPUT
 
 #include "generated/GeneratedLexer.h"
