@@ -331,7 +331,7 @@ namespace parser{
         }
 
         void fatal(){
-            throw ParseException(Error(&lookA.location, "wrong token"));
+            throw ParseException(Error(&lookA.location, "wrong token " + lookA.value));
         }
 
         Element* parse(){
@@ -399,7 +399,8 @@ rightBrace:\}*/
             }else if(is(STRUCT)){
                 auto structType = new StructType();
                 eat();
-                if(is(IDENTIFIER)){
+                bool isIdentifier = is(IDENTIFIER);
+                if(isIdentifier){
                     structType->name = lookA.value;
                     eat();
                 }
@@ -407,6 +408,8 @@ rightBrace:\}*/
                 if(eat(LEFT_BRACE)){
                     parseStructDeclarationList(structType);
                     shall(RIGHT_BRACE);
+                }else if(!isIdentifier){
+                    fatal();
                 }
 
                 return structType;
