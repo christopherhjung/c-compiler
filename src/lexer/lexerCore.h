@@ -8,6 +8,7 @@
 #include "StateMachineLexer.h"
 #include "../reader/FileInputReader.h"
 #include "../generated/GeneratedLexer.h"
+#include "LexerProxy.h"
 
 std::string translate[] = {
         "eof",
@@ -122,13 +123,13 @@ int runLexer(InputReader* fileInputReader,std::string& source, std::ostream& out
     //LexerGrammar lexerGrammar = LexerGrammar::build(new FileInputReader("./resources/c.lexer"));
     //StateMachineLexer lexer(StateMachineBuilder::build(lexerGrammar));
 
-    GeneratedLexer lexer;
+    GeneratedLexer generatedLexer;
+    LexerProxy proxy(generatedLexer);
 
-
-    lexer.reset(fileInputReader);
+    proxy.reset(fileInputReader);
     Token token;
     token.location.fileName = source;
-    while(lexer.hasNextToken(token)){
+    while(proxy.hasNextToken(token)){
         if(token.id > 0){
 #ifdef OUTPUT
             out << token.location << ": " << translate[token.id] << " " << token.value << std::endl;
@@ -137,8 +138,8 @@ int runLexer(InputReader* fileInputReader,std::string& source, std::ostream& out
     }
 
     out << std::flush;
-    if(lexer.isError()){
-        auto error = lexer.getError();
+    if(proxy.isError()){
+        auto error = proxy.getError();
 #ifdef OUTPUT
         err << *error << std::endl;
         err << std::flush;

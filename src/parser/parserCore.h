@@ -20,8 +20,9 @@
 
 int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err){
 
-GeneratedLexer lexer;
-    parser::SimpleParser parser(&lexer);
+    GeneratedLexer lexer;
+    LexerProxy proxy(lexer);
+    parser::SimpleParser parser(&proxy);
     parser.init(fileInputReader);
 
     try {

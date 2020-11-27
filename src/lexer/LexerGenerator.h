@@ -41,7 +41,9 @@ public:
 
         ss.open(target);
         ss << "#pragma once" << std::endl;
-        ss << "#include \"../lexer/Lexer.h\"" << std::endl;
+        ss << "#include \"../lexer/LexerControl.h\"" << std::endl;
+        ss << "#include \"../lexer/LexerProxy.h\"" << std::endl;
+        ss << "#include \"../reader/InputReader.h\"" << std::endl;
         writeClass(machine->states , machine->root, machine->kinds, machine->hides);
         ss << std::flush;
         ss.close();
@@ -66,8 +68,43 @@ public:
     void writeClass(std::vector<State*>& states, State* start, std::vector<std::string>& kinds, std::vector<bool>& hides){
         std::sort(states.begin(), states.end(), cmpState);
 
-        offset(0) << "class GeneratedLexer : public Lexer{" << std::endl;
+        offset(0) << "class GeneratedLexer : public LexerControl{" << std::endl;
 
+        offset(1) << "int16_t *current;" << std::endl;
+        offset(1) << "int32_t *accept;" << std::endl;
+        offset(1) << "uint32_t *offset;" << std::endl;
+        offset(1) << "InputReader *reader;" << std::endl;
+
+
+        writeHides(hides);
+
+        offset(1) << "void init(LexerProxy& proxy) override {" << std::endl;
+        offset(2) << "offset = &proxy.offset;" << std::endl;
+        offset(2) << "current = &proxy.current;" << std::endl;
+        offset(2) << "accept = &proxy.accept;" << std::endl;
+        offset(2) << "reader = proxy.reader;" << std::endl;
+        offset(1) << "}" << std::endl;
+
+        offset(1) << "void next() {" << std::endl;
+        offset(2) << "*current = reader->next();" << std::endl;
+        offset(1) << "}" << std::endl;
+
+        offset(1) << "void set(int32_t id) {" << std::endl;
+        offset(2) << "*accept = id;" << std::endl;
+        offset(2) << "*offset = reader->getOffset();" << std::endl;
+        offset(1) << "}" << std::endl;
+
+        offset(1) << "bool isHiding(uint32_t id) override {" << std::endl;
+        offset(2) << "return hides[id];" << std::endl;
+        offset(1) << "}" << std::endl;
+
+
+
+
+
+
+
+/*
 
         offset(1) << "int16_t current;" << std::endl;
         offset(1) << "int32_t accept;" << std::endl;
@@ -80,7 +117,6 @@ public:
         offset(1) << "bool finish = false;" << std::endl;
 
         writeKinds(kinds);
-        writeHides(hides);
 
         offset(0) << "public:" << std::endl;
 
@@ -208,7 +244,7 @@ public:
         offset(1) << "bool isError() override {" << std::endl;
         offset(2) << "return error;" << std::endl;
         offset(1) << "}" << std::endl;
-
+*/
         for( auto* state : states ){
             writeMethod(state, 1);
         }
@@ -218,7 +254,11 @@ public:
     void writeMethod(State* state, uint32_t depth){
         offset(depth) << "void ";
         writeRuleName(state);
-        ss << "(){" << std::endl;
+        ss << "()";
+        if(state->index == 0){
+            ss << " override ";
+        }
+        ss << "{" << std::endl;
         if(state->index > 0){
             offset(depth + 1) << "next();" << std::endl;
         }
@@ -240,7 +280,7 @@ public:
         }
 
         if(!unsorted.empty()) {
-            offset(depth) << "switch(current){" << std::endl;
+            offset(depth) << "switch(*current){" << std::endl;
             std::vector<std::pair<State*, std::set<char>>> sorted;
 
             sorted.reserve(unsorted.size());
@@ -272,7 +312,7 @@ public:
 
             if(state->greedy){
                 offset(depth + 1) << "default:" << std::endl;
-                offset(depth + 2) << "accept = -1;" << std::endl;
+                offset(depth + 2) << "*accept = -1;" << std::endl;
             }
 
             offset(depth) << "}" << std::endl;
@@ -355,7 +395,9 @@ public:
         }else if(state->greedy){
             ss << "Greedy";
         }
-        ss << state->index;
+        if(state->index > 0){
+            ss << state->index;
+        }
     }
 
     std::ofstream& offset(uint32_t indent){

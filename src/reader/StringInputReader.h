@@ -61,6 +61,10 @@ public:
         return str.length();
     }
 
+    int16_t get(uint32_t index) override{
+        return str[this->index + index];
+    }
+
     void reset(uint32_t offset) override {
         this->index += offset;
         this->offset = 0;

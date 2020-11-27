@@ -8,8 +8,8 @@
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
 
-//#define MEASURE
-#define OUTPUT
+#define MEASURE
+//#define OUTPUT
 
 #include "generated/GeneratedLexer.h"
 #include "lexer/lexerCore.h"

@@ -15,16 +15,17 @@ namespace{
     class Body : testing::Test{
     public:
         GeneratedLexer lexer;
+        LexerProxy proxy;
         StringInputReader reader;
-        Body(std::string str){
+        Body(std::string str): proxy(lexer){
             reader.reset(str);
-            lexer.reset(&reader);
+            proxy.reset(&reader);
         }
 
         void tokenEquals(int line, int column, std::string type, std::string value){
             Token token;
             bool found = false;
-            while(lexer.hasNextToken(token)){
+            while(proxy.hasNextToken(token)){
                 if(token.id >= 3){
                     found = true;
                     break;
@@ -41,23 +42,23 @@ namespace{
             EXPECT_EQ(token.location.column, column);
 //EXPECT_EQ(token.name, type);
             EXPECT_EQ(token.value, value);
-            EXPECT_FALSE(lexer.isError());
+            EXPECT_FALSE(proxy.isError());
         }
 
         void noToken(){
             Token token;
-            EXPECT_FALSE(lexer.hasNextToken(token));
+            EXPECT_FALSE(proxy.hasNextToken(token));
         }
 
         void hasError(){
             Token token;
-            EXPECT_TRUE(lexer.isError());
+            EXPECT_TRUE(proxy.isError());
         }
 
         void hasError(std::string msg){
             Token token;
             hasError();
-            Error* error = lexer.getError();
+            Error* error = proxy.getError();
             EXPECT_EQ(error->msg, msg);
         }
 

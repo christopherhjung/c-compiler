@@ -73,6 +73,10 @@ public:
         return size;
     }
 
+    int16_t get(uint32_t index) override{
+        return buffer[(tail + offset) & mask];
+    }
+
     std::string readString(uint32_t count) override {
         char arr[count];
         uint32_t last = tail + count;

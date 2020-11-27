@@ -10,9 +10,8 @@
 #include "../reader/InputReader.h"
 
 class Lexer {
-protected:
-    InputReader* reader;
 public:
+    InputReader* reader;
     virtual void reset(InputReader* reader){
         this->reader = reader;
         this->reader->reset(0);
