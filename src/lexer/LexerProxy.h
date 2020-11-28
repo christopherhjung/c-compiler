@@ -37,6 +37,8 @@ public:
             offset = 0;
             control.parse();
             if (accept == -1) {
+                token.location.line = startLine;
+                token.location.column = startColumn;
                 offset = reader->getOffset();
                 if (current == 256) {
                     errorObj = new Error(&token.location, reader->readString(offset) + "_<-- char >EOL< wrong!");

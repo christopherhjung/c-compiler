@@ -379,15 +379,7 @@ namespace parser{
             return method;
         }
 
-        /*
-         * leftParen:\(
-rightParen:\)
-leftBracket:\[
-rightBracket:\]
-leftBrace:\{
-rightBrace:\}*/
-
-        bool isType(int32_t type){
+        static bool isType(int32_t type){
             return type == INT || type == (CHAR) || type == (VOID) || type == (STRUCT);
         }
 

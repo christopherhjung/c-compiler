@@ -74,7 +74,7 @@ public:
     }
 
     int16_t get(uint32_t index) override{
-        return buffer[(tail + offset) & mask];
+        return buffer[(tail + index) & mask];
     }
 
     std::string readString(uint32_t count) override {
