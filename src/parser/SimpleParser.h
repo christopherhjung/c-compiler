@@ -669,7 +669,11 @@ namespace parser{
                             bin->left = left;
                             auto token = eat();
                             bin->op = token.id;
-                            bin->right = parseExpression(precedence);
+                            if(token.id == ARROW || token.id == DOT){
+                                bin->right = parseIdentifier();
+                            }else{
+                                bin->right = parseExpression(precedence);
+                            }
                             left = bin;
                         }
                     }
