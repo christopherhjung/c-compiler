@@ -613,15 +613,6 @@ namespace parser{
                 return constant;
             }else if(is(IDENTIFIER)){
                 return parseIdentifier();
-            }else if(eat(SIZEOF)){
-                shall(LEFT_PAREN);
-                auto sizeofObj = new Sizeof();
-                sizeofObj->type = parseType();
-                if(!is(RIGHT_PAREN)){
-                    sizeofObj->declarator = parseDeclarator(false, true);
-                }
-                shall(RIGHT_PAREN);
-                return sizeofObj;
             }else{
                 fatal();
             }
@@ -637,13 +628,24 @@ namespace parser{
         Expression* parseExpression(uint32_t other){
 
             Expression* left = nullptr;
-            if(!is(SIZEOF) || lookB.id != LEFT_PAREN){
-                uint32_t precedence = unary();
+            uint32_t precedence = unary();
 
-                if(precedence != 0){
+            if(precedence != 0){
+                uint32_t op = lookA.id;
+                eat();
+
+                if(op == SIZEOF && isType(lookB.id)) {
+                    shall(LEFT_PAREN);
+                    auto sizeofObj = new Sizeof();
+                    sizeofObj->type = parseType();
+                    if(!is(RIGHT_PAREN)){
+                        sizeofObj->declarator = parseDeclarator(false, true);
+                    }
+                    shall(RIGHT_PAREN);
+                    left = sizeofObj;
+                }else{
                     auto unary = new Unary();
-                    unary->op = lookA.id;
-                    eat();
+                    unary->op = op;
                     if(unary->op == LEFT_PAREN){
                         left = parseExpression();
                         shall(RIGHT_PAREN);
@@ -659,7 +661,7 @@ namespace parser{
             }
 
             for(;;){
-                uint32_t precedence = binary();
+                precedence = binary();
                 if(precedence == 0 || precedence > other){
                     return left;
                 }else{
