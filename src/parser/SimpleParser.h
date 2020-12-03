@@ -254,7 +254,7 @@ namespace parser{
 
     class Call : public Expression{
     public:
-        Identifier* name = nullptr;
+        Expression* method = nullptr;
         std::vector<Expression*> values;
     };
 
@@ -606,20 +606,7 @@ namespace parser{
                 eat();
                 return constant;
             }else if(is(IDENTIFIER)){
-                auto* identifier = parseIdentifier();
-                if(eat(LEFT_PAREN)){
-                    auto call = new Call();
-                    call->name = identifier;
-                    if(!is(RIGHT_PAREN)){
-                        call->values.push_back(parseExpression());
-                        while(eat(COMMA)){
-                            call->values.push_back(parseExpression());
-                        }
-                    }
-                    shall(RIGHT_PAREN);
-                    return call;
-                }
-                return identifier;
+                return parseIdentifier();
             }else if(eat(SIZEOF)){
                 if(eat(LEFT_PAREN)){
                     auto call = new Call();
@@ -642,11 +629,6 @@ namespace parser{
         }
 
         Expression* parseExpression(uint32_t other){
-            if(eat(LEFT_PAREN)){
-                Expression* inner = parseExpression();
-                shall(RIGHT_PAREN);
-                return inner;
-            }
 
             Expression* left = nullptr;
             for(;;){
@@ -655,23 +637,51 @@ namespace parser{
                     if(left == nullptr){
                         left = parseValue();
                     }
-                    precedence = binary();
-                    if(precedence == 0 || precedence > other){
-                        return left;
+
+                    if(eat(LEFT_PAREN)){
+                        auto call = new Call();
+                        call->method = left;
+                        if(!is(RIGHT_PAREN)){
+                            call->values.push_back(parseExpression());
+                            while(eat(COMMA)){
+                                call->values.push_back(parseExpression());
+                            }
+                        }
+                        shall(RIGHT_PAREN);
+                        left = call;
+                    }else if(eat(LEFT_BRACKET)){
+                        auto call = new Call();
+                        call->method = left;
+                        if(is(RIGHT_PAREN)){
+                           fatal();
+                        }
+                        call->values.push_back(parseExpression());
+                        shall(RIGHT_BRACKET);
+                        left = call;
                     }else{
-                        auto bin = new Binary();
-                        bin->left = left;
-                        auto token = eat();
-                        bin->op = token.id;
-                        bin->right = parseExpression(precedence);
-                        left = bin;
+                        precedence = binary();
+                        if(precedence == 0 || precedence > other){
+                            return left;
+                        }else{
+                            auto bin = new Binary();
+                            bin->left = left;
+                            auto token = eat();
+                            bin->op = token.id;
+                            bin->right = parseExpression(precedence);
+                            left = bin;
+                        }
                     }
                 }else{
                     auto unary = new Unary();
                     unary->op = lookA.id;
                     eat();
-                    unary->value = parseExpression(precedence);
-                    left = unary;
+                    if(unary->op == LEFT_PAREN){
+                        left = parseExpression();
+                        shall(RIGHT_PAREN);
+                    }else{
+                        unary->value = parseExpression(precedence);
+                        left = unary;
+                    }
                 }
             }
         }
@@ -705,6 +715,7 @@ namespace parser{
                 case MINUS:
                 case STAR:
                 case NOT: index = 2; break;
+                case LEFT_PAREN: index = 1; break;
                 default: return 0;
             }
 
