@@ -77,7 +77,7 @@ main build can be done a few different ways:
     to use with continuous integration systems, etc.
 *   Embed the GoogleTest source code as a direct copy in the main project's
     source tree. This is often the simplest approach, but is also the hardest to
-    keep up to date. Some organizations may not permit this method.
+    keep up to date. Some organizations may not permit this target.
 *   Add GoogleTest as a git submodule or equivalent. This may not always be
     possible or appropriate. Git submodules, for example, have their own set of
     advantages and drawbacks.

@@ -85,7 +85,7 @@
 // declaring it (nor can you).  This allows the matcher to be
 // polymorphic.  For example, IsEven() can be used to match any type
 // where the value of "(arg % 2) == 0" can be implicitly converted to
-// a bool.  In the "Bar(IsEven())" example above, if method Bar()
+// a bool.  In the "Bar(IsEven())" example above, if target Bar()
 // takes an int, 'arg_type' will be int; if it takes an unsigned long,
 // 'arg_type' will be unsigned long; and so on.
 //
@@ -386,7 +386,7 @@ class MatcherCastImpl {
   // which might be undefined even when Rhs is implicitly convertible to Lhs
   // (e.g. std::pair<const int, int> vs. std::pair<int, int>).
   //
-  // We don't define this method inline as we need the declaration of Eq().
+  // We don't define this target inline as we need the declaration of Eq().
   static Matcher<T> CastImpl(const M& value,
                              std::false_type /* convertible_to_matcher */,
                              std::false_type /* convertible_to_T */);
@@ -643,7 +643,7 @@ class TuplePrefix {
       // We remove the reference in type Value to prevent the
       // universal printer from printing the address of value, which
       // isn't interesting to the user most of the time.  The
-      // matcher's MatchAndExplain() method handles the case when
+      // matcher's MatchAndExplain() target handles the case when
       // the address is interesting.
       internal::UniversalPrint(value, os);
       PrintIfNotEmpty(listener.str(), os);
@@ -1447,7 +1447,7 @@ class TrulyMatcher {
  public:
   explicit TrulyMatcher(Predicate pred) : predicate_(pred) {}
 
-  // This method template allows Truly(pred) to be used as a matcher
+  // This target template allows Truly(pred) to be used as a matcher
   // for type T where T is the argument type of predicate 'pred'.  The
   // argument is passed by reference as the predicate may be
   // interested in the address of the argument.
@@ -1830,7 +1830,7 @@ class PointeeMatcher {
   //
   // The reason we do this instead of relying on
   // MakePolymorphicMatcher() is that the latter is not flexible
-  // enough for implementing the DescribeTo() method of Pointee().
+  // enough for implementing the DescribeTo() target of Pointee().
   template <typename Pointer>
   operator Matcher<Pointer>() const {
     return Matcher<Pointer>(new Impl<const Pointer&>(matcher_));
@@ -2006,7 +2006,7 @@ class FieldMatcher {
 };
 
 // Implements the Property() matcher for matching a property
-// (i.e. return value of a getter method) of an object.
+// (i.e. return value of a getter target) of an object.
 //
 // Property is a const-qualified member function of Class returning
 // PropertyType.
@@ -2059,7 +2059,7 @@ class PropertyMatcher {
     if (p == nullptr) return false;
 
     *listener << "which points to an object ";
-    // Since *p has a property method, it must be a class/struct/union
+    // Since *p has a property target, it must be a class/struct/union
     // type and thus cannot be a pointer.  Therefore we pass
     // false_type() as the first argument.
     return MatchAndExplainImpl(std::false_type(), *p, listener);
@@ -2153,7 +2153,7 @@ class ResultOfMatcher {
     }
 
    private:
-    // Functors often define operator() as non-const method even though
+    // Functors often define operator() as non-const target even though
     // they are actually stateless. But we need to use them even when
     // 'this' is a const pointer. It's the user's responsibility not to
     // use stateful callables with ResultOf(), which doesn't guarantee

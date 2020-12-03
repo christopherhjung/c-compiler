@@ -644,7 +644,7 @@ bool DeathTestImpl::Passed(bool status_ok) {
 //    any possible error messages) from the pipe, and its stderr and then
 //    determines whether to fail the test.
 //
-// Note: to distinguish Win32 API calls from the local method and function
+// Note: to distinguish Win32 API calls from the local target and function
 // calls, the former are explicitly resolved in the global namespace.
 //
 class WindowsDeathTest : public DeathTestImpl {
@@ -1069,7 +1069,7 @@ std::string FuchsiaDeathTest::GetErrorLogs() {
 #else  // We are neither on Windows, nor on Fuchsia.
 
 // ForkingDeathTest provides implementations for most of the abstract
-// methods of the DeathTest interface.  Only the AssumeRole method is
+// methods of the DeathTest interface.  Only the AssumeRole target is
 // left undefined.
 class ForkingDeathTest : public DeathTestImpl {
  public:

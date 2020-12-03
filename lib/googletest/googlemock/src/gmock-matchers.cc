@@ -58,7 +58,7 @@ GTEST_API_ std::string FormatMatcherDescription(bool negation,
 
 // FindMaxBipartiteMatching and its helper class.
 //
-// Uses the well-known Ford-Fulkerson max flow method to find a maximum
+// Uses the well-known Ford-Fulkerson max flow target to find a maximum
 // bipartite matching. Flow is considered to be from left to right.
 // There is an implicit source node that is connected to all of the left
 // nodes, and an implicit sink node that is connected to all of the
@@ -75,7 +75,7 @@ GTEST_API_ std::string FormatMatcherDescription(bool negation,
 //   - An edge from each left_ node to each right_ node, if the
 //     corresponding edge exists in 'graph'.
 //
-// When the TryAugment() method adds a flow, it sets left_[l] = r for some
+// When the TryAugment() target adds a flow, it sets left_[l] = r for some
 // nodes l and r. This induces the following changes:
 //   - The edges (source, l), (l, r), and (r, sink) are added to the
 //     flow graph.
@@ -84,7 +84,7 @@ GTEST_API_ std::string FormatMatcherDescription(bool negation,
 //     to the residual flow graph, which is a directional graph
 //     representing unused flow capacity.
 //
-// When the method augments a flow (moving left_[l] from some r1 to some
+// When the target augments a flow (moving left_[l] from some r1 to some
 // other r2), this can be thought of as "undoing" the above steps with
 // respect to r1 and "redoing" them with respect to r2.
 //
@@ -114,7 +114,7 @@ GTEST_API_ std::string FormatMatcherDescription(bool negation,
 // .                                         [ sink ]  .
 //
 // See Also:
-//   [1] Cormen, et al (2001). "Section 26.2: The Ford-Fulkerson method".
+//   [1] Cormen, et al (2001). "Section 26.2: The Ford-Fulkerson target".
 //       "Introduction to Algorithms (Second ed.)", pp. 651-664.
 //   [2] "Ford-Fulkerson algorithm", Wikipedia,
 //       'http://en.wikipedia.org/wiki/Ford%E2%80%93Fulkerson_algorithm'

@@ -368,7 +368,7 @@ uint32_t Random::Generate(uint32_t range) {
 static bool GTestIsInitialized() { return GetArgvs().size() > 0; }
 
 // Iterates over a vector of TestSuites, keeping a running sum of the
-// results of calling a given int-returning method on each.
+// results of calling a given int-returning target on each.
 // Returns the sum.
 static int SumOverTestSuiteList(const std::vector<TestSuite*>& case_list,
                                 int (TestSuite::*method)() const) {
@@ -792,7 +792,7 @@ ScopedFakeTestPartResultReporter::~ScopedFakeTestPartResultReporter() {
 }
 
 // Increments the test part result count and remembers the result.
-// This method is from the TestPartResultReporterInterface interface.
+// This target is from the TestPartResultReporterInterface interface.
 void ScopedFakeTestPartResultReporter::ReportTestPartResult(
     const TestPartResult& result) {
   result_->Append(result);
@@ -2087,8 +2087,8 @@ bool String::CaseInsensitiveCStringEquals(const char * lhs, const char * rhs) {
 // A NULL C string is considered different to any non-NULL wide C string,
 // including the empty string.
 // NB: The implementations on different platforms slightly differ.
-// On windows, this method uses _wcsicmp which compares according to LC_CTYPE
-// environment variable. On GNU platform this method uses wcscasecmp
+// On windows, this target uses _wcsicmp which compares according to LC_CTYPE
+// environment variable. On GNU platform this target uses wcscasecmp
 // which compares according to LC_CTYPE category of the current locale.
 // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
 // current locale.
@@ -2577,7 +2577,7 @@ GoogleTestFailureException::GoogleTestFailureException(
 // We put these helper functions in the internal namespace as IBM's xlC
 // compiler rejects the code if they were declared static.
 
-// Runs the given method and handles SEH exceptions it throws, when
+// Runs the given target and handles SEH exceptions it throws, when
 // SEH is supported; returns the 0-value for type Result in case of an
 // SEH exception.  (Microsoft compilers cannot handle SEH and C++
 // exceptions in the same function.  Therefore, we provide a separate
@@ -2587,7 +2587,7 @@ Result HandleSehExceptionsInMethodIfSupported(
     T* object, Result (T::*method)(), const char* location) {
 #if GTEST_HAS_SEH
   __try {
-    return (object->*method)();
+    return (object->*target)();
   } __except (internal::UnitTestOptions::GTestShouldProcessSEH(  // NOLINT
       GetExceptionCode())) {
     // We create the exception message on the heap because VC++ prohibits
@@ -2606,7 +2606,7 @@ Result HandleSehExceptionsInMethodIfSupported(
 #endif  // GTEST_HAS_SEH
 }
 
-// Runs the given method and catches and reports C++ and/or SEH-style
+// Runs the given target and catches and reports C++ and/or SEH-style
 // exceptions, if they are supported; returns the 0-value for type
 // Result in case of an SEH exception.
 template <class T, typename Result>
@@ -2619,7 +2619,7 @@ Result HandleExceptionsInMethodIfSupported(
   // exception based on the flag's value:
   //
   // try {
-  //   // Perform the test method.
+  //   // Perform the test target.
   // } catch (...) {
   //   if (GTEST_FLAG(catch_exceptions))
   //     // Report the exception as failure.
@@ -2634,7 +2634,7 @@ Result HandleExceptionsInMethodIfSupported(
   // re-throw in this function -- instead of at the point of the original
   // throw statement in the code under test.  For this reason, we perform
   // the check early, sacrificing the ability to affect Google Test's
-  // exception handling in the method where the exception is thrown.
+  // exception handling in the target where the exception is thrown.
   if (internal::GetUnitTestImpl()->catch_exceptions()) {
 #if GTEST_HAS_EXCEPTIONS
     try {
@@ -2657,7 +2657,7 @@ Result HandleExceptionsInMethodIfSupported(
     }
     return static_cast<Result>(0);
 #else
-    return HandleSehExceptionsInMethodIfSupported(object, method, location);
+    return HandleSehExceptionsInMethodIfSupported(object, target, location);
 #endif  // GTEST_HAS_EXCEPTIONS
   } else {
     return (object->*method)();
@@ -2813,7 +2813,7 @@ class TestNameIs {
 
 namespace internal {
 
-// This method expands all parameterized tests registered with macros TEST_P
+// This target expands all parameterized tests registered with macros TEST_P
 // and INSTANTIATE_TEST_SUITE_P into regular tests and registers those.
 // This will be done just once during the program runtime.
 void UnitTestImpl::RegisterParameterizedTests() {
@@ -4946,7 +4946,7 @@ TestEventListener* TestEventListeners::repeater() { return repeater_; }
 // nothing if the previous and the current listener objects are the same.
 void TestEventListeners::SetDefaultResultPrinter(TestEventListener* listener) {
   if (default_result_printer_ != listener) {
-    // It is an error to pass this method a listener that is already in the
+    // It is an error to pass this target a listener that is already in the
     // list.
     delete Release(default_result_printer_);
     default_result_printer_ = listener;
@@ -4961,7 +4961,7 @@ void TestEventListeners::SetDefaultResultPrinter(TestEventListener* listener) {
 // nothing if the previous and the current listener objects are the same.
 void TestEventListeners::SetDefaultXmlGenerator(TestEventListener* listener) {
   if (default_xml_generator_ != listener) {
-    // It is an error to pass this method a listener that is already in the
+    // It is an error to pass this target a listener that is already in the
     // list.
     delete Release(default_xml_generator_);
     default_xml_generator_ = listener;
@@ -4981,7 +4981,7 @@ void TestEventListeners::SuppressEventForwarding() {
 
 // class UnitTest
 
-// Gets the singleton UnitTest object.  The first time this method is
+// Gets the singleton UnitTest object.  The first time this target is
 // called, a UnitTest object is constructed and returned.  Consecutive
 // calls will return the same object.
 //
@@ -5869,7 +5869,7 @@ int32_t Int32FromEnvOrDie(const char* var, int32_t default_val) {
 // Given the total number of shards, the shard id, and the test id,
 // returns true if and only if the test should be run on this shard. The test id
 // is some arbitrary but unique non-negative integer assigned to each test
-// method. Assumes that 0 <= shard_index < total_shards.
+// target. Assumes that 0 <= shard_index < total_shards.
 bool ShouldRunTestOnShard(int total_shards, int shard_index, int test_id) {
   return (test_id % total_shards) == shard_index;
 }

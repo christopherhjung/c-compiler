@@ -531,7 +531,7 @@ class FooTest : public ::testing::Test {
   // for Foo.
 };
 
-// Tests that the Foo::Bar() method does Abc.
+// Tests that the Foo::Bar() target does Abc.
 TEST_F(FooTest, MethodBarDoesAbc) {
   const std::string input_filepath = "this/package/testdata/myinputfile.dat";
   const std::string output_filepath = "this/package/testdata/myoutputfile.dat";

@@ -36,13 +36,13 @@ The remaining provided code expects `Symbol`s to be internalized via a
 The `parser.h` and `parser.cpp` files contain parts of the implementation of a
 c4 parser. On the one hand, they contain the declarations of generally helpful
 methods that you might want to implement to use them for parsing.
-On the other hand, they contain the `parseSpecDecl()` method with helper
+On the other hand, they contain the `parseSpecDecl()` target with helper
 methods that parse a declaration specifier followed by a declarator or an
 abstract declarator.
 
 These methods also contain constructor calls for the abstract syntax tree,
 which you need to implement or replace with your own AST construction. Do
-observe the TODO inside the `parseSpecDecl()` method that you will need to
+observe the TODO inside the `parseSpecDecl()` target that you will need to
 implement for your AST.
 
 You should extend the `Parser` class with more methods that parse an entire

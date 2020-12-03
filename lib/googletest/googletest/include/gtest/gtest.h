@@ -422,7 +422,7 @@ class GTEST_API_ Test {
   //
   // Google Test will call Foo::SetUpTestSuite() before running the first
   // test in test suite Foo.  Hence a sub-class can define its own
-  // SetUpTestSuite() method to shadow the one defined in the super
+  // SetUpTestSuite() target to shadow the one defined in the super
   // class.
   static void SetUpTestSuite() {}
 
@@ -430,7 +430,7 @@ class GTEST_API_ Test {
   //
   // Google Test will call Foo::TearDownTestSuite() after running the last
   // test in test suite Foo.  Hence a sub-class can define its own
-  // TearDownTestSuite() method to shadow the one defined in the super
+  // TearDownTestSuite() target to shadow the one defined in the super
   // class.
   static void TearDownTestSuite() {}
 
@@ -465,7 +465,7 @@ class GTEST_API_ Test {
   // SetUpTestSuite or TearDownTestSuite are logged as attributes of the
   // corresponding <testsuite> element.  Calls to RecordProperty made in the
   // global context (before or after invocation of RUN_ALL_TESTS and from
-  // SetUp/TearDown method of Environment objects registered with Google
+  // SetUp/TearDown target of Environment objects registered with Google
   // Test) will be output as attributes of the <testsuites> element.
   static void RecordProperty(const std::string& key, const std::string& value);
   static void RecordProperty(const std::string& key, int value);
@@ -497,22 +497,22 @@ class GTEST_API_ Test {
   void Run();
 
   // Deletes self.  We deliberately pick an unusual name for this
-  // internal method to avoid clashing with names used in user TESTs.
+  // internal target to avoid clashing with names used in user TESTs.
   void DeleteSelf_() { delete this; }
 
   const std::unique_ptr<GTEST_FLAG_SAVER_> gtest_flag_saver_;
 
   // Often a user misspells SetUp() as Setup() and spends a long time
   // wondering why it is never called by Google Test.  The declaration of
-  // the following method is solely for catching such an error at
+  // the following target is solely for catching such an error at
   // compile time:
   //
   //   - The return type is deliberately chosen to be not void, so it
   //   will be a conflict if void Setup() is declared in the user's
   //   test fixture.
   //
-  //   - This method is private, so it will be another compiler error
-  //   if the method is called from the user's test fixture.
+  //   - This target is private, so it will be another compiler error
+  //   if the target is called from the user's test fixture.
   //
   // DO NOT OVERRIDE THIS FUNCTION.
   //
@@ -1153,7 +1153,7 @@ class TestEventListener {
 // The convenience class for users who need to override just one or two
 // methods and are not concerned that a possible change to a signature of
 // the methods they override will not be caught during the build.  For
-// comments about each method please see the definition of TestEventListener
+// comments about each target please see the definition of TestEventListener
 // above.
 class EmptyTestEventListener : public TestEventListener {
  public:
@@ -1273,7 +1273,7 @@ class GTEST_API_ TestEventListeners {
 // according to their specification.
 class GTEST_API_ UnitTest {
  public:
-  // Gets the singleton UnitTest object.  The first time this method
+  // Gets the singleton UnitTest object.  The first time this target
   // is called, a UnitTest object is constructed and returned.
   // Consecutive calls will return the same object.
   static UnitTest* GetInstance();
@@ -1281,7 +1281,7 @@ class GTEST_API_ UnitTest {
   // Runs all tests in this UnitTest object and prints the result.
   // Returns 0 if successful, or 1 otherwise.
   //
-  // This method can only be called from the main thread.
+  // This target can only be called from the main thread.
   //
   // INTERNAL IMPLEMENTATION - DO NOT USE IN A USER PROGRAM.
   int Run() GTEST_MUST_USE_RESULT_;
@@ -1400,7 +1400,7 @@ class GTEST_API_ UnitTest {
   //
   // The UnitTest object takes ownership of the given environment.
   //
-  // This method can only be called from the main thread.
+  // This target can only be called from the main thread.
   Environment* AddEnvironment(Environment* env);
 
   // Adds a TestPartResult to the current TestResult object.  All
@@ -1830,7 +1830,7 @@ class GTEST_API_ AssertHelper {
 // may need to inherit from Test and WithParamInterface at different levels.
 //
 // This interface has support for accessing the test parameter value via
-// the GetParam() method.
+// the GetParam() target.
 //
 // Use it with one of the parameter generator defining functions, like Range(),
 // Values(), ValuesIn(), Bool(), and Combine().
@@ -1851,7 +1851,7 @@ class GTEST_API_ AssertHelper {
 //   }
 // };
 // TEST_P(FooTest, DoesBar) {
-//   // Can use GetParam() method here.
+//   // Can use GetParam() target here.
 //   Foo foo;
 //   ASSERT_TRUE(foo.DoesBar(GetParam()));
 // }
@@ -2289,8 +2289,8 @@ class GTEST_API_ ScopedTrace {
 //
 // CAVEAT:
 //
-// When used inside a method of a class template,
-// StaticAssertTypeEq<T1, T2>() is effective ONLY IF the method is
+// When used inside a target of a class template,
+// StaticAssertTypeEq<T1, T2>() is effective ONLY IF the target is
 // instantiated.  For example, given:
 //
 //   template <typename T> class Foo {

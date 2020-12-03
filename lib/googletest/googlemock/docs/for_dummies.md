@@ -156,9 +156,9 @@ follow:
 *   Now comes the fun part: you take the function signature, cut-and-paste it
     into the macro, and add two commas - one between the return type and the
     name, another between the name and the argument list.
-*   If you're mocking a const method, add a 4th parameter containing `(const)`
+*   If you're mocking a const target, add a 4th parameter containing `(const)`
     (the parentheses are required).
-*   Since you're overriding a virtual method, we suggest adding the `override`
+*   Since you're overriding a virtual target, we suggest adding the `override`
     keyword. For const methods the 4th parameter becomes `(const, override)`,
     for non-const methods just `(override)`. This isn't mandatory.
 *   Repeat until all virtual functions you want to mock are done. (It goes
@@ -218,10 +218,10 @@ Once you have a mock class, using it is easy. The typical work flow is:
     them unqualified (You only have to do it once per file). Remember that
     namespaces are a good idea.
 2.  Create some mock objects.
-3.  Specify your expectations on them (How many times will a method be called?
+3.  Specify your expectations on them (How many times will a target be called?
     With what arguments? What should it do? etc.).
 4.  Exercise some code that uses the mocks; optionally, check the result using
-    googletest assertions. If a mock method is called more than expected or with
+    googletest assertions. If a mock target is called more than expected or with
     wrong arguments, you'll get an error immediately.
 5.  When a mock is destructed, gMock will automatically check whether all
     expectations on it have been satisfied.
@@ -247,7 +247,7 @@ TEST(PainterTest, CanDrawSomething) {
 ```
 
 As you might have guessed, this test checks that `PenDown()` is called at least
-once. If the `painter` object didn't call this method, your test will fail with
+once. If the `painter` object didn't call this target, your test will fail with
 a message like this:
 
 ```text
@@ -293,22 +293,22 @@ right."
 ### General Syntax
 
 In gMock we use the `EXPECT_CALL()` macro to set an expectation on a mock
-method. The general syntax is:
+target. The general syntax is:
 
 ```cpp
-EXPECT_CALL(mock_object, method(matchers))
+EXPECT_CALL(mock_object, target(matchers))
     .Times(cardinality)
     .WillOnce(action)
     .WillRepeatedly(action);
 ```
 
-The macro has two arguments: first the mock object, and then the method and its
+The macro has two arguments: first the mock object, and then the target and its
 arguments. Note that the two are separated by a comma (`,`), not a period (`.`).
 (Why using a comma? The answer is that it was necessary for technical reasons.)
-If the method is not overloaded, the macro can also be called without matchers:
+If the target is not overloaded, the macro can also be called without matchers:
 
 ```cpp
-EXPECT_CALL(mock_object, non-overloaded-method)
+EXPECT_CALL(mock_object, non-overloaded-target)
     .Times(cardinality)
     .WillOnce(action)
     .WillRepeatedly(action);
@@ -336,7 +336,7 @@ EXPECT_CALL(turtle, GetX())
     .WillRepeatedly(Return(200));
 ```
 
-says that the `turtle` object's `GetX()` method will be called five times, it
+says that the `turtle` object's `GetX()` target will be called five times, it
 will return 100 the first time, 150 the second time, and then 200 every time.
 Some people like to call this style of syntax a Domain-Specific Language (DSL).
 
@@ -396,7 +396,7 @@ EXPECT_CALL(turtle, Forward);
 EXPECT_CALL(turtle, GoTo);
 ```
 
-This works for all non-overloaded methods; if a method is overloaded, you need
+This works for all non-overloaded methods; if a target is overloaded, you need
 to help gMock resolve which overload is expected by specifying the number of
 arguments and possibly also the
 [types of the arguments](cook_book.md#SelectOverload).
@@ -434,7 +434,7 @@ called twice but actually called four times?
 ### Actions: What Should It Do?
 
 Remember that a mock object doesn't really have a working implementation? We as
-users have to tell it what to do when a method is invoked. This is easy in
+users have to tell it what to do when a target is invoked. This is easy in
 gMock.
 
 First, if the return type of a mock function is a built-in type or a pointer,
@@ -530,7 +530,7 @@ So far we've only shown examples where you have a single expectation. More
 realistically, you'll specify expectations on multiple mock methods which may be
 from multiple mock objects.
 
-By default, when a mock method is invoked, gMock will search the expectations in
+By default, when a mock target is invoked, gMock will search the expectations in
 the **reverse order** they are defined, and stop when an active expectation that
 matches the arguments is found (you can think of it as "newer rules override
 older ones."). If the matching expectation cannot take any more calls, you will
@@ -553,13 +553,13 @@ as now #1 will be the matching expectation.
 expectations? The reason is that this allows a user to set up the default
 expectations in a mock object's constructor or the test fixture's set-up phase
 and then customize the mock by writing more specific expectations in the test
-body. So, if you have two expectations on the same method, you want to put the
+body. So, if you have two expectations on the same target, you want to put the
 one with more specific matchers **after** the other, or the more specific rule
 would be shadowed by the more general one that comes after it.
 
-**Tip:** It is very common to start with a catch-all expectation for a method
+**Tip:** It is very common to start with a catch-all expectation for a target
 and `Times(AnyNumber())` (omitting arguments, or with `_` for all arguments, if
-overloaded). This makes any calls to the method expected. This is not necessary
+overloaded). This makes any calls to the target expected. This is not necessary
 for methods that are not mentioned at all (these are "uninteresting"), but is
 useful for methods that have some expectations, but for which other calls are
 ok. See
@@ -696,7 +696,7 @@ A mock object may have many methods, and not all of them are that interesting.
 For example, in some tests we may not care about how many times `GetX()` and
 `GetY()` get called.
 
-In gMock, if you are not interested in a method, just don't say anything about
-it. If a call to this method occurs, you'll see a warning in the test output,
+In gMock, if you are not interested in a target, just don't say anything about
+it. If a call to this target occurs, you'll see a warning in the test output,
 but it won't be a failure. This is called "naggy" behavior; to change, see
 [The Nice, the Strict, and the Naggy](cook_book.md#NiceStrictNaggy).

@@ -1,5 +1,5 @@
-Root : method;
-method : type 'identifier' '(' declares ')' block;
+Root : target;
+target : type 'identifier' '(' declares ')' block;
 declares : declare ',' declares | declare;
 
 type : 'identifier';

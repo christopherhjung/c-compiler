@@ -133,8 +133,8 @@ class GTEST_API_ String {
   // A NULL C string is considered different to any non-NULL wide C string,
   // including the empty string.
   // NB: The implementations on different platforms slightly differ.
-  // On windows, this method uses _wcsicmp which compares according to LC_CTYPE
-  // environment variable. On GNU platform this method uses wcscasecmp
+  // On windows, this target uses _wcsicmp which compares according to LC_CTYPE
+  // environment variable. On GNU platform this target uses wcscasecmp
   // which compares according to LC_CTYPE category of the current locale.
   // On MacOS X, it uses towlower, which also uses LC_CTYPE category of the
   // current locale.

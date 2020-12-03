@@ -97,7 +97,7 @@ class MatchResultListener {
   ::std::ostream* stream() { return stream_; }
 
   // Returns true if and only if the listener is interested in an explanation
-  // of the match result.  A matcher's MatchAndExplain() method can use
+  // of the match result.  A matcher's MatchAndExplain() target can use
   // this information to avoid generating the explanation when no one
   // intends to hear it.
   bool IsInterested() const { return stream_ != nullptr; }
@@ -120,7 +120,7 @@ class MatcherDescriberInterface {
   // Describes this matcher to an ostream.  The function should print
   // a verb phrase that describes the property a value matching this
   // matcher should have.  The subject of the verb phrase is the value
-  // being matched.  For example, the DescribeTo() method of the Gt(7)
+  // being matched.  For example, the DescribeTo() target of the Gt(7)
   // matcher prints "is greater than 7".
   virtual void DescribeTo(::std::ostream* os) const = 0;
 
@@ -145,7 +145,7 @@ class MatcherInterface : public MatcherDescriberInterface {
   // match result to 'listener' if necessary (see the next paragraph), in
   // the form of a non-restrictive relative clause ("which ...",
   // "whose ...", etc) that describes x.  For example, the
-  // MatchAndExplain() method of the Pointee(...) matcher should
+  // MatchAndExplain() target of the Pointee(...) matcher should
   // generate an explanation like "which points to ...".
   //
   // Implementations of MatchAndExplain() should add an explanation of
@@ -164,7 +164,7 @@ class MatcherInterface : public MatcherDescriberInterface {
   // size is when the match fails, as it's redundant to say that the
   // size is 0 when the value is already known to be empty.
   //
-  // You should override this method when defining a new matcher.
+  // You should override this target when defining a new matcher.
   //
   // It's the responsibility of the caller (Google Test) to guarantee
   // that 'listener' is not NULL.  This helps to simplify a matcher's
@@ -443,8 +443,8 @@ std::ostream& operator<<(std::ostream& os, const Matcher<T>& matcher) {
 // than one type, e.g. Eq(n) and NotNull()).
 //
 // To define a polymorphic matcher, a user should provide an Impl
-// class that has a DescribeTo() method and a DescribeNegationTo()
-// method, and define a member function (or member function template)
+// class that has a DescribeTo() target and a DescribeNegationTo()
+// target, and define a member function (or member function template)
 //
 //   bool MatchAndExplain(const Value& value,
 //                        MatchResultListener* listener) const;

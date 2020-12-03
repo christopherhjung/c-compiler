@@ -246,16 +246,26 @@ namespace parser{
 
     class Method : public Element{
     public:
-        Type* type;
-        Identifier* name = nullptr;
-        std::vector<DirectDeclarator*> params;
+        Declaration* declaration = nullptr;
         Block* body;
     };
 
     class Call : public Expression{
     public:
-        Expression* method = nullptr;
+        Expression* target = nullptr;
         std::vector<Expression*> values;
+    };
+
+    class Sizeof : public Expression{
+    public:
+        Type* type = nullptr;
+        Declarator *declarator;
+    };
+
+    class Select : public Expression{
+    public:
+        Expression* target = nullptr;
+        Expression* index = nullptr;
     };
 
     class IfSmall : public Expression{
@@ -360,10 +370,12 @@ namespace parser{
             if(!is(SEMI)){
                 declaration->declarator = parseDeclarator(true, false);
                 if(is(LEFT_BRACE)){
-                    Block* block = parseBlock();
-                    Method* method = new Method();
+                    auto* method = new Method();
 
-                    return declaration;
+                    method->declaration = declaration;
+                    method->body = parseBlock();
+
+                    return method;
                 }
             }
             shall(SEMI);
@@ -602,16 +614,14 @@ namespace parser{
             }else if(is(IDENTIFIER)){
                 return parseIdentifier();
             }else if(eat(SIZEOF)){
-                if(eat(LEFT_PAREN)){
-                    auto call = new Call();
-                    parseType();
-                    if(!is(RIGHT_PAREN)){
-                        parseDeclarator(false, true);
-                    }
-                    shall(RIGHT_PAREN);
-                    return call;
+                shall(LEFT_PAREN);
+                auto sizeofObj = new Sizeof();
+                sizeofObj->type = parseType();
+                if(!is(RIGHT_PAREN)){
+                    sizeofObj->declarator = parseDeclarator(false, true);
                 }
-                return nullptr;
+                shall(RIGHT_PAREN);
+                return sizeofObj;
             }else{
                 fatal();
             }
@@ -627,57 +637,10 @@ namespace parser{
         Expression* parseExpression(uint32_t other){
 
             Expression* left = nullptr;
-            for(;;){
+            if(!is(SIZEOF) || lookB.id != LEFT_PAREN){
                 uint32_t precedence = unary();
-                if(precedence == 0 || left != nullptr || (is(SIZEOF) && lookB.id == LEFT_PAREN)){
-                    if(left == nullptr){
-                        left = parseValue();
-                    }
 
-                    if(eat(QUESTION)){
-                        auto ifSimple = new IfSmall();
-                        ifSimple->left = parseExpression();
-                        shall(COLON);
-                        ifSimple->right = parseExpression();
-                        left = ifSimple;
-                    }else if(eat(LEFT_PAREN)){
-                        auto call = new Call();
-                        call->method = left;
-                        if(!is(RIGHT_PAREN)){
-                            call->values.push_back(parseExpression());
-                            while(eat(COMMA)){
-                                call->values.push_back(parseExpression());
-                            }
-                        }
-                        shall(RIGHT_PAREN);
-                        left = call;
-                    }else if(eat(LEFT_BRACKET)){
-                        auto call = new Call();
-                        call->method = left;
-                        if(is(RIGHT_PAREN)){
-                           fatal();
-                        }
-                        call->values.push_back(parseExpression());
-                        shall(RIGHT_BRACKET);
-                        left = call;
-                    }else{
-                        precedence = binary();
-                        if(precedence == 0 || precedence > other){
-                            return left;
-                        }else{
-                            auto bin = new Binary();
-                            bin->left = left;
-                            auto token = eat();
-                            bin->op = token.id;
-                            if(token.id == ARROW || token.id == DOT){
-                                bin->right = parseIdentifier();
-                            }else{
-                                bin->right = parseExpression(precedence);
-                            }
-                            left = bin;
-                        }
-                    }
-                }else{
+                if(precedence != 0){
                     auto unary = new Unary();
                     unary->op = lookA.id;
                     eat();
@@ -690,19 +653,68 @@ namespace parser{
                     }
                 }
             }
+
+            if(left == nullptr){
+                left = parseValue();
+            }
+
+            for(;;){
+                uint32_t precedence = binary();
+                if(precedence == 0 || precedence > other){
+                    return left;
+                }else{
+                    if(eat(QUESTION)){
+                        auto ifSimple = new IfSmall();
+                        ifSimple->condition = left;
+                        ifSimple->left = parseExpression();
+                        shall(COLON);
+                        ifSimple->right = parseExpression();
+                        left = ifSimple;
+                    }else if(eat(LEFT_PAREN)){
+                        auto call = new Call();
+                        call->target = left;
+                        if(!is(RIGHT_PAREN)){
+                            do {
+                                call->values.push_back(parseExpression());
+                            } while(eat(COMMA));
+                        }
+                        shall(RIGHT_PAREN);
+                        left = call;
+                    }else if(eat(LEFT_BRACKET)){
+                        auto select = new Select();
+                        select->target = left;
+                        select->index = parseExpression();
+                        shall(RIGHT_BRACKET);
+                        left = select;
+                    }else {
+                        auto bin = new Binary();
+                        bin->left = left;
+                        auto token = eat();
+                        bin->op = token.id;
+                        if (token.id == ARROW || token.id == DOT) {
+                            bin->right = parseIdentifier();
+                        } else {
+                            bin->right = parseExpression(precedence);
+                        }
+                        left = bin;
+                    }
+                }
+            }
         }
 
         uint32_t binary(){
             uint32_t index = 0;
             switch(lookA.id){
                 case ARROW:
+                case LEFT_PAREN:
+                case LEFT_BRACKET:
                 case DOT: index = 1; break;
+                case STAR: index = 2; break;
                 case PLUS:
                 case MINUS: index = 4; break;
                 case LESS: index = 6; break;
                 case EQUAL:
                 case NOT_EQUAL: index = 7; break;
-                case STAR: index = 2; break;
                 case AND_AND: index = 11; break;
                 case OR_OR: index = 12; break;
                 case QUESTION: index = 13; break;
@@ -716,13 +728,13 @@ namespace parser{
         uint32_t unary(){
             uint32_t index = 0;
             switch(lookA.id){
+                case LEFT_PAREN: index = 1; break;
                 case SIZEOF:
                 case AND:
                 case PLUS:
                 case MINUS:
                 case STAR:
                 case NOT: index = 2; break;
-                case LEFT_PAREN: index = 1; break;
                 default: return 0;
             }
 

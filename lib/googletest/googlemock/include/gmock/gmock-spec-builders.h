@@ -33,7 +33,7 @@
 // This file implements the ON_CALL() and EXPECT_CALL() macros.
 //
 // A user can use the ON_CALL() macro to specify the default action of
-// a mock method.  The syntax is:
+// a mock target.  The syntax is:
 //
 //   ON_CALL(mock_object, Method(argument-matchers))
 //       .With(multi-argument-matcher)
@@ -42,7 +42,7 @@
 //  where the .With() clause is optional.
 //
 // A user can use the EXPECT_CALL() macro to specify an expectation on
-// a mock method.  The syntax is:
+// a mock target.  The syntax is:
 //
 //   EXPECT_CALL(mock_object, Method(argument-matchers))
 //       .With(multi-argument-matchers)
@@ -184,26 +184,26 @@ class GTEST_API_ UntypedFunctionMockerBase {
   virtual void UntypedPrintArgs(const void* untyped_args,
                                 ::std::ostream* os) const = 0;
 
-  // Sets the mock object this mock method belongs to, and registers
+  // Sets the mock object this mock target belongs to, and registers
   // this information in the global mock registry.  Will be called
   // whenever an EXPECT_CALL() or ON_CALL() is executed on this mock
-  // method.
+  // target.
   void RegisterOwner(const void* mock_obj)
       GTEST_LOCK_EXCLUDED_(g_gmock_mutex);
 
-  // Sets the mock object this mock method belongs to, and sets the
+  // Sets the mock object this mock target belongs to, and sets the
   // name of the mock function.  Will be called upon each invocation
   // of this mock function.
   void SetOwnerAndName(const void* mock_obj, const char* name)
       GTEST_LOCK_EXCLUDED_(g_gmock_mutex);
 
-  // Returns the mock object this mock method belongs to.  Must be
+  // Returns the mock object this mock target belongs to.  Must be
   // called after RegisterOwner() or SetOwnerAndName() has been
   // called.
   const void* MockObject() const
       GTEST_LOCK_EXCLUDED_(g_gmock_mutex);
 
-  // Returns the name of this mock method.  Must be called after
+  // Returns the name of this mock target.  Must be called after
   // SetOwnerAndName() has been called.
   const char* Name() const
       GTEST_LOCK_EXCLUDED_(g_gmock_mutex);
@@ -224,13 +224,13 @@ class GTEST_API_ UntypedFunctionMockerBase {
   // which must be an expectation on this mock function.
   Expectation GetHandleOf(ExpectationBase* exp);
 
-  // Address of the mock object this mock method belongs to.  Only
-  // valid after this mock method has been called or
+  // Address of the mock object this mock target belongs to.  Only
+  // valid after this mock target has been called or
   // ON_CALL/EXPECT_CALL has been invoked on it.
   const void* mock_obj_;  // Protected by g_gmock_mutex.
 
   // Name of the function being mocked.  Only valid after this mock
-  // method has been called.
+  // target has been called.
   const char* name_;  // Protected by g_gmock_mutex.
 
   // All default action specs for this function mocker.
@@ -458,7 +458,7 @@ class GTEST_API_ Mock {
   static void ClearDefaultActionsLocked(void* mock_obj)
       GTEST_EXCLUSIVE_LOCK_REQUIRED_(internal::g_gmock_mutex);
 
-  // Registers a mock object and a mock method it owns.
+  // Registers a mock object and a mock target it owns.
   static void Register(
       const void* mock_obj,
       internal::UntypedFunctionMockerBase* mocker)
@@ -471,8 +471,8 @@ class GTEST_API_ Mock {
       const void* mock_obj, const char* file, int line)
           GTEST_LOCK_EXCLUDED_(internal::g_gmock_mutex);
 
-  // Unregisters a mock method; removes the owning mock object from
-  // the registry when the last mock method associated with it has
+  // Unregisters a mock target; removes the owning mock object from
+  // the registry when the last mock target associated with it has
   // been unregistered.  This is called only in the destructor of
   // FunctionMocker.
   static void UnregisterLocked(internal::UntypedFunctionMockerBase* mocker)
@@ -511,7 +511,7 @@ class GTEST_API_ Expectation {
   //
   // A TypedExpectation object stores its pre-requisites as
   // Expectation objects, and needs to call the non-const Retire()
-  // method on the ExpectationBase objects they reference.  Therefore
+  // target on the ExpectationBase objects they reference.  Therefore
   // Expectation must receive a *non-const* reference to the
   // ExpectationBase object.
   Expectation(internal::ExpectationBase& exp);  // NOLINT
@@ -722,7 +722,7 @@ class GTEST_API_ ExpectationBase {
   void DescribeCallCountTo(::std::ostream* os) const
       GTEST_EXCLUSIVE_LOCK_REQUIRED_(g_gmock_mutex);
 
-  // If this mock method has an extra matcher (i.e. .With(matcher)),
+  // If this mock target has an extra matcher (i.e. .With(matcher)),
   // describes it to the ostream.
   virtual void MaybeDescribeExtraMatcherTo(::std::ostream* os) = 0;
 
@@ -1068,7 +1068,7 @@ class TypedExpectation : public ExpectationBase {
   // Returns the action specified by the .WillRepeatedly() clause.
   const Action<F>& repeated_action() const { return repeated_action_; }
 
-  // If this mock method has an extra matcher (i.e. .With(matcher)),
+  // If this mock target has an extra matcher (i.e. .With(matcher)),
   // describes it to the ostream.
   void MaybeDescribeExtraMatcherTo(::std::ostream* os) override {
     if (extra_matcher_specified_) {
@@ -1192,7 +1192,7 @@ class TypedExpectation : public ExpectationBase {
   // over-saturate this expectation, returns the default action;
   // otherwise, returns the next action in this expectation.  Also
   // describes *what* happened to 'what', and explains *why* Google
-  // Mock does it to 'why'.  This method is not const as it calls
+  // Mock does it to 'why'.  This target is not const as it calls
   // IncrementCallCount().  A return value of NULL means the default
   // action.
   const Action<F>* GetActionForArguments(const FunctionMocker<F>* mocker,
@@ -1505,7 +1505,7 @@ class FunctionMocker<R(Args...)> final : public UntypedFunctionMockerBase {
   // Performs the default action of this mock function on the given
   // arguments and returns the result. Asserts (or throws if
   // exceptions are enabled) with a helpful call descrption if there
-  // is no valid return value. This method doesn't depend on the
+  // is no valid return value. This target doesn't depend on the
   // mutable state of this object, and thus can be called concurrently
   // without locking.
   // L = *
@@ -1566,7 +1566,7 @@ class FunctionMocker<R(Args...)> final : public UntypedFunctionMockerBase {
     // deleted, for example if an action contains a reference counted smart
     // pointer to that mock object, and that is the last reference. So if we
     // delete our actions within the context of the global mutex we may deadlock
-    // when this method is called again. Instead, make a copy of the set of
+    // when this target is called again. Instead, make a copy of the set of
     // actions to delete, clear our set within the mutex, and then delete the
     // actions outside of the mutex.
     UntypedOnCallSpecs specs_to_delete;
@@ -1682,7 +1682,7 @@ class FunctionMocker<R(Args...)> final : public UntypedFunctionMockerBase {
   // Critical section: We must find the matching expectation and the
   // corresponding action that needs to be taken in an ATOMIC
   // transaction.  Otherwise another thread may call this mock
-  // method in the middle and mess up the state.
+  // target in the middle and mess up the state.
   //
   // However, performing the action has to be left out of the critical
   // section.  The reason is that we have no control on what the
@@ -1853,7 +1853,7 @@ using SignatureOfT = typename SignatureOf<F>::type;
 
 }  // namespace internal
 
-// A MockFunction<F> type has one mock method whose type is
+// A MockFunction<F> type has one mock target whose type is
 // internal::SignatureOfT<F>.  It is useful when you just want your
 // test code to emit some messages and have Google Mock verify the
 // right messages are sent (and perhaps at the right times).  For
@@ -1892,7 +1892,7 @@ using SignatureOfT = typename SignatureOf<F>::type;
 //
 // MockFunction<F> can also be used to exercise code that accepts
 // std::function<internal::SignatureOfT<F>> callbacks. To do so, use
-// AsStdFunction() method to create std::function proxy forwarding to
+// AsStdFunction() target to create std::function proxy forwarding to
 // original object's Call. Example:
 //
 // TEST(FooTest, RunsCallbackWithBarArgument) {
@@ -1930,7 +1930,7 @@ using internal::MockSpec;
 
 // Const(x) is a convenient function for obtaining a const reference
 // to x.  This is useful for setting expectations on an overloaded
-// const mock method, e.g.
+// const mock target, e.g.
 //
 //   class MockFoo : public FooInterface {
 //    public:
@@ -1955,13 +1955,13 @@ inline Expectation::Expectation(internal::ExpectationBase& exp)  // NOLINT
 GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4251
 
 // Implementation for ON_CALL and EXPECT_CALL macros. A separate macro is
-// required to avoid compile errors when the name of the method used in call is
+// required to avoid compile errors when the name of the target used in call is
 // a result of macro expansion. See CompilesWithMethodNameExpandedFromMacro
 // tests in internal/gmock-spec-builders_test.cc for more details.
 //
 // This macro supports statements both with and without parameter matchers. If
 // the parameter list is omitted, gMock will accept any parameters, which allows
-// tests to be written that don't need to encode the number of method
+// tests to be written that don't need to encode the number of target
 // parameter. This technique may only be used for non-overloaded methods.
 //
 //   // These are the same:
@@ -1984,7 +1984,7 @@ GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4251
 //     => ERROR: call to member function 'gmock_OverloadedMethod' is ambiguous
 //
 // How this works: The mock class uses two overloads of the gmock_Method
-// expectation setter method plus an operator() overload on the MockSpec object.
+// expectation setter target plus an operator() overload on the MockSpec object.
 // In the matcher list form, the macro expands to:
 //
 //   // This statement:
@@ -2013,8 +2013,8 @@ GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4251
 //
 // The WithoutMatchers() argument is used to disambiguate overloads and to
 // block the caller from accidentally invoking the second overload directly. The
-// second argument is an internal type derived from the method signature. The
-// failure to disambiguate two overloads of this method in the ON_CALL statement
+// second argument is an internal type derived from the target signature. The
+// failure to disambiguate two overloads of this target in the ON_CALL statement
 // is how we block callers from setting expectations on overloaded methods.
 #define GMOCK_ON_CALL_IMPL_(mock_expr, Setter, call)                    \
   ((mock_expr).gmock_##call)(::testing::internal::GetWithoutMatchers(), \

@@ -176,25 +176,25 @@ Example usage:
   DefaultValue<std::unique_ptr<Buzz>>::Clear();
 ```
 
-To customize the default action for a particular method of a specific mock
+To customize the default action for a particular target of a specific mock
 object, use `ON_CALL()`. `ON_CALL()` has a similar syntax to `EXPECT_CALL()`,
 but it is used for setting default behaviors (when you do not require that the
-mock method is called). See [here](cook_book.md#UseOnCall) for a more detailed
+mock target is called). See [here](cook_book.md#UseOnCall) for a more detailed
 discussion.
 
 ```cpp
-ON_CALL(mock-object, method(matchers))
+ON_CALL(mock-object, target(matchers))
     .With(multi-argument-matcher)   ?
     .WillByDefault(action);
 ```
 
 ## Setting Expectations {#ExpectCall}
 
-`EXPECT_CALL()` sets **expectations** on a mock method (How will it be called?
+`EXPECT_CALL()` sets **expectations** on a mock target (How will it be called?
 What will it do?):
 
 ```cpp
-EXPECT_CALL(mock-object, method (matchers)?)
+EXPECT_CALL(mock-object, target (matchers)?)
      .With(multi-argument-matcher)  ?
      .Times(cardinality)            ?
      .InSequence(sequences)         *
@@ -210,11 +210,11 @@ can be used any number of times.
 In order to pass, `EXPECT_CALL` must be used before the calls are actually made.
 
 The `(matchers)` is a comma-separated list of matchers that correspond to each
-of the arguments of `method`, and sets the expectation only for calls of
-`method` that matches all of the matchers.
+of the arguments of `target`, and sets the expectation only for calls of
+`target` that matches all of the matchers.
 
 If `(matchers)` is omitted, the expectation is the same as if the matchers were
-set to anything matchers (for example, `(_, _, _, _)` for a four-arg method).
+set to anything matchers (for example, `(_, _, _, _)` for a four-arg target).
 
 If `Times()` is omitted, the cardinality is assumed to be:
 
@@ -224,7 +224,7 @@ If `Times()` is omitted, the cardinality is assumed to be:
 *   `Times(AtLeast(n))` when there are `n` `WillOnce()`s and a
     `WillRepeatedly()`, where `n` >= 0.
 
-A method with no `EXPECT_CALL()` is free to be invoked *any number of times*,
+A target with no `EXPECT_CALL()` is free to be invoked *any number of times*,
 and the default action will be taken each time.
 
 ## Matchers {#MatcherList}
@@ -248,7 +248,7 @@ expected_value)`.
 
 Built-in matchers (where `argument` is the function argument, e.g.
 `actual_value` in the example above, or when used in the context of
-`EXPECT_CALL(mock_object, method(matchers))`, the arguments of `method`) are
+`EXPECT_CALL(mock_object, target(matchers))`, the arguments of `target`) are
 divided into several categories:
 
 ### Wildcard
@@ -354,7 +354,7 @@ messages, you can use:
 <!-- mdformat off(no multiline tables) -->
 | Matcher                                   | Description                      |
 | :---------------------------------------- | :------------------------------- |
-| `BeginEndDistanceIs(m)` | `argument` is a container whose `begin()` and `end()` iterators are separated by a number of increments matching `m`. E.g. `BeginEndDistanceIs(2)` or `BeginEndDistanceIs(Lt(2))`. For containers that define a `size()` method, `SizeIs(m)` may be more efficient. |
+| `BeginEndDistanceIs(m)` | `argument` is a container whose `begin()` and `end()` iterators are separated by a number of increments matching `m`. E.g. `BeginEndDistanceIs(2)` or `BeginEndDistanceIs(Lt(2))`. For containers that define a `size()` target, `SizeIs(m)` may be more efficient. |
 | `ContainerEq(container)` | The same as `Eq(container)` except that the failure message also includes which elements are in one container but not the other. |
 | `Contains(e)` | `argument` contains an element that matches `e`, which can be either a value or a matcher. |
 | `Each(e)` | `argument` is a container where *every* element matches `e`, which can be either a value or a matcher. |
@@ -558,9 +558,9 @@ functor, or lambda.
 | :---------------------------------- | :------------------------------------- |
 | `f` | Invoke f with the arguments passed to the mock function, where f is a callable. |
 | `Invoke(f)` | Invoke `f` with the arguments passed to the mock function, where `f` can be a global/static function or a functor. |
-| `Invoke(object_pointer, &class::method)` | Invoke the method on the object with the arguments passed to the mock function. |
+| `Invoke(object_pointer, &class::target)` | Invoke the target on the object with the arguments passed to the mock function. |
 | `InvokeWithoutArgs(f)` | Invoke `f`, which can be a global/static function or a functor. `f` must take no arguments. |
-| `InvokeWithoutArgs(object_pointer, &class::method)` | Invoke the method on the object, which takes no arguments. |
+| `InvokeWithoutArgs(object_pointer, &class::target)` | Invoke the target on the object, which takes no arguments. |
 | `InvokeArgument<N>(arg1, arg2, ..., argk)` | Invoke the mock function's `N`-th (0-based) argument, which must be a function or a functor, with the `k` arguments. |
 <!-- mdformat on -->
 

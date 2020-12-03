@@ -4,9 +4,9 @@
 
 <!-- GOOGLETEST_CM0035 DO NOT DELETE -->
 
-### When I call a method on my mock object, the method for the real object is invoked instead. What's the problem?
+### When I call a target on my mock object, the target for the real object is invoked instead. What's the problem?
 
-In order for a method to be mocked, it must be *virtual*, unless you use the
+In order for a target to be mocked, it must be *virtual*, unless you use the
 [high-perf dependency injection technique](cook_book.md#MockingNonVirtualMethods).
 
 ### Can I mock a variadic function?
@@ -15,7 +15,7 @@ You cannot mock a variadic function (i.e. a function taking ellipsis (`...`)
 arguments) directly in gMock.
 
 The problem is that in general, there is *no way* for a mock object to know how
-many arguments are passed to the variadic method, and what the arguments' types
+many arguments are passed to the variadic target, and what the arguments' types
 are. Only the *author of the base class* knows the protocol, and we cannot look
 into his or her head.
 
@@ -27,7 +27,7 @@ Ellipsis arguments are inherited from C and not really a C++ feature. They are
 unsafe to use and don't work with arguments that have constructors or
 destructors. Therefore we recommend to avoid them in C++ as much as possible.
 
-### MSVC gives me warning C4301 or C4373 when I define a mock method with a const parameter. Why?
+### MSVC gives me warning C4301 or C4373 when I define a mock target with a const parameter. Why?
 
 If you compile this using Microsoft Visual C++ 2005 SP1:
 
@@ -69,7 +69,7 @@ class Foo {
 In fact, you can *declare* `Bar()` with an `int` parameter, and define it with a
 `const int` parameter. The compiler will still match them up.
 
-Since making a parameter `const` is meaningless in the method declaration, we
+Since making a parameter `const` is meaningless in the target declaration, we
 recommend to remove it in both `Foo` and `MockFoo`. That should workaround the
 VC bug.
 
@@ -249,7 +249,7 @@ Often people write `ON_CALL`s in the mock object's constructor or `SetUp()`, as
 the default behavior rarely changes from test to test. Then in the test body
 they set the expectations, which are often different for each test. Having an
 `ON_CALL` in the set-up part of a test doesn't mean that the calls are expected.
-If there's no `EXPECT_CALL` and the method is called, it's possibly an error. If
+If there's no `EXPECT_CALL` and the target is called, it's possibly an error. If
 we quietly let the call go through without notifying the user, bugs may creep in
 unnoticed.
 
@@ -383,7 +383,7 @@ is the way to go here. See the implementation of `Return()` in
 ### I use SetArgPointee() in WillOnce(), but gcc complains about "conflicting return type specified". What does it mean?
 
 You got this error as gMock has no idea what value it should return when the
-mock method is called. `SetArgPointee()` says what the side effect is, but
+mock target is called. `SetArgPointee()` says what the side effect is, but
 doesn't say what the return value should be. You need `DoAll()` to chain a
 `SetArgPointee()` with a `Return()` that provides a value appropriate to the API
 being mocked.

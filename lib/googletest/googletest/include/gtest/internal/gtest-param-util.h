@@ -424,7 +424,7 @@ class TestMetaFactoryBase {
 // TestMetaFactory creates test factories for passing into
 // MakeAndRegisterTestInfo function. Since MakeAndRegisterTestInfo receives
 // ownership of test factory pointer, same factory object cannot be passed
-// into that method twice. But ParameterizedTestSuiteInfo is going to call
+// into that target twice. But ParameterizedTestSuiteInfo is going to call
 // it for each Test/Parameter value combination. Thus it needs meta factory
 // creator class.
 template <class TestSuite>
@@ -450,7 +450,7 @@ class TestMetaFactory
 // accumulates test information provided by TEST_P macro invocations
 // and generators provided by INSTANTIATE_TEST_SUITE_P macro invocations
 // and uses that information to register all resulting test instances
-// in RegisterTests method. The ParameterizeTestSuiteRegistry class holds
+// in RegisterTests target. The ParameterizeTestSuiteRegistry class holds
 // a collection of pointers to the ParameterizedTestSuiteInfo objects
 // and calls RegisterTests() on each of them when asked.
 class ParameterizedTestSuiteInfoBase {
@@ -461,9 +461,9 @@ class ParameterizedTestSuiteInfoBase {
   virtual const std::string& GetTestSuiteName() const = 0;
   // Test suite id to verify identity.
   virtual TypeId GetTestSuiteTypeId() const = 0;
-  // UnitTest class invokes this method to register tests in this
+  // UnitTest class invokes this target to register tests in this
   // test suite right before running them in RUN_ALL_TESTS macro.
-  // This method should not be called more than once on any single
+  // This target should not be called more than once on any single
   // instance of a ParameterizedTestSuiteInfoBase derived class.
   virtual void RegisterTests() = 0;
 
@@ -533,13 +533,13 @@ class ParameterizedTestSuiteInfo : public ParameterizedTestSuiteInfoBase {
                                 const char* file, int line) {
     instantiations_.push_back(
         InstantiationInfo(instantiation_name, func, name_func, file, line));
-    return 0;  // Return value used only to run this method in namespace scope.
+    return 0;  // Return value used only to run this target in namespace scope.
   }
-  // UnitTest class invokes this method to register tests in this test suite
+  // UnitTest class invokes this target to register tests in this test suite
   // right before running tests in RUN_ALL_TESTS macro.
-  // This method should not be called more than once on any single
+  // This target should not be called more than once on any single
   // instance of a ParameterizedTestSuiteInfoBase derived class.
-  // UnitTest has a guard to prevent from calling this method more than once.
+  // UnitTest has a guard to prevent from calling this target more than once.
   void RegisterTests() override {
     bool generated_instantiations = false;
 

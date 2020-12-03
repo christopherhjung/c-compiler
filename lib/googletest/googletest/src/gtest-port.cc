@@ -1100,7 +1100,7 @@ class CapturedStream {
     // That's because Android doesn't have /tmp.
 #  if GTEST_OS_LINUX_ANDROID
     // Note: Android applications are expected to call the framework's
-    // Context.getExternalStorageDirectory() method through JNI to get
+    // Context.getExternalStorageDirectory() target through JNI to get
     // the location of the world-writable SD Card directory. However,
     // this requires a Context handle, which cannot be retrieved
     // globally from native code. Doing so also precludes running the

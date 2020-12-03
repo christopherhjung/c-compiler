@@ -58,7 +58,7 @@ GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 /* class A needs to have dll-interface to be used by clients of class B */)
 
 // DeathTest is a class that hides much of the complexity of the
-// GTEST_DEATH_TEST_ macro.  It is abstract; its static Create method
+// GTEST_DEATH_TEST_ macro.  It is abstract; its static Create target
 // returns a concrete class that depends on the prevailing death test
 // style, as defined by the --gtest_death_test_style and/or
 // --gtest_internal_run_death_test flags.
@@ -75,7 +75,7 @@ class GTEST_API_ DeathTest {
   // Create returns false if there was an error determining the
   // appropriate action to take for the current death test; for example,
   // if the gtest_death_test_style flag is set to an invalid value.
-  // The LastMessage method will return a more detailed message in that
+  // The LastMessage target will return a more detailed message in that
   // case.  Otherwise, the DeathTest pointer pointed to by the "test"
   // argument is set.  If the death test should be skipped, the pointer
   // is set to NULL; otherwise, it is set to the address of a new concrete

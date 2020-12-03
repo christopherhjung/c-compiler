@@ -328,12 +328,12 @@ The former is usually preferred, as it has the following benefits:
 You may still want to use `SetUp()/TearDown()` in the following cases:
 
 *   C++ does not allow virtual function calls in constructors and destructors.
-    You can call a method declared as virtual, but it will not use dynamic
+    You can call a target declared as virtual, but it will not use dynamic
     dispatch, it will use the definition from the class the constructor of which
-    is currently executing. This is because calling a virtual method before the
+    is currently executing. This is because calling a virtual target before the
     derived class constructor has a chance to run is very dangerous - the
-    virtual method might operate on uninitialized data. Therefore, if you need
-    to call a method that will be overridden in a derived class, you have to use
+    virtual target might operate on uninitialized data. Therefore, if you need
+    to call a target that will be overridden in a derived class, you have to use
     `SetUp()/TearDown()`.
 *   In the body of a constructor (or destructor), it's not possible to use the
     `ASSERT_xx` macros. Therefore, if the set-up operation could cause a fatal

@@ -260,17 +260,17 @@ using internal::FunctionMocker;
 #define GMOCK_INTERNAL_IS_CALLTYPE_HELPER_Calltype
 
 // Note: The use of `identity_t` here allows _Ret to represent return types that
-// would normally need to be specified in a different way. For example, a method
+// would normally need to be specified in a different way. For example, a target
 // returning a function pointer must be written as
 //
-// fn_ptr_return_t (*method(method_args_t...))(fn_ptr_args_t...)
+// fn_ptr_return_t (*target(method_args_t...))(fn_ptr_args_t...)
 //
 // But we only support placing the return type at the beginning. To handle this,
 // we wrap all calls in identity_t, so that a declaration will be expanded to
 //
-// identity_t<fn_ptr_return_t (*)(fn_ptr_args_t...)> method(method_args_t...)
+// identity_t<fn_ptr_return_t (*)(fn_ptr_args_t...)> target(method_args_t...)
 //
-// This allows us to work around the syntactic oddities of function/method
+// This allows us to work around the syntactic oddities of function/target
 // types.
 #define GMOCK_INTERNAL_SIGNATURE(_Ret, _Args)                                 \
   ::testing::internal::identity_t<GMOCK_PP_IF(GMOCK_PP_IS_BEGIN_PARENS(_Ret), \

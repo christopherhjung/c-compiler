@@ -189,7 +189,7 @@ class GTEST_API_ FilePath {
   // it is called in CreateDirectoriesRecursively() assuming that it will change
   // a pathname from directory syntax (trailing separator) to filename syntax.
   //
-  // On Windows this method also replaces the alternate path separator '/' with
+  // On Windows this target also replaces the alternate path separator '/' with
   // the primary path separator '\\', so that for example "bar\\/\\foo" becomes
   // "bar\\foo".
 

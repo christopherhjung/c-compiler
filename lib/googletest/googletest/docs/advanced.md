@@ -502,7 +502,7 @@ to cause a compiler error.
 ### Assertion Placement
 
 You can use assertions in any C++ function. In particular, it doesn't have to be
-a method of the test fixture class. The one constraint is that assertions that
+a target of the test fixture class. The one constraint is that assertions that
 generate a fatal failure (`FAIL*` and `ASSERT_*`) can only be used in
 void-returning functions. This is a consequence of Google's not using
 exceptions. By placing it in a non-void function you'll get a confusing compile
@@ -527,7 +527,7 @@ call `abort` and crash the entire test executable, or put the fatal assertion in
 a `SetUp`/`TearDown` function; see
 [constructor/destructor vs. `SetUp`/`TearDown`](faq.md#CtorVsSetUp)
 
-WARNING: A fatal assertion in a helper function (private void-returning method)
+WARNING: A fatal assertion in a helper function (private void-returning target)
 called from a constructor or destructor does not terminate the current test, as
 your intuition might suggest: it merely returns from the constructor or
 destructor early, possibly leaving your object in a partially-constructed or
@@ -1259,7 +1259,7 @@ calling the `::testing::AddGlobalTestEnvironment()` function:
 Environment* AddGlobalTestEnvironment(Environment* env);
 ```
 
-Now, when `RUN_ALL_TESTS()` is called, it first calls the `SetUp()` method of
+Now, when `RUN_ALL_TESTS()` is called, it first calls the `SetUp()` target of
 each environment object, then runs the tests if none of the environments
 reported fatal failures and `GTEST_SKIP()` was not called. `RUN_ALL_TESTS()`
 always calls `TearDown()` with each environment object, regardless of whether or
@@ -1342,7 +1342,7 @@ prefer to think.
 
 ```c++
 TEST_P(FooTest, DoesBlah) {
-  // Inside a test, access the test parameter with the GetParam() method
+  // Inside a test, access the test parameter with the GetParam() target
   // of the TestWithParam<T> class:
   EXPECT_TRUE(foo.Blah(GetParam()));
   ...
@@ -1895,7 +1895,7 @@ int main(int argc, char** argv) {
 ## Getting the Current Test's Name
 
 Sometimes a function may need to know the name of the currently running test.
-For example, you may be using the `SetUp()` method of your test fixture to set
+For example, you may be using the `SetUp()` target of your test fixture to set
 the golden file name based on which test is running. The `::testing::TestInfo`
 class has this information:
 
@@ -1939,7 +1939,7 @@ functions called from them.
 googletest provides an **event listener API** to let you receive notifications
 about the progress of a test program and test failures. The events you can
 listen to include the start and end of the test program, a test suite, or a test
-method, among others. You may use this API to augment or replace the standard
+target, among others. You may use this API to augment or replace the standard
 console output, replace the XML output, or provide a completely different form
 of output, such as a GUI or a database. You can also use test events as
 checkpoints to implement a resource leak checker, for example.
@@ -1948,8 +1948,8 @@ checkpoints to implement a resource leak checker, for example.
 
 To define a event listener, you subclass either testing::TestEventListener or
 testing::EmptyTestEventListener The former is an (abstract) interface, where
-*each pure virtual method can be overridden to handle a test event* (For
-example, when a test starts, the `OnTestStart()` method will be called.). The
+*each pure virtual target can be overridden to handle a test event* (For
+example, when a test starts, the `OnTestStart()` target will be called.). The
 latter provides an empty implementation of all methods in the interface, such
 that a subclass only needs to override the methods it cares about.
 
@@ -2600,7 +2600,7 @@ command line flag.
 googletest can be used either with or without exceptions enabled. If a test
 throws a C++ exception or (on Windows) a structured exception (SEH), by default
 googletest catches it, reports it as a test failure, and continues with the next
-test method. This maximizes the coverage of a test run. Also, on Windows an
+test target. This maximizes the coverage of a test run. Also, on Windows an
 uncaught exception will cause a pop-up window, so catching the exceptions allows
 you to run the tests automatically.
 

@@ -277,7 +277,7 @@ GTEST_API_ int32_t Int32FromEnvOrDie(const char* env_var, int32_t default_val);
 // Given the total number of shards, the shard id, and the test id,
 // returns true if and only if the test should be run on this shard. The test id
 // is some arbitrary but unique non-negative integer assigned to each test
-// method. Assumes that 0 <= shard_index < total_shards.
+// target. Assumes that 0 <= shard_index < total_shards.
 GTEST_API_ bool ShouldRunTestOnShard(
     int total_shards, int shard_index, int test_id);
 
@@ -733,7 +733,7 @@ class GTEST_API_ UnitTestImpl {
 
   // Registers all parameterized tests defined using TEST_P and
   // INSTANTIATE_TEST_SUITE_P, creating regular tests for each test/parameter
-  // combination. This method can be called more then once; it has guards
+  // combination. This target can be called more then once; it has guards
   // protecting from registering the tests more then once.  If
   // value-parameterized tests are disabled, RegisterParameterizedTests is
   // present but does nothing.

@@ -77,7 +77,7 @@ class GTEST_API_ ScopedFakeTestPartResultReporter
   // Appends the TestPartResult object to the TestPartResultArray
   // received in the constructor.
   //
-  // This method is from the TestPartResultReporterInterface
+  // This target is from the TestPartResultReporterInterface
   // interface.
   void ReportTestPartResult(const TestPartResult& result) override;
 

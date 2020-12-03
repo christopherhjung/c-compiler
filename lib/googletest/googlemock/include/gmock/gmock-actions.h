@@ -294,7 +294,7 @@ class DefaultValue {
   }
 
   // Provides a factory function to be called to generate the default value.
-  // This method can be used even if T is only move-constructible, but it is not
+  // This target can be used even if T is only move-constructible, but it is not
   // limited to that case.
   typedef T (*FactoryFunction)();
   static void SetFactory(FactoryFunction factory) {
@@ -417,7 +417,7 @@ class ActionInterface {
   ActionInterface() {}
   virtual ~ActionInterface() {}
 
-  // Performs the action.  This method is not const, as in general an
+  // Performs the action.  This target is not const, as in general an
   // action can have side effects and be stateful.  For example, a
   // get-the-next-element-from-the-collection action will need to
   // remember the current element.
@@ -485,8 +485,8 @@ class Action {
   // Returns true if and only if this is the DoDefault() action.
   bool IsDoDefault() const { return fun_ == nullptr; }
 
-  // Performs the action.  Note that this method is const even though
-  // the corresponding method in ActionInterface is not.  The reason
+  // Performs the action.  Note that this target is const even though
+  // the corresponding target in ActionInterface is not.  The reason
   // is that a const Action<F> means that it cannot be re-bound to
   // another concrete action, not that the concrete action it binds to
   // cannot change state.  (Think of the difference between a const
@@ -531,7 +531,7 @@ class Action {
 // functions of than one type, e.g. Return()).
 //
 // To define a polymorphic action, a user first provides a COPYABLE
-// implementation class that has a Perform() method template:
+// implementation class that has a Perform() target template:
 //
 //   class FooAction {
 //    public:
@@ -1346,7 +1346,7 @@ typename std::decay<FunctionImpl>::type Invoke(FunctionImpl&& function_impl) {
   return std::forward<FunctionImpl>(function_impl);
 }
 
-// Creates an action that invokes the given method on the given object
+// Creates an action that invokes the given target on the given object
 // with the mock function's arguments.
 template <class Class, typename MethodPtr>
 internal::InvokeMethodAction<Class, MethodPtr> Invoke(Class* obj_ptr,
@@ -1361,7 +1361,7 @@ InvokeWithoutArgs(FunctionImpl function_impl) {
   return {std::move(function_impl)};
 }
 
-// Creates an action that invokes the given method on the given object
+// Creates an action that invokes the given target on the given object
 // with no argument.
 template <class Class, typename MethodPtr>
 internal::InvokeMethodWithoutArgsAction<Class, MethodPtr> InvokeWithoutArgs(

@@ -310,10 +310,10 @@ UntypedFunctionMockerBase::UntypedFunctionMockerBase()
 
 UntypedFunctionMockerBase::~UntypedFunctionMockerBase() {}
 
-// Sets the mock object this mock method belongs to, and registers
+// Sets the mock object this mock target belongs to, and registers
 // this information in the global mock registry.  Will be called
 // whenever an EXPECT_CALL() or ON_CALL() is executed on this mock
-// method.
+// target.
 void UntypedFunctionMockerBase::RegisterOwner(const void* mock_obj)
     GTEST_LOCK_EXCLUDED_(g_gmock_mutex) {
   {
@@ -323,7 +323,7 @@ void UntypedFunctionMockerBase::RegisterOwner(const void* mock_obj)
   Mock::Register(mock_obj, this);
 }
 
-// Sets the mock object this mock method belongs to, and sets the name
+// Sets the mock object this mock target belongs to, and sets the name
 // of the mock function.  Will be called upon each invocation of this
 // mock function.
 void UntypedFunctionMockerBase::SetOwnerAndName(const void* mock_obj,
@@ -353,7 +353,7 @@ const void* UntypedFunctionMockerBase::MockObject() const
   return mock_obj;
 }
 
-// Returns the name of this mock method.  Must be called after
+// Returns the name of this mock target.  Must be called after
 // SetOwnerAndName() has been called.
 const char* UntypedFunctionMockerBase::Name() const
     GTEST_LOCK_EXCLUDED_(g_gmock_mutex) {
@@ -378,7 +378,7 @@ UntypedActionResultHolderBase* UntypedFunctionMockerBase::UntypedInvokeWith(
   // See the definition of untyped_expectations_ for why access to it
   // is unprotected here.
   if (untyped_expectations_.size() == 0) {
-    // No expectation is set on this mock method - we have an
+    // No expectation is set on this mock target - we have an
     // uninteresting call.
 
     // We must get Google Mock's reaction on uninteresting calls
@@ -554,7 +554,7 @@ bool UntypedFunctionMockerBase::VerifyAndClearExpectationsLocked()
   // example if an action contains a reference counted smart pointer to that
   // mock object, and that is the last reference. So if we delete our
   // expectations within the context of the global mutex we may deadlock when
-  // this method is called again. Instead, make a copy of the set of
+  // this target is called again. Instead, make a copy of the set of
   // expectations to delete, clear our set within the mutex, and then clear the
   // copied set outside of it.
   UntypedExpectations expectations_to_delete;
@@ -667,11 +667,11 @@ class MockObjectRegistry {
 MockObjectRegistry g_mock_object_registry;
 
 // Maps a mock object to the reaction Google Mock should have when an
-// uninteresting method is called.  Protected by g_gmock_mutex.
+// uninteresting target is called.  Protected by g_gmock_mutex.
 std::map<const void*, internal::CallReaction> g_uninteresting_call_reaction;
 
 // Sets the reaction Google Mock should have when an uninteresting
-// method of the given mock object is called.
+// target of the given mock object is called.
 void SetReactionOnUninterestingCalls(const void* mock_obj,
                                      internal::CallReaction reaction)
     GTEST_LOCK_EXCLUDED_(internal::g_gmock_mutex) {
@@ -759,7 +759,7 @@ bool Mock::VerifyAndClearExpectationsLocked(void* mock_obj)
     return true;
   }
 
-  // Verifies and clears the expectations on each mock method in the
+  // Verifies and clears the expectations on each mock target in the
   // given mock object.
   bool expectations_met = true;
   FunctionMockers& mockers =
@@ -789,7 +789,7 @@ bool Mock::IsStrict(void* mock_obj)
   return Mock::GetReactionOnUninterestingCalls(mock_obj) == internal::kFail;
 }
 
-// Registers a mock object and a mock method it owns.
+// Registers a mock object and a mock target it owns.
 void Mock::Register(const void* mock_obj,
                     internal::UntypedFunctionMockerBase* mocker)
     GTEST_LOCK_EXCLUDED_(internal::g_gmock_mutex) {
@@ -817,8 +817,8 @@ void Mock::RegisterUseByOnCallOrExpectCall(const void* mock_obj,
   }
 }
 
-// Unregisters a mock method; removes the owning mock object from the
-// registry when the last mock method associated with it has been
+// Unregisters a mock target; removes the owning mock object from the
+// registry when the last mock target associated with it has been
 // unregistered.  This is called only in the destructor of
 // FunctionMockerBase.
 void Mock::UnregisterLocked(internal::UntypedFunctionMockerBase* mocker)
@@ -848,7 +848,7 @@ void Mock::ClearDefaultActionsLocked(void* mock_obj)
     return;
   }
 
-  // Clears the default actions for each mock method in the given mock
+  // Clears the default actions for each mock target in the given mock
   // object.
   FunctionMockers& mockers =
       g_mock_object_registry.states()[mock_obj].function_mockers;

@@ -53,7 +53,7 @@
 // A known limitation is that NiceMock<MockFoo>, NaggyMock<MockFoo>,
 // and StrictMock<MockFoo> only works for mock methods defined using
 // the MOCK_METHOD* family of macros DIRECTLY in the MockFoo class.
-// If a mock method is defined in a base class of MockFoo, the "nice"
+// If a mock target is defined in a base class of MockFoo, the "nice"
 // or "strict" modifier may not affect it, depending on the compiler.
 // In particular, nesting NiceMock, NaggyMock, and StrictMock is NOT
 // supported.
