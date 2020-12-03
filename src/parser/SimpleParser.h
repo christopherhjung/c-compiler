@@ -358,7 +358,7 @@ namespace parser{
             auto declaration = new Declaration();
             declaration->type = parseType();
             if(!is(SEMI)){
-                declaration->declarator = parseDeclarator();
+                declaration->declarator = parseDeclarator(true, false);
                 if(is(LEFT_BRACE)){
                     Block* block = parseBlock();
                     Method* method = new Method();
@@ -368,22 +368,6 @@ namespace parser{
             }
             shall(SEMI);
             return declaration;
-        }
-
-        Method* parseFunctionDefinition(){
-            auto method = new Method();
-            method->type = parseType();
-            method->name = parseIdentifier();
-            shall(LEFT_PAREN);
-            if(!is(RIGHT_PAREN)){
-                method->params.push_back(parseDirectDeclarator());
-                while(eat(COMMA)){
-                    method->params.push_back(parseDirectDeclarator());
-                }
-            }
-            shall(RIGHT_PAREN);
-            method->body = parseBlock();
-            return method;
         }
 
         static bool isType(int32_t type){
@@ -442,13 +426,29 @@ namespace parser{
             return nullptr;
         }
 
-        DirectDeclarator* parseDirectDeclarator(){
+        Declarator* parseDeclarator(bool normal, bool abstract){
+            auto declaration = new Declarator();
+
+            while(eat(STAR)){
+                declaration->pointer++;
+            }
+
+            if(declaration->pointer > 0 && abstract && !is(LEFT_PAREN) && (!normal || !is(IDENTIFIER))){
+                return declaration;
+            }
+
+            declaration->declaration = parseDirectDeclarator(normal, abstract);
+
+            return declaration;
+        }
+
+        DirectDeclarator* parseDirectDeclarator(bool normal, bool abstract){
             auto declaration = new DirectDeclarator();
 
             if(eat(LEFT_PAREN)){
-                parseDeclarator();
+                parseDeclarator(normal, abstract);
                 shall(RIGHT_PAREN);
-            }else if(is(IDENTIFIER)){
+            }else if(normal && is(IDENTIFIER)){
                 declaration->identifier = parseIdentifier();
             }else{
                 fatal();
@@ -457,14 +457,13 @@ namespace parser{
             while(eat(LEFT_PAREN)){
                 auto inner = new DirectDeclarator();
                 inner->left = declaration;
-                while(true){
-                    if(!isType(lookA.id)){
-                         fatal();
-                    }
-                    parseParameterTypeList(inner);
+                if(!(abstract && is(RIGHT_PAREN))){
+                    while(true){
+                        parseParameterTypeList(inner);
 
-                    if(!eat(COMMA)){
-                        break;
+                        if(!eat(COMMA)){
+                            break;
+                        }
                     }
                 }
                 declaration = inner;
@@ -477,20 +476,8 @@ namespace parser{
         void parseParameterTypeList(DirectDeclarator* inner){
             Type* type = parseType();
             if(!is(COMMA) && !is(RIGHT_PAREN)){
-                Declarator* declarator = parseDeclarator();
+                Declarator* declarator = parseDeclarator(true, true);
             }
-        }
-
-        Declarator* parseDeclarator(){
-            auto declaration = new Declarator();
-
-            while(eat(STAR)){
-                declaration->pointer++;
-            }
-
-            declaration->declaration = parseDirectDeclarator();
-
-            return declaration;
         }
 
         Statement* parseStatement(){
@@ -566,7 +553,7 @@ namespace parser{
             auto declaration = new Declaration();
             declaration->type = parseType();
             if(!is(SEMI)){
-                declaration->declarator = parseDeclarator();
+                declaration->declarator = parseDeclarator(true, false);
             }
             shall(SEMI);
             return declaration;
@@ -618,7 +605,9 @@ namespace parser{
                 if(eat(LEFT_PAREN)){
                     auto call = new Call();
                     parseType();
-
+                    if(!is(RIGHT_PAREN)){
+                        parseDeclarator(false, true);
+                    }
                     shall(RIGHT_PAREN);
                     return call;
                 }
