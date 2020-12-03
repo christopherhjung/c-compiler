@@ -258,6 +258,13 @@ namespace parser{
         std::vector<Expression*> values;
     };
 
+    class IfSmall : public Expression{
+    public:
+        Expression* condition = nullptr;
+        Expression* left = nullptr;
+        Expression* right = nullptr;
+    };
+
     class If : public Statement{
     public:
         Expression* condition = nullptr;
@@ -638,7 +645,13 @@ namespace parser{
                         left = parseValue();
                     }
 
-                    if(eat(LEFT_PAREN)){
+                    if(eat(QUESTION)){
+                        auto ifSimple = new IfSmall();
+                        ifSimple->left = parseExpression();
+                        shall(COLON);
+                        ifSimple->right = parseExpression();
+                        left = ifSimple;
+                    }else if(eat(LEFT_PAREN)){
                         auto call = new Call();
                         call->method = left;
                         if(!is(RIGHT_PAREN)){
@@ -699,6 +712,7 @@ namespace parser{
                 case STAR: index = 2; break;
                 case AND_AND: index = 11; break;
                 case OR_OR: index = 12; break;
+                case QUESTION: index = 13; break;
                 case ASSIGN: index = 14; break;
                 default: return 0;
             }
