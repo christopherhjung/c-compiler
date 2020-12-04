@@ -462,7 +462,7 @@ namespace parser{
                 shall(RIGHT_PAREN);
             }else if(normal && is(IDENTIFIER)){
                 declaration->identifier = parseIdentifier();
-            }else{
+            }else if(!abstract){
                 fatal();
             }
 
@@ -489,6 +489,7 @@ namespace parser{
             Type* type = parseType();
             if(!is(COMMA) && !is(RIGHT_PAREN)){
                 Declarator* declarator = parseDeclarator(true, true);
+                inner->parameter.push_back(declarator);
             }
         }
 
@@ -516,13 +517,11 @@ namespace parser{
                 eat(COLON);
                 result->statement = parseStatement();
                 return result;
-            }else if(!eat(SEMI)){
+            }else{
                 auto expr = parseExpression();
                 shall(SEMI);
                 return expr;
             }
-
-            return nullptr;
         }
 
         GoTo* parseGoTo(){
@@ -547,7 +546,13 @@ namespace parser{
         Block* parseBlock(){
             auto block = new Block();
             shall(LEFT_BRACE);
-            while(!eat(RIGHT_BRACE)){
+            for(;;){
+                while(eat(SEMI));
+
+                if(eat(RIGHT_BRACE)){
+                    break;
+                }
+
                 block->children.push_back(parseBlockItem());
             }
             return block;
@@ -613,11 +618,9 @@ namespace parser{
                 return constant;
             }else if(is(IDENTIFIER)){
                 return parseIdentifier();
-            }else{
-                fatal();
             }
-
-            return nullptr;
+#
+            fatal();
         }
 
 
