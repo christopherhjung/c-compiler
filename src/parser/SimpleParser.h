@@ -615,7 +615,7 @@ namespace parser{
             }else if(is(IDENTIFIER)){
                 return parseIdentifier();
             }
-#
+
             fatal();
         }
 
