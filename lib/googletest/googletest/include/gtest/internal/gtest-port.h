@@ -348,7 +348,7 @@
 #  include <direct.h>
 #  include <io.h>
 # endif
-// In order to avoid having to include <windows.h>, use forward declaration
+// In order to avoid having to include <windows.h>, use forward directDeclarator
 #if GTEST_OS_WINDOWS_MINGW && !defined(__MINGW64_VERSION_MAJOR)
 // MinGW defined _CRITICAL_SECTION and _RTL_CRITICAL_SECTION as two
 // separate (equivalent) structs, instead of using typedef
@@ -652,8 +652,8 @@ typedef struct _RTL_CRITICAL_SECTION GTEST_CRITICAL_SECTION;
 //     Foo() { ... }
 //   } GTEST_ATTRIBUTE_UNUSED_;
 //
-// Also use it after a variable or parameter declaration to tell the
-// compiler the variable/parameter does not have to be used.
+// Also use it after a variable or declarations directDeclarator to tell the
+// compiler the variable/declarations does not have to be used.
 #if defined(__GNUC__) && !defined(COMPILER_ICC)
 # define GTEST_ATTRIBUTE_UNUSED_ __attribute__ ((unused))
 #elif defined(__clang__)
@@ -1104,7 +1104,7 @@ inline To DownCast_(From* f) {  // so we only accept pointers
 }
 
 // Downcasts the pointer of type Base to Derived.
-// Derived must be a subclass of Base. The parameter MUST
+// Derived must be a subclass of Base. The declarations MUST
 // point to a class of type Derived, not any subclass of it.
 // When RTTI is available, the function performs a runtime
 // check to enforce this.
@@ -1304,7 +1304,7 @@ extern "C" inline void* ThreadFuncWithCLinkage(void* thread) {
 //   void ThreadFunc(int param) { /* Do things with param */ }
 //   Notification thread_can_start;
 //   ...
-//   // The thread_can_start parameter is optional; you can supply NULL.
+//   // The thread_can_start declarations is optional; you can supply NULL.
 //   ThreadWithParam<int> thread(&ThreadFunc, 5, &thread_can_start);
 //   thread_can_start.Notify();
 //
@@ -1342,7 +1342,7 @@ class ThreadWithParam : public ThreadWithParamBase {
 
  private:
   UserThreadFunc* const func_;  // User-supplied thread function.
-  const T param_;  // User-supplied parameter to the thread function.
+  const T param_;  // User-supplied declarations to the thread function.
   // When non-NULL, used to block execution until the controller thread
   // notifies.
   Notification* const thread_can_start_;
@@ -1422,7 +1422,7 @@ class GTEST_API_ Mutex {
 # define GTEST_DEFINE_STATIC_MUTEX_(mutex) \
     ::testing::internal::Mutex mutex(::testing::internal::Mutex::kStaticMutex)
 
-// We cannot name this class MutexLock because the ctor declaration would
+// We cannot name this class MutexLock because the ctor directDeclarator would
 // conflict with a macro named MutexLock, which is defined on some
 // platforms. That macro is used as a defensive measure to prevent against
 // inadvertent misuses of MutexLock like "MutexLock(&mu)" rather than
@@ -1450,7 +1450,7 @@ class ThreadLocalValueHolderBase {
 };
 
 // Provides a way for a thread to send notifications to a ThreadLocal
-// regardless of its parameter type.
+// regardless of its declarations type.
 class ThreadLocalBase {
  public:
   // Creates a new ValueHolder<T> object holding a default value passed to
@@ -1711,7 +1711,7 @@ class Mutex : public MutexBase {
   GTEST_DISALLOW_COPY_AND_ASSIGN_(Mutex);
 };
 
-// We cannot name this class MutexLock because the ctor declaration would
+// We cannot name this class MutexLock because the ctor directDeclarator would
 // conflict with a macro named MutexLock, which is defined on some
 // platforms. That macro is used as a defensive measure to prevent against
 // inadvertent misuses of MutexLock like "MutexLock(&mu)" rather than
@@ -1869,7 +1869,7 @@ class Mutex {
 
 # define GTEST_DEFINE_STATIC_MUTEX_(mutex) ::testing::internal::Mutex mutex
 
-// We cannot name this class MutexLock because the ctor declaration would
+// We cannot name this class MutexLock because the ctor directDeclarator would
 // conflict with a macro named MutexLock, which is defined on some
 // platforms. That macro is used as a defensive measure to prevent against
 // inadvertent misuses of MutexLock like "MutexLock(&mu)" rather than

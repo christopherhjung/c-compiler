@@ -523,7 +523,7 @@ namespace internal {
 // used to match an int, a short, a double, etc).  Therefore we use
 // a template type conversion operator in the implementation.
 //
-// The following template definition assumes that the Rhs parameter is
+// The following template definition assumes that the Rhs declarations is
 // a "bare" type (i.e. neither 'const T' nor 'T&').
 template <typename D, typename Rhs, typename Op>
 class ComparisonBase {
@@ -695,7 +695,7 @@ PolymorphicMatcher<internal::MatchesRegexMatcher> ContainsRegex(
 }
 
 // Creates a polymorphic matcher that matches anything equal to x.
-// Note: if the parameter of Eq() were declared as const T&, Eq("foo")
+// Note: if the declarations of Eq() were declared as const T&, Eq("foo")
 // wouldn't compile.
 template <typename T>
 inline internal::EqMatcher<T> Eq(T x) { return internal::EqMatcher<T>(x); }

@@ -47,7 +47,7 @@
 // To write value-parameterized tests, first you should define a fixture
 // class. It is usually derived from testing::TestWithParam<T> (see below for
 // another inheritance scheme that's sometimes useful in more complicated
-// class hierarchies), where the type of your parameter values.
+// class hierarchies), where the type of your declarations values.
 // TestWithParam<T> is itself derived from testing::Test. T can be any
 // copyable type. If it's a raw pointer, you are responsible for managing the
 // lifespan of the pointed values.
@@ -61,7 +61,7 @@ class FooTest : public ::testing::TestWithParam<const char*> {
 // or "pattern", whichever you prefer to think.
 
 TEST_P(FooTest, DoesBlah) {
-  // Inside a test, access the test parameter with the GetParam() target
+  // Inside a test, access the test declarations with the GetParam() target
   // of the TestWithParam<T> class:
   EXPECT_TRUE(foo.Blah(GetParam()));
   ...
@@ -74,7 +74,7 @@ TEST_P(FooTest, HasBlahBlah) {
 // Finally, you can use INSTANTIATE_TEST_SUITE_P to instantiate the test
 // case with any set of parameters you want. Google Test defines a number
 // of functions for generating test parameters. They return what we call
-// (surprise!) parameter generators. Here is a summary of them, which
+// (surprise!) declarations generators. Here is a summary of them, which
 // are all in the testing namespace:
 //
 //
@@ -93,7 +93,7 @@ TEST_P(FooTest, HasBlahBlah) {
 // in this file.
 //
 // The following statement will instantiate tests from the FooTest test suite
-// each with parameter values "meeny", "miny", and "moe".
+// each with declarations values "meeny", "miny", and "moe".
 
 INSTANTIATE_TEST_SUITE_P(InstantiationName,
                          FooTest,
@@ -116,7 +116,7 @@ INSTANTIATE_TEST_SUITE_P(InstantiationName,
 // You can use these names in --gtest_filter.
 //
 // This statement will instantiate all tests from FooTest again, each
-// with parameter values "cat" and "dog":
+// with declarations values "cat" and "dog":
 
 const char* pets[] = {"cat", "dog"};
 INSTANTIATE_TEST_SUITE_P(AnotherInstantiationName, FooTest, ValuesIn(pets));
@@ -142,13 +142,13 @@ INSTANTIATE_TEST_SUITE_P(AnotherInstantiationName, FooTest, ValuesIn(pets));
 // You can see samples/sample7_unittest.cc and samples/sample8_unittest.cc
 // for more examples.
 //
-// In the future, we plan to publish the API for defining new parameter
+// In the future, we plan to publish the API for defining new declarations
 // generators. But for now this interface remains part of the internal
 // implementation and is subject to change.
 //
 //
 // A parameterized test fixture must be derived from testing::Test and from
-// testing::WithParamInterface<T>, where T is the type of the parameter
+// testing::WithParamInterface<T>, where T is the type of the declarations
 // values. Inheriting from TestWithParam<T> satisfies that requirement because
 // TestWithParam<T> inherits from both Test and WithParamInterface. In more
 // complicated hierarchies, however, it is occasionally useful to inherit
@@ -183,7 +183,7 @@ TEST_P(DerivedTest, DoesBlah) {
 
 namespace testing {
 
-// Functions producing parameter generators.
+// Functions producing declarations generators.
 //
 // Google Test uses these generators to produce parameters for value-
 // parameterized tests. When a parameterized test suite is instantiated
@@ -191,7 +191,7 @@ namespace testing {
 // for each element in the sequence produced by the generator.
 //
 // In the following sample, tests from test suite FooTest are instantiated
-// each three times with parameter values 3, 5, and 8:
+// each three times with declarations values 3, 5, and 8:
 //
 // class FooTest : public TestWithParam<int> { ... };
 //
@@ -278,7 +278,7 @@ internal::ParamGenerator<T> Range(T start, T end) {
 //
 //
 // This will also instantiate tests from CharTest
-// each with parameter values 'a' and 'b':
+// each with declarations values 'a' and 'b':
 //
 // ::std::list<char> GetParameterChars() {
 //   ::std::list<char> list;
@@ -326,7 +326,7 @@ internal::ParamGenerator<typename Container::value_type> ValuesIn(
 //                          Values("one", "two", "three"));
 //
 // This instantiates tests from test suite BazTest each with values 1, 2, 3.5.
-// The exact type of values will depend on the type of parameter in BazTest.
+// The exact type of values will depend on the type of declarations in BazTest.
 //
 // INSTANTIATE_TEST_SUITE_P(FloatingNumbers, BazTest, Values(1, 2, 3.5));
 //
@@ -376,7 +376,7 @@ inline internal::ParamGenerator<bool> Bool() {
 // Example:
 //
 // This will instantiate tests in test suite AnimalTest each one with
-// the parameter values tuple("cat", BLACK), tuple("cat", WHITE),
+// the declarations values tuple("cat", BLACK), tuple("cat", WHITE),
 // tuple("dog", BLACK), and tuple("dog", WHITE):
 //
 // enum Color { BLACK, GRAY, WHITE };

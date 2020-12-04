@@ -53,7 +53,7 @@ class Matcher;
 
 namespace internal {
 
-// Silence MSVC C4100 (unreferenced formal parameter) and
+// Silence MSVC C4100 (unreferenced formal declarations) and
 // C4805('==': unsafe mix of type 'const int' and type 'const bool')
 #ifdef _MSC_VER
 # pragma warning(push)

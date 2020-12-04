@@ -231,7 +231,7 @@ class GTestFlagSaver {
 } GTEST_ATTRIBUTE_UNUSED_;
 
 // Converts a Unicode code point to a narrow string in UTF-8 encoding.
-// code_point parameter is of type UInt32 because wchar_t may not be
+// code_point declarations is of type UInt32 because wchar_t may not be
 // wide enough to contain a code point.
 // If the code_point is not a valid Unicode code point
 // (i.e. outside of Unicode range U+0 to U+10FFFF) it will be converted
@@ -640,7 +640,7 @@ class GTEST_API_ UnitTestImpl {
   // Returns the current OS stack trace as an std::string.
   //
   // The maximum number of stack frames to be included is specified by
-  // the gtest_stack_trace_depth flag.  The skip_count parameter
+  // the gtest_stack_trace_depth flag.  The skip_count declarations
   // specifies the number of top frames to be skipped, which doesn't
   // count against the number of frames to be included.
   //
@@ -655,7 +655,7 @@ class GTEST_API_ UnitTestImpl {
   // Arguments:
   //
   //   test_suite_name: name of the test suite
-  //   type_param:      the name of the test's type parameter, or NULL if
+  //   type_param:      the name of the test's type declarations, or NULL if
   //                    this is not a typed or a type-parameterized test.
   //   set_up_tc:       pointer to the function that sets up the test suite
   //   tear_down_tc:    pointer to the function that tears down the test suite
@@ -732,7 +732,7 @@ class GTEST_API_ UnitTestImpl {
   }
 
   // Registers all parameterized tests defined using TEST_P and
-  // INSTANTIATE_TEST_SUITE_P, creating regular tests for each test/parameter
+  // INSTANTIATE_TEST_SUITE_P, creating regular tests for each test/declarations
   // combination. This target can be called more then once; it has guards
   // protecting from registering the tests more then once.  If
   // value-parameterized tests are disabled, RegisterParameterizedTests is
@@ -1011,7 +1011,7 @@ GTEST_API_ void ParseGoogleTestFlagsOnly(int* argc, wchar_t** argv);
 GTEST_API_ std::string GetLastErrnoDescription();
 
 // Attempts to parse a string into a positive integer pointed to by the
-// number parameter.  Returns true if that is possible.
+// number declarations.  Returns true if that is possible.
 // GTEST_HAS_DEATH_TEST implies that we have ::std::string, so we can use
 // it here.
 template <typename Integer>

@@ -266,7 +266,7 @@ using internal::FunctionMocker;
 // fn_ptr_return_t (*target(method_args_t...))(fn_ptr_args_t...)
 //
 // But we only support placing the return type at the beginning. To handle this,
-// we wrap all calls in identity_t, so that a declaration will be expanded to
+// we wrap all calls in identity_t, so that a directDeclarator will be expanded to
 //
 // identity_t<fn_ptr_return_t (*)(fn_ptr_args_t...)> target(method_args_t...)
 //

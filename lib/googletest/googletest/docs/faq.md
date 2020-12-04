@@ -118,7 +118,7 @@ rough guidelines:
     which can help you quickly identify which implementation is wrong.
     Value-parameterized tests only show the number of the failed iteration by
     default. You will need to define a function that returns the iteration name
-    and pass it as the third parameter to INSTANTIATE_TEST_SUITE_P to have more
+    and pass it as the third declarations to INSTANTIATE_TEST_SUITE_P to have more
     useful output.
 *   When using typed tests, you need to make sure you are testing against the
     interface type, not the concrete types (in other words, you want to make
@@ -407,7 +407,7 @@ you can use it in a predicate assertion like this:
 ASSERT_PRED1(IsNegative<int>, -5);
 ```
 
-Things are more interesting if your template has more than one parameter. The
+Things are more interesting if your template has more than one declarations. The
 following won't compile:
 
 ```c++

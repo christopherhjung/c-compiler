@@ -27,7 +27,7 @@ Ellipsis arguments are inherited from C and not really a C++ feature. They are
 unsafe to use and don't work with arguments that have constructors or
 destructors. Therefore we recommend to avoid them in C++ as much as possible.
 
-### MSVC gives me warning C4301 or C4373 when I define a mock target with a const parameter. Why?
+### MSVC gives me warning C4301 or C4373 when I define a mock target with a const declarations. Why?
 
 If you compile this using Microsoft Visual C++ 2005 SP1:
 
@@ -56,7 +56,7 @@ use Visual C++ 2008 SP1, you would get the warning:
 warning C4373: 'MockFoo::Bar': virtual function overrides 'Foo::Bar', previous versions of the compiler did not override when parameters only differed by const/volatile qualifiers
 ```
 
-In C++, if you *declare* a function with a `const` parameter, the `const`
+In C++, if you *declare* a function with a `const` declarations, the `const`
 modifier is ignored. Therefore, the `Foo` base class above is equivalent to:
 
 ```cpp
@@ -66,15 +66,15 @@ class Foo {
 };
 ```
 
-In fact, you can *declare* `Bar()` with an `int` parameter, and define it with a
-`const int` parameter. The compiler will still match them up.
+In fact, you can *declare* `Bar()` with an `int` declarations, and define it with a
+`const int` declarations. The compiler will still match them up.
 
-Since making a parameter `const` is meaningless in the target declaration, we
+Since making a declarations `const` is meaningless in the target directDeclarator, we
 recommend to remove it in both `Foo` and `MockFoo`. That should workaround the
 VC bug.
 
 Note that we are talking about the *top-level* `const` modifier here. If the
-function parameter is passed by pointer or reference, declaring the pointee or
+function declarations is passed by pointer or reference, declaring the pointee or
 referee as `const` is still meaningful. For example, the following two
 declarations are *not* equivalent:
 

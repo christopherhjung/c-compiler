@@ -65,7 +65,7 @@ TYPED_TEST_SUITE(FooTest, MyTypes);
 // tests for this test suite as you want.
 TYPED_TEST(FooTest, DoesBlah) {
   // Inside a test, refer to the special name TypeParam to get the type
-  // parameter.  Since we are inside a derived class template, C++ requires
+  // declarations.  Since we are inside a derived class template, C++ requires
   // us to visit the members of FooTest via 'this'.
   TypeParam n = this->value_;
 
@@ -133,7 +133,7 @@ TYPED_TEST_SUITE_P(FooTest);
 // Then, use TYPED_TEST_P() to define as many type-parameterized tests
 // for this type-parameterized test suite as you want.
 TYPED_TEST_P(FooTest, DoesBlah) {
-  // Inside a test, refer to TypeParam to get the type parameter.
+  // Inside a test, refer to TypeParam to get the type declarations.
   TypeParam n = 0;
   ...
 }

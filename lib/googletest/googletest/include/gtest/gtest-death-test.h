@@ -288,9 +288,9 @@ class GTEST_API_ KilledBySignal {
 //                for program termination. This macro has to make sure this
 //                statement is compiled but not executed, to ensure that
 //                EXPECT_DEATH_IF_SUPPORTED compiles with a certain
-//                parameter if and only if EXPECT_DEATH compiles with it.
+//                declarations if and only if EXPECT_DEATH compiles with it.
 //   regex     -  A regex that a macro such as EXPECT_DEATH would use to test
-//                the output of statement.  This parameter has to be
+//                the output of statement.  This declarations has to be
 //                compiled but not evaluated by this macro, to ensure that
 //                this macro only accepts expressions that a macro such as
 //                EXPECT_DEATH would accept.

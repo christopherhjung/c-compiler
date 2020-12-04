@@ -201,7 +201,7 @@ GTEST_API_ std::string DiffStrings(const std::string& left,
 //   expected_value:      "5"
 //   actual_value:        "6"
 //
-// The ignoring_case parameter is true if and only if the assertion is a
+// The ignoring_case declarations is true if and only if the assertion is a
 // *_STRCASEEQ*.  When it's true, the string " (ignoring case)" will
 // be inserted into the message.
 GTEST_API_ AssertionResult EqFailure(const char* expected_expression,
@@ -243,7 +243,7 @@ GTEST_API_ std::string GetBoolAssertionFailureMessage(
 //   More details can be found at
 //   http://en.wikipedia.org/wiki/IEEE_floating-point_standard.
 //
-// Template parameter:
+// Template declarations:
 //
 //   RawType: the raw floating-point type (either float or double)
 template <typename RawType>
@@ -568,9 +568,9 @@ struct SuiteApiResolver : T {
 //
 //   test_suite_name:  name of the test suite
 //   name:             name of the test
-//   type_param:       the name of the test's type parameter, or NULL if
+//   type_param:       the name of the test's type declarations, or NULL if
 //                     this is not a typed or a type-parameterized test.
-//   value_param:      text representation of the test's value parameter,
+//   value_param:      text representation of the test's value declarations,
 //                     or NULL if this is not a type-parameterized test.
 //   code_location:    code location where the test is defined
 //   fixture_class_id: ID of the test fixture class
@@ -709,7 +709,7 @@ std::vector<std::string> GenerateNames() {
 // such that we can call this function in a namespace scope.
 //
 // Implementation note: The GTEST_TEMPLATE_ macro declares a template
-// template parameter.  It's defined in gtest-type-util.h.
+// template declarations.  It's defined in gtest-type-util.h.
 template <GTEST_TEMPLATE_ Fixture, class TestSel, typename Types>
 class TypeParameterizedTest {
  public:
@@ -733,7 +733,7 @@ class TypeParameterizedTest {
             .c_str(),
         StripTrailingSpaces(GetPrefixUntilComma(test_names)).c_str(),
         GetTypeName<Type>().c_str(),
-        nullptr,  // No value parameter.
+        nullptr,  // No value declarations.
         code_location, GetTypeId<FixtureClass>(),
         SuiteApiResolver<TestClass>::GetSetUpCaseOrSuite(
             code_location.file.c_str(), code_location.line),
@@ -828,7 +828,7 @@ class TypeParameterizedTestSuite<Fixture, internal::None, Types> {
 // Returns the current OS stack trace as an std::string.
 //
 // The maximum number of stack frames to be included is specified by
-// the gtest_stack_trace_depth flag.  The skip_count parameter
+// the gtest_stack_trace_depth flag.  The skip_count declarations
 // specifies the number of top frames to be skipped, which doesn't
 // count against the number of frames to be included.
 //

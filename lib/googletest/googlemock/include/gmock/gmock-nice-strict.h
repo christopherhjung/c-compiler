@@ -77,7 +77,7 @@ class NiceMock : public MockClass {
   }
 
   // Ideally, we would inherit base class's constructors through a using
-  // declaration, which would preserve their visibility. However, many existing
+  // directDeclarator, which would preserve their visibility. However, many existing
   // tests rely on the fact that current implementation reexports protected
   // constructors as public. These tests would need to be cleaned up first.
 
@@ -115,7 +115,7 @@ class NaggyMock : public MockClass {
   }
 
   // Ideally, we would inherit base class's constructors through a using
-  // declaration, which would preserve their visibility. However, many existing
+  // directDeclarator, which would preserve their visibility. However, many existing
   // tests rely on the fact that current implementation reexports protected
   // constructors as public. These tests would need to be cleaned up first.
 
@@ -153,7 +153,7 @@ class StrictMock : public MockClass {
   }
 
   // Ideally, we would inherit base class's constructors through a using
-  // declaration, which would preserve their visibility. However, many existing
+  // directDeclarator, which would preserve their visibility. However, many existing
   // tests rely on the fact that current implementation reexports protected
   // constructors as public. These tests would need to be cleaned up first.
 

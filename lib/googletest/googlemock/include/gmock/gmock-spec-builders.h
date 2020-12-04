@@ -1281,7 +1281,7 @@ class MockSpec {
         file, line, source_text, matchers_);
   }
 
-  // This operator overload is used to swallow the superfluous parameter list
+  // This operator overload is used to swallow the superfluous declarations list
   // introduced by the ON/EXPECT_CALL macros. See the macro comments for more
   // explanation.
   MockSpec<F>& operator()(const internal::WithoutMatchers&, void* const) {
@@ -1959,10 +1959,10 @@ GTEST_DISABLE_MSC_WARNINGS_POP_()  //  4251
 // a result of macro expansion. See CompilesWithMethodNameExpandedFromMacro
 // tests in internal/gmock-spec-builders_test.cc for more details.
 //
-// This macro supports statements both with and without parameter matchers. If
-// the parameter list is omitted, gMock will accept any parameters, which allows
+// This macro supports statements both with and without declarations matchers. If
+// the declarations list is omitted, gMock will accept any parameters, which allows
 // tests to be written that don't need to encode the number of target
-// parameter. This technique may only be used for non-overloaded methods.
+// declarations. This technique may only be used for non-overloaded methods.
 //
 //   // These are the same:
 //   ON_CALL(mock, NoArgsMethod()).WillByDefault(...);

@@ -73,14 +73,14 @@
 //
 //   ...WillOnce(Add(5));
 //
-// Note that you don't need to provide the type of the parameter
-// either.  If you need to reference the type of a parameter named
+// Note that you don't need to provide the type of the declarations
+// either.  If you need to reference the type of a declarations named
 // 'foo', you can write 'foo_type'.  For example, in the body of
 // ACTION_P(Add, n) above, you can write 'n_type' to refer to the type
 // of 'n'.
 //
 // We also provide ACTION_P2, ACTION_P3, ..., up to ACTION_P10 to support
-// multi-parameter actions.
+// multi-declarations actions.
 //
 // For the purpose of typing, you can view
 //
@@ -110,7 +110,7 @@
 // they give you more control on the types of the mock function
 // arguments and the action parameters, which in general leads to
 // better compiler error messages that pay off in the long run.  They
-// also allow overloading actions based on parameter types (as opposed
+// also allow overloading actions based on declarations types (as opposed
 // to just based on the number of parameters).
 //
 // CAVEAT:

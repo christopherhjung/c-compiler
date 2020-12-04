@@ -63,9 +63,9 @@
 //
 // defines an action template that takes m explicit template
 // parameters and n value parameters.  name_i is the name of the i-th
-// template parameter, and kind_i specifies whether it's a typename,
+// template declarations, and kind_i specifies whether it's a typename,
 // an integral constant, or a template.  p_i is the name of the i-th
-// value parameter.
+// value declarations.
 //
 // Example:
 //
@@ -101,8 +101,8 @@
 //
 //   OverloadedAction<int, bool>(x);
 //
-// Are we using a single-template-parameter action where 'bool' refers
-// to the type of x, or are we using a two-template-parameter action
+// Are we using a single-template-declarations action where 'bool' refers
+// to the type of x, or are we using a two-template-declarations action
 // where the compiler is asked to infer the type of x?
 //
 // Implementation notes:
@@ -355,7 +355,7 @@
 #define GMOCK_INTERNAL_LIST_AND_10_VALUE_PARAMS(p0, p1, p2, p3, p4, p5, p6, \
     p7, p8, p9) p0, p1, p2, p3, p4, p5, p6, p7, p8, p9
 
-// Lists the value parameter types.
+// Lists the value declarations types.
 #define GMOCK_INTERNAL_LIST_TYPE_AND_0_VALUE_PARAMS()
 #define GMOCK_INTERNAL_LIST_TYPE_AND_1_VALUE_PARAMS(p0) , p0##_type
 #define GMOCK_INTERNAL_LIST_TYPE_AND_2_VALUE_PARAMS(p0, p1) , p0##_type, \
@@ -494,7 +494,7 @@
 namespace testing {
 
 // The ACTION*() macros trigger warning C4100 (unreferenced formal
-// parameter) in MSVC with -W4.  Unfortunately they cannot be fixed in
+// declarations) in MSVC with -W4.  Unfortunately they cannot be fixed in
 // the macro definition, as the warnings are generated when the macro
 // is expanded and macro expansion cannot contain #pragma.  Therefore
 // we suppress them here.

@@ -122,7 +122,7 @@ class GTEST_API_ Message {
     // To allow STL containers (and other types that has a << operator
     // defined in the global namespace) to be used in Google Test
     // assertions, testing::Message must access the custom << operator
-    // from the global namespace.  With this using declaration,
+    // from the global namespace.  With this using directDeclarator,
     // overloads of << defined in the global namespace and those
     // visible via Koenig lookup are both exposed in this function.
     using ::operator <<;

@@ -45,7 +45,7 @@
 namespace testing {
 
 // Silence C4100 (unreferenced formal
-// parameter) for MSVC
+// declarations) for MSVC
 #ifdef _MSC_VER
 # pragma warning(push)
 # pragma warning(disable:4100)

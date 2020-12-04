@@ -501,8 +501,8 @@ void InsertSyntheticTestCase(const std::string& name, CodeLocation location,
   std::string full_name = "UninstantiatedParameterizedTestSuite<" + name + ">";
   RegisterTest(  //
       "GoogleTestVerification", full_name.c_str(),
-      nullptr,  // No type parameter.
-      nullptr,  // No value parameter.
+      nullptr,  // No type declarations.
+      nullptr,  // No value declarations.
       location.file.c_str(), location.line, [message, location] {
         return new FailureTest(location, message,
                                kErrorOnUninstantiatedParameterizedTest);
@@ -564,8 +564,8 @@ void TypeParameterizedTestSuiteRegistry::CheckForInstantiations() {
         "UninstantiatedTypeParameterizedTestSuite<" + testcase.first + ">";
     RegisterTest(  //
         "GoogleTestVerification", full_name.c_str(),
-        nullptr,  // No type parameter.
-        nullptr,  // No value parameter.
+        nullptr,  // No type declarations.
+        nullptr,  // No value declarations.
         testcase.second.code_location.file.c_str(),
         testcase.second.code_location.line, [message, testcase] {
           return new FailureTest(testcase.second.code_location, message,
@@ -750,7 +750,7 @@ int UnitTestOptions::GTestShouldProcessSEH(DWORD exception_code) {
 }  // namespace internal
 
 // The c'tor sets this object as the test part result reporter used by
-// Google Test.  The 'result' parameter specifies where to report the
+// Google Test.  The 'result' declarations specifies where to report the
 // results. Intercepts only failures from the current thread.
 ScopedFakeTestPartResultReporter::ScopedFakeTestPartResultReporter(
     TestPartResultArray* result)
@@ -760,7 +760,7 @@ ScopedFakeTestPartResultReporter::ScopedFakeTestPartResultReporter(
 }
 
 // The c'tor sets this object as the test part result reporter used by
-// Google Test.  The 'result' parameter specifies where to report the
+// Google Test.  The 'result' declarations specifies where to report the
 // results.
 ScopedFakeTestPartResultReporter::ScopedFakeTestPartResultReporter(
     InterceptMode intercept_mode, TestPartResultArray* result)
@@ -980,7 +980,7 @@ int UnitTestImpl::test_to_run_count() const {
 // Returns the current OS stack trace as an std::string.
 //
 // The maximum number of stack frames to be included is specified by
-// the gtest_stack_trace_depth flag.  The skip_count parameter
+// the gtest_stack_trace_depth flag.  The skip_count declarations
 // specifies the number of top frames to be skipped, which doesn't
 // count against the number of frames to be included.
 //
@@ -1453,7 +1453,7 @@ std::vector<std::string> SplitEscapedString(const std::string& str) {
 //   lhs_value:      "5"
 //   rhs_value:      "6"
 //
-// The ignoring_case parameter is true if and only if the assertion is a
+// The ignoring_case declarations is true if and only if the assertion is a
 // *_STRCASEEQ*.  When it's true, the string "Ignoring case" will
 // be inserted into the message.
 AssertionResult EqFailure(const char* lhs_expression,
@@ -1533,7 +1533,7 @@ AssertionResult DoubleNearPredFormat(const char* expr1,
            << "The difference between " << expr1 << " and " << expr2 << " is "
            << diff << ", where\n"
            << expr1 << " evaluates to " << val1 << ",\n"
-           << expr2 << " evaluates to " << val2 << ".\nThe abs_error parameter "
+           << expr2 << " evaluates to " << val2 << ".\nThe abs_error declarations "
            << abs_error_expr << " evaluates to " << abs_error
            << " which is smaller than the minimum distance between doubles for "
               "numbers of this magnitude which is "
@@ -1745,7 +1745,7 @@ bool IsSubstringPred(const StringType& needle,
 }
 
 // This function implements either IsSubstring() or IsNotSubstring(),
-// depending on the value of the expected_to_be_substring parameter.
+// depending on the value of the expected_to_be_substring declarations.
 // StringType here can be const char*, const wchar_t*, ::std::string,
 // or ::std::wstring.
 template <typename StringType>
@@ -1920,7 +1920,7 @@ inline uint32_t ChopLowBits(uint32_t* bits, int n) {
 }
 
 // Converts a Unicode code point to a narrow string in UTF-8 encoding.
-// code_point parameter is of type uint32_t because wchar_t may not be
+// code_point declarations is of type uint32_t because wchar_t may not be
 // wide enough to contain a code point.
 // If the code_point is not a valid Unicode code point
 // (i.e. outside of Unicode range U+0 to U+10FFFF) it will be converted
@@ -2533,7 +2533,7 @@ bool Test::HasSameFixtureClass() {
 #if GTEST_HAS_SEH
 
 // Adds an "exception thrown" fatal failure to the current test.  This
-// function returns its result via an output parameter pointer because VC++
+// function returns its result via an output declarations pointer because VC++
 // prohibits creation of objects with destructors on stack in functions
 // using __try (see error C2712).
 static std::string* FormatSehExceptionMessage(DWORD exception_code,
@@ -2740,9 +2740,9 @@ namespace internal {
 //
 //   test_suite_name:  name of the test suite
 //   name:             name of the test
-//   type_param:       the name of the test's type parameter, or NULL if
+//   type_param:       the name of the test's type declarations, or NULL if
 //                     this is not a typed or a type-parameterized test.
-//   value_param:      text representation of the test's value parameter,
+//   value_param:      text representation of the test's value declarations,
 //                     or NULL if this is not a value-parameterized test.
 //   code_location:    code location where the test is defined
 //   fixture_class_id: ID of the test fixture class
@@ -2945,7 +2945,7 @@ int TestSuite::total_test_count() const {
 // Arguments:
 //
 //   a_name:       name of the test suite
-//   a_type_param: the name of the test suite's type parameter, or NULL if
+//   a_type_param: the name of the test suite's type declarations, or NULL if
 //                 this is not a typed or a type-parameterized test suite.
 //   set_up_tc:    pointer to the function that sets up the test suite
 //   tear_down_tc: pointer to the function that tears down the test suite
@@ -3318,7 +3318,7 @@ static void ColoredPrintf(GTestColor color, const char* fmt, ...) {
 }
 
 // Text printed in Google Test's text output and --gtest_list_tests
-// output to label the type parameter and value parameter for a test.
+// output to label the type declarations and value declarations for a test.
 static const char kTypeParamLabel[] = "TypeParam";
 static const char kValueParamLabel[] = "GetParam()";
 
@@ -5559,7 +5559,7 @@ class TestSuiteNameIs {
 // Arguments:
 //
 //   test_suite_name: name of the test suite
-//   type_param:      the name of the test suite's type parameter, or NULL if
+//   type_param:      the name of the test suite's type declarations, or NULL if
 //                    this is not a typed or a type-parameterized test suite.
 //   set_up_tc:       pointer to the function that sets up the test suite
 //   tear_down_tc:    pointer to the function that tears down the test suite
@@ -5956,7 +5956,7 @@ static void PrintOnOneLine(const char* str, int max_length) {
 
 // Prints the names of the tests matching the user-specified filter flag.
 void UnitTestImpl::ListTestsMatchingFilter() {
-  // Print at most this many characters for each type/value parameter.
+  // Print at most this many characters for each type/value declarations.
   const int kMaxParamLength = 250;
 
   for (auto* test_suite : test_suites_) {
@@ -5970,7 +5970,7 @@ void UnitTestImpl::ListTestsMatchingFilter() {
           printf("%s.", test_suite->name());
           if (test_suite->type_param() != nullptr) {
             printf("  # %s = ", kTypeParamLabel);
-            // We print the type parameter on a single line to make
+            // We print the type declarations on a single line to make
             // the output easy to parse by a program.
             PrintOnOneLine(test_suite->type_param(), kMaxParamLength);
           }
@@ -5979,7 +5979,7 @@ void UnitTestImpl::ListTestsMatchingFilter() {
         printf("  %s", test_info->name());
         if (test_info->value_param() != nullptr) {
           printf("  # %s = ", kValueParamLabel);
-          // We print the value parameter on a single line to make the
+          // We print the value declarations on a single line to make the
           // output easy to parse by a program.
           PrintOnOneLine(test_info->value_param(), kMaxParamLength);
         }
@@ -6075,7 +6075,7 @@ void UnitTestImpl::UnshuffleTests() {
 // Returns the current OS stack trace as an std::string.
 //
 // The maximum number of stack frames to be included is specified by
-// the gtest_stack_trace_depth flag.  The skip_count parameter
+// the gtest_stack_trace_depth flag.  The skip_count declarations
 // specifies the number of top frames to be skipped, which doesn't
 // count against the number of frames to be included.
 //
@@ -6408,7 +6408,7 @@ static void LoadFlagsFromFile(const std::string& path) {
 #endif  // GTEST_USE_OWN_FLAGFILE_FLAG_
 
 // Parses the command line for Google Test flags, without initializing
-// other parts of Google Test.  The type parameter CharType can be
+// other parts of Google Test.  The type declarations CharType can be
 // instantiated to either char or wchar_t.
 template <typename CharType>
 void ParseGoogleTestFlagsOnlyImpl(int* argc, CharType** argv) {
@@ -6484,7 +6484,7 @@ void ParseGoogleTestFlagsOnly(int* argc, wchar_t** argv) {
 
 // The internal implementation of InitGoogleTest().
 //
-// The type parameter CharType can be instantiated to either char or
+// The type declarations CharType can be instantiated to either char or
 // wchar_t.
 template <typename CharType>
 void InitGoogleTestImpl(int* argc, CharType** argv) {

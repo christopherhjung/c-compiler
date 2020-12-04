@@ -85,7 +85,7 @@ class MockStack : public StackInterface<Elem> {
 ### Specifying Calling Conventions for Mock Functions
 
 If your mock function doesn't use the default calling convention, you can
-specify it by adding `Calltype(convention)` to `MOCK_METHOD`'s 4th parameter.
+specify it by adding `Calltype(convention)` to `MOCK_METHOD`'s 4th declarations.
 For example,
 
 ```cpp

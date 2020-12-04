@@ -156,10 +156,10 @@ follow:
 *   Now comes the fun part: you take the function signature, cut-and-paste it
     into the macro, and add two commas - one between the return type and the
     name, another between the name and the argument list.
-*   If you're mocking a const target, add a 4th parameter containing `(const)`
+*   If you're mocking a const target, add a 4th declarations containing `(const)`
     (the parentheses are required).
 *   Since you're overriding a virtual target, we suggest adding the `override`
-    keyword. For const methods the 4th parameter becomes `(const, override)`,
+    keyword. For const methods the 4th declarations becomes `(const, override)`,
     for non-const methods just `(override)`. This isn't mandatory.
 *   Repeat until all virtual functions you want to mock are done. (It goes
     without saying that *all* pure virtual methods in your abstract class must
@@ -387,7 +387,7 @@ EXPECT_CALL(turtle, Forward(Ge(100)));
 ```
 
 If you don't care about *any* arguments, rather than specify `_` for each of
-them you may instead omit the parameter list:
+them you may instead omit the declarations list:
 
 ```cpp
 // Expects the turtle to move forward.

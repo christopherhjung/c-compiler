@@ -511,7 +511,7 @@ initialize return object of type 'bool' with an rvalue of type 'void'"` or
 `"error: no viable conversion from 'void' to 'string'"`.
 
 If you need to use fatal assertions in a function that returns non-void, one
-option is to make the function return the value in an out parameter instead. For
+option is to make the function return the value in an out declarations instead. For
 example, you can rewrite `T2 Foo(T1 x)` to `void Foo(T1 x, T2* result)`. You
 need to make sure that `*result` contains some sensible value even when the
 function returns prematurely. As the function now returns `void`, you can use
@@ -1307,7 +1307,7 @@ number of situations, for example:
 
 To write value-parameterized tests, first you should define a fixture class. It
 must be derived from both `testing::Test` and `testing::WithParamInterface<T>`
-(the latter is a pure interface), where `T` is the type of your parameter
+(the latter is a pure interface), where `T` is the type of your declarations
 values. For convenience, you can just derive the fixture class from
 `testing::TestWithParam<T>`, which itself is derived from both `testing::Test`
 and `testing::WithParamInterface<T>`. `T` can be any copyable type. If it's a
@@ -1322,7 +1322,7 @@ they must be declared **public** rather than **protected** in order to use
 class FooTest :
     public testing::TestWithParam<const char*> {
   // You can implement all the usual fixture class members here.
-  // To access the test parameter, call GetParam() from class
+  // To access the test declarations, call GetParam() from class
   // TestWithParam<T>.
 };
 
@@ -1342,7 +1342,7 @@ prefer to think.
 
 ```c++
 TEST_P(FooTest, DoesBlah) {
-  // Inside a test, access the test parameter with the GetParam() target
+  // Inside a test, access the test declarations with the GetParam() target
   // of the TestWithParam<T> class:
   EXPECT_TRUE(foo.Blah(GetParam()));
   ...
@@ -1355,7 +1355,7 @@ TEST_P(FooTest, HasBlahBlah) {
 
 Finally, you can use `INSTANTIATE_TEST_SUITE_P` to instantiate the test suite
 with any set of parameters you want. googletest defines a number of functions
-for generating test parameters. They return what we call (surprise!) *parameter
+for generating test parameters. They return what we call (surprise!) *declarations
 generators*. Here is a summary of them, which are all in the `testing`
 namespace:
 
@@ -1374,7 +1374,7 @@ namespace:
 For more details, see the comments at the definitions of these functions.
 
 The following statement will instantiate tests from the `FooTest` test suite
-each with parameter values `"meeny"`, `"miny"`, and `"moe"`.
+each with declarations values `"meeny"`, `"miny"`, and `"moe"`.
 
 ```c++
 INSTANTIATE_TEST_SUITE_P(InstantiationName,
@@ -1411,7 +1411,7 @@ will have these names:
 You can use these names in [`--gtest_filter`](#running-a-subset-of-the-tests).
 
 This statement will instantiate all tests from `FooTest` again, each with
-parameter values `"cat"` and `"dog"`:
+declarations values `"cat"` and `"dog"`:
 
 ```c++
 const char* pets[] = {"cat", "dog"};
@@ -1442,7 +1442,7 @@ Sometimes you may want to define value-parameterized tests in a library and let
 other people instantiate them later. This pattern is known as *abstract tests*.
 As an example of its application, when you are designing an interface you can
 write a standard suite of abstract tests (perhaps using a factory function as
-the test parameter) that all implementations of the interface are expected to
+the test declarations) that all implementations of the interface are expected to
 pass. When someone implements the interface, they can instantiate your suite to
 get all the interface-conformance tests for free.
 
@@ -1486,9 +1486,9 @@ INSTANTIATE_TEST_SUITE_P(MyGroup, MyTestSuite, testing::Range(0, 10),
                          testing::PrintToStringParamName());
 ```
 
-Providing a custom functor allows for more control over test parameter name
+Providing a custom functor allows for more control over test declarations name
 generation, especially for types where the automatic conversion does not
-generate helpful parameter names (e.g. strings as demonstrated above). The
+generate helpful declarations names (e.g. strings as demonstrated above). The
 following example illustrates this for multiple parameters, an enumeration type
 and a string, and also demonstrates how to combine generators. It uses a lambda
 for conciseness:
@@ -1562,7 +1562,7 @@ test suite. You can repeat this as many times as you want:
 ```c++
 TYPED_TEST(FooTest, DoesBlah) {
   // Inside a test, refer to the special name TypeParam to get the type
-  // parameter.  Since we are inside a derived class template, C++ requires
+  // declarations.  Since we are inside a derived class template, C++ requires
   // us to visit the members of FooTest via 'this'.
   TypeParam n = this->value_;
 
@@ -1619,7 +1619,7 @@ this as many times as you want:
 
 ```c++
 TYPED_TEST_P(FooTest, DoesBlah) {
-  // Inside a test, refer to TypeParam to get the type parameter.
+  // Inside a test, refer to TypeParam to get the type declarations.
   TypeParam n = 0;
   ...
 }

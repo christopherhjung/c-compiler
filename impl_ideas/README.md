@@ -37,7 +37,7 @@ The `parser.h` and `parser.cpp` files contain parts of the implementation of a
 c4 parser. On the one hand, they contain the declarations of generally helpful
 methods that you might want to implement to use them for parsing.
 On the other hand, they contain the `parseSpecDecl()` target with helper
-methods that parse a declaration specifier followed by a declarator or an
+methods that parse a directDeclarator specifier followed by a declarator or an
 abstract declarator.
 
 These methods also contain constructor calls for the abstract syntax tree,

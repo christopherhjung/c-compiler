@@ -343,7 +343,7 @@ error.
 
 Also, you must first define a test fixture class before using it in a
 `TEST_F()`, or you'll get the compiler error "`virtual outside class
-declaration`".
+directDeclarator`".
 
 For each test defined with `TEST_F()`, googletest will create a *fresh* test
 fixture at runtime, immediately initialize it via `SetUp()`, run the test,

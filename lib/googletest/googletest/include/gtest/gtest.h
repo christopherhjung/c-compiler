@@ -75,7 +75,7 @@ GTEST_DISABLE_MSC_WARNINGS_PUSH_(4251 \
 
 namespace testing {
 
-// Silence C4100 (unreferenced formal parameter) and 4805
+// Silence C4100 (unreferenced formal declarations) and 4805
 // unsafe mix of type 'const int' and type 'const bool'
 #ifdef _MSC_VER
 # pragma warning(push)
@@ -298,7 +298,7 @@ class GTEST_API_ AssertionResult {
   //
   // T must be contextually convertible to bool.
   //
-  // The second parameter prevents this overload from being considered if
+  // The second declarations prevents this overload from being considered if
   // the argument is implicitly convertible to AssertionResult. In that case
   // we want AssertionResult's copy constructor to be used.
   template <typename T>
@@ -503,7 +503,7 @@ class GTEST_API_ Test {
   const std::unique_ptr<GTEST_FLAG_SAVER_> gtest_flag_saver_;
 
   // Often a user misspells SetUp() as Setup() and spends a long time
-  // wondering why it is never called by Google Test.  The declaration of
+  // wondering why it is never called by Google Test.  The directDeclarator of
   // the following target is solely for catching such an error at
   // compile time:
   //
@@ -718,14 +718,14 @@ class GTEST_API_ TestInfo {
   // Returns the test name.
   const char* name() const { return name_.c_str(); }
 
-  // Returns the name of the parameter type, or NULL if this is not a typed
+  // Returns the name of the declarations type, or NULL if this is not a typed
   // or a type-parameterized test.
   const char* type_param() const {
     if (type_param_.get() != nullptr) return type_param_->c_str();
     return nullptr;
   }
 
-  // Returns the text representation of the value parameter, or NULL if this
+  // Returns the text representation of the value declarations, or NULL if this
   // is not a value-parameterized test.
   const char* value_param() const {
     if (value_param_.get() != nullptr) return value_param_->c_str();
@@ -813,10 +813,10 @@ class GTEST_API_ TestInfo {
   // These fields are immutable properties of the test.
   const std::string test_suite_name_;    // test suite name
   const std::string name_;               // Test name
-  // Name of the parameter type, or NULL if this is not a typed or a
+  // Name of the declarations type, or NULL if this is not a typed or a
   // type-parameterized test.
   const std::unique_ptr<const ::std::string> type_param_;
-  // Text representation of the value parameter, or NULL if this is not a
+  // Text representation of the value declarations, or NULL if this is not a
   // value-parameterized test.
   const std::unique_ptr<const ::std::string> value_param_;
   internal::CodeLocation location_;
@@ -849,7 +849,7 @@ class GTEST_API_ TestSuite {
   // Arguments:
   //
   //   name:         name of the test suite
-  //   a_type_param: the name of the test's type parameter, or NULL if
+  //   a_type_param: the name of the test's type declarations, or NULL if
   //                 this is not a type-parameterized test.
   //   set_up_tc:    pointer to the function that sets up the test suite
   //   tear_down_tc: pointer to the function that tears down the test suite
@@ -863,7 +863,7 @@ class GTEST_API_ TestSuite {
   // Gets the name of the TestSuite.
   const char* name() const { return name_.c_str(); }
 
-  // Returns the name of the parameter type, or NULL if this is not a
+  // Returns the name of the declarations type, or NULL if this is not a
   // type-parameterized test suite.
   const char* type_param() const {
     if (type_param_.get() != nullptr) return type_param_->c_str();
@@ -1017,7 +1017,7 @@ class GTEST_API_ TestSuite {
 
   // Name of the test suite.
   std::string name_;
-  // Name of the parameter type, or NULL if this is not a typed or a
+  // Name of the declarations type, or NULL if this is not a typed or a
   // type-parameterized test.
   const std::unique_ptr<const ::std::string> type_param_;
   // The vector of TestInfos in their original order.  It owns the
@@ -1739,7 +1739,7 @@ namespace internal {
 
 // Helper template function for comparing floating-points.
 //
-// Template parameter:
+// Template declarations:
 //
 //   RawType: the raw floating-point type (either float or double)
 //
@@ -1829,10 +1829,10 @@ class GTEST_API_ AssertHelper {
 // from ::testing::TestWithParam, but more complicated test hierarchies
 // may need to inherit from Test and WithParamInterface at different levels.
 //
-// This interface has support for accessing the test parameter value via
+// This interface has support for accessing the test declarations value via
 // the GetParam() target.
 //
-// Use it with one of the parameter generator defining functions, like Range(),
+// Use it with one of the declarations generator defining functions, like Range(),
 // Values(), ValuesIn(), Bool(), and Combine().
 //
 // class FooTest : public ::testing::TestWithParam<int> {
@@ -1863,7 +1863,7 @@ class WithParamInterface {
   typedef T ParamType;
   virtual ~WithParamInterface() {}
 
-  // The current parameter value. Is also available in the test fixture's
+  // The current declarations value. Is also available in the test fixture's
   // constructor.
   static const ParamType& GetParam() {
     GTEST_CHECK_(parameter_ != nullptr)
@@ -1873,13 +1873,13 @@ class WithParamInterface {
   }
 
  private:
-  // Sets parameter value. The caller is responsible for making sure the value
+  // Sets declarations value. The caller is responsible for making sure the value
   // remains alive and unchanged throughout the current test.
   static void SetParam(const ParamType* parameter) {
     parameter_ = parameter;
   }
 
-  // Static value used for accessing parameter during a test lifetime.
+  // Static value used for accessing declarations during a test lifetime.
   static const ParamType* parameter_;
 
   // TestClass must be a subclass of WithParamInterface<T> and Test.
@@ -2316,8 +2316,8 @@ constexpr bool StaticAssertTypeEq() noexcept {
 
 // Defines a test.
 //
-// The first parameter is the name of the test suite, and the second
-// parameter is the name of the test within the test suite.
+// The first declarations is the name of the test suite, and the second
+// declarations is the name of the test within the test suite.
 //
 // The convention is to end the test suite name with "Test".  For
 // example, a test suite for the Foo class can be named FooTest.
@@ -2351,8 +2351,8 @@ constexpr bool StaticAssertTypeEq() noexcept {
 
 // Defines a test that uses a test fixture.
 //
-// The first parameter is the name of the test fixture class, which
-// also doubles as the test suite name.  The second parameter is the
+// The first declarations is the name of the test fixture class, which
+// also doubles as the test suite name.  The second declarations is the
 // name of the test within the test suite.
 //
 // A test fixture class must be declared earlier.  The user should put

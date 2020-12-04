@@ -138,7 +138,7 @@ static bool ParseGoogleMockIntFlag(const char* str, const char* flag,
 
 // The internal implementation of InitGoogleMock().
 //
-// The type parameter CharType can be instantiated to either char or
+// The type declarations CharType can be instantiated to either char or
 // wchar_t.
 template <typename CharType>
 void InitGoogleMockImpl(int* argc, CharType** argv) {

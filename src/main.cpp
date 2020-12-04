@@ -39,11 +39,13 @@ int main(int, char **const args) {
     std::string command = args[1];
     std::string source = args[2];
 
+    bool printAST = command == "--print-ast";
+
     int code = 1;
     if(command == "--tokenize"){
         code = runLexer(fileInputReader, source, out, err);
     }else{
-        code = runParser(fileInputReader, out, err);
+        code = runParser(fileInputReader, out, err, printAST);
     }
 
 

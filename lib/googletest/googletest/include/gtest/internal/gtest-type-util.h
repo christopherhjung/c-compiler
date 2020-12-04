@@ -107,7 +107,7 @@ struct None {};
 
 // The template "selector" struct TemplateSel<Tmpl> is used to
 // represent Tmpl, which must be a class template with one type
-// parameter, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
+// declarations, as a type.  TemplateSel<Tmpl>::Bind<T>::type is defined
 // as the type Tmpl<T>.  This allows us to actually instantiate the
 // template "selected" by TemplateSel<Tmpl>.
 //

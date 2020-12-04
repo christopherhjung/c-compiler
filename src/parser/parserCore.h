@@ -17,8 +17,9 @@
 
 #include "../utils/PrintUtils.h"
 #include "SimpleParser.h"
+#include "PrettyPrinter.h"
 
-int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err){
+int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err, bool printAST){
 
     GeneratedLexer lexer;
     LexerProxy proxy(lexer);
@@ -27,6 +28,12 @@ int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err
 
     try {
         auto element = parser.parse();
+        if(printAST){
+            PrettyPrinter printer(out);
+            element->dump(printer);
+            out << std::endl;
+            out << std::flush;
+        }
         return 0;
     }catch(parser::ParseException& e){
         std::cerr << e.error << std::endl;
