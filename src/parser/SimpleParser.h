@@ -15,7 +15,7 @@ namespace parser{
     public:
         Error error;
 
-        ParseException(const Error& error) : error(error){
+        explicit ParseException(const Error& error) : error(error){
 
         }
     };
@@ -28,7 +28,7 @@ namespace parser{
         Token lookA;
         Token lookB;
 
-        SimpleParser(Lexer* lexer) : lexer(lexer){
+        explicit SimpleParser(Lexer* lexer) : lexer(lexer){
 
         }
 
@@ -185,15 +185,18 @@ namespace parser{
 
         DirectDeclarator* parseDirectDeclarator(bool normal, bool abstract){
             auto directDeclarator = new DirectDeclarator();
+            bool content = false;
 
             if(is(LEFT_PAREN)){
                 if(!isType(lookB.id) || !abstract){
                     next();
                     directDeclarator->declarator = parseDeclarator(normal, abstract);
                     shall(RIGHT_PAREN);
+                    content = true;
                 }
             }else if(normal && is(IDENTIFIER)){
                 directDeclarator->identifier = parseIdentifier();
+                content = true;
             }else if(!abstract){
                 fatal();
             }
@@ -201,6 +204,7 @@ namespace parser{
             while(eat(LEFT_PAREN)){
                 auto inner = new DirectDeclarator();
                 inner->directDeclarator = directDeclarator;
+                content = true;
                 if(!(abstract && is(RIGHT_PAREN))){
                     inner->parameterTypeList = parseParameterTypeList();
                 }
@@ -208,8 +212,7 @@ namespace parser{
                 shall(RIGHT_PAREN);
             }
 
-            if(directDeclarator->parameterTypeList == nullptr && directDeclarator->declarator == nullptr &&
-                directDeclarator->directDeclarator == nullptr && directDeclarator->identifier == nullptr){
+            if(!content){
                 return nullptr;
             }
 

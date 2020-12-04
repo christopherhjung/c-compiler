@@ -8,7 +8,7 @@
 #include "reader/StreamInputReader.h"
 #include "reader/FileInputReader.h"
 
-//make#define MEASURE
+//#define MEASURE
 #define OUTPUT
 
 #include "generated/GeneratedLexer.h"
@@ -22,15 +22,18 @@ int main(int, char **const args) {
     auto start_time = std::chrono::high_resolution_clock::now();
 #endif
 
-#ifdef MEASURE
+#ifndef OUTPUT
     //std::ofstream ss("test/out");
     std::stringstream ss;
     std::ostream& out = ss;
     std::ostream& err = ss;
-    std::ostream& msg = std::cout;
 #else
     std::ostream& out = std::cout;
     std::ostream& err = std::cerr;
+#endif
+
+#ifdef MEASURE
+    std::ostream& msg = std::cout;
 #endif
 
     //InputReader* fileInputReader = new StreamInputReader(&std::cin);
