@@ -228,7 +228,7 @@ namespace parser{
     public:
         Identifier* identifier;
         Declarator* declarator;
-        DirectDeclarator* left;
+        DirectDeclarator* directDeclarator;
         std::vector<Declarator*> parameter;
     };
 
@@ -455,20 +455,20 @@ namespace parser{
         }
 
         DirectDeclarator* parseDirectDeclarator(bool normal, bool abstract){
-            auto declaration = new DirectDeclarator();
+            auto directDeclarator = new DirectDeclarator();
 
             if(eat(LEFT_PAREN)){
-                parseDeclarator(normal, abstract);
+                directDeclarator->declarator = parseDeclarator(normal, abstract);
                 shall(RIGHT_PAREN);
             }else if(normal && is(IDENTIFIER)){
-                declaration->identifier = parseIdentifier();
+                directDeclarator->identifier = parseIdentifier();
             }else if(!abstract){
                 fatal();
             }
 
             while(eat(LEFT_PAREN)){
                 auto inner = new DirectDeclarator();
-                inner->left = declaration;
+                inner->directDeclarator = directDeclarator;
                 if(!(abstract && is(RIGHT_PAREN))){
                     while(true){
                         parseParameterTypeList(inner);
@@ -478,11 +478,11 @@ namespace parser{
                         }
                     }
                 }
-                declaration = inner;
+                directDeclarator = inner;
                 shall(RIGHT_PAREN);
             }
 
-            return declaration;
+            return directDeclarator;
         }
 
         void parseParameterTypeList(DirectDeclarator* inner){
