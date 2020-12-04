@@ -445,7 +445,7 @@ namespace parser{
                 declaration->pointer++;
             }
 
-            if(declaration->pointer > 0 && abstract && !is(LEFT_PAREN) && (!normal || !is(IDENTIFIER))){
+            if(declaration->pointer > 0 && abstract && !is(LEFT_PAREN) && !(normal && is(IDENTIFIER))){
                 return declaration;
             }
 
@@ -470,13 +470,9 @@ namespace parser{
                 auto inner = new DirectDeclarator();
                 inner->directDeclarator = directDeclarator;
                 if(!(abstract && is(RIGHT_PAREN))){
-                    while(true){
+                    do {
                         parseParameterTypeList(inner);
-
-                        if(!eat(COMMA)){
-                            break;
-                        }
-                    }
+                    } while(eat(COMMA));
                 }
                 directDeclarator = inner;
                 shall(RIGHT_PAREN);
@@ -657,9 +653,7 @@ namespace parser{
                         left = unary;
                     }
                 }
-            }
-
-            if(left == nullptr){
+            }else{
                 left = parseValue();
             }
 
