@@ -617,6 +617,7 @@ namespace parser{
             }
 
             fatal();
+            return nullptr;
         }
 
 
