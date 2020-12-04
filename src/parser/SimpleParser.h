@@ -186,9 +186,12 @@ namespace parser{
         DirectDeclarator* parseDirectDeclarator(bool normal, bool abstract){
             auto directDeclarator = new DirectDeclarator();
 
-            if(eat(LEFT_PAREN)){
-                directDeclarator->declarator = parseDeclarator(normal, abstract);
-                shall(RIGHT_PAREN);
+            if(is(LEFT_PAREN)){
+                if(!isType(lookB.id) || !abstract){
+                    next();
+                    directDeclarator->declarator = parseDeclarator(normal, abstract);
+                    shall(RIGHT_PAREN);
+                }
             }else if(normal && is(IDENTIFIER)){
                 directDeclarator->identifier = parseIdentifier();
             }else if(!abstract){
