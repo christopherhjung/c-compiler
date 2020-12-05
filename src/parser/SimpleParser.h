@@ -269,6 +269,8 @@ namespace parser{
                 shall(SEMI);
                 return expr;
             }
+
+            return nullptr;
         }
 
         GoTo* parseGoTo(){

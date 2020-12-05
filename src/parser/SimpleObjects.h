@@ -392,9 +392,11 @@ namespace parser{
         Expression* index = nullptr;
 
         void dump(PrettyPrinter& stream) override{
-            target->dump(stream);
             stream << "(";
+            target->dump(stream);
+            stream << "[";
             index->dump(stream);
+            stream << "]";
             stream << ")";
         }
     };
@@ -406,11 +408,13 @@ namespace parser{
         Expression* right = nullptr;
 
         void dump(PrettyPrinter& stream) override{
+            stream << "(";
             condition->dump(stream);
             stream << "?";
             left->dump(stream);
             stream << ":";
             right->dump(stream);
+            stream << ")";
         }
     };
 
