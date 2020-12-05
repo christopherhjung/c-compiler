@@ -235,7 +235,9 @@ namespace parser{
             stream.withoutIndent();
             stream << name << ":";
             stream.newLine();
-            statement->dump(stream);
+            if(statement != nullptr){
+                statement->dump(stream);
+            }
         }
     };
 
