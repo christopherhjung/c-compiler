@@ -264,7 +264,7 @@ namespace parser{
                 eat(COLON);
                 result->statement = parseStatement();
                 return result;
-            }else{
+            }else if(!eat(SEMI)){
                 auto expr = parseExpression();
                 shall(SEMI);
                 return expr;
