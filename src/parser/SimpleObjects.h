@@ -17,6 +17,10 @@ namespace parser{
         return dynamic_cast<const Base *>(obj) != nullptr;
     }
 
+    class Statement;
+    void printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement);
+    void printStatement(PrettyPrinter& stream, Statement* statement);
+
     class Element{
     public:
         virtual ~Element() = default;
@@ -189,10 +193,7 @@ namespace parser{
             stream.increaseDepth();
             stream.newLine();
             for(auto child : children){
-                child->dump(stream);
-                if(!instanceof<If>(child) && !instanceof<While>(child) && !instanceof<Block>(child)){
-                    stream << ";";
-                }
+                printStatement(stream, child);
                 stream.newLine();
             }
             stream.decreaseDepth();
@@ -293,21 +294,19 @@ namespace parser{
         void dump(PrettyPrinter& stream) override{
             if(identifier != nullptr){
                 identifier->dump(stream);
-            }
-
-            if(declarator != nullptr){
-                stream << "(";
+            }else if(declarator != nullptr){
                 declarator->dump(stream);
-                stream << ")";
-            }
-
-            if(directDeclarator != nullptr){
-                directDeclarator->dump(stream);
-            }
-
-            if(parameterTypeList != nullptr){
+            }else{
                 stream << "(";
-                parameterTypeList->dump(stream);
+                if(directDeclarator != nullptr){
+                    directDeclarator->dump(stream);
+                }
+
+                if(parameterTypeList != nullptr){
+                    stream << "(";
+                    parameterTypeList->dump(stream);
+                    stream << ")";
+                }
                 stream << ")";
             }
         }
@@ -420,7 +419,6 @@ namespace parser{
         }
     };
 
-    void printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement);
 
     class If : public Statement{
     public:
