@@ -144,8 +144,8 @@ namespace parser{
         }
     };
 
-
-    class Identifier : public Expression{
+    class DirectDeclarator : public Element{};
+    class Identifier : public Expression, public DirectDeclarator{
     public:
         std::string value;
 
@@ -244,7 +244,7 @@ namespace parser{
 
     class DirectDeclarator;
 
-    class Declarator : public Statement{
+    class Declarator : public DirectDeclarator{
     public:
         int pointer = 0;
         DirectDeclarator* directDeclarator = nullptr;
@@ -284,31 +284,23 @@ namespace parser{
         }
     };
 
-    class DirectDeclarator : public Statement{
+    class ParameterDirectDeclarator : public DirectDeclarator{
     public:
-        Identifier* identifier = nullptr;
-        Declarator* declarator = nullptr;
         DirectDeclarator* directDeclarator = nullptr;
         ParameterTypeList* parameterTypeList = nullptr;
 
         void dump(PrettyPrinter& stream) override{
-            if(identifier != nullptr){
-                identifier->dump(stream);
-            }else if(declarator != nullptr){
-                declarator->dump(stream);
-            }else{
-                stream << "(";
-                if(directDeclarator != nullptr){
-                    directDeclarator->dump(stream);
-                }
+            stream << "(";
+            if(directDeclarator != nullptr){
+                directDeclarator->dump(stream);
+            }
 
-                if(parameterTypeList != nullptr){
-                    stream << "(";
-                    parameterTypeList->dump(stream);
-                    stream << ")";
-                }
+            if(parameterTypeList != nullptr){
+                stream << "(";
+                parameterTypeList->dump(stream);
                 stream << ")";
             }
+            stream << ")";
         }
     };
 

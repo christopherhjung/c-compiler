@@ -188,53 +188,30 @@ namespace parser{
         }
 
         DirectDeclarator* parseDirectDeclarator(bool normal, bool abstract){
-            auto directDeclarator = new DirectDeclarator();
-            bool content = false;
+            DirectDeclarator* directDeclarator = nullptr;
 
             if(is(LEFT_PAREN)){
-                if(!isType(lookB.id) || !abstract){
+                if((!isType(lookB.id) && !isNext(RIGHT_PAREN)) || !abstract){
                     next();
-                    auto declarator = parseDeclarator(normal, abstract);
+                    directDeclarator = parseDeclarator(normal, abstract);
                     shall(RIGHT_PAREN);
-
-                    /*if(){
-
-                    }else{
-
-                    }*/
-
-
-                    directDeclarator->declarator = declarator;
-                    content = true;
                 }
             }else if(normal && is(IDENTIFIER)){
-                directDeclarator->identifier = parseIdentifier();
-                content = true;
-            }else if(!abstract){
+                directDeclarator = parseIdentifier();
+            }else{
                 fatal();
             }
 
-            if(is(LEFT_PAREN)){
-                while(eat(LEFT_PAREN)){
-                    auto inner = new DirectDeclarator();
-                    inner->directDeclarator = directDeclarator;
-                    content = true;
-                    if(!(abstract && is(RIGHT_PAREN))){
-                        inner->parameterTypeList = parseParameterTypeList();
-                    }
-                    directDeclarator = inner;
-                    shall(RIGHT_PAREN);
+            while(eat(LEFT_PAREN)){
+                auto inner = new ParameterDirectDeclarator();
+                inner->directDeclarator = directDeclarator;
+                if(!(abstract && is(RIGHT_PAREN))){
+                    inner->parameterTypeList = parseParameterTypeList();
+                }else{
+                    inner->parameterTypeList = new ParameterTypeList();
                 }
-            }else{
-                if(directDeclarator->declarator != nullptr){
-                    if(directDeclarator->declarator->pointer == 0){
-                        return directDeclarator->declarator->directDeclarator;
-                    }
-                }
-            }
-
-            if(!content){
-                return nullptr;
+                directDeclarator = inner;
+                shall(RIGHT_PAREN);
             }
 
             return directDeclarator;
