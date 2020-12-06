@@ -198,7 +198,7 @@ namespace parser{
                 }
             }else if(normal && is(IDENTIFIER)){
                 directDeclarator = parseIdentifier();
-            }else{
+            }else if(!abstract){
                 fatal();
             }
 
