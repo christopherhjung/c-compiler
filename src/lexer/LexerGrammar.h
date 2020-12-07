@@ -16,8 +16,9 @@ public:
     std::string regex;
     bool greedy;
     bool hide;
+    bool catchValue;
 
-    LexerGrammarEntry(const std::string& name,const std::string& regex, bool greedy, bool hide) : name(name), regex(regex), greedy(greedy), hide(hide){
+    LexerGrammarEntry(const std::string& name,const std::string& regex, bool greedy, bool hide, bool catchValue) : name(name), regex(regex), greedy(greedy), hide(hide), catchValue(catchValue){
 
     }
 };
@@ -28,7 +29,7 @@ public:
     std::vector<LexerGrammarEntry> entries;
 
     LexerGrammar(){
-        entries.emplace_back("eof", "", false, false);
+        entries.emplace_back("eof", "", false, false, false);
     }
 
     static LexerGrammar build(InputReader* inputReader){
@@ -37,6 +38,11 @@ public:
 
         for( std::string line; inputReader->readLine(line); )
         {
+            bool catchValue = line[0] == '+';
+            if(catchValue){
+                line = line.substr(1);
+            }
+
             bool hide = line[0] == '*';
             if(hide){
                 line = line.substr(1);
@@ -55,7 +61,7 @@ public:
             value = std::regex_replace (value,e,"");
 
             if(!key.empty() && !value.empty()){
-                lexerGrammar.entries.emplace_back(LexerGrammarEntry(key,value, greedy, hide));
+                lexerGrammar.entries.emplace_back(LexerGrammarEntry(key,value, greedy, hide, catchValue));
             }
         }
 

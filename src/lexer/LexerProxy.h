@@ -28,7 +28,6 @@ public:
                     return false;
                 } else {
                     accept = 0;
-                    token.value = "";
                     finish = true;
                     break;
                 }
@@ -57,7 +56,9 @@ public:
             }
 
             if (control.isHiding(accept)) {
-                token.value = reader->readString(offset);
+                if(control.isCatching(accept)){
+                    token.value = reader->readString(offset);
+                }
                 reader->reset(offset);
                 current = reader->peek();
                 break;
