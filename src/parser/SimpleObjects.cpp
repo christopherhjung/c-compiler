@@ -35,7 +35,8 @@ void parser::printStatement(PrettyPrinter &stream, parser::Statement *statement)
     if(statement != nullptr){
         statement->dump(stream);
     }
-    if(!instanceof<If>(statement) && !instanceof<While>(statement) && !instanceof<Block>(statement)){
+
+    if(!instanceof<If>(statement) && !instanceof<While>(statement) && !instanceof<Block>(statement) && !instanceof<LabeledStatement>(statement)){
         stream << ";";
     }
 }

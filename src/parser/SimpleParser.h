@@ -331,6 +331,7 @@ namespace parser{
             shall(RIGHT_PAREN);
             result->trueBranch = parseStatement();
             if(eat(ELSE)){
+                result->hasFalse = true;
                 result->falseBranch = parseStatement();
             }
 

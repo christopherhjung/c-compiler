@@ -239,9 +239,7 @@ namespace parser{
             stream.withoutIndent();
             stream << name << ":";
             stream.newLine();
-            if(statement != nullptr){
-                statement->dump(stream);
-            }
+            printStatement(stream, statement);
         }
     };
 
@@ -419,6 +417,7 @@ namespace parser{
     public:
         Expression* condition = nullptr;
         Statement* trueBranch = nullptr;
+        bool hasFalse = false;
         Statement* falseBranch = nullptr;
 
         void dump(PrettyPrinter& stream) override{
@@ -428,7 +427,7 @@ namespace parser{
 
             printIndentIfNotBlock(stream, trueBranch);
 
-            if(falseBranch != nullptr){
+            if(hasFalse){
                 if(instanceof<Block>(trueBranch)){
                     stream << " ";
                 }else{
