@@ -294,7 +294,7 @@ namespace parser{
             auto block = new Block();
             shall(LEFT_BRACE);
             for(;;){
-                while(eat(SEMI));
+                //while(eat(SEMI));
 
                 if(eat(RIGHT_BRACE)){
                     break;
@@ -410,7 +410,7 @@ namespace parser{
             }
 
             for(;;){
-                precedence = binary();
+                precedence = leftPrecedence();
                 if(precedence == 0 || precedence >= other){
                     return left;
                 }else{
@@ -445,7 +445,7 @@ namespace parser{
                         if (bin->op == ARROW || bin->op == DOT) {
                             bin->right = parseIdentifier();
                         } else {
-                            bin->right = parseExpression(precedence);
+                            bin->right = parseExpression(rightPrecedence(bin->op));
                         }
                         left = bin;
                     }
@@ -453,7 +453,7 @@ namespace parser{
             }
         }
 
-        uint32_t binary(){
+        uint32_t leftPrecedence(){
             uint32_t index = 0;
             switch(lookA.id){
                 case ARROW:
@@ -475,6 +475,34 @@ namespace parser{
                 case OR_OR: index = 12; break;
                 case QUESTION: index = 13; break;
                 case ASSIGN: index = 14; break;
+                default: return 0;
+            }
+
+            return index;
+        }
+
+        uint32_t rightPrecedence(uint32_t id){
+            uint32_t index = 0;
+            switch(id){
+                case ARROW:
+                case LEFT_PAREN:
+                case LEFT_BRACKET:
+                case DOT: index = 1; break;
+                case STAR: index = 2; break;
+                case PLUS:
+                case MINUS: index = 4; break;
+                case LESS:
+                case LESS_EQUAL:
+                case GREATER:
+                case GREATER_EQUAL:
+                case LEFT_SHIFT:
+                case RIGHT_SHIFT: index = 6; break;
+                case EQUAL:
+                case NOT_EQUAL: index = 7; break;
+                case AND_AND: index = 11; break;
+                case OR_OR: index = 12; break;
+                case QUESTION: index = 13; break;
+                case ASSIGN: index = 15; break;
                 default: return 0;
             }
 

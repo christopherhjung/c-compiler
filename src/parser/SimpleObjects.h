@@ -123,8 +123,11 @@ namespace parser{
         Expression* value = nullptr;
 
         void dump(PrettyPrinter& stream) override{
-            stream << "return ";
-            value->dump(stream);
+            stream << "return";
+            if(value != nullptr){
+                stream << " ";
+                value->dump(stream);
+            }
         }
     };
 
@@ -403,9 +406,9 @@ namespace parser{
         void dump(PrettyPrinter& stream) override{
             stream << "(";
             condition->dump(stream);
-            stream << "?";
+            stream << " ? ";
             left->dump(stream);
-            stream << ":";
+            stream << " : ";
             right->dump(stream);
             stream << ")";
         }
