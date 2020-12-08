@@ -7,16 +7,14 @@
 #include <iostream>
 
 void parser::Declarator::dump(PrettyPrinter &stream) {
-    if(pointer>0){
-        stream << "(";
-    }
+
     for(uint32_t i = 0 ; i < pointer ; i++){
-        stream << "*";
+        stream << "(*";
     }
     if(directDeclarator != nullptr){
         directDeclarator->dump(stream);
     }
-    if(pointer>0){
+    for(uint32_t i = 0 ; i < pointer ; i++){
         stream << ")";
     }
 }
