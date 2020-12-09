@@ -40,14 +40,16 @@ public:
                 token.location.line = startLine;
                 token.location.column = startColumn;
                 offset = reader->getOffset();
+                std::string msg = "_<-- char >";
                 if (current == 256) {
-                    errorObj = new Error(token.location, reader->readString(offset) + "_<-- char >EOL< wrong!");
+                    msg += "EOL";
                 } else if (current == 0) {
-                    errorObj = new Error(token.location, reader->readString(offset) + "_<-- char >NULL< wrong!");
+                    msg += "NULL";
                 } else {
-                    errorObj = new Error(token.location,
-                                         reader->readString(offset) + "_<-- char >" + ((char) current) + "< wrong!");
+                    msg += std::to_string((char) current);
                 }
+                msg += "< wrong!";
+                errorObj = new Error(token.location, reader->readString(offset) + msg);
                 error = true;
                 return false;
             }
