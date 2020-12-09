@@ -41,7 +41,7 @@ namespace{
             EXPECT_EQ(token.location.line, line);
             EXPECT_EQ(token.location.column, column);
 //EXPECT_EQ(token.name, type);
-            EXPECT_EQ(token.value, value);
+            EXPECT_EQ(*token.value, value);
             EXPECT_FALSE(proxy.isError());
         }
 

@@ -1,0 +1,6 @@
+comment_with_slash.input:1:10: identifier a
+comment_with_slash.input:1:11: punctuator =
+comment_with_slash.input:1:12: constant 0
+comment_with_slash.input:4:13: identifier b
+comment_with_slash.input:4:14: punctuator =
+comment_with_slash.input:4:16: constant 0

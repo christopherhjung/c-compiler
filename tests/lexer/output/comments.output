@@ -1,0 +1,10 @@
+comments.input:4:8: identifier z1234_z
+comments.input:8:1: identifier xx
+comments.input:8:4: punctuator *
+comments.input:8:5: punctuator /
+comments.input:9:1: identifier x
+comments.input:9:3: punctuator =
+comments.input:9:5: identifier a
+comments.input:9:7: punctuator +
+comments.input:9:9: identifier b
+comments.input:9:10: punctuator ;

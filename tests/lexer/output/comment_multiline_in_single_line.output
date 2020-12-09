@@ -1,0 +1,5 @@
+comment_multiline_in_single_line.input:6:1: identifier fgh
+comment_multiline_in_single_line.input:6:4: punctuator *
+comment_multiline_in_single_line.input:6:5: punctuator /
+comment_multiline_in_single_line.input:6:6: identifier sdfgaoiudf
+comment_multiline_in_single_line.input:7:1: identifier abs

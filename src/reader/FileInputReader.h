@@ -15,9 +15,13 @@ class FileInputReader : public StreamInputReader  {
     std::string file;
     std::string context;
 public:
-    explicit FileInputReader(const std::string& file) : StreamInputReader(), fileStream(file), file(file) {
+    explicit FileInputReader(const std::string& file) : FileInputReader(file, file) {
+
+    }
+
+    explicit FileInputReader(const std::string& file, const std::string& context) : StreamInputReader(), fileStream(file), file(file) {
         stream = &fileStream;
-        context = file;
+        this->context = context;
         init();
     }
 

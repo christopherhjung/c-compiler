@@ -49,7 +49,7 @@ public:
     std::unordered_map<std::string, Entity*> terminals;
     std::unordered_map<std::string, Entity*> nonTerminals;
 
-    ParserCodeGenerator(LexerGrammar lexerGrammar) : lexerGrammar(lexerGrammar), stateMachineLexer(StateMachineBuilder::build(new FileInputReader("./resources/parser.lexer"))){
+    ParserCodeGenerator(LexerGrammar lexerGrammar) : lexerGrammar(lexerGrammar), stateMachineLexer(StateMachineBuilder::build(new FileInputReader("./resources/astTree.lexer"))){
         uint32_t id = 0;
         std::regex pattern (R"(\\)");
         std::regex isRegex (R"([^\\][[\]\{\}\(\)\*\+])");

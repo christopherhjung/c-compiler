@@ -36,8 +36,7 @@ public:
             if (accept == -1) {
                 token.location.line = startLine;
                 token.location.column = startColumn;
-                offset = reader->getOffset();
-                std::string msg = "_<-- char >";
+                std::string msg = reader->readString(reader->getOffset()) + "_<-- char >";
                 if (current == 256) {
                     msg += "EOL";
                 } else if (current == 0) {
@@ -46,7 +45,7 @@ public:
                     msg += std::to_string((char) current);
                 }
                 msg += "< wrong!";
-                errorObj = new Error(token.location, reader->readString(offset) + msg);
+                errorObj = new Error(token.location, msg);
                 error = true;
                 return false;
             }

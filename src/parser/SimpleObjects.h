@@ -311,7 +311,12 @@ namespace parser{
         std::vector<Declaration*> declarations;
 
         void dump(PrettyPrinter& stream) override{
-            stream << "struct " << *name;
+            stream << "struct";
+
+            if(name != nullptr){
+                stream << " " << *name;
+            }
+
             if(!declarations.empty()){
                 stream.newLine();
                 stream << "{";

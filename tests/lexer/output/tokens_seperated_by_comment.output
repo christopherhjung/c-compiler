@@ -1,0 +1,4 @@
+tokens_seperated_by_comment.input:1:1: identifier ABC
+tokens_seperated_by_comment.input:1:15: identifier sdfsdf
+tokens_seperated_by_comment.input:5:1: punctuator *
+tokens_seperated_by_comment.input:5:2: punctuator /

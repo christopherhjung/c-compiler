@@ -46,7 +46,7 @@ int main(int, char **const args) {
 
     int code = 1;
     if(command == "--tokenize"){
-        code = runLexer(fileInputReader, source, out, err);
+        code = runLexer(fileInputReader, out, err);
     }else{
         code = runParser(fileInputReader, out, err, printAST);
     }

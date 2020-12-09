@@ -10,13 +10,13 @@ include_directories(lib/googletest)
 include_directories(lib/googletest/googletest/include)
 include_directories(lib/googletest/googlemock/include)
 
-SET(CMAKE_CXX_FLAGS "-O3")
-SET(CMAKE_C_FLAGS "-O3")
+SET(CMAKE_CXX_FLAGS "-O0")
+SET(CMAKE_C_FLAGS "-O0")
 
 add_executable(c4 src/main.cpp src/parser/SimpleObjects.cpp)
 add_executable(build src/build.cpp)
 
-add_executable(testC4 tests/main.cpp)
+add_executable(testC4 tests/main.cpp src/parser/SimpleObjects.cpp)
 
 target_link_libraries(testC4 gtest gtest_main)
 

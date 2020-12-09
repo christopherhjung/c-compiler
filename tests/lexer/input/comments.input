@@ -1,0 +1,9 @@
+/* I AM A COMMENT
+*****
+234567fghzjk "§shdflhg"
+    v*/z1234_z
+
+// abcdefghijklmnopqrstuvwxyz /* no-multiline-comment
+
+xx */ // these are two punctuators and not the end of the "no-multiline-comment"
+x = a + b;

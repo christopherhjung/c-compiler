@@ -1,0 +1,5 @@
+example_from_sheet_1.input:1:1: constant 42
+example_from_sheet_1.input:1:5: keyword if
+example_from_sheet_1.input:2:2: string-literal "bla\n"
+example_from_sheet_1.input:2:9: identifier x
+example_from_sheet_1.input:2:10: punctuator +
