@@ -44,7 +44,7 @@ public:
         ss << "#include \"../lexer/LexerControl.h\"" << std::endl;
         ss << "#include \"../lexer/LexerProxy.h\"" << std::endl;
         ss << "#include \"../reader/InputReader.h\"" << std::endl;
-        writeClass(machine->states , machine->root, machine->kinds, machine->hides);
+        writeClass(machine->states , machine->root, machine->kinds, machine->hides, machine->catches);
         ss << std::flush;
         ss.close();
     }
@@ -65,7 +65,15 @@ public:
         offset(1) << "};" << std::endl;
     }
 
-    void writeClass(std::vector<State*>& states, State* start, std::vector<std::string>& kinds, std::vector<bool>& hides){
+    void writeCatches(std::vector<bool>& catches){
+        offset(1) << "bool catches["<<  catches.size() <<"] {" << std::endl ;
+        for( const auto& catchValue : catches ){
+            offset(2) << catchValue << "," << std::endl;
+        }
+        offset(1) << "};" << std::endl;
+    }
+
+    void writeClass(std::vector<State*>& states, State* start, std::vector<std::string>& kinds, std::vector<bool>& hides, std::vector<bool>& catches){
         std::sort(states.begin(), states.end(), cmpState);
 
         offset(0) << "class GeneratedLexer : public LexerControl{" << std::endl;
@@ -75,7 +83,7 @@ public:
         offset(1) << "uint32_t *offset;" << std::endl;
         offset(1) << "InputReader *reader;" << std::endl;
 
-
+        writeCatches(catches);
         writeHides(hides);
 
         offset(1) << "void init(LexerProxy& proxy) override {" << std::endl;
@@ -96,6 +104,10 @@ public:
 
         offset(1) << "bool isHiding(uint32_t id) override {" << std::endl;
         offset(2) << "return hides[id];" << std::endl;
+        offset(1) << "}" << std::endl;
+
+        offset(1) << "bool isCatching(uint32_t id) override {" << std::endl;
+        offset(2) << "return catches[id];" << std::endl;
         offset(1) << "}" << std::endl;
 
 

@@ -60,6 +60,7 @@ public:
     std::vector<std::string> kinds;
     std::unordered_set<uint32_t> greedys;
     std::unordered_set<uint32_t> hides;
+    std::unordered_set<uint32_t> catches;
     std::unordered_map<std::unordered_set<uint32_t>, State*, SetHash> states;
 
     static StateMachine* build(InputReader* inputReader){
@@ -72,7 +73,7 @@ public:
         StateMachineBuilder builder;
         for( const auto& entry : grammar.entries )
         {
-            builder.add(entry.name, entry.regex, entry.greedy, entry.hide);
+            builder.add(entry.name, entry.regex, entry.greedy, entry.hide, entry.catchValue);
         }
         return builder.build();
     }
@@ -127,7 +128,7 @@ public:
         return info;
     }
 
-    void add(const std::string& name, const std::string& regex, bool greedy, bool hide)
+    void add(const std::string& name, const std::string& regex, bool greedy, bool hide, bool catchValue)
     {
         if(name == "eof"){
             eof = currentRule;
@@ -154,6 +155,10 @@ public:
             if(hide){
                 hides.insert(endInfo->rule);
             }
+
+            if(catchValue){
+                catches.insert(endInfo->rule);
+            }
             rules[finalIndex] = endInfo->rule;
 
             if(finish != nullptr){
@@ -172,7 +177,7 @@ public:
         stateIndex = 0;
         State* root = compile(finish->firstPositions);
 
-        return new StateMachine(root, eof,getStates(), kinds, hides);
+        return new StateMachine(root, eof,getStates(), kinds, hides, catches);
     }
 
     State* compile(const std::unordered_set<uint32_t>& set)

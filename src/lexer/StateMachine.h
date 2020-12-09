@@ -35,9 +35,10 @@ public:
     std::vector<State*> states;
     std::vector<std::string> kinds;
     std::vector<bool> hides;
+    std::vector<bool> catches;
 
     StateMachine(State *init, int32_t eof, const std::vector<State *> &states, const std::vector<std::string> &kinds,
-                 const std::unordered_set<uint32_t>& hides) :
+                 const std::unordered_set<uint32_t>& hides,const std::unordered_set<uint32_t>& catches) :
             root(init), eof(eof), states(states), kinds(kinds)
     {
 
@@ -45,6 +46,13 @@ public:
         std::fill(this->hides.begin() , this->hides.end(), false);
         for( const uint32_t& id : hides){
             this->hides[id] = true;
+        }
+
+
+        this->catches.resize(kinds.size());
+        std::fill(this->catches.begin() , this->catches.end(), false);
+        for( const uint32_t& id : catches){
+            this->catches[id] = true;
         }
     }
 };
