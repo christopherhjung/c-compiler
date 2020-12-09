@@ -24,68 +24,85 @@ std::string removeExtension(const std::string& fileName){
     return std::string::npos == position ? fileName : fileName.substr(0, position);
 }
 
-auto findFile(const std::string& path, const std::string& name){
+std::string findFile(const std::string& path, const std::string& name){
+    if(!std::filesystem::exists(path)){
+        return "";
+    }
+
     std::string fileName = removeExtension(name);
     for (const auto& dirEntry : std::filesystem::directory_iterator(path)){
         if(removeExtension(dirEntry.path().filename()) == fileName){
-            return dirEntry;
+            return dirEntry.path();
         }
     }
 
-    throw std::exception();
+    return "";
 }
 
+int diff(const std::string& orgStr, const std::string& path){
+    if(path.empty()){
+        if(!orgStr.empty()){
+            return 1;
+        }
+
+        return 0;
+    }
+
+    int error = 0;
+    std::istringstream org(orgStr);
+    std::ifstream ref(path);
+    std::string orgLine;
+    std::string refLine;
+    for (; std::getline(org, orgLine); ) {
+        if(std::getline(ref, refLine)){
+            if(refLine != orgLine){
+                std::cout << "\u001b[31m-" << (refLine) << std::endl;
+                std::cout << "\u001b[32m+"  << (orgLine) << std::endl;
+                std::cout << "\u001b[0m";
+                error++;
+            }
+        }else{
+            std::cout << "\u001b[32m+"  << orgLine << std::endl;
+            std::cout << "\u001b[0m";
+            error++;
+        }
+    }
+
+    while(std::getline(ref, refLine)){
+        std::cout << "\u001b[31m-" << refLine << std::endl;
+        std::cout << "\u001b[0m";
+        error++;
+    }
+
+    return error;
+}
 
 int print(const std::string& path, void (*fun)(FileInputReader*, std::ostream&, std::ostream&)){
     int errors = 0;
     for (const auto& dirEntry : std::filesystem::directory_iterator(path + "/input")){
         int currentErrors = 0;
-
         FileInputReader reader(dirEntry.path(), dirEntry.path().filename());
 
         std::stringstream out;
         std::stringstream err;
         fun(&reader, out, err);
-        std::string outStr = out.str();
-        std::string errStr = err.str();
 
-        auto result = findFile(path + "/output", reader.getContext());
-        std::istringstream org(outStr);
-        std::ifstream ref(result);
+        auto outputRef = findFile(path + "/output", reader.getContext());
+        auto errorRef = findFile(path + "/error", reader.getContext());
 
-        std::string orgLine;
-        std::string refLine;
-        for (; std::getline(org, orgLine); ) {
-            if(std::getline(ref, refLine)){
-                if(refLine != orgLine){
-                    std::cout << "\u001b[31m-" << (refLine) << std::endl;
-                    std::cout << "\u001b[32m+"  << (orgLine) << std::endl;
-                    std::cout << "\u001b[0m";
-                    currentErrors++;
-                }
-            }else{
-                std::cout << "\u001b[32m+"  << orgLine << std::endl;
-                std::cout << "\u001b[0m";
-                currentErrors++;
-            }
-        }
-
-        while(std::getline(ref, refLine)){
-            std::cout << "\u001b[31m-" << refLine << std::endl;
-            std::cout << "\u001b[0m";
-            currentErrors++;
-        }
+        currentErrors += diff(out.str(), outputRef);
+        currentErrors += diff(err.str(), errorRef);
 
         if(currentErrors == 0){
             std::cout << "\u001b[32m";
         }else{
             std::cout << "\u001b[31m";
-            errors += currentErrors;
         }
-
 
         std::cout<< path << ": " << (std::string)dirEntry.path().filename() << std::endl;
         std::cout << "\u001b[0m";
+
+        errors += currentErrors;
     }
 
     return errors;
@@ -98,7 +115,6 @@ int main(int argc, char** argv){
     errors += print("lexer", [](FileInputReader* inputReader, std::ostream& out, std::ostream& err){
         runLexer(inputReader, out, err);
     });
-
 
     errors += print("print_ast", [](FileInputReader* inputReader, std::ostream& out, std::ostream& err){
         runParser(inputReader, out, err, true);
