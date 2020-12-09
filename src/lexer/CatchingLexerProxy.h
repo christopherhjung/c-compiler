@@ -2,6 +2,9 @@
 
 #include "Lexer.h"
 #include "LexerControl.h"
+
+std::unordered_set<std::string> map;
+
 class CatchingLexerProxy : public Lexer {
 
 public:
@@ -12,7 +15,6 @@ public:
     char last = 0;
     bool finish = false;
     LexerControl& control;
-    std::unordered_set<std::string> map;
 
     CatchingLexerProxy(LexerControl& control): control(control){
 
@@ -39,11 +41,11 @@ public:
                 token.location.column = startColumn;
                 offset = reader->getOffset();
                 if (current == 256) {
-                    errorObj = new Error(&token.location, reader->readString(offset) + "_<-- char >EOL< wrong!");
+                    errorObj = new Error(token.location, reader->readString(offset) + "_<-- char >EOL< wrong!");
                 } else if (current == 0) {
-                    errorObj = new Error(&token.location, reader->readString(offset) + "_<-- char >NULL< wrong!");
+                    errorObj = new Error(token.location, reader->readString(offset) + "_<-- char >NULL< wrong!");
                 } else {
-                    errorObj = new Error(&token.location,
+                    errorObj = new Error(token.location,
                                          reader->readString(offset) + "_<-- char >" + ((char) current) + "< wrong!");
                 }
                 error = true;
@@ -58,6 +60,8 @@ public:
                 if(control.isCatching(accept)){
                     const auto& p = map.emplace(reader->readString(offset));
                     token.value = &(*p.first);
+                }else{
+                    token.value = nullptr;
                 }
                 reader->reset(offset);
                 current = reader->peek();

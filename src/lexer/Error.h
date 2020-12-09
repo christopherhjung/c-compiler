@@ -12,17 +12,13 @@
 
 class Error {
 public:
-    Location* location;
+    Location location;
     std::string msg;
-    Error(Location* location, const std::string& msg) : location(location),  msg(msg){
+    Error(const Location &location, const std::string& msg) : location(location),  msg(msg){
 
     };
 
-    virtual ~Error() {
-
-    }
-
     friend std::ostream& operator<<(std::ostream& stream, const Error& tok){
-        return stream << *(tok.location) << ": error: " << tok.msg;
+        return stream << tok.location << ": error: " << tok.msg;
     }
 };

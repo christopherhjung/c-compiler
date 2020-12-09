@@ -78,7 +78,7 @@ public:
                 if(currentState == nullptr || reader->peek() == 256){
                     if(acceptPosition == -1){
                         token.id = -1;
-                        errorObj =new Error(&token.location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + escaping(c) + "< wrong!" );
+                        errorObj =new Error(token.location, reader->readString(reader->getOffset() - 1) + "_<-- char >" + escaping(c) + "< wrong!" );
                         error = true;
                         return false;
                     }

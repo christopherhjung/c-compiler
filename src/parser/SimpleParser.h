@@ -71,7 +71,7 @@ namespace parser{
         }
 
         void fatal(){
-            throw ParseException(Error(&lookA.location, "wrong token " + *lookA.value));
+            throw ParseException(Error(lookA.location, "wrong token " + *lookA.value));
         }
 
         Unit* parse(){
