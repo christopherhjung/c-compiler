@@ -11,6 +11,9 @@
 
 class Lexer {
 public:
+    int16_t current;
+    int32_t accept;
+    uint32_t offset;
     InputReader* reader;
     virtual void reset(InputReader* reader){
         this->reader = reader;

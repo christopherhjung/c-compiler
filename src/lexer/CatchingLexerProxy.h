@@ -1,7 +1,8 @@
 #pragma once
+
 #include "Lexer.h"
 #include "LexerControl.h"
-class LexerProxy : public Lexer {
+class CatchingLexerProxy : public Lexer {
 
 public:
     uint32_t line = 1;
@@ -12,7 +13,8 @@ public:
     bool finish = false;
     LexerControl& control;
 
-    LexerProxy(LexerControl& control): control(control){
+
+    CatchingLexerProxy(LexerControl& control): control(control){
 
     }
 
@@ -53,7 +55,9 @@ public:
             }
 
             if (control.isHiding(accept)) {
-                token.value = reader->readString(offset);
+                if(control.isCatching(accept)){
+                    token.value = reader->readString(offset);
+                }
                 reader->reset(offset);
                 current = reader->peek();
                 break;

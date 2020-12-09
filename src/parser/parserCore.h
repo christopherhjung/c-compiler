@@ -18,11 +18,12 @@
 #include "../utils/PrintUtils.h"
 #include "SimpleParser.h"
 #include "PrettyPrinter.h"
+#include "../lexer/CatchingLexerProxy.h"
 
 int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err, bool printAST){
 
     GeneratedLexer lexer;
-    LexerProxy proxy(lexer);
+    CatchingLexerProxy proxy(lexer);
     parser::SimpleParser parser(&proxy);
     parser.init(fileInputReader);
 

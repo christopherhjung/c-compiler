@@ -86,7 +86,7 @@ public:
         writeCatches(catches);
         writeHides(hides);
 
-        offset(1) << "void init(LexerProxy& proxy) override {" << std::endl;
+        offset(1) << "void init(Lexer& proxy) override {" << std::endl;
         offset(2) << "offset = &proxy.offset;" << std::endl;
         offset(2) << "current = &proxy.current;" << std::endl;
         offset(2) << "accept = &proxy.accept;" << std::endl;
