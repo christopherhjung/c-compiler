@@ -13,14 +13,13 @@ struct Token {
 
 public:
     Location location;
-    Location end;
     int32_t id;
-    std::string value;
+    const std::string *value;
     Token( ){
     };
 
     friend std::ostream& operator<<(std::ostream& stream, const Token& tok){
-        return stream << tok.location << " " << tok.value;
+        return stream << tok.location << " " << *tok.value;
     }
 };
 

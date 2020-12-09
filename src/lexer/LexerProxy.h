@@ -11,6 +11,7 @@ public:
     char last = 0;
     bool finish = false;
     LexerControl& control;
+    std::string value;
 
     LexerProxy(LexerControl& control): control(control){
 
@@ -53,7 +54,8 @@ public:
             }
 
             if (control.isHiding(accept)) {
-                token.value = reader->readString(offset);
+                value = reader->readString(offset);
+                token.value = &value;
                 reader->reset(offset);
                 current = reader->peek();
                 break;
@@ -66,8 +68,6 @@ public:
         }
         token.location.line = startLine;
         token.location.column = startColumn;
-        token.end.line = line;
-        token.end.column = column;
         token.id = accept;
         return true;
     }

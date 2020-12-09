@@ -78,17 +78,17 @@ public:
         Entity* result = nullptr;
         switch (token.id){
             case PARSER_NAME:
-                if(nonTerminals.find(token.value) != nonTerminals.end()){
-                    result = nonTerminals[token.value];
+                if(nonTerminals.find(*token.value) != nonTerminals.end()){
+                    result = nonTerminals[*token.value];
                 }else{
-                    result = new Entity(nonTerminalId++,token.value, false);
+                    result = new Entity(nonTerminalId++,*token.value, false);
                     nonTerminals.emplace(token.value, result );
                 }
 
                 break;
             case LEXER_NAME:
             case LEXER_VALUE:
-                std::string str = token.value.substr(1, token.value.size() - 2);
+                std::string str = (*token.value).substr(1, (*token.value).size() - 2);
                 if(terminals.find(str) == terminals.end()){
                     throw std::exception();
                 }

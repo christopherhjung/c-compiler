@@ -12,7 +12,6 @@
 #include "Parser.h"
 #include "../lexer/StateMachineBuilder.h"
 #include "../lexer/StateMachineLexer.h"
-#include "../transformer/ParserCodeGenerator.h"
 #include "../reader/FileInputReader.h"
 
 #include "../utils/PrintUtils.h"

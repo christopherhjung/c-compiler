@@ -132,7 +132,7 @@ int runLexer(InputReader* fileInputReader,std::string& source, std::ostream& out
     while(proxy.hasNextToken(token)){
         if(token.id > 0){
 #ifdef OUTPUT
-            out << token.location << ": " << translate[token.id] << " " << token.value << std::endl;
+            out << token.location << ": " << translate[token.id] << " " << *token.value << std::endl;
 #endif
         }
     }

@@ -35,7 +35,6 @@ namespace parser{
         void init(InputReader* parserDescriptor){
             lexer->reset(parserDescriptor);
             lookB.location.fileName = parserDescriptor->getContext();
-            lookB.end.fileName = parserDescriptor->getContext();
             next();
             next();
         }
@@ -72,7 +71,7 @@ namespace parser{
         }
 
         void fatal(){
-            throw ParseException(Error(&lookA.location, "wrong token " + lookA.value));
+            throw ParseException(Error(&lookA.location, "wrong token " + *lookA.value));
         }
 
         Unit* parse(){

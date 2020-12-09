@@ -62,7 +62,7 @@ public:
                     return false;
                 }else{
                     token.id = machine->eof;
-                    token.value = "";
+                    token.value = nullptr;
                     finish = true;
                     return true;
                 }
@@ -95,7 +95,7 @@ public:
                 }
             }
 
-            value = symbolCache.internalize(reader->readString(acceptPosition));
+            token.value = &symbolCache.internalize(reader->readString(acceptPosition));
 
             for(auto& c2 : value){
                 updatePosition(c2);
@@ -109,7 +109,6 @@ public:
         }
 
         token.id = acceptState->id;
-        token.value = value;
         return true;
     }
 

@@ -150,37 +150,37 @@ namespace parser{
     class DirectDeclarator : public Element{};
     class Identifier : public Expression, public DirectDeclarator{
     public:
-        std::string value;
+        const std::string *value;
 
         void dump(PrettyPrinter& stream) override{
-            stream << value;
+            stream << *value;
         }
     };
 
     class StringLiteral : public Expression{
     public:
-        std::string value;
+        const std::string *value;
 
         void dump(PrettyPrinter& stream) override{
-            stream << value;
+            stream << *value;
         }
     };
 
     class Constant : public Expression{
     public:
-        std::string value;
+        const std::string *value;
 
         void dump(PrettyPrinter& stream) override{
-            stream << value;
+            stream << *value;
         }
     };
 
     class Number : public Expression{
     public:
-        std::string value;
+        const std::string *value;
 
         void dump(PrettyPrinter& stream) override{
-            stream << value;
+            stream << *value;
         }
     };
 
@@ -222,10 +222,10 @@ namespace parser{
 
     class GoTo : public Statement{
     public:
-        std::string name;
+        const std::string *name;
 
         void dump(PrettyPrinter& stream) override{
-            stream << "goto " << name;
+            stream << "goto " << *name;
         }
     };
 
@@ -233,11 +233,11 @@ namespace parser{
     class LabeledStatement : public Statement{
     public:
         Statement* statement = nullptr;
-        std::string name;
+        const std::string *name;
 
         void dump(PrettyPrinter& stream) override{
             stream.withoutIndent();
-            stream << name << ":";
+            stream << *name << ":";
             stream.newLine();
             printStatement(stream, statement);
         }
@@ -307,11 +307,11 @@ namespace parser{
 
     class StructType : public Type{
     public:
-        std::string name;
+        const std::string *name;
         std::vector<Declaration*> declarations;
 
         void dump(PrettyPrinter& stream) override{
-            stream << "struct " << name;
+            stream << "struct " << *name;
             if(!declarations.empty()){
                 stream.newLine();
                 stream << "{";

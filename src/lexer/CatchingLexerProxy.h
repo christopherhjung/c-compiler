@@ -12,7 +12,7 @@ public:
     char last = 0;
     bool finish = false;
     LexerControl& control;
-
+    std::unordered_set<std::string> map;
 
     CatchingLexerProxy(LexerControl& control): control(control){
 
@@ -56,7 +56,8 @@ public:
 
             if (control.isHiding(accept)) {
                 if(control.isCatching(accept)){
-                    token.value = reader->readString(offset);
+                    const auto& p = map.emplace(reader->readString(offset));
+                    token.value = &(*p.first);
                 }
                 reader->reset(offset);
                 current = reader->peek();
@@ -70,8 +71,6 @@ public:
         }
         token.location.line = startLine;
         token.location.column = startColumn;
-        token.end.line = line;
-        token.end.column = column;
         token.id = accept;
         return true;
     }
