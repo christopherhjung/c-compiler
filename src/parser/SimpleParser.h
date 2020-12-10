@@ -71,7 +71,15 @@ namespace parser{
         }
 
         void fatal(){
-            throw ParseException(Error(lookA.location, "wrong token " + *lookA.value));
+            std::string str;
+
+            if(lookA.value == nullptr){
+                str = "\\0";
+            }else{
+                str = *lookA.value;
+            }
+
+            throw ParseException(Error(lookA.location, "wrong token " + str));
         }
 
         Unit* parse(){

@@ -24,9 +24,9 @@ int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err
     GeneratedLexer lexer;
     CatchingLexerProxy proxy(lexer);
     parser::SimpleParser parser(&proxy);
-    parser.init(fileInputReader);
 
     try {
+        parser.init(fileInputReader);
         auto element = parser.parse();
         if(printAST){
             PrettyPrinter printer(out);
@@ -36,7 +36,7 @@ int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err
         }
         return 0;
     }catch(parser::ParseException& e){
-        std::cerr << e.error << std::endl;
+        err << e.error << std::endl;
         return 1;
     }
 }

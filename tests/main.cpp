@@ -40,8 +40,15 @@ std::string findFile(const std::string& path, const std::string& name){
 }
 
 int diff(const std::string& orgStr, const std::string& path){
+    std::istringstream org(orgStr);
+    std::string orgLine;
     if(path.empty()){
         if(!orgStr.empty()){
+            std::cout << "\u001b[31m";
+            while(std::getline(org, orgLine)){
+                std::cout << orgLine << std::endl;
+            }
+            std::cout << "\u001b[0m";
             return 1;
         }
 
@@ -49,35 +56,31 @@ int diff(const std::string& orgStr, const std::string& path){
     }
 
     int error = 0;
-    std::istringstream org(orgStr);
     std::ifstream ref(path);
-    std::string orgLine;
     std::string refLine;
     for (; std::getline(org, orgLine); ) {
         if(std::getline(ref, refLine)){
             if(refLine != orgLine){
-                std::cout << "\u001b[31m-" << (refLine) << std::endl;
-                std::cout << "\u001b[32m+"  << (orgLine) << std::endl;
-                std::cout << "\u001b[0m";
+                std::cout << "\u001b[34m" << (refLine) << std::endl;
+                std::cout << "\u001b[31m"  << (orgLine) << std::endl;
                 error++;
             }
         }else{
-            std::cout << "\u001b[32m+"  << orgLine << std::endl;
-            std::cout << "\u001b[0m";
+            std::cout << "\u001b[31m"  << orgLine << std::endl;
             error++;
         }
     }
 
     while(std::getline(ref, refLine)){
-        std::cout << "\u001b[31m-" << refLine << std::endl;
-        std::cout << "\u001b[0m";
+        std::cout << "\u001b[34m" << refLine << std::endl;
         error++;
     }
+    std::cout << "\u001b[0m";
 
     return error;
 }
 
-int print(const std::string& path, void (*fun)(FileInputReader*, std::ostream&, std::ostream&)){
+int check(const std::string& path, int (*fun)(FileInputReader*, std::ostream&, std::ostream&)){
     int errors = 0;
     for (const auto& dirEntry : std::filesystem::directory_iterator(path + "/input")){
         int currentErrors = 0;
@@ -85,13 +88,19 @@ int print(const std::string& path, void (*fun)(FileInputReader*, std::ostream&, 
 
         std::stringstream out;
         std::stringstream err;
-        fun(&reader, out, err);
+        int error = fun(&reader, out, err);
 
         auto outputRef = findFile(path + "/output", reader.getContext());
         auto errorRef = findFile(path + "/error", reader.getContext());
 
+        std::string errContent = err.str();
+
+        if( (error == 0) != errContent.empty() ){
+            currentErrors += 1;
+        }
+
         currentErrors += diff(out.str(), outputRef);
-        currentErrors += diff(err.str(), errorRef);
+        currentErrors += diff(errContent, errorRef);
 
         if(currentErrors == 0){
             std::cout << "\u001b[32m";
@@ -112,16 +121,16 @@ int main(int argc, char** argv){
 
     int errors = 0;
 
-    errors += print("lexer", [](FileInputReader* inputReader, std::ostream& out, std::ostream& err){
-        runLexer(inputReader, out, err);
+    errors += check("lexer", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
+        return runLexer(inputReader, out, err);
     });
 
-    errors += print("print_ast", [](FileInputReader* inputReader, std::ostream& out, std::ostream& err){
-        runParser(inputReader, out, err, true);
+    errors += check("print_ast", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
+        return runParser(inputReader, out, err, true);
     });
 
 
-    return -errors;
+    return errors;
 
     //testing::InitGoogleTest(&argc,argv);
     //return RUN_ALL_TESTS();

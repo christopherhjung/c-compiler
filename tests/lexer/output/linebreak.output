@@ -1,0 +1,5 @@
+linebreak.input:2:1: identifier a
+linebreak.input:5:1: identifier b
+linebreak.input:8:1: identifier c
+linebreak.input:9:1: identifier d
+linebreak.input:10:1: identifier sss
