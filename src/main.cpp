@@ -11,7 +11,6 @@
 #define MEASURE
 //#define OUTPUT
 
-#include "generated/GeneratedLexer.h"
 #include "lexer/lexerCore.h"
 #include "parser/parserCore.h"
 

@@ -23,7 +23,7 @@
 #include "StateMachineBuilder.h"
 #include "Token.h"
 #include "Error.h"
-#import "SymbolCache.h"
+#include "SymbolCache.h"
 #include "Lexer.h"
 
 
