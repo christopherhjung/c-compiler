@@ -39,7 +39,7 @@ std::string findFile(const std::string& path, const std::string& name){
     return "";
 }
 
-int diff(const std::string& orgStr, const std::string& path){
+int diff(const std::string& orgStr, const std::string& path, bool regex){
     std::istringstream org(orgStr);
     std::string orgLine;
     if(path.empty()){
@@ -60,7 +60,15 @@ int diff(const std::string& orgStr, const std::string& path){
     std::string refLine;
     for (; std::getline(org, orgLine); ) {
         if(std::getline(ref, refLine)){
-            if(refLine != orgLine){
+            bool match = false;
+            if(regex){
+                std::regex pattern(refLine);
+                match = regex_match (orgLine,pattern);
+            }else{
+                match = refLine == orgLine;
+            }
+
+            if(!match){
                 std::cout << "\u001b[34m" << (refLine) << std::endl;
                 std::cout << "\u001b[31m"  << (orgLine) << std::endl;
                 error++;
@@ -99,8 +107,8 @@ int check(const std::string& path, int (*fun)(FileInputReader*, std::ostream&, s
             currentErrors += 1;
         }
 
-        currentErrors += diff(out.str(), outputRef);
-        currentErrors += diff(errContent, errorRef);
+        currentErrors += diff(out.str(), outputRef, false);
+        currentErrors += diff(errContent, errorRef, true);
 
         if(currentErrors == 0){
             std::cout << "\u001b[32m";

@@ -1,1 +1,1 @@
-break_outside.c:3:2: error: wrong token \0
+break_outside\.c:3:2: error: .+

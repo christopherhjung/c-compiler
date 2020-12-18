@@ -1,1 +1,1 @@
-comment.input:1:1: error: /*_<-- char >EOL< wrong!
+comment\.input:1:1: error: .+

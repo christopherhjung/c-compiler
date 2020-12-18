@@ -1,0 +1,1 @@
+add_assign\.c:3:11: error: .+

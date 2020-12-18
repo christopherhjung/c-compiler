@@ -472,6 +472,18 @@ namespace parser{
                         auto bin = new Binary();
                         bin->left = left;
                         bin->op = lookA.id;
+
+                        if( bin->op == ASSIGN ){
+                            if( const auto* leftBin = dynamic_cast<const Binary *>(left) ){
+                                if(leftBin->op != ARROW && leftBin->op != DOT){
+                                    fatal();
+                                }
+                            }else if( const auto* leftUnary = dynamic_cast<const Unary *>(left) ){
+                                if(leftUnary->op != STAR){
+                                    fatal();
+                                }
+                            }
+                        }
                         next();
                         if (bin->op == ARROW || bin->op == DOT) {
                             bin->right = parseIdentifier();

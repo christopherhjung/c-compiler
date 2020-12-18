@@ -1,1 +1,1 @@
-comment_error.c:1:1: error: /*_<-- char >EOL< wrong!
+comment_error\.c:1:1: error: .+
