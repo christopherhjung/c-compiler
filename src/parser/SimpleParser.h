@@ -89,7 +89,7 @@ namespace parser{
             for(;;){
                 unit->children.push_back(parseExternalDeclaration());
 
-                if(is(EOF)){
+                if(is(END_OF_FILE)){
                     break;
                 }
             }

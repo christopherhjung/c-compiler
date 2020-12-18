@@ -7,7 +7,7 @@
 #define TYPE_CHAR 1
 #define TYPE_VOID 2
 
-#define EOF 0
+#define END_OF_FILE 0
 #define AUTO 4
 #define BREAK 5
 #define CASE 6
