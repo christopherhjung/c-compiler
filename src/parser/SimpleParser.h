@@ -10,6 +10,7 @@
 #include "SimpleObjects.h"
 #include <vector>
 
+
 namespace parser{
     class ParseException : public std::exception{
     public:
@@ -27,6 +28,7 @@ namespace parser{
 
         Token lookA;
         Token lookB;
+        bool insideLoop = false;
 
         explicit SimpleParser(Lexer* lexer) : lexer(lexer){
 
@@ -120,7 +122,17 @@ namespace parser{
         Type* parseType(){
             if(is(INT) || is(CHAR) || is(VOID)){
                 auto type = new Type();
-                type->type = lookA.id;
+                switch(lookA.id){
+                    case INT:
+                        type->type = TYPE_INT;
+                        break;
+                    case CHAR:
+                        type->type = TYPE_CHAR;
+                        break;
+                    case VOID:
+                        type->type = TYPE_VOID;
+                        break;
+                }
                 next();
                 return type;
             }else if(is(STRUCT)){
@@ -256,10 +268,18 @@ namespace parser{
                 return parseReturn();
             }else if(is(GOTO) ){
                 return parseGoTo();
-            }else if(eat(CONTINUE) ){
+            }else if(is(CONTINUE) ){
+                if(!insideLoop){
+                    fatal();
+                }
+                next();
                 shall(SEMI);
                 return new Continue();
-            }else if(eat(BREAK) ){
+            }else if(is(BREAK) ){
+                if(!insideLoop){
+                    fatal();
+                }
+                next();
                 shall(SEMI);
                 return new Break();
             }else if(is(IDENTIFIER) && isNext(COLON)){
@@ -346,12 +366,15 @@ namespace parser{
         }
 
         While* parseWhile(){
+            bool beforeLoop = insideLoop;
+            insideLoop = true;
             auto result = new While();
             shall(WHILE);
             shall(LEFT_PAREN);
             result->condition = parseExpression();
             shall(RIGHT_PAREN);
             result->body = parseStatement();
+            insideLoop = beforeLoop;
             return result;
         }
 

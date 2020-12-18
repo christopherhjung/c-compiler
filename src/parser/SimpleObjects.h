@@ -137,11 +137,11 @@ namespace parser{
         uint32_t  type;
 
         void dump(PrettyPrinter& stream) override{
-            if(type == INT){
+            if(type == TYPE_INT){
                 stream << "int";
-            }else if(type == CHAR){
+            }else if(type == TYPE_CHAR){
                 stream << "char";
-            }else if(type == VOID){
+            }else if(type == TYPE_VOID){
                 stream << "void";
             }
         }

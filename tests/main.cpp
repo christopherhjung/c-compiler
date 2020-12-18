@@ -129,6 +129,10 @@ int main(int argc, char** argv){
         return runParser(inputReader, out, err, true);
     });
 
+    errors += check("semantic_analysis", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
+        return runParser(inputReader, out, err, true);
+    });
+
 
     return errors;
 

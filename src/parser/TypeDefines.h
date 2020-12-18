@@ -3,6 +3,10 @@
 //
 
 
+#define TYPE_INT 0
+#define TYPE_CHAR 1
+#define TYPE_VOID 2
+
 #define EOF 0
 #define AUTO 4
 #define BREAK 5
