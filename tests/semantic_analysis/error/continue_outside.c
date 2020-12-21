@@ -1,1 +1,1 @@
-continue_outside\.c:3:2: error: .+
+continue_outside\.c:3:2: error:.*

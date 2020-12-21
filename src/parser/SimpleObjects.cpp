@@ -6,7 +6,7 @@
 #include "PrettyPrinter.h"
 #include <iostream>
 
-void parser::Declarator::dump(PrettyPrinter &stream) {
+void Declarator::dump(PrettyPrinter &stream) {
 
     for(uint32_t i = 0 ; i < pointer ; i++){
         stream << "(*";
@@ -19,7 +19,7 @@ void parser::Declarator::dump(PrettyPrinter &stream) {
     }
 }
 
-void parser::printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement){
+void printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement){
         if(instanceof<Block>(statement)){
             stream << " ";
             statement->dump(stream);
@@ -31,7 +31,7 @@ void parser::printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement){
         }
 }
 
-void parser::printStatement(PrettyPrinter &stream, parser::Statement *statement) {
+void printStatement(PrettyPrinter &stream, Statement *statement) {
     if(statement != nullptr){
         statement->dump(stream);
     }

@@ -1,1 +1,1 @@
-no_argument\.c:1:7: error: .+
+no_argument\.c:1:7: error:.*

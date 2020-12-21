@@ -1,1 +1,1 @@
-break_outside\.c:3:2: error: .+
+break_outside\.c:3:2: error:.*

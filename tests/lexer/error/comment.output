@@ -1,1 +1,1 @@
-comment\.input:1:1: error: .+
+comment\.input:1:1: error:.*
