@@ -1,0 +1,1 @@
+wrong_redefined\.c:3:7: error: .+

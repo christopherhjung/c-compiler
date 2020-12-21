@@ -21,6 +21,13 @@ namespace parser{
         }
     };
 
+    class Descriptor{
+    public:
+        std::vector<Type*> types;
+        bool filled = false;
+        bool defined = false;
+    };
+
 
     class SimpleParser {
     public:
@@ -29,6 +36,9 @@ namespace parser{
         Token lookA;
         Token lookB;
         bool insideLoop = false;
+
+        std::unordered_map<const std::string*, Descriptor> defs;
+        std::unordered_map<const DirectDeclarator*, Descriptor> defs2;
 
         explicit SimpleParser(Lexer* lexer) : lexer(lexer){
 
@@ -84,6 +94,17 @@ namespace parser{
             throw ParseException(Error(lookA.location, "wrong token " + str));
         }
 
+        void fatal(Element* element){
+            throw ParseException(Error(element->location, "wrong semantic"));
+        }
+
+        template<class T>
+        T* create(){
+            T* result = new T();
+            result->location = lookA.location;
+            return result;
+        }
+
         Unit* parse(){
             Unit* unit = new Unit();
             for(;;){
@@ -102,6 +123,46 @@ namespace parser{
             declaration->type = parseType();
             if(!is(SEMI)){
                 declaration->declarator = parseDeclarator(true, false);
+
+                if(declaration->declarator != nullptr){
+                    if( auto* paramDeclarator = dynamic_cast<ParameterDirectDeclarator*>(declaration->declarator->directDeclarator)){
+                        if(auto* identifier = dynamic_cast<Identifier*>(paramDeclarator->directDeclarator)){
+                            auto& def = defs[identifier->value];
+
+                            auto &decls = paramDeclarator->parameterTypeList->declarations;
+
+                            bool isFilling = is(LEFT_BRACE);
+
+                            if(def.filled && isFilling){
+                                fatal();
+                            }
+
+                            if(def.defined){
+                                int minSize = std::min(decls.size(), def.types.size());
+
+                                for( int i = 0 ; i < minSize ; i++ ){
+                                    if( decls[i]->type->type != def.types[i]->type ){
+                                        fatal(decls[i]->type);
+                                    }
+                                }
+
+                                if( decls.size() < def.types.size() ){
+                                    fatal();
+                                }else if(decls.size() > def.types.size()){
+                                    fatal(decls[minSize]->type);
+                                }
+                            }else{
+                                for(auto* decl : decls){
+                                    def.types.push_back(decl->type);
+                                }
+
+                                def.filled = isFilling;
+                                def.defined = true;
+                            }
+                        }
+                    }
+                }
+
                 if(is(LEFT_BRACE)){
                     auto* method = new Method();
 
@@ -121,7 +182,7 @@ namespace parser{
 
         Type* parseType(){
             if(is(INT) || is(CHAR) || is(VOID)){
-                auto type = new Type();
+                auto type = create<Type>();
                 switch(lookA.id){
                     case INT:
                         type->type = TYPE_INT;
@@ -171,7 +232,7 @@ namespace parser{
 
         Identifier* parseIdentifier(){
             if(is(IDENTIFIER)){
-                auto identifier = new Identifier();
+                auto identifier = create<Identifier>();
                 identifier->value = lookA.value;
                 next();
                 return identifier;
@@ -195,12 +256,8 @@ namespace parser{
 
             declaration->directDeclarator = parseDirectDeclarator(normal, abstract);
 
-            if(declaration->pointer == 0){
-                if(declaration->directDeclarator == nullptr){
-                    return nullptr;
-                }else{
-
-                }
+            if(declaration->pointer == 0 && declaration->directDeclarator == nullptr){
+                return nullptr;
             }
 
             return declaration;
@@ -224,11 +281,7 @@ namespace parser{
             while(eat(LEFT_PAREN)){
                 auto inner = new ParameterDirectDeclarator();
                 inner->directDeclarator = directDeclarator;
-                if(!(abstract && is(RIGHT_PAREN))){
-                    inner->parameterTypeList = parseParameterTypeList();
-                }else{
-                    inner->parameterTypeList = new ParameterTypeList();
-                }
+                inner->parameterTypeList = parseParameterTypeList(abstract);
                 directDeclarator = inner;
                 shall(RIGHT_PAREN);
             }
@@ -236,23 +289,26 @@ namespace parser{
             return directDeclarator;
         }
 
-        ParameterTypeList* parseParameterTypeList(){
+        ParameterTypeList* parseParameterTypeList(bool nullable){
             auto parameterTypeList = new ParameterTypeList();
 
-            while(true){
-                Type* type = parseType();
-                Declarator* declarator = parseDeclarator(true, true);
+            if(!nullable || !is(RIGHT_PAREN)){
+                while(true){
+                    Type* type = parseType();
+                    Declarator* declarator = parseDeclarator(true, true);
 
-                auto declaration = new Declaration();
-                declaration->type = type;
-                declaration->declarator = declarator;
+                    auto declaration = new Declaration();
+                    declaration->type = type;
+                    declaration->declarator = declarator;
 
-                parameterTypeList->declarations.push_back(declaration);
+                    parameterTypeList->declarations.push_back(declaration);
 
-                if(!eat(COMMA)){
-                    break;
+                    if(!eat(COMMA)){
+                        break;
+                    }
                 }
             }
+
 
             return parameterTypeList;
         }

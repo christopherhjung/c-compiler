@@ -6,6 +6,7 @@
 
 #include "PrettyPrinter.h"
 #include "TypeDefines.h"
+#include "../lexer/Location.h"
 #include <ostream>
 #include <vector>
 #include <iostream>
@@ -21,10 +22,15 @@ namespace parser{
     void printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement);
     void printStatement(PrettyPrinter& stream, Statement* statement);
 
-    class Element{
+    class Dumpable{
     public:
-        virtual ~Element() = default;
         virtual void dump(PrettyPrinter& stream) = 0;
+    };
+
+    class Element : public Dumpable{
+    public:
+        Location location;
+        virtual ~Element() = default;
     };
     class Declaration;
 
@@ -147,7 +153,7 @@ namespace parser{
         }
     };
 
-    class DirectDeclarator : public Element{};
+    class DirectDeclarator : public Dumpable{};
     class Identifier : public Expression, public DirectDeclarator{
     public:
         const std::string *value;
