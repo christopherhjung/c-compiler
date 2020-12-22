@@ -1,0 +1,1 @@
+wrong_defined\.c:3:5: error:.*

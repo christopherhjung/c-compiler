@@ -40,12 +40,14 @@ int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err
                 out << std::flush;
             }
         }catch (SemanticException& e){
-            err << e.location << ": error: " << std::endl;
+            err << e.location << ": error: semantic: " << std::endl;
+            return 1;
+        }catch (std::exception e){
             return 1;
         }
         return 0;
     }catch(ParseException& e){
-        err << e.error << std::endl;
+        err << e.error << " parser: " << std::endl;
         return 1;
     }
 }

@@ -19,6 +19,8 @@
 #include "../src/parser/parserCore.h"
 #include "../src/lexer/lexerCore.h"
 
+std::string filter = "";
+
 std::string removeExtension(const std::string& fileName){
     size_t position = fileName.find(".");
     return std::string::npos == position ? fileName : fileName.substr(0, position);
@@ -91,6 +93,16 @@ int diff(const std::string& orgStr, const std::string& path, bool regex){
 int check(const std::string& path, int (*fun)(FileInputReader*, std::ostream&, std::ostream&)){
     int errors = 0;
     for (const auto& dirEntry : std::filesystem::directory_iterator(path + "/input")){
+        if(!filter.empty()){
+            std::regex pattern(filter);
+            if(!regex_match ((std::string)dirEntry.path().filename(),pattern)){
+                continue;
+            }
+        }
+
+        std::cout << "------------------------------" << std::endl;
+        std::cout<< "[start] " << (std::string)dirEntry.path().filename() << std::endl;
+
         int currentErrors = 0;
         FileInputReader reader(dirEntry.path(), dirEntry.path().filename());
 
@@ -128,6 +140,10 @@ int check(const std::string& path, int (*fun)(FileInputReader*, std::ostream&, s
 int main(int argc, char** argv){
 
     int errors = 0;
+
+    if(argc == 3 && std::string(argv[1]) == "-f"){
+        filter = std::string(argv[2]);
+    }
 
     errors += check("lexer", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
         return runLexer(inputReader, out, err);

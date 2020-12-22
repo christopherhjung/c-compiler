@@ -16,7 +16,7 @@ struct { int somevalue; struct { int inner; }; } nested;
 struct { int somevalue; struct { int inner; } id; } nested2;
 struct name { int foo; };
 struct name { int foo; } value3;
-void nm(int (((())())));
+void nm(int (((())(void))));
 void nm(int (((())(void))));
 void nm(int ((((x))(void))));
 
@@ -37,14 +37,14 @@ void def3(int x, int y, struct withname { int (*x)(void); } z) {}
 
 int fun(int)(int)(int);
 
-void statements(int x, int y) {
+int statements(int x, int y) {
   goto foo;
   foo:
   x;
   x;;;
   {{ ; }}
   int z;
-  if (x) if (y) return; else return x;
+  if (x) if (y) return x; else return x;
   while (x) continue;
   while (x) {
     int z;
@@ -63,12 +63,7 @@ void expressions(int x, int y) {
   1();
   1(1);
   1(1, 1);
-  1.x;
-  1->x;
-  &1;
-  *1;
-  -1;
-  !1;
+
   sizeof 1;
   sizeof(1);
   sizeof(foo);

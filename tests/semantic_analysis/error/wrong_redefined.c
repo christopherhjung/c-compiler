@@ -1,1 +1,1 @@
-wrong_redefined\.c:3:7: error:.*
+wrong_redefined\.c:3:5: error:.*

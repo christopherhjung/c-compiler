@@ -90,6 +90,13 @@ public:
         return result;
     }
 
+    template<class T>
+    T* create(const Token& token){
+        T* result = new T();
+        result->location = token.location;
+        return result;
+    }
+
     Unit* parse(){
         Unit* unit = new Unit();
         for(;;){
@@ -104,13 +111,13 @@ public:
     }
 
     Element* parseExternalDeclaration(){
-        auto declaration = new Declaration();
+        auto declaration = create<Declaration>();
         declaration->type = parseType();
         if(!is(SEMI)){
             declaration->declarator = parseDeclarator(true, false);
 
             if(is(LEFT_BRACE)){
-                auto* method = new Method();
+                auto* method = create<Method>();
 
                 method->declaration = declaration;
                 method->body = parseBlock();
@@ -143,7 +150,7 @@ public:
             next();
             return type;
         }else if(is(STRUCT)){
-            auto structType = new StructType();
+            auto structType = create<StructType>();
             next();
             bool isIdentifier = is(IDENTIFIER);
             if(isIdentifier){
@@ -240,10 +247,10 @@ public:
 
         if(!nullable || !is(RIGHT_PAREN)){
             while(true){
+                auto declaration = create<Declaration>();
                 Type* type = parseType();
                 Declarator* declarator = parseDeclarator(true, true);
 
-                auto declaration = new Declaration();
                 declaration->type = type;
                 declaration->declarator = declarator;
 
@@ -310,17 +317,19 @@ public:
     }
 
     Return* parseReturn(){
-        auto result = new Return();
+        auto result = create<Return>();
         eat(RETURN);
         if(!is(SEMI)){
+            Token carry = lookA;
             result->value = parseExpression();
+            result->value->location = carry.location;
         }
         shall(SEMI);
         return result;
     }
 
     Block* parseBlock(){
-        auto block = new Block();
+        auto block = create<Block>();
         shall(LEFT_BRACE);
         for(;;){
             //while(eat(SEMI));
@@ -343,7 +352,7 @@ public:
     }
 
     Declaration* parseDeclaration(){
-        auto declaration = new Declaration();
+        auto declaration = create<Declaration>();
         declaration->type = parseType();
         if(!is(SEMI)){
             declaration->declarator = parseDeclarator(true, false);
@@ -382,17 +391,17 @@ public:
 
     Expression* parseValue(){
         if(is(DIGIT_SEQUENCE)){
-            auto number = new Number();
+            auto number = create<Number>();
             number->value = lookA.value;
             next();
             return number;
         }else if(is(STRING_LITERAL)){
-            auto string = new StringLiteral();
+            auto string = create<StringLiteral>();
             string->value = lookA.value;
             next();
             return string;
         }else if(is(CONSTANT)){
-            auto constant = new Constant();
+            auto constant = create<Constant>();
             constant->value = lookA.value;
             next();
             return constant;
@@ -415,10 +424,10 @@ public:
         uint32_t precedence = unary();
 
         if(precedence != 0){
-            uint32_t op = lookA.id;
+            auto opToken = lookA;
             next();
 
-            if(op == SIZEOF && isType(lookB.id)) {
+            if(opToken.id == SIZEOF && isType(lookB.id)) {
                 shall(LEFT_PAREN);
                 auto sizeofObj = new Sizeof();
                 sizeofObj->type = parseType();
@@ -428,9 +437,11 @@ public:
                 shall(RIGHT_PAREN);
                 left = sizeofObj;
             }else{
+                auto op = create<Operator>(opToken);
                 auto unary = new Unary();
+                op->id = opToken.id;
                 unary->op = op;
-                if(unary->op == LEFT_PAREN){
+                if(op->id == LEFT_PAREN){
                     left = parseExpression();
                     shall(RIGHT_PAREN);
                 }else{
@@ -471,26 +482,18 @@ public:
                     shall(RIGHT_BRACKET);
                     left = select;
                 }else {
+                    auto op = create<Operator>();
                     auto bin = new Binary();
+                    bin->op = op;
                     bin->left = left;
-                    bin->op = lookA.id;
+                    //bin->op = lookA.id;
+                    op->id = lookA.id;
 
-                    if( bin->op == ASSIGN ){
-                        if( const auto* leftBin = dynamic_cast<const Binary *>(left) ){
-                            if(leftBin->op != ARROW && leftBin->op != DOT){
-                                fatal();
-                            }
-                        }else if( const auto* leftUnary = dynamic_cast<const Unary *>(left) ){
-                            if(leftUnary->op != STAR){
-                                fatal();
-                            }
-                        }
-                    }
                     next();
-                    if (bin->op == ARROW || bin->op == DOT) {
+                    if (op->id == ARROW || op->id == DOT) {
                         bin->right = parseIdentifier();
                     } else {
-                        bin->right = parseExpression(rightPrecedence(bin->op));
+                        bin->right = parseExpression(rightPrecedence(op->id));
                     }
                     left = bin;
                 }

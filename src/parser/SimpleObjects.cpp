@@ -20,15 +20,15 @@ void Declarator::dump(PrettyPrinter &stream) {
 }
 
 void printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement){
-        if(instanceof<Block>(statement)){
-            stream << " ";
-            statement->dump(stream);
-        }else{
-            stream.newLine();
-            stream.increaseDepth();
-            printStatement(stream, statement);
-            stream.decreaseDepth();
-        }
+    if(instanceof<Block>(statement)){
+        stream << " ";
+        statement->dump(stream);
+    }else{
+        stream.newLine();
+        stream.increaseDepth();
+        printStatement(stream, statement);
+        stream.decreaseDepth();
+    }
 }
 
 void printStatement(PrettyPrinter &stream, Statement *statement) {
@@ -41,3 +41,4 @@ void printStatement(PrettyPrinter &stream, Statement *statement) {
         stream << ";";
     }
 }
+
