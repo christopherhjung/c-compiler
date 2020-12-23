@@ -59,7 +59,6 @@ void expressions(int x, int y) {
   "str";
   0;
   int foo;
-
   sizeof 1;
   sizeof(1);
   sizeof(foo);

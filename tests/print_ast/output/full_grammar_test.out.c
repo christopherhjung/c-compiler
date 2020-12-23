@@ -138,10 +138,6 @@ void (expressions(int x, int y))
 	'c';
 	"str";
 	0;
-	(1[1]);
-	(1());
-	(1(1));
-	(1(1, 1));
 	int foo;
 	(sizeof 1);
 	(sizeof 1);

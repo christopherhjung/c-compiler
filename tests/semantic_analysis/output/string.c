@@ -1,8 +1,4 @@
-int (g(int a, char b))
+char (main(int e))
 {
-}
-
-int (main(int))
-{
-	(g(1, 'a'));
+	return (((e > 1000) ? "sss" : "eeee")[e]);
 }

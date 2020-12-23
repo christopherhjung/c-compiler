@@ -497,6 +497,11 @@ public:
     }
 };
 
+class MethodType;
+class PointerType;
+class SuperStructType;
+class SimpleType;
+
 class SuperType : public Comparable{
 public:
     const Identifier* identifier = nullptr;

@@ -1,7 +1,5 @@
 
 int a(int a){
-    int a;
-    int *b;
+    goto test;
 
-    a = *b;
 }

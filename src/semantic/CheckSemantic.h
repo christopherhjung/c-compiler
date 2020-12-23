@@ -21,14 +21,14 @@ template<class T>
 class Descriptor{
 public:
     T* superType = nullptr;
-    bool filled = false;
+    bool implementation = false;
     bool defined = false;
 
     Descriptor(){
 
     }
 
-    Descriptor(const Descriptor* other) : superType(other->superType), filled(other->filled), defined(other->defined){
+    Descriptor(const Descriptor* other) : superType(other->superType), implementation(other->implementation), defined(other->defined){
 
     }
 
@@ -44,13 +44,8 @@ public:
     std::unordered_map<const std::string*, Descriptor<SuperStructType>> structs;
     Scope* parent = nullptr;
     const SuperType* returnType = nullptr;
-    bool overridePermitted = false;
 
-    Scope() : Scope(false){
-
-    }
-
-    Scope( bool overridePermitted ) : overridePermitted(overridePermitted){
+    Scope(){
 
     }
 
@@ -79,7 +74,7 @@ public:
         auto desc = &structs[str];
 
         if( desc->defined ){
-            if(!(overridePermitted && desc->superType->equals(type))){
+            if(!desc->superType->equals(type)){
                 return false;
             }
         }else{
@@ -90,13 +85,15 @@ public:
         return true;
     }
 
-    bool set(const std::string* str, SuperType* type, bool content){
+    bool set(const std::string* str, SuperType* type, bool hasImplementation){
         auto desc = &types[str];
 
+        bool isMethod = instanceof<MethodType>(type);
+
         if( desc->defined ){
-            if( !instanceof<MethodType>(type) ){
+            if( !isMethod ){
                 return false;
-            }else if(!(overridePermitted && desc->superType->equals(type))){
+            }else if(!desc->superType->equals(type)){
                 return false;
             }
         }else{
@@ -104,11 +101,11 @@ public:
             desc->defined = true;
         }
 
-        if(content){
-            if(desc->filled){
+        if(hasImplementation){
+            if(desc->implementation){
                 return false;
             }else{
-                desc->filled = true;
+                desc->implementation = true;
             }
         }
 
@@ -128,7 +125,7 @@ public:
 
 class Semantic {
 public:
-    Scope mainScope{true};
+    Scope mainScope;
     Scope* currentScope = &mainScope;
 
     void fatal(Element* element){
