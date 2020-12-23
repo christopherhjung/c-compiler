@@ -13,8 +13,7 @@
 extern SimpleType* const IntType = new SimpleType(TYPE_INT);
 extern SimpleType* const CharType = new SimpleType(TYPE_CHAR);
 extern SimpleType* const VoidType = new SimpleType(TYPE_VOID);
-extern SimpleType* const BoolType = new SimpleType(TYPE_BOOL);
-extern SuperType* const StringType = new DeallocateType(CharType);
+extern SuperType* const StringType = new PointerType(CharType);
 
 #define ERROR(LOCATION) (throw SemanticException(LOCATION, __LINE__))
 
@@ -95,7 +94,9 @@ public:
         auto desc = &types[str];
 
         if( desc->defined ){
-            if(!(overridePermitted && desc->superType->equals(type))){
+            if( !instanceof<MethodType>(type) ){
+                return false;
+            }else if(!(overridePermitted && desc->superType->equals(type))){
                 return false;
             }
         }else{
@@ -231,7 +232,7 @@ public:
         enter(ifStatement->falseBranch);
 
         if( !ifStatement->condition->superType->equals(IntType) ){
-            ERROR(Location());
+            ERROR(ifStatement->location);
         }
     }
 
@@ -240,7 +241,7 @@ public:
         enter(whileStatement->body);
 
         if( !whileStatement->condition->superType->equals(IntType) ){
-            ERROR(Location());
+            ERROR(whileStatement->location);
         }
     }
 
@@ -355,7 +356,7 @@ public:
         switch(unary->op->id){
             case STAR:
                 if( type->isPointer() ){
-                    auto dealloc = dynamic_cast<const DeallocateType*>(type);
+                    auto dealloc = dynamic_cast<const PointerType*>(type);
                     unary->superType = dealloc->subType;
                     return;
                 }
@@ -374,7 +375,7 @@ public:
                 }
                 break;
             case AND:
-                unary->superType = new DeallocateType(type);
+                unary->superType = new PointerType(type);
                 return;
         }
 
@@ -403,7 +404,7 @@ public:
 
         switch(binary->op->id) {
             case ARROW:
-                if (auto deallocType = dynamic_cast<const DeallocateType *>(leftType)) {
+                if (auto deallocType = dynamic_cast<const PointerType *>(leftType)) {
                     if (auto superStruct = dynamic_cast<const SuperStructType *>(deallocType->subType)) {
                         auto identifier = (const Identifier *) binary->right;
                         binary->superType = superStruct->apply(identifier);
@@ -497,7 +498,7 @@ public:
         if(auto declarator = dynamic_cast<Declarator*>(directDeclarator)){
 
             for( int i = 0 ; i < declarator->pointer ; i++ ){
-                simpleType = new DeallocateType(simpleType);
+                simpleType = new PointerType(simpleType);
             }
 
             return enter(declarator->directDeclarator, simpleType);

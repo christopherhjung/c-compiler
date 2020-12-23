@@ -578,9 +578,9 @@ public:
     }
 };
 
-class DeallocateType : public ComplexType{
+class PointerType : public ComplexType{
 public:
-    explicit DeallocateType(const SuperType* subType) : ComplexType(subType) {
+    explicit PointerType(const SuperType* subType) : ComplexType(subType) {
 
     }
 
@@ -589,7 +589,7 @@ public:
     }
 
     bool equals(const Comparable *other) const override {
-        if( auto simpleOther = dynamic_cast<const DeallocateType*>(other) ){
+        if( auto simpleOther = dynamic_cast<const PointerType*>(other) ){
             return subType->equals(simpleOther->subType);
         }
         return false;

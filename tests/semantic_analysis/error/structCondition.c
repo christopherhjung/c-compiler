@@ -1,0 +1,1 @@
+missing_arg\.c:8:5: error:.*

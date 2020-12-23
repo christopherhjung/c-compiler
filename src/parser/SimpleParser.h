@@ -362,7 +362,7 @@ public:
     }
 
     If* parseIf(){
-        auto result = new If();
+        auto result = create<If>();
         shall(IF);
         shall(LEFT_PAREN);
         result->condition = parseExpression();
@@ -379,7 +379,7 @@ public:
     While* parseWhile(){
         bool beforeLoop = insideLoop;
         insideLoop = true;
-        auto result = new While();
+        auto result = create<While>();
         shall(WHILE);
         shall(LEFT_PAREN);
         result->condition = parseExpression();

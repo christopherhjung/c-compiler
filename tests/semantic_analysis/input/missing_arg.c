@@ -1,5 +1,7 @@
 
+int a(int a){
+    int a;
+    int *b;
 
-char* main(int e){
-    return e > 1 ? "sss" : "eeee";
+    a = *b;
 }
