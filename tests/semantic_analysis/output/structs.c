@@ -1,0 +1,17 @@
+int (main(int))
+{
+	struct S
+	{
+		int a;
+	};
+	struct S s;
+	struct S (*sp);
+	int a;
+	(a = (s.a));
+	(s = (*sp));
+	(((sp[0]).a) = a);
+	(((*(&(sp[0]))).a) = 1);
+	return a;
+	return (s.a);
+	return (sp->a);
+}

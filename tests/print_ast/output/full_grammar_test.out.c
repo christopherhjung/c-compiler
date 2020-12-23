@@ -58,9 +58,7 @@ struct name
 	int foo;
 } value3;
 
-void (nm(int ((())())));
-
-void (nm(int ((())(void))));
+void (nm(int ((void))));
 
 void (nm(int (x(void))));
 
@@ -104,7 +102,7 @@ void (def3(int x, int y, struct withname
 
 int (((fun(int))(int))(int));
 
-void (statements(int x, int y))
+int (statements(int x, int y))
 {
 	goto foo;
 foo:
@@ -120,7 +118,7 @@ foo:
 	int z;
 	if (x)
 		if (y)
-			return;
+			return x;
 		else
 			return x;
 	while (x)
@@ -144,12 +142,7 @@ void (expressions(int x, int y))
 	(1());
 	(1(1));
 	(1(1, 1));
-	(1.x);
-	(1->x);
-	(&1);
-	(*1);
-	(-1);
-	(!1);
+	int foo;
 	(sizeof 1);
 	(sizeof 1);
 	(sizeof foo);
@@ -166,12 +159,12 @@ void (expressions(int x, int y))
 	(1 || 1);
 	(1 ? 1 : 1);
 	(1 = 1);
-	(*(*(*(*((((1[1])[1])[1])[1])))));
 	(1 ? (2 ? 3 : 4) : 5);
 	(1 ? 2 : (3 ? 4 : 5));
 	((1 ? 2 : 3) ? 4 : 5);
-	(x = (y = 3));
-	(sizeof (!(-(*(&((((x[1])()).x)->y))))));
+	int (*x);
+	(x = 0);
+	(sizeof (!(-(*(&(x[1]))))));
 	(((((((((1 * 2) + 3) - 4) < 5) == 6) != 7) && 8) || 9) ? 10 : 11);
 	(1 ? 2 : (3 || (4 && ((5 != 6) == (7 < ((8 - 9) + (10 * 11)))))));
 	(1 = (2 ? (3 = 4) : 5));

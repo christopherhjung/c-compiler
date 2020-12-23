@@ -523,27 +523,29 @@ public:
 
     const SuperType* apply(const Expression* expression) const override {
         if(auto call = dynamic_cast<const Call*>(expression)){
-            /*if( types.size() != call->values.size() ){
+            if( types.size() != call->values.size() ){
 
-            }*/
+            }
             int min = std::min(types.size() , call->values.size());
 
             for( int i = 0 ; i < min ; i++ ){
                 if( !types[i]->equals(call->values[i]->superType) ){
-                    throw SemanticException(call->values[i]->location);
+                    return nullptr;
+                    //throw SemanticException(call->values[i]->location);
                 }
             }
 
-            if(types.size() < call->values.size()){
+            /*if(types.size() < call->values.size()){
                 throw SemanticException(call->values[min]->location);
             }else if(types.size() > call->values.size()){
                 throw SemanticException(call->values[0]->location);
-            }
+            }*/
 
             return subType;
         }
 
-        throw SemanticException(expression->location);
+        return nullptr;
+        //throw SemanticException(expression->location);
     }
 
     uint64_t hash() const override {

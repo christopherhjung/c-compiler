@@ -16,9 +16,8 @@ struct { int somevalue; struct { int inner; }; } nested;
 struct { int somevalue; struct { int inner; } id; } nested2;
 struct name { int foo; };
 struct name { int foo; } value3;
-void nm(int (((())(void))));
-void nm(int (((())(void))));
-void nm(int ((((x))(void))));
+void nm(int (void));
+void nm(int (x)(void));
 
 void lol1(int);
 void lol2(int *);
@@ -59,10 +58,7 @@ void expressions(int x, int y) {
   'c';
   "str";
   0;
-  1[1];
-  1();
-  1(1);
-  1(1, 1);
+  int foo;
 
   sizeof 1;
   sizeof(1);
@@ -80,12 +76,12 @@ void expressions(int x, int y) {
   1 || 1;
   1 ? 1 : 1;
   1 = 1;
-  ****((((1))))[1][1][1][1];
   1?2?3:4:5;
   1?2:3?4:5;
   (1?2:3)?4:5;
-  x=y=3;
-  sizeof!-*&x[1]().x->y;
+  int *x;
+  x=0;
+  sizeof!-*&x[1];
   1*2+3-4<5==6!=7&&8||9?10:11;
   1?2:3||4&&5!=6==7<8-9+10*11;
   1=2?3=4:5;

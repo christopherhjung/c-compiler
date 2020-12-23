@@ -1,9 +1,5 @@
-int f(int x, int y)
-{
-    struct S
-    {
-        int x;
-    } s;
-    struct S *p;
-    p = &s;
+
+
+char* main(int e){
+    return e > 1 ? "sss" : "eeee";
 }

@@ -14,7 +14,7 @@ extern SimpleType* const IntType = new SimpleType(TYPE_INT);
 extern SimpleType* const CharType = new SimpleType(TYPE_CHAR);
 extern SimpleType* const VoidType = new SimpleType(TYPE_VOID);
 extern SimpleType* const BoolType = new SimpleType(TYPE_BOOL);
-extern SimpleType* const StringType = new SimpleType(TYPE_STRING);
+extern SuperType* const StringType = new DeallocateType(CharType);
 
 #define ERROR(LOCATION) (throw SemanticException(LOCATION, __LINE__))
 
@@ -44,7 +44,7 @@ public:
     std::unordered_map<const std::string*, const std::string*> labels;
     std::unordered_map<const std::string*, Descriptor<SuperStructType>> structs;
     Scope* parent = nullptr;
-    const SuperType* returnType;
+    const SuperType* returnType = nullptr;
     bool overridePermitted = false;
 
     Scope() : Scope(false){
@@ -91,7 +91,7 @@ public:
         return true;
     }
 
-    bool set(const std::string* str, SuperType* type){
+    bool set(const std::string* str, SuperType* type, bool content){
         auto desc = &types[str];
 
         if( desc->defined ){
@@ -101,6 +101,14 @@ public:
         }else{
             desc->superType = type;
             desc->defined = true;
+        }
+
+        if(content){
+            if(desc->filled){
+                return false;
+            }else{
+                desc->filled = true;
+            }
         }
 
         return true;
@@ -128,6 +136,12 @@ public:
         ERROR(loc);
     }
 
+    void checkType( Expression* element, SuperType* superType ){
+        if( element->superType == nullptr && !element->superType->equals(superType) ){
+            ERROR(element->location);
+        }
+    }
+
     void check(Unit *element) {
         for (auto child : element->children) {
             if (auto *declaration = dynamic_cast<Declaration *>(child)) {
@@ -135,12 +149,12 @@ public:
             } else if (auto *method = dynamic_cast<Method *>(child)) {
                 auto methodType = static_cast<MethodType*>(enter(method->declaration));
 
-                if(methodType->identifier != nullptr && !currentScope->set(methodType->identifier->value, methodType)){
-                    currentScope->set(methodType->identifier->value, methodType);
+                auto inner = new Scope();
+
+                if(methodType->identifier != nullptr && !currentScope->set(methodType->identifier->value, methodType,true)){
                     ERROR(methodType->identifier->location);
                 }
 
-                auto inner = new Scope();
                 if(methodType->types.size() != 1 || !methodType->types[0]->equals(VoidType)){
                     for( auto paramType : methodType->types ){
                         auto identifier = paramType->identifier;
@@ -148,13 +162,12 @@ public:
                         if(identifier == nullptr){
                             //ERROR(Location());
                         }else{
-                            if(!inner->set(identifier->value, paramType)){
+                            if(!inner->set(identifier->value, paramType, false)){
                                 ERROR(identifier->location);
                             }
                         }
                     }
                 }
-
 
                 auto carry = currentScope;
                 currentScope = inner;
@@ -262,6 +275,14 @@ public:
     }
 
     void enter(Expression* expression){
+        enter0(expression);
+
+        if( expression->superType == nullptr ){
+            ERROR(expression->location);
+        }
+    }
+
+    void enter0(Expression* expression){
         if(expression == nullptr){
             return;
         }else if(auto binary = dynamic_cast<Binary*>(expression)){
@@ -279,14 +300,25 @@ public:
         }else if(auto constant = dynamic_cast<Constant*>(expression)){
             constant->superType = new SimpleType(TYPE_CHAR);
         }else if(auto string = dynamic_cast<StringLiteral*>(expression)){
-            string->superType = new SimpleType(TYPE_STRING);
+            string->superType = StringType;
         }else if(auto call = dynamic_cast<Call*>(expression)){
             for( auto expr : call->values ){
                 enter(expr);
             }
 
             enter(call->target);
-            call->superType = call->target->superType->apply(call);
+
+            auto type = call->target->superType;
+
+            if( type == nullptr ){
+                ERROR(call->target->location);
+            }
+
+            call->superType = type->apply(call);
+
+            if(call->superType == nullptr){
+                ERROR(call->location);
+            }
         }else if(auto number = dynamic_cast<Number*>(expression)){
             number->type = TYPE_INT;
             number->superType = new SimpleType(TYPE_INT);
@@ -298,7 +330,9 @@ public:
                 ERROR(select->index->location);
             }
 
-            select->superType = select->target->superType->apply(select);
+            auto type = select->target->superType;
+
+            select->superType = type->apply(select);
         }else if(auto sizeOf = dynamic_cast<Sizeof*>(expression)){
             sizeOf->superType = new SimpleType(TYPE_INT);
         }else if(auto ifSmall = dynamic_cast<IfSmall*>(expression)){
@@ -306,13 +340,9 @@ public:
             enter(ifSmall->left);
             enter(ifSmall->right);
 
-            if(!ifSmall->left->superType->equals(ifSmall->right->superType)){
-                ERROR(Location());
-            }
+            checkType(ifSmall->condition, IntType);
 
-            if(!ifSmall->condition->superType->equals(IntType)){
-                ERROR(Location());
-            }
+            ifSmall->superType = ifSmall->left->superType;
         }else{
             ERROR(expression->location);
         }
@@ -452,14 +482,11 @@ public:
                     return;
                 }
 
-                if( leftType->isPointer() && rightType->equals(StringType) ){
-                    if(auto ref = dynamic_cast<const DeallocateType*>(leftType)){
-                        if(ref->subType->equals(CharType)){
-                            binary->superType = leftType;
-                            return;
-                        }
-                    }
+                if( leftType->equals(StringType) && rightType->equals(StringType)){
+                    binary->superType = StringType;
+                    return;
                 }
+
                 break;
         }
 
@@ -481,13 +508,17 @@ public:
                 methodType->types.push_back(enter(decl));
             }
 
-            if(auto identifier = dynamic_cast<Identifier*>(paramDecl->directDeclarator)){
-                methodType->identifier = identifier;
-            }else if(paramDecl->directDeclarator != nullptr){
-                enter(paramDecl->directDeclarator, methodType);
+            SuperType* finalType = methodType;
+
+            if(paramDecl->directDeclarator != nullptr){
+                finalType = enter(paramDecl->directDeclarator, methodType);
             }
 
-            return methodType;
+            if(auto identifier = dynamic_cast<Identifier*>(paramDecl->directDeclarator)){
+                finalType->identifier = identifier;
+            }
+
+            return finalType;
         }else if(auto identifier = dynamic_cast<Identifier*>(directDeclarator)){
             simpleType->identifier = identifier;
             return simpleType;
@@ -499,8 +530,7 @@ public:
     const SuperType* enter0(Declaration *declaration) {
         if(declaration != nullptr){
             auto type = enter(declaration);
-            if(type != nullptr && type->identifier != nullptr && !currentScope->set(type->identifier->value, type)){
-                currentScope->set(type->identifier->value, type);
+            if(type != nullptr && type->identifier != nullptr && !currentScope->set(type->identifier->value, type, false)){
                 ERROR(type->identifier->location);
             }
 
@@ -515,8 +545,10 @@ public:
         if(auto structType = dynamic_cast<StructType*>(declaration->type)){
             auto superStruct = new SuperStructType();
 
-            if(structType->declarations.empty()){
-                superType = currentScope->getStruct(structType->name)->superType;
+            auto desc = currentScope->getStruct(structType->name);
+
+            if(desc != nullptr && desc->defined){
+                superType = desc->superType;
             }else{
                 for( auto decel : structType->declarations ){
                     auto structInner = enter(decel);
@@ -539,7 +571,6 @@ public:
                 case TYPE_VOID: superType = new SimpleType(TYPE_VOID); break;
                 case TYPE_CHAR: superType = new SimpleType(TYPE_CHAR); break;
                 case TYPE_INT: superType = new SimpleType(TYPE_INT); break;
-                case TYPE_STRING: superType = new SimpleType(TYPE_STRING); break;
             }
         }
 

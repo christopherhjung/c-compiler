@@ -459,15 +459,16 @@ public:
                 return left;
             }else{
                 if(eat(QUESTION)){
-                    auto ifSimple = new IfSmall();
+                    auto ifSimple = create<IfSmall>();
                     ifSimple->condition = left;
                     ifSimple->left = parseExpression();
                     shall(COLON);
                     ifSimple->right = parseExpression();
                     left = ifSimple;
-                }else if(eat(LEFT_PAREN)){
-                    auto call = new Call();
+                }else if(is(LEFT_PAREN)){
+                    auto call = create<Call>();
                     call->target = left;
+                    next();
                     if(!is(RIGHT_PAREN)){
                         do {
                             call->values.push_back(parseExpression());
@@ -475,8 +476,9 @@ public:
                     }
                     shall(RIGHT_PAREN);
                     left = call;
-                }else if(eat(LEFT_BRACKET)){
-                    auto select = new Select();
+                }else if(is(LEFT_BRACKET)){
+                    auto select = create<Select>();
+                    next();
                     select->target = left;
                     select->index = parseExpression();
                     shall(RIGHT_BRACKET);
