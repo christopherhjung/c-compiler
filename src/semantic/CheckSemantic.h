@@ -158,7 +158,7 @@ public:
                         auto identifier = paramType->identifier;
 
                         if(identifier == nullptr){
-                            //ERROR(Location());
+                            ERROR(method->location);
                         }else{
                             if(!inner->set(identifier->value, paramType, false)){
                                 ERROR(identifier->location);
@@ -259,9 +259,14 @@ public:
             returnType = returnStatement->value->superType;
         }
 
-        if( !returnType->equals(currentScope->getReturnType()) ){
+        if(!isAssignable(currentScope->getReturnType(), returnType)){
             ERROR(loc->location);
         }
+    }
+
+    bool isAssignable(const SuperType* target, const SuperType* source)
+    {
+        return target->equals(source) || (target->isPointer() && source->equals(IntType));
     }
 
     void enter(Continue* continueStatement){
@@ -470,18 +475,8 @@ public:
                 }
                 break;
             case ASSIGN:
-                if( leftType->equals(rightType) ){
+                if(isAssignable(leftType, rightType)){
                     binary->superType = leftType;
-                    return;
-                }
-
-                if( leftType->isPointer() && rightType->equals(IntType) ){
-                    binary->superType = leftType;
-                    return;
-                }
-
-                if( leftType->equals(StringType) && rightType->equals(StringType)){
-                    binary->superType = StringType;
                     return;
                 }
 
@@ -528,8 +523,14 @@ public:
     const SuperType* enter0(Declaration *declaration) {
         if(declaration != nullptr){
             auto type = enter(declaration);
-            if(type != nullptr && type->identifier != nullptr && !currentScope->set(type->identifier->value, type, false)){
-                ERROR(type->identifier->location);
+            if(type != nullptr ){
+                if(type->identifier == nullptr){
+                    ERROR(declaration->location);
+                }
+
+                if(!currentScope->set(type->identifier->value, type, false)){
+                    ERROR(type->identifier->location);
+                }
             }
 
             return type;
@@ -545,7 +546,11 @@ public:
 
             auto desc = currentScope->getStruct(structType->name);
 
-            if(desc != nullptr && desc->defined){
+            if(structType->name != nullptr && desc != nullptr && desc->defined){
+                if(!structType->declarations.empty()){
+                    ERROR(structType->location);
+                }
+
                 superType = desc->superType;
             }else{
                 for( auto decel : structType->declarations ){

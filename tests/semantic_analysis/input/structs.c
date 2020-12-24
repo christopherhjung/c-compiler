@@ -1,5 +1,5 @@
 
-int main(int){
+int main(int a){
     struct S{
         int a;
     };

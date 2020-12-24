@@ -529,7 +529,7 @@ public:
     const SuperType* apply(const Expression* expression) const override {
         if(auto call = dynamic_cast<const Call*>(expression)){
             if( types.size() != call->values.size() ){
-
+                return nullptr;
             }
             int min = std::min(types.size() , call->values.size());
 

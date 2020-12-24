@@ -1,0 +1,1 @@
+global_variable_redefine\.c:2:5: error:.*

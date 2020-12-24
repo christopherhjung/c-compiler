@@ -1,0 +1,1 @@
+variable_redefine\.c:3:9: error:.*
