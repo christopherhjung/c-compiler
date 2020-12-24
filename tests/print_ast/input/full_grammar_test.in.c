@@ -1,5 +1,5 @@
-int;
-void;
+int p;
+void q;
 int x;
 int y;
 

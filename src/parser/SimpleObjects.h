@@ -661,7 +661,7 @@ public:
     }
 
     bool isSimple() const override {
-        return true;
+        return false;
     }
 
     bool isPointer() const override {

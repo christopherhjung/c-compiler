@@ -524,11 +524,11 @@ public:
         if(declaration != nullptr){
             auto type = enter(declaration);
             if(type != nullptr ){
-                if(type->identifier == nullptr){
+                if( instanceof<SimpleType>(type) && type->identifier == nullptr){
                     ERROR(declaration->location);
                 }
 
-                if(!currentScope->set(type->identifier->value, type, false)){
+                if(type->identifier != nullptr && !currentScope->set(type->identifier->value, type, false)){
                     ERROR(type->identifier->location);
                 }
             }
