@@ -6,7 +6,6 @@ int (main(int a))
 	};
 	struct S s;
 	struct S (*sp);
-	int a;
 	(a = (s.a));
 	(s = (*sp));
 	(((sp[0]).a) = a);

@@ -137,7 +137,6 @@ int check(const std::string& path, int (*fun)(FileInputReader*, std::ostream&, s
     return errors;
 }
 
-int f(int (((s)))(int));
 
 int main(int argc, char** argv){
 
@@ -159,16 +158,8 @@ int main(int argc, char** argv){
         return runParser(inputReader, out, err, true);
     });
 
-    std::cout << f([](int a){return  a + 1;}) << std::endl;
-
-
     return errors;
 
     //testing::InitGoogleTest(&argc,argv);
     //return RUN_ALL_TESTS();
-}
-
-
-int f(int g(int)){
-    return (g)(2);
 }

@@ -67,12 +67,12 @@ class Statement : public Element{
 
 class Expression : public Statement{
 public:
-    Declaration* type = nullptr;
+    //Declaration* type = nullptr;
     const SuperType* superType = nullptr;
 
-    Declaration* getType(){
+    /*Declaration* getType(){
         return type;
-    };
+    };*/
 };
 
 class Operator : public Element{
@@ -298,7 +298,7 @@ public:
     }
 };
 
-class ParameterTypeList : public Statement {
+class ParameterTypeList : public Dumpable {
 public:
     std::vector<SuperType*> declarations2;
     std::vector<Declaration *> declarations;

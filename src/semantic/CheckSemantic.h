@@ -134,7 +134,7 @@ public:
         ERROR(loc);
     }
 
-    void checkType( Expression* element, SuperType* superType ){
+    void checkType( const Expression* element, const SuperType* superType ){
         if( element->superType == nullptr && !element->superType->equals(superType) ){
             ERROR(element->location);
         }
@@ -167,20 +167,21 @@ public:
                     }
                 }
 
-                auto carry = currentScope;
-                currentScope = inner;
-                inner->parent = carry;
+                inner->parent = currentScope;
                 inner->returnType = methodType->subType;
-                enter(method->body);
-                currentScope = carry;
+                enter(method->body, inner);
             }
         }
     }
 
-    void enter(Block* block){
+    void enter(Block* block, Scope* scope){
         if( block != nullptr ){
             Scope* carry = currentScope;
-            currentScope = new Scope();
+            if(scope == nullptr){
+                currentScope = new Scope();
+            }else{
+                currentScope = scope;
+            }
             currentScope->parent = carry;
             for( auto statement : block->children){
                 enter(statement);
@@ -207,7 +208,7 @@ public:
         }else if(auto breakStatement = dynamic_cast<Break*>(statement)){
             enter(breakStatement);
         }else if(auto block = dynamic_cast<Block*>(statement)){
-            enter(block);
+            enter(block, nullptr);
         }else if(auto declaration = dynamic_cast<Declaration*>(statement)){
             enter0(declaration);
         }else if(auto expression = dynamic_cast<Expression*>(statement)){
@@ -301,7 +302,7 @@ public:
 
             identifier->superType = desc->superType;
         }else if(auto constant = dynamic_cast<Constant*>(expression)){
-            constant->superType = new SimpleType(TYPE_CHAR);
+            constant->superType = CharType;
         }else if(auto string = dynamic_cast<StringLiteral*>(expression)){
             string->superType = StringType;
         }else if(auto call = dynamic_cast<Call*>(expression)){
@@ -323,8 +324,7 @@ public:
                 ERROR(call->location);
             }
         }else if(auto number = dynamic_cast<Number*>(expression)){
-            number->type = TYPE_INT;
-            number->superType = new SimpleType(TYPE_INT);
+            number->superType = IntType;
         }else if(auto select = dynamic_cast<Select*>(expression)){
             enter(select->target);
             enter(select->index);
@@ -337,13 +337,14 @@ public:
 
             select->superType = type->apply(select);
         }else if(auto sizeOf = dynamic_cast<Sizeof*>(expression)){
-            sizeOf->superType = new SimpleType(TYPE_INT);
+            sizeOf->superType = IntType;
         }else if(auto ifSmall = dynamic_cast<IfSmall*>(expression)){
             enter(ifSmall->condition);
             enter(ifSmall->left);
             enter(ifSmall->right);
 
             checkType(ifSmall->condition, IntType);
+            checkType(ifSmall->left, ifSmall->right->superType);
 
             ifSmall->superType = ifSmall->left->superType;
         }else{
