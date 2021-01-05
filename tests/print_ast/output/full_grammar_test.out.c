@@ -1,6 +1,6 @@
-int;
+int p;
 
-void;
+void q;
 
 int x;
 
@@ -53,7 +53,7 @@ struct name
 	int foo;
 };
 
-struct name
+struct name2
 {
 	int foo;
 } value3;
@@ -93,7 +93,7 @@ void (def2(int x, int y, struct
 {
 }
 
-void (def3(int x, int y, struct withname
+void (def3(int x, int y, struct
 {
 	int ((*x)(void));
 } z))
@@ -130,7 +130,7 @@ foo:
 	}
 }
 
-void (expressions(int x, int y))
+void (expressions(int z, int y))
 {
 	;
 	1;

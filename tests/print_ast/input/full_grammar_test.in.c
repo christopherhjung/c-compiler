@@ -32,7 +32,7 @@ void **(((***funptr)(int (((x))), void)));
 
 void def1(int x, int y, struct withname z) {}
 void def2(int x, int y, struct { int x; } z) {}
-void def3(int x, int y, struct withname { int (*x)(void); } z) {}
+void def3(int x, int y, struct { int (*x)(void); } z) {}
 
 int fun(int)(int)(int);
 
@@ -51,7 +51,7 @@ int statements(int x, int y) {
     break;
   }
 }
-void expressions(int x, int y) {
+void expressions(int z, int y) {
   ;
   1;
   x;

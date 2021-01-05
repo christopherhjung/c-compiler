@@ -1,10 +1,1 @@
-
-char* swapArray( int a, int b )
-{
-    struct{
-        int a;
-    } c;
-    if(c){
-
-    }
-}
+struct_condition_error\.c:7:5: error:.*

@@ -158,7 +158,7 @@ public:
                         auto identifier = paramType->identifier;
 
                         if(identifier == nullptr){
-                            ERROR(method->location);
+                            ERROR(method->declaration->location);
                         }else{
                             if(!inner->set(identifier->value, paramType, false)){
                                 ERROR(identifier->location);
@@ -224,23 +224,30 @@ public:
         currentScope->labels[labeledStatement->name] = labeledStatement->name;
     }
 
+
+
+    void checkCondition(Expression* condition, Location& location){
+        enter(condition);
+        if( instanceof<SuperStructType>(condition->superType) ){
+            ERROR(location);
+        }
+    }
+
     void enter(If* ifStatement){
         enter(ifStatement->condition);
         enter(ifStatement->trueBranch);
         enter(ifStatement->falseBranch);
 
-        if( !ifStatement->condition->superType->equals(IntType) ){
+        if( instanceof<SuperStructType>(ifStatement->condition->superType) ){
             ERROR(ifStatement->location);
         }
+
+        checkCondition(ifStatement->condition, ifStatement->location);
     }
 
     void enter(While* whileStatement){
-        enter(whileStatement->condition);
+        checkCondition(whileStatement->condition, whileStatement->location);
         enter(whileStatement->body);
-
-        if( !whileStatement->condition->superType->equals(IntType) ){
-            ERROR(whileStatement->location);
-        }
     }
 
     void enter(GoTo* gotoStatement){
@@ -318,7 +325,7 @@ public:
                 ERROR(call->target->location);
             }
 
-            call->superType = type->apply(call);
+            call->superType = type->call(call);
 
             if(call->superType == nullptr){
                 ERROR(call->location);
@@ -329,13 +336,13 @@ public:
             enter(select->target);
             enter(select->index);
 
-            if( !select->index->superType->equals(IntType) ){
+            if( !select->index->superType->isSimple() ){
                 ERROR(select->index->location);
             }
 
             auto type = select->target->superType;
 
-            select->superType = type->apply(select);
+            select->superType = type->select();
         }else if(auto sizeOf = dynamic_cast<Sizeof*>(expression)){
             sizeOf->superType = IntType;
         }else if(auto ifSmall = dynamic_cast<IfSmall*>(expression)){
@@ -410,7 +417,7 @@ public:
                 if (auto deallocType = dynamic_cast<const PointerType *>(leftType)) {
                     if (auto superStruct = dynamic_cast<const SuperStructType *>(deallocType->subType)) {
                         auto identifier = (const Identifier *) binary->right;
-                        binary->superType = superStruct->apply(identifier);
+                        binary->superType = superStruct->member(identifier);
                         if (binary->superType != nullptr) {
                             return;
                         }
@@ -420,7 +427,7 @@ public:
             case DOT:
                 if (auto superStruct = dynamic_cast<const SuperStructType *>(leftType)) {
                     auto identifier = (const Identifier *) binary->right;
-                    binary->superType = superStruct->apply(identifier);
+                    binary->superType = superStruct->member(identifier);
                     if (binary->superType != nullptr) {
                         return;
                     }
@@ -498,8 +505,20 @@ public:
         }else if(auto paramDecl = dynamic_cast<ParameterDirectDeclarator*>(directDeclarator)){
             auto methodType = new MethodType(simpleType);
 
-            for( auto decl : paramDecl->parameterTypeList->declarations ){
-                methodType->types.push_back(enter(decl));
+            auto decls = paramDecl->parameterTypeList->declarations;
+
+            if(decls.size() == 1){
+                auto decl = decls[0];
+
+                auto type = enter(decl);
+
+                if(!type->equals(VoidType)){
+                    methodType->types.push_back(type);
+                }
+            }else{
+                for( auto decl : decls ){
+                    methodType->types.push_back(enter(decl));
+                }
             }
 
             SuperType* finalType = methodType;

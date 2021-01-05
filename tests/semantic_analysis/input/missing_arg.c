@@ -1,5 +1,7 @@
 
-char* swapArray( int a, int b )
-{
-    return 0;
+void foo (void) {
+    struct {int a;} test;
+    if(test){
+
+    }
 }

@@ -368,7 +368,6 @@ public:
 class Method : public Element{
 public:
     Declaration* declaration = nullptr;
-    SuperType* type = nullptr;
     Block* body = nullptr;
 
     void dump(PrettyPrinter& printer) override{
@@ -505,7 +504,16 @@ class SimpleType;
 class SuperType : public Comparable{
 public:
     const Identifier* identifier = nullptr;
-    virtual const SuperType* apply(const Expression* expression) const = 0;
+    virtual const SuperType* call(const Call* call) const{
+        return nullptr;
+    };
+    virtual const SuperType* select() const{
+        return nullptr;
+    };
+    virtual const SuperType* member(const Identifier* identifier) const{
+        return nullptr;
+    };
+
     virtual bool isSimple() const = 0;
     virtual bool isPointer() const = 0;
 };
@@ -526,8 +534,8 @@ public:
 
     }
 
-    const SuperType* apply(const Expression* expression) const override {
-        if(auto call = dynamic_cast<const Call*>(expression)){
+    const SuperType* call(const Call* call) const override {
+        if(call){
             if( types.size() != call->values.size() ){
                 return nullptr;
             }
@@ -600,7 +608,7 @@ public:
         return false;
     }
 
-    const SuperType* apply(const Expression* instruction) const override {
+    const SuperType* select() const override {
         return subType;
     }
 
@@ -646,8 +654,8 @@ public:
         return false;
     }
 
-    const SuperType* apply(const Expression* instruction) const override {
-        if(auto identifier = dynamic_cast<const Identifier*>(instruction)){
+    const SuperType* member(const Identifier* identifier) const override {
+        if(identifier){
             auto pos = map.find(identifier->value);
 
             if(pos == map.end()){
@@ -686,10 +694,6 @@ public:
             return id == otherSimple->id;
         }
         return false;
-    }
-
-    const SuperType* apply(const Expression* instruction) const override {
-        return nullptr;
     }
 
     bool isSimple() const override {
