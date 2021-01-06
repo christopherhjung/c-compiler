@@ -40,13 +40,21 @@ public:
 class Scope{
 public:
     std::unordered_map<const std::string*, Descriptor<SuperType>> types;
-    std::unordered_map<const std::string*, const std::string*> labels;
     std::unordered_map<const std::string*, Descriptor<SuperStructType>> structs;
+    std::unordered_map<const std::string*, int> labels;
     Scope* parent = nullptr;
     const SuperType* returnType = nullptr;
 
     Scope(){
 
+    }
+
+    bool isLabel(const std::string* label){
+        return labels.find(label) != labels.end();
+    }
+
+    void setLabel(const std::string* label){
+        labels[label] = 0;
     }
 
     const SuperType* getReturnType(){
@@ -127,6 +135,7 @@ class Semantic {
 public:
     Scope mainScope;
     Scope* currentScope = &mainScope;
+    Scope* methodScope = nullptr;
 
     void fatal(Element* element){
         Location& loc = element->location;
@@ -169,7 +178,30 @@ public:
 
                 inner->parent = currentScope;
                 inner->returnType = methodType->subType;
+                methodScope = inner;
+                findLabels(method->body);
                 enter(method->body, inner);
+            }
+        }
+    }
+
+    void findLabels(Statement* statement){
+        if(statement == nullptr){
+            return;
+        }else if(auto labeledStatement = dynamic_cast<LabeledStatement*>(statement)){
+            if(methodScope->isLabel(labeledStatement->name)){
+                ERROR(labeledStatement->location);
+            }
+            methodScope->setLabel(labeledStatement->name);
+            findLabels(labeledStatement->statement);
+        }else if(auto ifStatement = dynamic_cast<If*>(statement)){
+            findLabels(ifStatement->trueBranch);
+            findLabels(ifStatement->falseBranch);
+        }else if(auto whileStatement = dynamic_cast<While*>(statement)){
+            findLabels(whileStatement->body);
+        }else if(auto block = dynamic_cast<Block*>(statement)){
+            for(auto &child : block->children){
+                findLabels(child);
             }
         }
     }
@@ -186,6 +218,7 @@ public:
             for( auto statement : block->children){
                 enter(statement);
             }
+
             currentScope = carry;
         }
     }
@@ -194,7 +227,7 @@ public:
         if(statement == nullptr){
             return;
         }else if(auto labeledStatement = dynamic_cast<LabeledStatement*>(statement)){
-            enter(labeledStatement);
+            enter(labeledStatement->statement);
         }else if(auto ifStatement = dynamic_cast<If*>(statement)){
             enter(ifStatement);
         }else if(auto whileStatement = dynamic_cast<While*>(statement)){
@@ -217,14 +250,6 @@ public:
             ERROR(statement->location);
         }
     }
-
-    void enter(LabeledStatement* labeledStatement){
-        enter(labeledStatement->statement);
-
-        currentScope->labels[labeledStatement->name] = labeledStatement->name;
-    }
-
-
 
     void checkCondition(Expression* condition, Location& location){
         enter(condition);
@@ -251,7 +276,9 @@ public:
     }
 
     void enter(GoTo* gotoStatement){
-
+        if(!methodScope->isLabel(gotoStatement->name)){
+            ERROR(gotoStatement->location);
+        }
     }
 
     void enter(Return* returnStatement){
@@ -336,7 +363,7 @@ public:
             enter(select->target);
             enter(select->index);
 
-            if( !select->index->superType->isSimple() ){
+            if( !select->index->superType->isSimple() && !select->index->superType->isPointer() ){
                 ERROR(select->index->location);
             }
 
@@ -432,7 +459,7 @@ public:
                         return;
                     }
                 }
-                break;
+                ERROR(binary->op->location);
         }
 
         enter(binary->right);
@@ -491,8 +518,13 @@ public:
                 break;
         }
 
+
+
+
         ERROR(binary->op->location);
     }
+
+
 
     SuperType* enter(DirectDeclarator* directDeclarator, SuperType* simpleType){
         if(auto declarator = dynamic_cast<Declarator*>(directDeclarator)){
@@ -574,17 +606,31 @@ public:
                 superType = desc->superType;
             }else{
                 for( auto decel : structType->declarations ){
-                    auto structInner = enter(decel);
+
+                    auto savedScope = currentScope;
+                    currentScope = new Scope();
+                    auto structInner = enter0(decel);
+                    delete currentScope;
+                    currentScope = savedScope;
+
 
                     superStruct->types.push_back(structInner);
 
                     auto identifier = structInner->identifier;
                     if(identifier != nullptr){
+                        if(superStruct->map.find(identifier->value) != superStruct->map.end()){
+                            ERROR(identifier->location);
+                        }
+
                         superStruct->map[identifier->value] = superStruct->types.size() - 1;
                     }
                 }
 
+                //hello
+                //set(type->identifier->value, type, false)
+
                 currentScope->setStruct(structType->name, superStruct);
+
                 //currentScope->structs[structType->name] = superStruct;
                 superType = superStruct;
             }

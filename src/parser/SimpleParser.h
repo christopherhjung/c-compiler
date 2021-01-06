@@ -292,7 +292,7 @@ public:
             shall(SEMI);
             return new Break();
         }else if(is(IDENTIFIER) && isNext(COLON)){
-            auto result = new LabeledStatement();
+            auto result = create<LabeledStatement>();
             result->name = lookA.value;
             eat(IDENTIFIER);
             eat(COLON);
@@ -309,7 +309,7 @@ public:
 
     GoTo* parseGoTo(){
         shall(GOTO);
-        auto result = new GoTo();
+        auto result = create<GoTo>();
         result->name = lookA.value;
         next();
         shall(SEMI);

@@ -1,0 +1,1 @@
+multipleParamInStruct\.c:3:9: error:.*
