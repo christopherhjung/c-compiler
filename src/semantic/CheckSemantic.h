@@ -97,9 +97,8 @@ public:
     bool set(const std::string* str, SuperType* type, bool hasImplementation){
         auto desc = &types[str];
 
-        bool isMethod = instanceof<MethodType>(type);
-
         if( desc->defined ){
+            bool isMethod = type->asMethodType();
             if( !isMethod ){
                 return false;
             }else if(!desc->superType->equals(type)){
@@ -250,11 +249,9 @@ public:
         }
     }
 
-
-
     void checkCondition(Expression* condition, Location& location){
         enter(condition);
-        if( instanceof<SuperStructType>(condition->superType) ){
+        if( condition->superType->asSuperStructType() ){
             ERROR(location);
         }
     }
@@ -264,7 +261,7 @@ public:
         enter(ifStatement->trueBranch);
         enter(ifStatement->falseBranch);
 
-        if( instanceof<SuperStructType>(ifStatement->condition->superType) ){
+        if( ifStatement->condition->superType->asSuperStructType() ){
             ERROR(ifStatement->location);
         }
 
@@ -605,7 +602,7 @@ public:
         if(declaration != nullptr){
             auto type = enter(declaration);
             if(type != nullptr ){
-                if( instanceof<SimpleType>(type) && type->identifier == nullptr){
+                if( type->asSimpleType() && type->identifier == nullptr){
                     ERROR(declaration->location);
                 }
 
