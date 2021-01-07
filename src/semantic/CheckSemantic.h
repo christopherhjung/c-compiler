@@ -461,7 +461,7 @@ public:
                         }
                     }
                 }
-                break;
+                ERROR(binary->op->location);
             case DOT:
                 if (auto superStruct = leftType->asSuperStructType()) {
                     auto identifier = (const Identifier *) binary->right;
