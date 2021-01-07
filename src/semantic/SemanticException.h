@@ -21,3 +21,6 @@ public:
 
     }
 };
+
+#define ERROR(LOCATION) (throw SemanticException(LOCATION, __LINE__))
+#define ERROR_MSG(LOCATION, MSG) (throw SemanticException(LOCATION,MSG, __LINE__))

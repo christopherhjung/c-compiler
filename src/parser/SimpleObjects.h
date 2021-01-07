@@ -526,9 +526,11 @@ public:
     virtual const SuperType* call(const Call* call) const{
         return nullptr;
     };
+
     virtual const SuperType* select() const{
         return nullptr;
     };
+
     virtual const SuperType* member(const Identifier* identifier) const{
         return nullptr;
     };
@@ -581,7 +583,6 @@ public:
             for( int i = 0 ; i < min ; i++ ){
                 if( !types[i]->equals(call->values[i]->superType) ){
                     return nullptr;
-                    //throw SemanticException(call->values[i]->location);
                 }
             }
 
@@ -589,11 +590,6 @@ public:
         }
 
         return nullptr;
-        //throw SemanticException(expression->location);
-    }
-
-    uint64_t hash() const override {
-        return 0;
     }
 
     bool equals(const SuperType *other) const override {
@@ -628,10 +624,6 @@ public:
 
     }
 
-    uint64_t hash() const override {
-        return 0;
-    }
-
     bool equals(const SuperType *other) const override {
         if( auto simpleOther = other->asPointerType() ){
             return subType->equals(simpleOther->subType);
@@ -642,7 +634,6 @@ public:
     const SuperType* select() const override {
         return subType;
     }
-
 
     const PointerType* asPointerType() const override{
         return this;
@@ -660,10 +651,6 @@ public:
 
     explicit SuperStructType(bool assignable) : SuperType(assignable) {
 
-    }
-
-    uint64_t hash() const override {
-        return 0;
     }
 
     bool equals(const SuperType *other) const override {
@@ -700,7 +687,6 @@ public:
         return nullptr;
     }
 
-
     const SuperStructType* asSuperStructType() const override{
         return this;
     }
@@ -716,10 +702,6 @@ public:
 
     explicit SimpleType(int id, bool assignable) : SuperType(assignable), id(id){
 
-    }
-
-    uint64_t hash() const override {
-        return 0;
     }
 
     bool equals(const SuperType *other) const override {
@@ -744,10 +726,6 @@ public:
 
     explicit ProxyType(const SuperType* inner, bool assignable) : SuperType(assignable), inner(inner){
 
-    }
-
-    uint64_t hash() const override {
-        return 0;
     }
 
     bool equals(const SuperType *other) const override {

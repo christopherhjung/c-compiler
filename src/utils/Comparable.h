@@ -22,7 +22,9 @@ public:
         }
     };
 
-    virtual uint64_t hash() const = 0;
+    virtual uint64_t hash() const{
+        return 0;
+    };
     virtual bool equals(const T* other) const = 0;
 
     virtual bool operator==(const T& other) const {

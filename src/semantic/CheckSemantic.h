@@ -15,9 +15,6 @@ extern SimpleType* const CharType = new SimpleType(TYPE_CHAR);
 extern SimpleType* const VoidType = new SimpleType(TYPE_VOID);
 extern SuperType* const StringType = new PointerType(CharType);
 
-#define ERROR(LOCATION) (throw SemanticException(LOCATION, __LINE__))
-#define ERROR_MSG(LOCATION, MSG) (throw SemanticException(LOCATION,MSG, __LINE__))
-
 template<class T>
 class Descriptor{
 public:
@@ -344,6 +341,8 @@ public:
 
             enter(call->target);
 
+            //call->target->superType->call(call);
+
 
             if( auto methodType = call->target->superType->asMethodType() ){
 
@@ -361,15 +360,13 @@ public:
                     }
                 }
 
-                call->superType = new ProxyType(methodType->subType, false);
-
-
-                if(call->superType == nullptr){
+                if(methodType->subType == nullptr){
                     ERROR(call->location);
                 }
+
+                call->superType = new ProxyType(methodType->subType, false);
                 return;
             }
-
 
             ERROR(call->target->location);
         }else if(auto number = dynamic_cast<Number*>(expression)){
@@ -482,21 +479,27 @@ public:
             ERROR(binary->op->location);
         }
 
+        bool leftIsNumeric = leftType->equals(IntType) || leftType->equals(CharType);
+        bool rightIsNumeric = rightType->equals(IntType) || rightType->equals(CharType);
+
+        bool leftIsNotComparable = leftType->asSuperStructType() || VoidType->equals(leftType);
+        bool rightIsNotComparable = rightType->asSuperStructType() || VoidType->equals(rightType);
+
         switch(binary->op->id){
             case STAR:
-                if( leftType->equals(IntType) && rightType->equals(IntType) ){
+                if( leftIsNumeric && rightIsNumeric ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
                 break;
             case PLUS:
-                if( leftType->equals(IntType) && rightType->equals(IntType) ){
+                if( leftIsNumeric && rightIsNumeric ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
-                }else if(leftType->asPointerType() && rightType->equals(IntType)){
+                }else if(leftType->asPointerType() && rightIsNumeric){
                     binary->superType = new ProxyType(leftType, false);
                     return;
-                }else if(rightType->asPointerType() && leftType->equals(IntType)){
+                }else if(rightType->asPointerType() && leftIsNumeric){
                     binary->superType = new ProxyType(rightType, false);
                     return;
                 }
@@ -505,7 +508,7 @@ public:
                 if( leftType->equals(rightType) ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
-                }else if(leftType->asPointerType() && rightType->equals(IntType)){
+                }else if(leftType->asPointerType() && rightIsNumeric){
                     binary->superType = new ProxyType(leftType, false);
                     return;
                 }
@@ -516,21 +519,16 @@ public:
             case GREATER_EQUAL:
             case EQUAL:
             case NOT_EQUAL:
-                if( leftType->equals(rightType) ){
-                    binary->superType = new SimpleType(TYPE_INT, false);
-                    return;
-                }
-                break;
             case AND_AND:
             case OR_OR:
-                if( !leftType->asSuperStructType() && !rightType->asSuperStructType() ){
+                if( !leftIsNotComparable && !rightIsNotComparable ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
                 break;
             case LEFT_SHIFT:
             case RIGHT_SHIFT:
-                if( leftType->equals(IntType) && rightType->equals(IntType) ){
+                if( leftIsNumeric && rightIsNumeric ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
