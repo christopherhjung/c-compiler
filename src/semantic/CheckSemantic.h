@@ -634,6 +634,9 @@ public:
                     delete currentScope;
                     currentScope = savedScope;
 
+                    if(structInner == nullptr){
+                        ERROR(structType->location);
+                    }
 
                     superStruct->types.push_back(structInner);
 
