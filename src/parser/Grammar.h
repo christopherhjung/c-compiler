@@ -49,7 +49,7 @@ public:
         return 0;
     }
 
-    bool equals(const Comparable *other) const override {
+    bool equals(const Component *other) const override {
         return other == this;
     }
 };

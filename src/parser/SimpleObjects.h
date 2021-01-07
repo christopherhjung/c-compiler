@@ -502,8 +502,9 @@ class PointerType;
 class SuperStructType;
 class SimpleType;
 
-class SuperType : public Comparable{
+class SuperType : public Comparable<SuperType>{
 public:
+    bool assignable = false;
     const Identifier* identifier = nullptr;
     virtual const SuperType* call(const Call* call) const{
         return nullptr;
@@ -517,6 +518,22 @@ public:
 
     virtual bool isSimple() const = 0;
     virtual bool isPointer() const = 0;
+
+    virtual const MethodType* asMethodType() const{
+        return nullptr;
+    }
+
+    virtual const PointerType* asPointerType() const{
+        return nullptr;
+    }
+
+    virtual const SuperStructType* asSuperStructType() const{
+        return nullptr;
+    }
+
+    virtual const SimpleType* asSimpleType() const{
+        return nullptr;
+    }
 };
 
 class ComplexType : public SuperType{
@@ -561,8 +578,8 @@ public:
         return 0;
     }
 
-    bool equals(const Comparable *other) const override {
-        if( auto superType = dynamic_cast<const MethodType*>(other) ){
+    bool equals(const SuperType *other) const override {
+        if( auto superType =other->asMethodType() ){
             if( types.size() != superType->types.size() ){
                 return false;
             }
@@ -585,6 +602,10 @@ public:
     bool isPointer() const override {
         return false;
     }
+
+    const MethodType* asMethodType() const override{
+        return this;
+    }
 };
 
 class PointerType : public ComplexType{
@@ -597,8 +618,8 @@ public:
         return 0;
     }
 
-    bool equals(const Comparable *other) const override {
-        if( auto simpleOther = dynamic_cast<const PointerType*>(other) ){
+    bool equals(const SuperType *other) const override {
+        if( auto simpleOther = other->asPointerType() ){
             return subType->equals(simpleOther->subType);
         }
         return false;
@@ -615,6 +636,11 @@ public:
     bool isPointer() const override {
         return true;
     }
+
+
+    const PointerType* asPointerType() const override{
+        return this;
+    }
 };
 
 class SuperStructType : public SuperType{
@@ -630,7 +656,7 @@ public:
         return 0;
     }
 
-    bool equals(const Comparable *other) const override {
+    bool equals(const SuperType *other) const override {
         if(auto structType = dynamic_cast<const SuperStructType*>(other)){
             if(types.size() != structType->types.size()){
                 return false;
@@ -671,6 +697,11 @@ public:
     bool isPointer() const override {
         return false;
     }
+
+
+    const SuperStructType* asSuperStructType() const override{
+        return this;
+    }
 };
 
 class SimpleType : public SuperType{
@@ -685,8 +716,8 @@ public:
         return 0;
     }
 
-    bool equals(const Comparable *other) const override {
-        if(auto otherSimple = dynamic_cast<const SimpleType*>(other)){
+    bool equals(const SuperType *other) const override {
+        if(auto otherSimple = other->asSimpleType()){
             return id == otherSimple->id;
         }
         return false;
@@ -698,5 +729,50 @@ public:
 
     bool isPointer() const override {
         return false;
+    }
+
+    const SimpleType* asSimpleType() const override{
+        return this;
+    }
+};
+
+class ProxyType : public SuperType{
+public:
+    const SuperType* inner;
+
+    explicit ProxyType(const SuperType* inner) : inner(inner){
+
+    }
+
+    uint64_t hash() const override {
+        return 0;
+    }
+
+    bool equals(const SuperType *other) const override {
+        return inner->equals(other);
+    }
+
+    bool isSimple() const override {
+        return true;
+    }
+
+    bool isPointer() const override {
+        return false;
+    }
+
+    const SimpleType* asSimpleType() const override{
+        return inner->asSimpleType();
+    }
+
+    const MethodType* asMethodType() const override{
+        return inner->asMethodType();
+    }
+
+    const PointerType* asPointerType() const override{
+        return inner->asPointerType();
+    }
+
+    const SuperStructType* asSuperStructType() const override{
+        return inner->asSuperStructType();
     }
 };

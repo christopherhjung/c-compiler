@@ -220,7 +220,7 @@ public:
         DirectDeclarator* directDeclarator = nullptr;
 
         if(is(LEFT_PAREN)){
-            if((!isType(lookB.id) && !isNext(RIGHT_PAREN)) || !abstract){
+            if((!isType(lookB.id) /*&& !isNext(RIGHT_PAREN)*/) || !abstract){
                 next();
                 directDeclarator = parseDeclarator(normal, abstract);
                 shall(RIGHT_PAREN);
@@ -245,7 +245,7 @@ public:
     ParameterTypeList* parseParameterTypeList(bool nullable){
         auto parameterTypeList = new ParameterTypeList();
 
-        if(!nullable || !is(RIGHT_PAREN)){
+        //if(!nullable || !is(RIGHT_PAREN)){
             while(true){
                 auto declaration = create<Declaration>();
                 Type* type = parseType();
@@ -261,7 +261,7 @@ public:
                     break;
                 }
             }
-        }
+        //}
 
 
         return parameterTypeList;
@@ -582,5 +582,3 @@ public:
     }
 
 };
-
-

@@ -1,9 +1,6 @@
 int p;
-void q;
 int x;
 int y;
-
-void k;
 
 void lol(void);
 
@@ -28,7 +25,7 @@ void lol3n(int (*x));
 void lol4(int (()(void)));
 void lol5(int (()(void)));
 void lol61(int x);
-void **(((***funptr)(int (((x))), void)));
+void **(((***funptr)(int (((x))))));
 
 void def1(int x, int y, struct withname z) {}
 void def2(int x, int y, struct { int x; } z) {}

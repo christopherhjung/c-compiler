@@ -1,12 +1,8 @@
 int p;
 
-void q;
-
 int x;
 
 int y;
-
-void k;
 
 void (lol(void));
 
@@ -74,13 +70,13 @@ void (lol2n(int (*x)));
 
 void (lol3n(int (*x)));
 
-void (lol4(int ((())(void))));
+void (lol4(int ((void))));
 
-void (lol5(int ((())(void))));
+void (lol5(int ((void))));
 
 void (lol61(int x));
 
-void (*(*((*(*(*funptr)))(int x, void))));
+void (*(*((*(*(*funptr)))(int x))));
 
 void (def1(int x, int y, struct withname z))
 {
@@ -143,7 +139,7 @@ void (expressions(int z, int y))
 	(sizeof 1);
 	(sizeof foo);
 	(sizeof(struct foosizeof));
-	(sizeof(int((())(int x, int y))));
+	(sizeof(int((int x, int y))));
 	(sizeof(int((*)(int, int))));
 	(1 + 1);
 	(1 * 1);

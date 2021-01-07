@@ -18,7 +18,7 @@
 class Closure {
 public:
     uint32_t id;
-    std::unordered_set<Item*, Comparable::Hash, Comparable::Equals> items;
+    std::unordered_set<Item*, Comparable<Item>::Hash, Comparable<Item>::Equals> items;
     std::unordered_map<Entity*, Closure*> transitions;
 
     Closure(uint32_t id) : id(id){
@@ -26,9 +26,9 @@ public:
     }
 };
 
-class Kernel : public Comparable {
+class Kernel : public Comparable<Kernel> {
 public:
-    std::unordered_set<Item*, Comparable::Hash, Comparable::Equals> seeds;
+    std::unordered_set<Item*, Comparable<Item>::Hash, Comparable<Item>::Equals> seeds;
 
     uint64_t hash() const override {
         uint64_t result{31};
@@ -38,7 +38,7 @@ public:
         return result;
     }
 
-    bool equals(const Comparable *other) const override {
+    bool equals(const Kernel *other) const override {
         if(auto* kernel = dynamic_cast<const Kernel*>(other)) {
             for(auto kernelItem : kernel->seeds){
                 if(seeds.find(kernelItem) == seeds.end()){
@@ -78,7 +78,7 @@ void printKernel(const Kernel* closure){
 
 class ParserGenerator {
     uint32_t currentClosure = 0;
-    std::unordered_map<Kernel*, Closure*, Comparable::Hash, Comparable::Equals> closures;
+    std::unordered_map<Kernel*, Closure*, Comparable<Kernel>::Hash, Comparable<Kernel>::Equals> closures;
 
     void computeClosure(Closure* closure){
         std::unordered_map<Entity*, Kernel*> aggregate;

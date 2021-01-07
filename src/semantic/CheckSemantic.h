@@ -353,7 +353,7 @@ public:
             enter(call->target);
 
 
-            if( auto methodType = dynamic_cast<const MethodType*>(call->target->superType) ){
+            if( auto methodType = call->target->superType->asMethodType() ){
 
                 if( methodType->types.size() < call->values.size() ){
                     ERROR(call->locations[methodType->types.size()]);
@@ -416,7 +416,7 @@ public:
         switch(unary->op->id){
             case STAR:
                 if( type->isPointer() ){
-                    auto dealloc = dynamic_cast<const PointerType*>(type);
+                    auto dealloc = type->asPointerType();
                     unary->superType = dealloc->subType;
                     return;
                 }
@@ -461,8 +461,8 @@ public:
 
         switch(binary->op->id) {
             case ARROW:
-                if (auto deallocType = dynamic_cast<const PointerType *>(leftType)) {
-                    if (auto superStruct = dynamic_cast<const SuperStructType *>(deallocType->subType)) {
+                if (auto deallocType = leftType->asPointerType()) {
+                    if (auto superStruct = deallocType->subType->asSuperStructType()) {
                         auto identifier = (const Identifier *) binary->right;
                         binary->superType = superStruct->member(identifier);
                         if (binary->superType != nullptr) {
@@ -472,7 +472,7 @@ public:
                 }
                 break;
             case DOT:
-                if (auto superStruct = dynamic_cast<const SuperStructType *>(leftType)) {
+                if (auto superStruct = leftType->asSuperStructType()) {
                     auto identifier = (const Identifier *) binary->right;
                     binary->superType = superStruct->member(identifier);
                     if (binary->superType != nullptr) {
@@ -492,13 +492,17 @@ public:
         switch(binary->op->id){
             case STAR:
                 if( leftType->equals(IntType) && rightType->equals(IntType) ){
-                    binary->superType = new SimpleType(TYPE_INT);
+                    auto type = new SimpleType(TYPE_INT);
+                    binary->superType = type;
+                    type->assignable = false;
                     return;
                 }
                 break;
             case PLUS:
                 if( leftType->equals(IntType) && rightType->equals(IntType) ){
-                    binary->superType = new SimpleType(TYPE_INT);
+                    auto type = new SimpleType(TYPE_INT);
+                    binary->superType = type;
+                    type->assignable = false;
                     return;
                 }else if(leftType->isPointer() && rightType->equals(IntType)){
                     binary->superType = leftType;
@@ -569,7 +573,13 @@ public:
                 }
             }else{
                 for( auto decl : decls ){
-                    methodType->types.push_back(enter(decl));
+
+                    auto type = enter(decl);
+
+                    if(VoidType->equals(type)){
+                        ERROR(decl->location);
+                    }
+                    methodType->types.push_back(type);
                 }
             }
 
@@ -580,12 +590,20 @@ public:
                 finalType = enter(paramDecl->directDeclarator, methodType);
             }
 
-            if(auto identifier = dynamic_cast<Identifier*>(paramDecl->directDeclarator)){
+            /*if(auto identifier = dynamic_cast<Identifier*>(paramDecl->directDeclarator)){
+                if(VoidType->equals(finalType)){
+                    ERROR(identifier->location);
+                }
+
                 finalType->identifier = identifier;
+            }*/
+
+            return enter(paramDecl->directDeclarator, finalType);
+        }else if(auto identifier = dynamic_cast<Identifier*>(directDeclarator)){
+            if(VoidType->equals(simpleType)){
+                ERROR(identifier->location);
             }
 
-            return finalType;
-        }else if(auto identifier = dynamic_cast<Identifier*>(directDeclarator)){
             simpleType->identifier = identifier;
             return simpleType;
         }

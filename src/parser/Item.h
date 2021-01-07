@@ -12,7 +12,7 @@
 class Rule;
 class Entity;
 
-class Item : public Comparable{
+class Item : public Comparable<Item>{
 public:
     uint32_t dot;
     Rule* rule;
@@ -24,5 +24,5 @@ public:
 
     uint64_t hash() const override;
 
-    bool equals(const Comparable *other) const override;
+    bool equals(const Item *other) const override;
 };

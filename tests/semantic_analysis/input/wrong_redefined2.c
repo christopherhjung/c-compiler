@@ -1,3 +1,3 @@
-int f(void);
+int f(int);
 
-int f(void, int);
+int f(int, int);

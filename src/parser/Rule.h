@@ -27,5 +27,5 @@ public:
 
     uint64_t hash() const override;
 
-    bool equals(const  Comparable *other) const override;
+    bool equals(const  Component *other) const override;
 };

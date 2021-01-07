@@ -7,7 +7,7 @@
 #include <iostream>
 #include "../utils/Comparable.h"
 
-class Component : public Comparable{
+class Component : public Comparable<Component>{
 public:
     bool flag = true;
     virtual ~Component() = default;
