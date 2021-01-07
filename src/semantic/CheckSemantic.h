@@ -482,8 +482,11 @@ public:
         bool leftIsNumeric = leftType->equals(IntType) || leftType->equals(CharType);
         bool rightIsNumeric = rightType->equals(IntType) || rightType->equals(CharType);
 
-        bool leftIsNotComparable = leftType->asSuperStructType() || VoidType->equals(leftType);
-        bool rightIsNotComparable = rightType->asSuperStructType() || VoidType->equals(rightType);
+        bool leftIsStruct = leftType->asSuperStructType();
+        bool rightIsStruct = rightType->asSuperStructType();
+
+        bool leftIsComparable = !(leftType->asSuperStructType() || VoidType->equals(leftType));
+        bool rightIsComparable = !(rightType->asSuperStructType() || VoidType->equals(rightType));
 
         switch(binary->op->id){
             case STAR:
@@ -513,15 +516,20 @@ public:
                     return;
                 }
                 break;
+
+            case GREATER_EQUAL:
+            case EQUAL:
+                if( leftIsStruct && rightIsStruct ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }
             case LESS:
             case LESS_EQUAL:
             case GREATER:
-            case GREATER_EQUAL:
-            case EQUAL:
             case NOT_EQUAL:
             case AND_AND:
             case OR_OR:
-                if( !leftIsNotComparable && !rightIsNotComparable ){
+                if( leftIsComparable && rightIsComparable ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
