@@ -462,6 +462,7 @@ public:
                     }
                 }
                 ERROR(binary->op->location);
+                break;
             case DOT:
                 if (auto superStruct = leftType->asSuperStructType()) {
                     auto identifier = (const Identifier *) binary->right;
@@ -471,6 +472,7 @@ public:
                     }
                 }
                 ERROR(binary->op->location);
+                break;
         }
 
         enter(binary->right);
@@ -500,15 +502,28 @@ public:
                 }
                 break;
             case MINUS:
+                if( leftType->equals(rightType) ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }else if(leftType->asPointerType() && rightType->equals(IntType)){
+                    binary->superType = new ProxyType(leftType, false);
+                    return;
+                }
+                break;
             case LESS:
             case LESS_EQUAL:
             case GREATER:
             case GREATER_EQUAL:
             case EQUAL:
             case NOT_EQUAL:
+                if( leftType->equals(rightType) ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }
+                break;
             case AND_AND:
             case OR_OR:
-                if( leftType->equals(rightType) ){
+                if( !leftType->asSuperStructType() && !rightType->asSuperStructType() ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
@@ -521,7 +536,6 @@ public:
                 }
                 break;
             case ASSIGN:
-
                 if(!leftType->assignable){
                     ERROR_MSG(binary->op->location, binary->left->toString() + " not assignable");
                 }
@@ -679,3 +693,10 @@ public:
         return enter(declaration->declarator, superType);
     }
 };
+
+void test(){
+    int *a;
+
+    a = a + 1;
+
+}
