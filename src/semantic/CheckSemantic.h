@@ -148,7 +148,7 @@ public:
             if (auto *declaration = dynamic_cast<Declaration *>(child)) {
                 enter0(declaration);
             } else if (auto *method = dynamic_cast<Method *>(child)) {
-                auto methodType = static_cast<MethodType*>(enter(method->declaration));
+                auto methodType = const_cast<MethodType*>(enter(method->declaration)->asMethodType());
 
                 auto inner = new Scope();
 
@@ -587,9 +587,9 @@ public:
             methodType->locations = paramDecl->parameterTypeList->locations;
             SuperType* finalType = methodType;
 
-            if(paramDecl->directDeclarator != nullptr){
+            /*if(paramDecl->directDeclarator != nullptr){
                 finalType = enter(paramDecl->directDeclarator, methodType);
-            }
+            }*/
 
             /*if(auto identifier = dynamic_cast<Identifier*>(paramDecl->directDeclarator)){
                 if(VoidType->equals(finalType)){
