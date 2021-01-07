@@ -251,6 +251,8 @@ public:
         }
     }
 
+
+
     void checkCondition(Expression* condition, Location& location){
         enter(condition);
         if( instanceof<SuperStructType>(condition->superType) ){
@@ -406,11 +408,8 @@ public:
             case MINUS:
             case NOT:
             case SIZEOF:
-                if( type->equals(IntType) ){
-                    unary->superType = IntType;
-                    return;
-                }
-                break;
+                unary->superType = IntType;
+                return;
             case AND:
                 unary->superType = new PointerType(type);
                 return;
