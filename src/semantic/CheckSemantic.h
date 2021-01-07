@@ -307,7 +307,7 @@ public:
 
     bool isAssignable(const SuperType* target, const SuperType* source)
     {
-        return target->equals(source) || (target->isPointer() && source->equals(IntType));
+        return target->equals(source) || (target->asPointerType() && source->equals(IntType));
     }
 
     void enter(Continue* continueStatement){
@@ -386,7 +386,7 @@ public:
             enter(select->target);
             enter(select->index);
 
-            if( !select->index->superType->isSimple() && !select->index->superType->isPointer() ){
+            if( !select->index->superType->asSimpleType() && !select->index->superType->asSimpleType() ){
                 ERROR(select->index->location);
             }
 
@@ -415,14 +415,14 @@ public:
         auto type = unary->value->superType;
         switch(unary->op->id){
             case STAR:
-                if( type->isPointer() ){
+                if( type->asPointerType() ){
                     auto dealloc = type->asPointerType();
                     unary->superType = dealloc->subType;
                     return;
                 }
                 break;
             case PLUS:
-                if( type->isPointer() ){
+                if( type->asPointerType() ){
                     unary->superType = type;
                     return;
                 }
@@ -504,10 +504,10 @@ public:
                     binary->superType = type;
                     type->assignable = false;
                     return;
-                }else if(leftType->isPointer() && rightType->equals(IntType)){
+                }else if(leftType->asPointerType() && rightType->equals(IntType)){
                     binary->superType = leftType;
                     return;
-                }else if(rightType->isPointer() && leftType->equals(IntType)){
+                }else if(rightType->asPointerType() && leftType->equals(IntType)){
                     binary->superType = rightType;
                     return;
                 }

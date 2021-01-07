@@ -516,9 +516,6 @@ public:
         return nullptr;
     };
 
-    virtual bool isSimple() const = 0;
-    virtual bool isPointer() const = 0;
-
     virtual const MethodType* asMethodType() const{
         return nullptr;
     }
@@ -595,14 +592,6 @@ public:
         return false;
     }
 
-    bool isSimple() const override {
-        return false;
-    }
-
-    bool isPointer() const override {
-        return false;
-    }
-
     const MethodType* asMethodType() const override{
         return this;
     }
@@ -627,14 +616,6 @@ public:
 
     const SuperType* select() const override {
         return subType;
-    }
-
-    bool isSimple() const override {
-        return false;
-    }
-
-    bool isPointer() const override {
-        return true;
     }
 
 
@@ -690,14 +671,6 @@ public:
         return nullptr;
     }
 
-    bool isSimple() const override {
-        return false;
-    }
-
-    bool isPointer() const override {
-        return false;
-    }
-
 
     const SuperStructType* asSuperStructType() const override{
         return this;
@@ -723,14 +696,6 @@ public:
         return false;
     }
 
-    bool isSimple() const override {
-        return true;
-    }
-
-    bool isPointer() const override {
-        return false;
-    }
-
     const SimpleType* asSimpleType() const override{
         return this;
     }
@@ -750,14 +715,6 @@ public:
 
     bool equals(const SuperType *other) const override {
         return inner->equals(other);
-    }
-
-    bool isSimple() const override {
-        return true;
-    }
-
-    bool isPointer() const override {
-        return false;
     }
 
     const SimpleType* asSimpleType() const override{
