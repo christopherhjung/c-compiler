@@ -1,1 +1,1 @@
-add_assign\.c:3:11: error:.*
+add_assign\.c:5:11: error:.*

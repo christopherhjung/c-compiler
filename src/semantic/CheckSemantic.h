@@ -16,6 +16,7 @@ extern SimpleType* const VoidType = new SimpleType(TYPE_VOID);
 extern SuperType* const StringType = new PointerType(CharType);
 
 #define ERROR(LOCATION) (throw SemanticException(LOCATION, __LINE__))
+#define ERROR_MSG(LOCATION, MSG) (throw SemanticException(LOCATION,MSG, __LINE__))
 
 template<class T>
 class Descriptor{
@@ -136,12 +137,6 @@ public:
     Scope mainScope;
     Scope* currentScope = &mainScope;
     Scope* methodScope = nullptr;
-
-    void fatal(Element* element){
-        Location& loc = element->location;
-
-        ERROR(loc);
-    }
 
     void checkType( const Expression* element, const SuperType* superType ){
         if( element->superType == nullptr && !element->superType->equals(superType) ){
@@ -416,13 +411,13 @@ public:
         switch(unary->op->id){
             case STAR:
                 if( auto dealloc = type->asPointerType() ){
-                    unary->superType = dealloc->subType;
+                    unary->superType = new ProxyType(dealloc->subType, true);
                     return;
                 }
                 break;
             case PLUS:
                 if( type->asPointerType() ){
-                    unary->superType = type;
+                    unary->superType = new ProxyType(type, false);
                     return;
                 }
             case MINUS:
@@ -439,17 +434,17 @@ public:
     }
 
     void enter(Binary* binary){
-        if( binary->op->id == ASSIGN ){
+        /*if( binary->op->id == ASSIGN ){
             if( const auto* leftBin = dynamic_cast<const Binary *>(binary->left) ){
                 if(leftBin->op->id != ARROW && leftBin->op->id != DOT){
-                    fatal(binary->op);
+                    ERROR(binary->op->location);
                 }
             }else if( const auto* leftUnary = dynamic_cast<const Unary *>(binary->left) ){
                 if(leftUnary->op->id != STAR){
-                    fatal(binary->op);
+                    ERROR(binary->op->location);
                 }
             }
-        }
+        }*/
 
         enter(binary->left);
         auto leftType = binary->left->superType;
@@ -529,7 +524,12 @@ public:
                 }
                 break;
             case ASSIGN:
-                if(leftType->assignable && isAssignable(leftType, rightType)){
+
+                if(!leftType->assignable){
+                    ERROR_MSG(binary->op->location, binary->left->toString() + " not assignable");
+                }
+
+                if(isAssignable(leftType, rightType)){
                     binary->superType = rightType;
                     return;
                 }

@@ -16,6 +16,8 @@
 #include "../utils/Comparable.h"
 #include "../semantic/SemanticException.h"
 
+#include <sstream>
+
 template<typename Base, typename T>
 inline bool instanceof(const T* obj) {
     return dynamic_cast<const Base *>(obj) != nullptr;
@@ -37,6 +39,12 @@ class Element : public Dumpable{
 public:
     Location location;
     virtual ~Element() = default;
+    std::string toString(){
+        std::stringstream ss;
+        PrettyPrinter prettyPrinter(ss);
+        dump(prettyPrinter);
+        return ss.str();
+    }
 };
 class Declaration;
 
@@ -659,7 +667,7 @@ public:
     }
 
     bool equals(const SuperType *other) const override {
-        if(auto structType = dynamic_cast<const SuperStructType*>(other)){
+        if(auto structType = other->asSuperStructType()){
             if(types.size() != structType->types.size()){
                 return false;
             }
@@ -734,7 +742,7 @@ public:
 
     }
 
-    explicit ProxyType(const SuperType* inner, bool assignable) : SuperType(), inner(inner){
+    explicit ProxyType(const SuperType* inner, bool assignable) : SuperType(assignable), inner(inner){
 
     }
 

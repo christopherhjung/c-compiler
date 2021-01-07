@@ -1,4 +1,5 @@
 
-void foo (int a, int b) {
-    foo(1, 'a');
+void foo (void) {
+    int b;
+    -b = 9;
 }
