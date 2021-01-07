@@ -506,6 +506,15 @@ class SuperType : public Comparable<SuperType>{
 public:
     bool assignable = false;
     const Identifier* identifier = nullptr;
+
+    SuperType(){
+
+    }
+
+    SuperType(bool assignable) : assignable(assignable){
+
+    }
+
     virtual const SuperType* call(const Call* call) const{
         return nullptr;
     };
@@ -537,6 +546,10 @@ class ComplexType : public SuperType{
 public:
     const SuperType* subType = nullptr;
     explicit ComplexType(const SuperType* subType) : subType(subType){
+
+    }
+
+    explicit ComplexType(const SuperType* subType, bool assignable) : SuperType(assignable), subType(subType){
 
     }
 };
@@ -603,6 +616,10 @@ public:
 
     }
 
+    explicit PointerType(const SuperType* subType, bool assignable) : ComplexType(subType, assignable) {
+
+    }
+
     uint64_t hash() const override {
         return 0;
     }
@@ -630,6 +647,10 @@ public:
     std::vector<const SuperType*> types;
 
     explicit SuperStructType() {
+
+    }
+
+    explicit SuperStructType(bool assignable) : SuperType(assignable) {
 
     }
 
@@ -685,6 +706,10 @@ public:
 
     }
 
+    explicit SimpleType(int id, bool assignable) : SuperType(assignable), id(id){
+
+    }
+
     uint64_t hash() const override {
         return 0;
     }
@@ -709,6 +734,10 @@ public:
 
     }
 
+    explicit ProxyType(const SuperType* inner, bool assignable) : SuperType(), inner(inner){
+
+    }
+
     uint64_t hash() const override {
         return 0;
     }
@@ -716,6 +745,18 @@ public:
     bool equals(const SuperType *other) const override {
         return inner->equals(other);
     }
+
+    const SuperType* call(const Call* call) const override{
+        return inner->call(call);
+    };
+
+    const SuperType* select() const override{
+        return inner->select();
+    };
+
+    const SuperType* member(const Identifier* identifier) const override{
+        return inner->member(identifier);
+    };
 
     const SimpleType* asSimpleType() const override{
         return inner->asSimpleType();

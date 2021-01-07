@@ -1,7 +1,4 @@
 
-void foo (void) {
-    struct {int a;} test;
-    if(test){
-
-    }
+void foo (int a, int b) {
+    foo(1, 'a');
 }

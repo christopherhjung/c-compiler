@@ -342,9 +342,9 @@ public:
 
             identifier->superType = desc->superType;
         }else if(auto constant = dynamic_cast<Constant*>(expression)){
-            constant->superType = CharType;
+            constant->superType = new ProxyType(CharType, false);
         }else if(auto string = dynamic_cast<StringLiteral*>(expression)){
-            string->superType = StringType;
+            string->superType = new ProxyType(StringType, false);
         }else if(auto call = dynamic_cast<Call*>(expression)){
             for( auto expr : call->values ){
                 enter(expr);
@@ -369,7 +369,7 @@ public:
                     }
                 }
 
-                call->superType = methodType->subType;
+                call->superType = new ProxyType(methodType->subType, false);
 
 
                 if(call->superType == nullptr){
@@ -415,8 +415,7 @@ public:
         auto type = unary->value->superType;
         switch(unary->op->id){
             case STAR:
-                if( type->asPointerType() ){
-                    auto dealloc = type->asPointerType();
+                if( auto dealloc = type->asPointerType() ){
                     unary->superType = dealloc->subType;
                     return;
                 }
@@ -455,7 +454,7 @@ public:
         enter(binary->left);
         auto leftType = binary->left->superType;
 
-        if(leftType == nullptr  ){
+        if(leftType == nullptr){
             ERROR(binary->op->location);
         }
 
@@ -492,23 +491,19 @@ public:
         switch(binary->op->id){
             case STAR:
                 if( leftType->equals(IntType) && rightType->equals(IntType) ){
-                    auto type = new SimpleType(TYPE_INT);
-                    binary->superType = type;
-                    type->assignable = false;
+                    binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
                 break;
             case PLUS:
                 if( leftType->equals(IntType) && rightType->equals(IntType) ){
-                    auto type = new SimpleType(TYPE_INT);
-                    binary->superType = type;
-                    type->assignable = false;
+                    binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }else if(leftType->asPointerType() && rightType->equals(IntType)){
-                    binary->superType = leftType;
+                    binary->superType = new ProxyType(leftType, false);
                     return;
                 }else if(rightType->asPointerType() && leftType->equals(IntType)){
-                    binary->superType = rightType;
+                    binary->superType = new ProxyType(rightType, false);
                     return;
                 }
                 break;
@@ -522,39 +517,34 @@ public:
             case AND_AND:
             case OR_OR:
                 if( leftType->equals(rightType) ){
-                    binary->superType = new SimpleType(TYPE_INT);
+                    binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
                 break;
             case LEFT_SHIFT:
             case RIGHT_SHIFT:
                 if( leftType->equals(IntType) && rightType->equals(IntType) ){
-                    binary->superType = new SimpleType(TYPE_INT);
+                    binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
                 break;
             case ASSIGN:
-                if(isAssignable(leftType, rightType)){
-                    binary->superType = leftType;
+                if(leftType->assignable && isAssignable(leftType, rightType)){
+                    binary->superType = rightType;
                     return;
                 }
 
                 break;
         }
 
-
-
-
         ERROR(binary->op->location);
     }
-
-
 
     SuperType* enter(DirectDeclarator* directDeclarator, SuperType* simpleType){
         if(auto declarator = dynamic_cast<Declarator*>(directDeclarator)){
 
             for( int i = 0 ; i < declarator->pointer ; i++ ){
-                simpleType = new PointerType(simpleType);
+                simpleType = new PointerType(simpleType, true);
             }
 
             return enter(declarator->directDeclarator, simpleType);
@@ -633,7 +623,7 @@ public:
     SuperType* enter(Declaration *declaration) {
         SuperType* superType = nullptr;
         if(auto structType = dynamic_cast<StructType*>(declaration->type)){
-            auto superStruct = new SuperStructType();
+            auto superStruct = new SuperStructType(true);
 
             auto desc = currentScope->getStruct(structType->name);
 
@@ -678,10 +668,10 @@ public:
             }
         }else{
             switch (declaration->type->type) {
-                case TYPE_BOOL: superType = new SimpleType(TYPE_BOOL); break;
-                case TYPE_VOID: superType = new SimpleType(TYPE_VOID); break;
-                case TYPE_CHAR: superType = new SimpleType(TYPE_CHAR); break;
-                case TYPE_INT: superType = new SimpleType(TYPE_INT); break;
+                case TYPE_BOOL: superType = new SimpleType(TYPE_BOOL, true); break;
+                case TYPE_VOID: superType = new SimpleType(TYPE_VOID, true); break;
+                case TYPE_CHAR: superType = new SimpleType(TYPE_CHAR, true); break;
+                case TYPE_INT: superType = new SimpleType(TYPE_INT, true); break;
             }
         }
 
