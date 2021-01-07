@@ -300,7 +300,7 @@ public:
 
 class ParameterTypeList : public Dumpable {
 public:
-    std::vector<SuperType*> declarations2;
+    std::vector<Location> locations;
     std::vector<Declaration *> declarations;
 
     void dump(PrettyPrinter& printer) override{
@@ -381,6 +381,7 @@ class Call : public Expression{
 public:
     Expression* target = nullptr;
     std::vector<Expression*> values;
+    std::vector<Location> locations;
 
     void dump(PrettyPrinter& printer) override{
         printer << "(";
@@ -529,6 +530,7 @@ public:
 class MethodType : public ComplexType{
 public:
     std::vector<SuperType*> types;
+    std::vector<Location> locations;
 
     explicit MethodType(const SuperType* subType) : ComplexType(subType) {
 
@@ -547,12 +549,6 @@ public:
                     //throw SemanticException(call->values[i]->location);
                 }
             }
-
-            /*if(types.size() < call->values.size()){
-                throw SemanticException(call->values[min]->location);
-            }else if(types.size() > call->values.size()){
-                throw SemanticException(call->values[0]->location);
-            }*/
 
             return subType;
         }

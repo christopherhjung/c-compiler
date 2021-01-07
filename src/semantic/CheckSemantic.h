@@ -163,10 +163,14 @@ public:
                 }
 
                 if(methodType->types.size() != 1 || !methodType->types[0]->equals(VoidType)){
-                    for( auto paramType : methodType->types ){
+                    for(  int i = 0 ; i < methodType->types.size(); i++  ){
+                        auto paramType = methodType->types[i];
                         auto identifier = paramType->identifier;
 
                         if(identifier == nullptr){
+                            if(i < methodType->locations.size()){
+                                ERROR(methodType->locations[i]);
+                            }
                             ERROR(method->declaration->location);
                         }else{
                             if(!inner->set(identifier->value, paramType, false)){
@@ -348,17 +352,34 @@ public:
 
             enter(call->target);
 
-            auto type = call->target->superType;
 
-            if( type == nullptr ){
-                ERROR(call->target->location);
+            if( auto methodType = dynamic_cast<const MethodType*>(call->target->superType) ){
+
+                if( methodType->types.size() < call->values.size() ){
+                    ERROR(call->locations[methodType->types.size()]);
+                }else if(methodType->types.size() > call->values.size()){
+                    ERROR(call->locations[call->locations.size() - 1]);
+                }
+
+                int min = std::min(methodType->types.size() , call->values.size());
+
+                for( int i = 0 ; i < min ; i++ ){
+                    if( !methodType->types[i]->equals(call->values[i]->superType) ){
+                        ERROR(call->locations[i]);
+                    }
+                }
+
+                call->superType = methodType->subType;
+
+
+                if(call->superType == nullptr){
+                    ERROR(call->location);
+                }
+                return;
             }
 
-            call->superType = type->call(call);
 
-            if(call->superType == nullptr){
-                ERROR(call->location);
-            }
+            ERROR(call->target->location);
         }else if(auto number = dynamic_cast<Number*>(expression)){
             number->superType = IntType;
         }else if(auto select = dynamic_cast<Select*>(expression)){
@@ -552,6 +573,7 @@ public:
                 }
             }
 
+            methodType->locations = paramDecl->parameterTypeList->locations;
             SuperType* finalType = methodType;
 
             if(paramDecl->directDeclarator != nullptr){

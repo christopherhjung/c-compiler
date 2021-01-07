@@ -254,6 +254,7 @@ public:
                 declaration->type = type;
                 declaration->declarator = declarator;
 
+                parameterTypeList->locations.push_back(lookA.location);
                 parameterTypeList->declarations.push_back(declaration);
 
                 if(!eat(COMMA)){
@@ -472,9 +473,12 @@ public:
                     next();
                     if(!is(RIGHT_PAREN)){
                         do {
+                            call->locations.push_back(lookA.location);
                             call->values.push_back(parseExpression());
                         } while(eat(COMMA));
                     }
+
+                    call->locations.push_back(lookA.location);
                     shall(RIGHT_PAREN);
                     left = call;
                 }else if(is(LEFT_BRACKET)){
