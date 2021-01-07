@@ -519,7 +519,7 @@ public:
 
             case GREATER_EQUAL:
             case EQUAL:
-                if( leftIsStruct && rightIsStruct ){
+                if( leftIsStruct && rightIsStruct && leftType->equals(rightType) ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
