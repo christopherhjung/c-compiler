@@ -485,8 +485,8 @@ public:
         bool leftIsStruct = leftType->asSuperStructType();
         bool rightIsStruct = rightType->asSuperStructType();
 
-        bool leftIsComparable = !(leftType->asSuperStructType() || VoidType->equals(leftType));
-        bool rightIsComparable = !(rightType->asSuperStructType() || VoidType->equals(rightType));
+        bool leftIsComparable = !(leftIsStruct || VoidType->equals(leftType));
+        bool rightIsComparable = !(rightIsStruct || VoidType->equals(rightType));
 
         switch(binary->op->id){
             case STAR:
@@ -699,10 +699,3 @@ public:
         return enter(declaration->declarator, superType);
     }
 };
-
-void test(){
-    int *a;
-
-    a = a + 1;
-
-}
