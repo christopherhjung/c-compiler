@@ -296,15 +296,17 @@ public:
 
     bool isAssignable(const SuperType* target, const SuperType* source)
     {
-        return target->equals(source) || (target->asPointerType() && source->equals(IntType));
+        bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
+        bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType);
+
+        return target->equals(source) || (targetIsNumeric && sourceIsNumeric) || (target->asPointerType() && sourceIsNumeric);
     }
 
-    void enter(Continue* continueStatement){
+    void enter(Continue*){
 
     }
 
-    void enter(Break* breakStatement){
-
+    void enter(Break*){
     }
 
     void enter(Expression* expression){
@@ -331,7 +333,7 @@ public:
 
             identifier->superType = desc->superType;
         }else if(auto constant = dynamic_cast<Constant*>(expression)){
-            constant->superType = new ProxyType(CharType, false);
+            constant->superType = new SimpleType(TYPE_CHAR, false);
         }else if(auto string = dynamic_cast<StringLiteral*>(expression)){
             string->superType = new ProxyType(StringType, false);
         }else if(auto call = dynamic_cast<Call*>(expression)){
@@ -508,11 +510,14 @@ public:
                 }
                 break;
             case MINUS:
-                if( leftType->equals(rightType) ){
+                if(  leftIsNumeric && rightIsNumeric ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }else if(leftType->asPointerType() && rightIsNumeric){
                     binary->superType = new ProxyType(leftType, false);
+                    return;
+                }else if(leftType->asPointerType() && rightType->asPointerType()){
+                    binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
                 break;
