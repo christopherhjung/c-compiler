@@ -135,7 +135,7 @@ public:
     Scope* methodScope = nullptr;
 
     void checkType( const Expression* element, const SuperType* superType ){
-        if( element->superType == nullptr && !element->superType->equals(superType) ){
+        if( element->superType == nullptr || !element->superType->equals(superType) ){
             ERROR(element->location);
         }
     }
@@ -257,10 +257,6 @@ public:
         enter(ifStatement->condition);
         enter(ifStatement->trueBranch);
         enter(ifStatement->falseBranch);
-
-        if( ifStatement->condition->superType->asSuperStructType() ){
-            ERROR(ifStatement->location);
-        }
 
         checkCondition(ifStatement->condition, ifStatement->location);
     }
@@ -387,11 +383,10 @@ public:
         }else if(auto sizeOf = dynamic_cast<Sizeof*>(expression)){
             sizeOf->superType = IntType;
         }else if(auto ifSmall = dynamic_cast<IfSmall*>(expression)){
-            enter(ifSmall->condition);
+            checkCondition(ifSmall->condition, ifSmall->condition->location);
             enter(ifSmall->left);
             enter(ifSmall->right);
 
-            checkType(ifSmall->condition, IntType);
             checkType(ifSmall->left, ifSmall->right->superType);
 
             ifSmall->superType = ifSmall->left->superType;
@@ -427,6 +422,11 @@ public:
         }
 
         ERROR(unary->op->location);
+    }
+
+
+    void test(){
+
     }
 
     void enter(Binary* binary){
