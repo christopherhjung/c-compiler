@@ -468,7 +468,7 @@ public:
                     left = ifSimple;
                 }else if(is(LEFT_PAREN)){
                     auto call = create<Call>();
-                    call->location = lookA.location;
+                    call->location = left->location;
                     call->target = left;
                     next();
                     if(!is(RIGHT_PAREN)){

@@ -373,7 +373,9 @@ public:
             enter(select->target);
             enter(select->index);
 
-            if( !select->index->superType->asSimpleType() && !select->index->superType->asSimpleType() ){
+            auto indexType = select->index->superType;
+
+            if( !IntType->equals(indexType) && !CharType->equals(indexType) ){
                 ERROR(select->index->location);
             }
 

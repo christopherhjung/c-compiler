@@ -41,7 +41,7 @@ int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err
         }catch (SemanticException& e){
             err << e.location << ": error: semantic: (CheckSemantic.h:" << e.lineNumber << ":1) " << e.msg << std::endl;
             return 1;
-        }catch (std::exception e){
+        }catch (std::exception& e){
             return 1;
         }
         return 0;
