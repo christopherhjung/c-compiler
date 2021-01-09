@@ -473,14 +473,21 @@ public:
             ERROR(binary->op->location);
         }
 
-        bool leftIsNumeric = leftType->equals(IntType) || leftType->equals(CharType);
-        bool rightIsNumeric = rightType->equals(IntType) || rightType->equals(CharType);
+        bool leftIsInteger = IntType->equals(leftType);
+        bool rightIsInteger = IntType->equals(rightType);
+
+        bool leftIsPointer = IntType->equals(leftType);
+        bool rightIsPointer = IntType->equals(rightType);
+
+        bool leftIsNumeric = leftIsInteger || leftType->equals(CharType);
+        bool rightIsNumeric = rightIsInteger || rightType->equals(CharType);
 
         bool leftIsStruct = leftType->asSuperStructType();
         bool rightIsStruct = rightType->asSuperStructType();
 
         bool leftIsComparable = !(leftIsStruct || VoidType->equals(leftType));
         bool rightIsComparable = !(rightIsStruct || VoidType->equals(rightType));
+
 
         switch(binary->op->id){
             case STAR:
@@ -493,10 +500,10 @@ public:
                 if( leftIsNumeric && rightIsNumeric ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
-                }else if(leftType->asPointerType() && rightIsNumeric){
+                }else if(leftType->asPointerType() && rightIsInteger){
                     binary->superType = new ProxyType(leftType, false);
                     return;
-                }else if(rightType->asPointerType() && leftIsNumeric){
+                }else if(rightType->asPointerType() && leftIsInteger){
                     binary->superType = new ProxyType(rightType, false);
                     return;
                 }
@@ -505,7 +512,7 @@ public:
                 if(  leftIsNumeric && rightIsNumeric ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
-                }else if(leftType->asPointerType() && rightIsNumeric){
+                }else if(leftType->asPointerType() && rightIsInteger){
                     binary->superType = new ProxyType(leftType, false);
                     return;
                 }else if(leftType->asPointerType() && rightType->asPointerType() && leftType->equals(rightType)){
@@ -521,7 +528,7 @@ public:
                 }else if(  leftIsNumeric && rightIsNumeric ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
-                }else if(  leftType->asPointerType() && rightIsNumeric ){
+                }else if(leftType->asPointerType() && rightIsInteger){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }else if(  rightType->asPointerType() && leftIsNumeric ){
@@ -532,9 +539,18 @@ public:
             case LESS:
             case LESS_EQUAL:
             case GREATER:
+            case GREATER_EQUAL:
+                if( leftIsNumeric && rightIsNumeric ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }else if( leftIsPointer && rightIsPointer ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }
+                break;
+
             case AND_AND:
             case OR_OR:
-            case GREATER_EQUAL:
                 if( leftIsComparable && rightIsComparable ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
@@ -542,7 +558,7 @@ public:
                 break;
             case LEFT_SHIFT:
             case RIGHT_SHIFT:
-                if( leftIsNumeric && rightIsNumeric ){
+                if( leftIsInteger && rightIsInteger ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
