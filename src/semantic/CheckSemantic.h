@@ -430,17 +430,6 @@ public:
     }
 
     void enter(Binary* binary){
-        /*if( binary->op->id == ASSIGN ){
-            if( const auto* leftBin = dynamic_cast<const Binary *>(binary->left) ){
-                if(leftBin->op->id != ARROW && leftBin->op->id != DOT){
-                    ERROR(binary->op->location);
-                }
-            }else if( const auto* leftUnary = dynamic_cast<const Unary *>(binary->left) ){
-                if(leftUnary->op->id != STAR){
-                    ERROR(binary->op->location);
-                }
-            }
-        }*/
 
         enter(binary->left);
         auto leftType = binary->left->superType;
@@ -453,10 +442,11 @@ public:
             case ARROW:
                 if (auto deallocType = leftType->asPointerType()) {
                     if (auto superStruct = deallocType->subType->asSuperStructType()) {
-                        auto identifier = (const Identifier *) binary->right;
-                        binary->superType = superStruct->member(identifier);
-                        if (binary->superType != nullptr) {
-                            return;
+                        if(auto identifier = dynamic_cast<Identifier*>(binary->right)){
+                            binary->superType = superStruct->member(identifier);
+                            if (binary->superType != nullptr) {
+                                return;
+                            }
                         }
                     }
                 }
@@ -516,18 +506,27 @@ public:
                 }else if(leftType->asPointerType() && rightIsNumeric){
                     binary->superType = new ProxyType(leftType, false);
                     return;
-                }else if(leftType->asPointerType() && rightType->asPointerType()){
+                }else if(leftType->asPointerType() && rightType->asPointerType() && leftType->equals(rightType)){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
                 break;
-
             case GREATER_EQUAL:
             case EQUAL:
-                if( leftIsStruct && rightIsStruct && leftType->equals(rightType) ){
+                if( leftType->equals(rightType) ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }else if(  leftIsNumeric && rightIsNumeric ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }else if(  leftType->asPointerType() && rightIsNumeric ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }else if(  rightType->asPointerType() && leftIsNumeric ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }
+                break;
             case LESS:
             case LESS_EQUAL:
             case GREATER:
