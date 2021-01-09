@@ -513,8 +513,8 @@ public:
                     return;
                 }
                 break;
-            case GREATER_EQUAL:
             case EQUAL:
+            case NOT_EQUAL:
                 if( leftType->equals(rightType) ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
@@ -532,9 +532,9 @@ public:
             case LESS:
             case LESS_EQUAL:
             case GREATER:
-            case NOT_EQUAL:
             case AND_AND:
             case OR_OR:
+            case GREATER_EQUAL:
                 if( leftIsComparable && rightIsComparable ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
@@ -597,7 +597,7 @@ public:
             }
 
             methodType->locations = paramDecl->parameterTypeList->locations;
-            SuperType* finalType = methodType;
+            //SuperType* finalType = methodType;
 
             /*if(paramDecl->directDeclarator != nullptr){
                 finalType = enter(paramDecl->directDeclarator, methodType);
@@ -611,7 +611,7 @@ public:
                 finalType->identifier = identifier;
             }*/
 
-            return enter(paramDecl->directDeclarator, finalType);
+            return enter(paramDecl->directDeclarator, methodType);
         }else if(auto identifier = dynamic_cast<Identifier*>(directDeclarator)){
             if(VoidType->equals(simpleType)){
                 ERROR(identifier->location);
