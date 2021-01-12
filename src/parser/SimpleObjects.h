@@ -527,10 +527,6 @@ public:
         return nullptr;
     };
 
-    virtual const SuperType* select() const{
-        return nullptr;
-    };
-
     virtual const SuperType* member(const Identifier* identifier) const{
         return nullptr;
     };
@@ -629,10 +625,6 @@ public:
             return subType->equals(simpleOther->subType);
         }
         return false;
-    }
-
-    const SuperType* select() const override {
-        return subType;
     }
 
     const PointerType* asPointerType() const override{
@@ -734,10 +726,6 @@ public:
 
     const SuperType* call(const Call* call) const override{
         return inner->call(call);
-    };
-
-    const SuperType* select() const override{
-        return inner->select();
     };
 
     const SuperType* member(const Identifier* identifier) const override{

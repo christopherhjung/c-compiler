@@ -273,7 +273,9 @@ public:
     }
 
     void enter(Return* returnStatement){
-        enter(returnStatement->value);
+        if(returnStatement->value != nullptr){
+            enter(returnStatement->value);
+        }
 
         Element* loc;
         const SuperType* returnType;
@@ -375,13 +377,16 @@ public:
 
             auto indexType = select->index->superType;
 
-            if( !IntType->equals(indexType) && !CharType->equals(indexType) ){
+            if( !IntType->equals(indexType) ){
                 ERROR(select->index->location);
             }
 
             auto type = select->target->superType;
 
-            select->superType = type->select();
+            if(auto pointer = type->asPointerType()){
+                select->superType = pointer->subType;
+            }
+
         }else if(auto sizeOf = dynamic_cast<Sizeof*>(expression)){
             sizeOf->superType = IntType;
         }else if(auto ifSmall = dynamic_cast<IfSmall*>(expression)){
@@ -677,6 +682,7 @@ public:
 
                     auto savedScope = currentScope;
                     currentScope = new Scope();
+                    currentScope->parent = savedScope;
                     auto structInner = enter0(decel);
                     delete currentScope;
                     currentScope = savedScope;
