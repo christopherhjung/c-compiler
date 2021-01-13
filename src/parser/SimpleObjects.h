@@ -632,6 +632,8 @@ public:
     }
 };
 
+
+
 class SuperStructType : public SuperType{
 public:
     std::unordered_map<const std::string*, int> map;

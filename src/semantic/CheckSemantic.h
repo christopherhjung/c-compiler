@@ -128,6 +128,34 @@ public:
     }
 };
 
+class PendingSuperStructType : public SuperType{
+public:
+    const std::string* name;
+    Scope* scope;
+
+    explicit PendingSuperStructType(const std::string* name, Scope* scope) : name(name), scope(scope) {
+
+    }
+
+    bool equals(const SuperType *other) const override {
+        auto type = asSuperStructType();
+        if(type == nullptr){
+            return false;
+        }
+        return type->equals(other);
+    }
+
+    const SuperStructType * asSuperStructType() const override{
+        auto it = scope->structs.find(name);
+
+        if(it == scope->structs.end()){
+            return nullptr;
+        }
+
+        return it->second.superType;
+    }
+};
+
 class Semantic {
 public:
     Scope mainScope;
@@ -618,19 +646,6 @@ public:
             }
 
             methodType->locations = paramDecl->parameterTypeList->locations;
-            //SuperType* finalType = methodType;
-
-            /*if(paramDecl->directDeclarator != nullptr){
-                finalType = enter(paramDecl->directDeclarator, methodType);
-            }*/
-
-            /*if(auto identifier = dynamic_cast<Identifier*>(paramDecl->directDeclarator)){
-                if(VoidType->equals(finalType)){
-                    ERROR(identifier->location);
-                }
-
-                finalType->identifier = identifier;
-            }*/
 
             return enter(paramDecl->directDeclarator, methodType);
         }else if(auto identifier = dynamic_cast<Identifier*>(directDeclarator)){
@@ -669,14 +684,12 @@ public:
         if(auto structType = dynamic_cast<StructType*>(declaration->type)){
             auto superStruct = new SuperStructType(true);
 
-            auto desc = currentScope->getStruct(structType->name);
-
-            if(structType->name != nullptr && desc != nullptr && desc->defined){
+            if(structType->name != nullptr && structType->declarations.empty()){
                 if(!structType->declarations.empty()){
                     ERROR(structType->location);
                 }
 
-                superType = desc->superType;
+                superType = new PendingSuperStructType(structType->name, currentScope);
             }else{
                 for( auto decel : structType->declarations ){
 
@@ -703,12 +716,9 @@ public:
                     }
                 }
 
-                //hello
-                //set(type->identifier->value, type, false)
-
-                currentScope->setStruct(structType->name, superStruct);
-
-                //currentScope->structs[structType->name] = superStruct;
+                if(structType->name != nullptr){
+                    currentScope->setStruct(structType->name, superStruct);
+                }
                 superType = superStruct;
             }
         }else{
