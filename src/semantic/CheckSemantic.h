@@ -154,6 +154,14 @@ public:
 
         return it->second.superType;
     }
+
+    const bool isAssignable() const override{
+        if(auto superStruct = asSuperStructType()){
+            return superStruct->assignable;
+        }
+
+        return false;
+    }
 };
 
 class Semantic {
@@ -597,7 +605,7 @@ public:
                 }
                 break;
             case ASSIGN:
-                if(!leftType->assignable){
+                if(!leftType->isAssignable()){
                     ERROR_MSG(binary->op->location, binary->left->toString() + " not assignable");
                 }
 

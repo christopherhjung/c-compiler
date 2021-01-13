@@ -546,6 +546,10 @@ public:
     virtual const SimpleType* asSimpleType() const{
         return nullptr;
     }
+
+    virtual const bool isAssignable() const{
+        return assignable;
+    }
 };
 
 class ComplexType : public SuperType{
