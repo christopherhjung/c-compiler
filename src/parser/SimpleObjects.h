@@ -718,10 +718,6 @@ class ProxyType : public SuperType{
 public:
     const SuperType* inner;
 
-    explicit ProxyType(const SuperType* inner) : inner(inner){
-
-    }
-
     explicit ProxyType(const SuperType* inner, bool assignable) : SuperType(assignable), inner(inner){
 
     }

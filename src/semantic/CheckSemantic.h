@@ -699,6 +699,10 @@ public:
 
                 superType = new PendingSuperStructType(structType->name, currentScope);
             }else{
+                if(structType->name != nullptr && currentScope->getStruct(structType->name) != nullptr){
+                    ERROR(structType->location);
+                }
+
                 for( auto decel : structType->declarations ){
 
                     auto savedScope = currentScope;
