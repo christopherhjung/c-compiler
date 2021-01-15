@@ -13,7 +13,9 @@
 extern SimpleType* const IntType = new SimpleType(TYPE_INT);
 extern SimpleType* const CharType = new SimpleType(TYPE_CHAR);
 extern SimpleType* const VoidType = new SimpleType(TYPE_VOID);
-extern SuperType* const StringType = new PointerType(CharType);
+extern SuperType* const CharPointerType = new PointerType(CharType);
+extern SuperType* const IntPointerType = new PointerType(IntType);
+extern SuperType* const VoidPointerType = new PointerType(VoidType);
 
 template<class T>
 class Descriptor{
@@ -146,13 +148,13 @@ public:
     }
 
     const SuperStructType * asSuperStructType() const override{
-        auto it = scope->structs.find(name);
+        auto desc = scope->getStruct(name);
 
-        if(it == scope->structs.end()){
+        if(desc == nullptr){
             return nullptr;
         }
 
-        return it->second.superType;
+        return desc->superType;
     }
 
     const bool isAssignable() const override{
@@ -333,7 +335,11 @@ public:
         bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
         bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType);
 
-        return target->equals(source) || (targetIsNumeric && sourceIsNumeric) || (target->asPointerType() && sourceIsNumeric);
+        return target->equals(source)
+            || (targetIsNumeric && sourceIsNumeric)
+            || (target->asPointerType() && sourceIsNumeric)
+            || (target->equals(VoidPointerType) && source->asPointerType())
+            || (source->equals(VoidPointerType) && target->asPointerType());
     }
 
     void enter(Continue*){
@@ -369,7 +375,7 @@ public:
         }else if(auto constant = dynamic_cast<Constant*>(expression)){
             constant->superType = new SimpleType(TYPE_CHAR, false);
         }else if(auto string = dynamic_cast<StringLiteral*>(expression)){
-            string->superType = new ProxyType(StringType, false);
+            string->superType = new ProxyType(CharPointerType, false);
         }else if(auto call = dynamic_cast<Call*>(expression)){
             for( auto expr : call->values ){
                 enter(expr);
@@ -465,11 +471,6 @@ public:
         }
 
         ERROR(unary->op->location);
-    }
-
-
-    void test(){
-
     }
 
     void enter(Binary* binary){
@@ -573,6 +574,12 @@ public:
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }else if(  rightType->asPointerType() && leftIsNumeric ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }else if(  rightType->equals(VoidPointerType) && leftType->asPointerType() ){
+                    binary->superType = new SimpleType(TYPE_INT, false);
+                    return;
+                }else if(  leftType->equals(VoidPointerType) && rightType->asPointerType() ){
                     binary->superType = new SimpleType(TYPE_INT, false);
                     return;
                 }

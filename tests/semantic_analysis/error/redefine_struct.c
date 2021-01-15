@@ -1,1 +1,1 @@
-./test/test6\.c:5:1: error:.*
+redefine_struct\.c:5:1: error:.*
