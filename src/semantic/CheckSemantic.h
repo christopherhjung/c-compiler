@@ -417,15 +417,20 @@ public:
             enter(select->target);
             enter(select->index);
 
-            auto indexType = select->index->superType;
+            auto rightType = select->index->superType;
+            auto leftType = select->target->superType;
 
-            if( !IntType->equals(indexType) ){
-                ERROR(select->index->location);
-            }
+            if(auto pointer = leftType->asPointerType()){
+                if( !IntType->equals(rightType) ){
+                    ERROR(select->index->location);
+                }
 
-            auto type = select->target->superType;
+                select->superType = pointer->subType;
+            }else if(auto pointer = rightType->asPointerType()){
+                if( !IntType->equals(leftType) ){
+                    ERROR(select->target->location);
+                }
 
-            if(auto pointer = type->asPointerType()){
                 select->superType = pointer->subType;
             }
 
@@ -756,3 +761,4 @@ public:
         return enter(declaration->declarator, superType);
     }
 };
+
