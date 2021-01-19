@@ -219,11 +219,13 @@ public:
     DirectDeclarator* parseDirectDeclarator(bool normal, bool abstract){
         DirectDeclarator* directDeclarator = nullptr;
 
+        bool empty = false;
         if(is(LEFT_PAREN)){
             if((!isType(lookB.id) /*&& !isNext(RIGHT_PAREN)*/) || !abstract){
                 next();
                 directDeclarator = parseDeclarator(normal, abstract);
                 shall(RIGHT_PAREN);
+                empty = directDeclarator == nullptr;
             }
         }else if(normal && is(IDENTIFIER)){
             directDeclarator = parseIdentifier();
@@ -231,12 +233,20 @@ public:
             fatal();
         }
 
-        while(eat(LEFT_PAREN)){
+
+        if(is(LEFT_PAREN)){
+            while(eat(LEFT_PAREN)){
+                auto inner = new ParameterDirectDeclarator();
+                inner->directDeclarator = directDeclarator;
+                inner->parameterTypeList = parseParameterTypeList(abstract);
+                directDeclarator = inner;
+                shall(RIGHT_PAREN);
+            }
+        }else if(empty){
             auto inner = new ParameterDirectDeclarator();
             inner->directDeclarator = directDeclarator;
-            inner->parameterTypeList = parseParameterTypeList(abstract);
+            inner->parameterTypeList = new ParameterTypeList();
             directDeclarator = inner;
-            shall(RIGHT_PAREN);
         }
 
         return directDeclarator;

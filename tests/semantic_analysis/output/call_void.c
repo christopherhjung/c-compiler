@@ -1,0 +1,4 @@
+int (test(void))
+{
+	(test());
+}

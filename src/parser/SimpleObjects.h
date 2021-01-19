@@ -594,6 +594,10 @@ public:
 
     bool equals(const SuperType *other) const override {
         if( auto superType =other->asMethodType() ){
+            if(types.size() == 0 || superType->types.size() == 0){
+                return true;
+            }
+
             if( types.size() != superType->types.size() ){
                 return false;
             }

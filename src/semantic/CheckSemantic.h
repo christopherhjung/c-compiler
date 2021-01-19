@@ -102,6 +102,8 @@ public:
                 return false;
             }else if(!desc->superType->equals(type)){
                 return false;
+            }else{
+                desc->superType = type;
             }
         }else{
             desc->superType = type;
@@ -391,14 +393,16 @@ public:
                 if( methodType->types.size() < call->values.size() ){
                     ERROR(call->locations[methodType->types.size()]);
                 }else if(methodType->types.size() > call->values.size()){
-                    ERROR(call->locations[call->locations.size() - 1]);
-                }
+                    if(!(methodType->types.size() == 1 && methodType->types[0]->equals(VoidType))){
+                        ERROR(call->locations[call->locations.size() - 1]);
+                    }
+                }else{
+                    int min = std::min(methodType->types.size() , call->values.size());
 
-                int min = std::min(methodType->types.size() , call->values.size());
-
-                for( int i = 0 ; i < min ; i++ ){
-                    if( !methodType->types[i]->equals(call->values[i]->superType) ){
-                        ERROR(call->locations[i]);
+                    for( int i = 0 ; i < min ; i++ ){
+                        if( !methodType->types[i]->equals(call->values[i]->superType) ){
+                            ERROR(call->locations[i]);
+                        }
                     }
                 }
 
@@ -646,18 +650,10 @@ public:
             auto decls = paramDecl->parameterTypeList->declarations;
 
             if(decls.size() == 1){
-                auto decl = decls[0];
-
-                auto type = enter(decl);
-
-                if(!type->equals(VoidType)){
-                    methodType->types.push_back(type);
-                }
+                methodType->types.push_back(enter(decls[0]));
             }else{
                 for( auto decl : decls ){
-
                     auto type = enter(decl);
-
                     if(VoidType->equals(type)){
                         ERROR(decl->location);
                     }
