@@ -79,6 +79,10 @@ public:
     }
 
     bool setStruct(const std::string* str, SuperStructType* type){
+        if(str == nullptr){
+            ERROR(Location());
+        }
+
         auto desc = &structs[str];
 
         if( desc->defined ){
@@ -94,6 +98,10 @@ public:
     }
 
     bool set(const std::string* str, SuperType* type, bool hasImplementation){
+        if(str == nullptr){
+            ERROR(Location());
+        }
+
         auto desc = &types[str];
 
         if( desc->defined ){
@@ -717,7 +725,6 @@ public:
                     currentScope = new Scope();
                     currentScope->parent = savedScope;
                     auto structInner = enter0(decel);
-                    delete currentScope;
                     currentScope = savedScope;
 
                     if(structInner == nullptr){
@@ -757,4 +764,3 @@ public:
         return enter(declaration->declarator, superType);
     }
 };
-
