@@ -657,7 +657,7 @@ public:
 
     bool equals(const SuperType *other) const override {
         if(auto structType = other->asSuperStructType()){
-            if(types.size() != structType->types.size()){
+            /*if(types.size() != structType->types.size()){
                 return false;
             }
 
@@ -668,9 +668,9 @@ public:
                 if( !left->equals(right) ){
                     return false;
                 }
-            }
+            }*/
 
-            return true;
+            return structType == this;
         }
         return false;
     }
