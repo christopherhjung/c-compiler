@@ -10,14 +10,22 @@ include_directories(lib/googletest)
 include_directories(lib/googletest/googletest/include)
 include_directories(lib/googletest/googlemock/include)
 
-SET(CMAKE_CXX_FLAGS "-O3")
-SET(CMAKE_C_FLAGS "-O3")
+#SET(CMAKE_EXE_LINKER_FLAGS "-L/media/hd/workspace/c4/llvm/install/lib  -lz -lrt -ldl -lpthread -lm -pthread -lLLVMCore -lLLVMRemarks -lLLVMBitstreamReader -lLLVMBinaryFormat -lLLVMSupport -lLLVMDemangle")
+SET(CMAKE_CXX_FLAGS "-Wall -W -std=c++17 -O0 -g -Wno-unused-parameter -isystem/media/hd/workspace/c4/llvm/install/include -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS -pthread")
+#SET(CMAKE_C_FLAGS "-Wall -W -std=c++17 -O0 -g -Wno-unused-parameter -isystem/media/hd/workspace/c4/llvm/install/include -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS")
+
+#add_compile_options("-Wall -W -std=c++17 -O0 -g -Wno-unused-parameter -isystem/media/hd/workspace/c4/llvm/install/include -D_GNU_SOURCE -D_DEBUG -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS")
+
+
+link_directories(/media/hd/workspace/c4/llvm/install/lib)
+include_directories(/media/hd/workspace/c4/llvm/install/include/)
+link_libraries(z rt dl pthread m LLVMCore LLVMRemarks LLVMBitstreamReader LLVMBinaryFormat LLVMSupport LLVMDemangle)
 
 add_executable(c4 src/main.cpp src/parser/SimpleObjects.cpp)
-add_executable(build src/build.cpp)
+add_executable(build src/build.cpp src/transform/TransformContext.cpp src/transform/TransformContext.h src/transform/TransformException.cpp src/transform/TransformException.h)
 
 add_executable(testC4 tests/main.cpp src/parser/SimpleObjects.cpp)
 
 target_link_libraries(testC4 gtest gtest_main)
 
-
+add_executable(llvmExample examples/custom.cpp src/parser/SimpleObjects.cpp)

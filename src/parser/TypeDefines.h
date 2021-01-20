@@ -25,7 +25,7 @@
 #define FLOAT 16
 #define FOR 17
 #define GOTO 18
-#define IF 19
+#define IF_STATEMENT 19
 #define INLINE 20
 #define INT 21
 #define LONG 22

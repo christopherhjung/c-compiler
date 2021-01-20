@@ -15,6 +15,20 @@
 #include "unordered_set"
 #include "../utils/Comparable.h"
 #include "../semantic/SemanticException.h"
+#include "../transform/TransformException.h"
+
+#include "llvm/IR/Module.h"                /* Module */
+#include "llvm/IR/Function.h"              /* Function */
+#include "llvm/IR/IRBuilder.h"             /* IRBuilder */
+#include "llvm/IR/LLVMContext.h"           /* LLVMContext */
+#include "llvm/IR/GlobalValue.h"           /* GlobaleVariable, LinkageTypes */
+#include "llvm/IR/Verifier.h"              /* verifyFunction, verifyModule */
+#include "llvm/Support/Signals.h"          /* Nice stacktrace output */
+#include "llvm/Support/SystemUtils.h"
+#include "llvm/Support/PrettyStackTrace.h"
+#include "../transform/TransformContext.h"
+
+
 
 #include <sstream>
 
@@ -25,6 +39,9 @@ inline bool instanceof(const T* obj) {
 
 class SuperType;
 class Statement;
+class If;
+class While;
+class DirectDeclarator;
 
 void printIndentIfNotBlock(PrettyPrinter& printer, Statement* statement);
 void printStatement(PrettyPrinter& printer, Statement* statement);
@@ -48,39 +65,35 @@ public:
 };
 class Declaration;
 
-class Unit : public Element{
-public:
-    std::vector<Element*> children;
-
-    void dump(PrettyPrinter& printer) override{
-        bool first = true;
-        for(auto child : children){
-            if(first){
-                first = false;
-            }else{
-                printer.newLine();
-                printer.newLine();
-            }
-            child->dump(printer);
-            if(instanceof<Declaration>(child)){
-                printer << ";";
-            }
-        }
-    }
-};
 
 class Statement : public Element{
+public:
+    const SuperType* superType = nullptr;
 
+    virtual llvm::Value* create(TransformContext &context){
+        TRANSFORM_ERROR();
+    }
+
+    virtual llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock* start){
+        TRANSFORM_ERROR();
+    }
 };
 
 class Expression : public Statement{
 public:
-    //Declaration* type = nullptr;
-    const SuperType* superType = nullptr;
+    virtual llvm::Value* createRightValue(TransformContext &context){
+        TRANSFORM_ERROR();
+    };
 
-    /*Declaration* getType(){
-        return type;
-    };*/
+    virtual llvm::Value* createLeftValue(TransformContext &context){
+        TRANSFORM_ERROR();
+    };
+
+    virtual void createConditionBranch(TransformContext& context, llvm::BasicBlock* activeBlock, llvm::BasicBlock* trueBlock, llvm::BasicBlock* falseBlock){
+        context.builder.SetInsertPoint(activeBlock);
+        llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0));
+        context.builder.CreateCondBr(condition, trueBlock, falseBlock);
+    }
 };
 
 class Operator : public Element{
@@ -105,7 +118,6 @@ public:
             case NOT_EQUAL: printer << "!="; break;
             case AND_AND: printer << "&&"; break;
             case OR_OR: printer << "||"; break;
-            case QUESTION: printer << "?"; break;
             case ASSIGN: printer << "="; break;
 
             case SIZEOF: printer << "sizeof "; break;
@@ -136,6 +148,85 @@ public:
     }
 };
 
+class CompareBinary : public Binary{
+public:
+    void createConditionBranch(TransformContext& context, llvm::BasicBlock* activeBlock, llvm::BasicBlock* trueBlock, llvm::BasicBlock* falseBlock) override {
+        context.builder.SetInsertPoint(activeBlock);
+        llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0), "condition");
+        context.builder.CreateCondBr(condition, trueBlock, falseBlock);
+    }
+
+    llvm::CmpInst::Predicate getPredicate(){
+        llvm::CmpInst::Predicate predicate = llvm::CmpInst::Predicate::BAD_ICMP_PREDICATE;
+        switch(this->op->id){
+
+            case EQUAL: predicate = llvm::CmpInst::Predicate::ICMP_EQ; break;
+            case NOT_EQUAL: predicate = llvm::CmpInst::Predicate::ICMP_NE; break;
+            case LESS: predicate = llvm::CmpInst::Predicate::ICMP_SLT; break;
+            case LESS_EQUAL: predicate = llvm::CmpInst::Predicate::ICMP_SLE; break;
+            case GREATER: predicate = llvm::CmpInst::Predicate::ICMP_SGT; break;
+            case GREATER_EQUAL: predicate = llvm::CmpInst::Predicate::ICMP_SGE; break;
+        }
+
+        return predicate;
+    }
+
+    llvm::Value* createRightValue(TransformContext &context) override{
+        return context.builder.CreateICmp(getPredicate(),left->create(context), right->create(context));
+    }
+};
+
+class Assignment : public Binary{
+public:
+    llvm::Value* createRightValue(TransformContext &context) override{
+        return context.builder.CreateStore(right->createRightValue(context), left->createLeftValue(context));
+    }
+
+    llvm::Value* create(TransformContext &context) override {
+        TRANSFORM_ERROR();
+    }
+
+    llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock* start) override{
+        context.builder.SetInsertPoint(start);
+        createRightValue(context);
+        return start;
+    }
+};
+
+class LogicalAnd : public Binary{
+public:
+    void createConditionBranch(TransformContext& context, llvm::BasicBlock* activeBlock, llvm::BasicBlock* trueBlock, llvm::BasicBlock* falseBlock) override {
+        auto extraBB = context.createBasicBlock("logic-and-temp");
+        left->createConditionBranch(context,activeBlock, extraBB, falseBlock);
+        right->createConditionBranch(context, extraBB, trueBlock, falseBlock);
+    }
+
+    llvm::Value* createLeftValue(TransformContext &context) override{
+
+    }
+
+    llvm::Value* createRightValue(TransformContext &context) override{
+
+    }
+};
+
+class LogicalOr : public Binary{
+public:
+    void createConditionBranch(TransformContext& context, llvm::BasicBlock* activeBlock, llvm::BasicBlock* trueBlock, llvm::BasicBlock* falseBlock) override {
+        auto extraBB = context.createBasicBlock("logic-and-temp");
+        left->createConditionBranch(context,activeBlock, trueBlock, extraBB);
+        right->createConditionBranch(context, extraBB, trueBlock, falseBlock);
+    }
+
+    llvm::Value* createLeftValue(TransformContext &context) override{
+
+    }
+
+    llvm::Value* createRightValue(TransformContext &context) override{
+
+    }
+};
+
 class Unary : public Expression{
 public:
     Expression* value = nullptr;
@@ -163,7 +254,6 @@ public:
 };
 
 class Type : public Element{
-
 public:
     uint32_t  type;
 
@@ -183,6 +273,14 @@ class Identifier : public Expression, public DirectDeclarator{
 public:
     const std::string *value = nullptr;
 
+    Identifier(){
+
+    }
+
+    Identifier(const std::string* value) : value(value){
+
+    }
+
     void dump(PrettyPrinter& printer) override{
         printer << *value;
     }
@@ -193,6 +291,16 @@ public:
 
     bool operator!=(const Identifier &rhs) const {
         return !(rhs == *this);
+    }
+
+    llvm::Value* createRightValue(TransformContext &context) override{
+        llvm::Value *randomVariable = context.resetAllocBuilder().CreateAlloca(context.builder.getInt32Ty());
+        return context.builder.CreateLoad(randomVariable);
+    }
+
+    llvm::Value* createLeftValue(TransformContext &context) override {
+        llvm::Value *randomVariable = context.resetAllocBuilder().CreateAlloca(context.builder.getInt32Ty());
+        return randomVariable;
     }
 };
 
@@ -221,10 +329,11 @@ public:
     void dump(PrettyPrinter& printer) override{
         printer << *value;
     }
-};
 
-class If;
-class While;
+    llvm::Value* createRightValue(TransformContext &context) override{
+        return context.builder.getInt32(1);
+    }
+};
 
 class Block : public Statement{
 public:
@@ -240,6 +349,14 @@ public:
         }
         printer.decreaseDepth();
         printer << "}";
+    }
+
+    llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock *start) override{
+        for( auto child  : children ){
+            start = child->create(context, start);
+        }
+
+        return start;
     }
 };
 
@@ -268,7 +385,6 @@ public:
     }
 };
 
-
 class LabeledStatement : public Statement{
 public:
     Statement* statement = nullptr;
@@ -282,7 +398,6 @@ public:
     }
 };
 
-class DirectDeclarator;
 
 class Declarator : public DirectDeclarator{
 public:
@@ -303,6 +418,18 @@ public:
             printer << " ";
             declarator->dump(printer);
         }
+    }
+
+    virtual llvm::Value* create(TransformContext &context){
+        
+
+        return context.resetAllocBuilder().CreateAlloca(context.builder.getInt32Ty());
+    }
+
+    virtual llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock* start){
+        context.builder.SetInsertPoint(start);
+        create(context);
+        return start;
     }
 };
 
@@ -382,6 +509,11 @@ public:
         declaration->dump(printer);
         printer.newLine();
         body->dump(printer);
+    }
+
+    void create(TransformContext& context){
+        auto entry = context.createFunction("main");
+        body->create(context, entry);
     }
 };
 
@@ -490,6 +622,33 @@ public:
             }
         }
     }
+
+    llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock* start) override{
+        llvm::BasicBlock *conditionBlock = context.createBasicBlock("if-condition");
+        llvm::BasicBlock *startTrue = context.createBasicBlock("if-true");
+        llvm::BasicBlock *end = context.createBasicBlock("if-end");
+
+        context.builder.SetInsertPoint(start);
+        context.builder.CreateBr(conditionBlock);
+
+        llvm::BasicBlock *startFalse;
+        llvm::BasicBlock *endTrueBlock = trueBranch->create(context, startTrue);
+        context.builder.SetInsertPoint(endTrueBlock);
+        context.builder.CreateBr(end);
+
+        if(falseBranch == nullptr){
+            startFalse = end;
+        }else{
+            startFalse = context.createBasicBlock("if-false");
+            llvm::BasicBlock *endFalse = falseBranch->create(context, startFalse);
+            context.builder.SetInsertPoint(endFalse);
+            context.builder.CreateBr(end);
+        }
+
+        condition->createConditionBranch(context,conditionBlock, startTrue, startFalse);
+
+        return end;
+    }
 };
 
 class While : public Statement{
@@ -502,6 +661,38 @@ public:
         condition->dump(printer);
         printer << ")";
         printIndentIfNotBlock(printer, body);
+    }
+};
+
+
+class Unit : public Element{
+public:
+    std::vector<Element*> children;
+
+    void dump(PrettyPrinter& printer) override{
+        bool first = true;
+        for(auto child : children){
+            if(first){
+                first = false;
+            }else{
+                printer.newLine();
+                printer.newLine();
+            }
+            child->dump(printer);
+            if(instanceof<Declaration>(child)){
+                printer << ";";
+            }
+        }
+    }
+
+    void create(TransformContext& context){
+        for( auto element : children ){
+            if( auto method = dynamic_cast<Method*>(element) ){
+                method->create(context);
+            }else if( auto decl = dynamic_cast<Declaration*>(element) ){
+
+            }
+        }
     }
 };
 
@@ -539,7 +730,7 @@ public:
         return nullptr;
     }
 
-    virtual const bool isAssignable() const{
+    virtual bool isAssignable() const{
         return assignable;
     }
 };
@@ -594,7 +785,7 @@ public:
                 return false;
             }
 
-            for( int i = 0 ; i < superType->types.size() ; i++ ){
+            for( unsigned long i = 0 ; i < superType->types.size() ; i++ ){
                 if( !types[i]->equals(superType->types[i]) ){
                     return false;
                 }

@@ -167,7 +167,7 @@ public:
         return desc->superType;
     }
 
-    const bool isAssignable() const override{
+    bool isAssignable() const override{
         if(auto superStruct = asSuperStructType()){
             return superStruct->assignable;
         }
@@ -680,6 +680,8 @@ public:
     const SuperType* enter0(Declaration *declaration) {
         if(declaration != nullptr){
             auto type = enter(declaration);
+            declaration->superType = type;
+
             if(type != nullptr ){
                 if( type->asSimpleType() && type->identifier == nullptr){
                     ERROR(declaration->location);

@@ -19,8 +19,24 @@
 #include "../lexer/CatchingLexerProxy.h"
 #include "../semantic/CheckSemantic.h"
 
-int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err, bool printAST){
+int runCompiler(Unit* unit, std::ostream& out, std::ostream& err){
+    llvm::LLVMContext context;
+    llvm::Module module("shsh", context);
+    llvm::IRBuilder<> builder(context);
+    llvm::IRBuilder<> allocBuilder(context);
 
+    TransformContext transformContext(context,module, builder, allocBuilder);
+
+    try{
+        unit->create(transformContext);
+    } catch (TransformException& e) {
+        std::cerr << ": error: semantic: (" << e.file << ":" << e.lineNumber << ":1) " << e.msg << std::endl;
+    }
+
+    transformContext.dump();
+}
+
+int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err, bool printAST){
     GeneratedLexer lexer;
     CatchingLexerProxy proxy(lexer);
     SimpleParser parser(&proxy);
@@ -38,6 +54,8 @@ int runParser(InputReader* fileInputReader, std::ostream& out, std::ostream& err
                 unit->dump(printer);
                 out << std::endl;
             }
+
+            runCompiler(unit, out, err);
         }catch (SemanticException& e){
             err << e.location << ": error: semantic: (CheckSemantic.h:" << e.lineNumber << ":1) " << e.msg << std::endl;
             return 1;

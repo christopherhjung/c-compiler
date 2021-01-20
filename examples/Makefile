@@ -3,7 +3,7 @@ Q ?= @
 LLVM_CONFIG := llvm-config
 
 LLVM_CXXFLAGS  := $(subst -I,-isystem,$(shell $(LLVM_CONFIG) --cppflags))
-LLVM_LDFLAGS := $(shell $(LLVM_CONFIG) --ldflags --system-libs)
+LLVM_LDFLAGS := $(shell $(LLVM_CONFIG) --ldflags --system-libs) -pthread
 CXXFLAGS  += -Wall -W -std=c++14 -O0 -g -Wno-unused-parameter $(LLVM_CXXFLAGS)
 
 ifeq ($(LLVM_SHARED), yes)
@@ -16,9 +16,9 @@ LDFLAGS  += $(LLVM_LDFLAGS) $(LLVM_LIBS)
 
 .PHONY: all clean archive
 
-all: max fac struct main
+all: custom
 
-max: max.cpp
+custom: custom.cpp
 	@echo "===> CXX $<"
 	$(Q)$(CXX) $(CXXFLAGS) -o $@ $< $(LDFLAGS)
 

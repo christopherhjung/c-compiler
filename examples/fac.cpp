@@ -174,6 +174,12 @@ int main(int argc, char **argv) {
   /* Create the conditional branch */
   Builder.CreateCondBr(WhileCondition, WhileBodyBlock, WhileEndBlock);
 
+    /* Part 4:
+     *     x = x * n;
+     *     n = n - 1;
+     */
+
+    //###################################### body
   /* Start inserting in the while body block */
   Builder.SetInsertPoint(WhileBodyBlock);
 
@@ -197,6 +203,8 @@ int main(int argc, char **argv) {
 
   /* Insert the back loop edge (the branch back to the header) */
   Builder.CreateBr(WhileHeaderBlock);
+
+    //######################################end
 
   /* The while was created, adjust the inserting point to the while end block */
   Builder.SetInsertPoint(WhileEndBlock);

@@ -278,7 +278,7 @@ public:
     }
 
     Statement* parseStatement(){
-        if(is(IF)){
+        if(is(IF_STATEMENT)){
             return parseIf();
         }else if(is(WHILE)){
             return parseWhile();
@@ -374,7 +374,7 @@ public:
 
     If* parseIf(){
         auto result = create<If>();
-        shall(IF);
+        shall(IF_STATEMENT);
         shall(LEFT_PAREN);
         result->condition = parseExpression();
         shall(RIGHT_PAREN);
@@ -500,22 +500,44 @@ public:
                     left = select;
                 }else {
                     auto op = create<Operator>();
-                    auto bin = new Binary();
-                    bin->op = op;
-                    bin->left = left;
-                    //bin->op = lookA.id;
                     op->id = lookA.id;
-
-                    next();
-                    if (op->id == ARROW || op->id == DOT) {
-                        bin->right = parseIdentifier();
-                    } else {
-                        bin->right = parseExpression(rightPrecedence(op->id));
-                    }
-                    left = bin;
+                    left = createBinary(op, left);
                 }
             }
         }
+    }
+
+    Binary* createBinary(Operator* op, Expression* left){
+        Binary* bin = nullptr;
+
+        switch(op->id){
+            case ARROW: bin = new Binary(); break;
+            case DOT: bin = new Binary(); break;
+            case STAR: bin = new Binary(); break;
+            case PLUS: bin = new Binary(); break;
+            case MINUS: bin = new Binary(); break;
+            case LESS: bin = new CompareBinary(); break;
+            case LESS_EQUAL: bin = new CompareBinary(); break;
+            case GREATER: bin = new CompareBinary(); break;
+            case GREATER_EQUAL: bin = new CompareBinary(); break;
+            case LEFT_SHIFT: bin = new Binary(); break;
+            case RIGHT_SHIFT: bin = new Binary(); break;
+            case EQUAL: bin = new CompareBinary(); break;
+            case NOT_EQUAL: bin = new CompareBinary(); break;
+            case AND_AND: bin = new LogicalAnd(); break;
+            case OR_OR: bin = new LogicalOr(); break;
+            case ASSIGN: bin = new Assignment(); break;
+        }
+
+        bin->op = op;
+        bin->left = left;
+        next();
+        if (op->id == ARROW || op->id == DOT) {
+            bin->right = parseIdentifier();
+        } else {
+            bin->right = parseExpression(rightPrecedence(op->id));
+        }
+        return bin;
     }
 
     uint32_t leftPrecedence(){
