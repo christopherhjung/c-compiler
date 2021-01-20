@@ -279,19 +279,19 @@ public:
             enter(returnStatement);
         }else if(auto gotoStatement = dynamic_cast<GoTo*>(statement)){
             enter(gotoStatement);
-        }else if(auto continueStatement = dynamic_cast<Continue*>(statement)){
+        }/*else if(auto continueStatement = dynamic_cast<Continue*>(statement)){
             enter(continueStatement);
         }else if(auto breakStatement = dynamic_cast<Break*>(statement)){
             enter(breakStatement);
-        }else if(auto block = dynamic_cast<Block*>(statement)){
+        }*/else if(auto block = dynamic_cast<Block*>(statement)){
             enter(block, nullptr);
         }else if(auto declaration = dynamic_cast<Declaration*>(statement)){
             enter0(declaration);
         }else if(auto expression = dynamic_cast<Expression*>(statement)){
             enter(expression);
-        }else{
+        }/*else{
             ERROR(statement->location);
-        }
+        }*/
     }
 
     void checkCondition(Expression* condition, Location& location){
@@ -321,16 +321,13 @@ public:
     }
 
     void enter(Return* returnStatement){
-        if(returnStatement->value != nullptr){
-            enter(returnStatement->value);
-        }
-
         Element* loc;
         const SuperType* returnType;
         if( returnStatement->value == nullptr ){
             returnType = VoidType;
             loc = returnStatement;
         }else{
+            enter(returnStatement->value);
             loc = returnStatement->value;
             returnType = returnStatement->value->superType;
         }
@@ -352,12 +349,13 @@ public:
             || (source->equals(VoidPointerType) && target->asPointerType());
     }
 
+    /*
     void enter(Continue*){
 
     }
 
     void enter(Break*){
-    }
+    }*/
 
     void enter(Expression* expression){
         enter0(expression);
@@ -392,12 +390,7 @@ public:
             }
 
             enter(call->target);
-
-            //call->target->superType->call(call);
-
-
             if( auto methodType = call->target->superType->asMethodType() ){
-
                 if( methodType->types.size() < call->values.size() ){
                     ERROR(call->locations[methodType->types.size()]);
                 }else if(methodType->types.size() > call->values.size()){

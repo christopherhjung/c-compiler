@@ -523,14 +523,6 @@ public:
 
     }
 
-    virtual const SuperType* call(const Call* call) const{
-        return nullptr;
-    };
-
-    virtual const SuperType* member(const Identifier* identifier) const{
-        return nullptr;
-    };
-
     virtual const MethodType* asMethodType() const{
         return nullptr;
     }
@@ -573,7 +565,7 @@ public:
 
     }
 
-    const SuperType* call(const Call* call) const override {
+    const SuperType* call(const Call* call) const {
         if(call){
             if( types.size() != call->values.size() ){
                 return nullptr;
@@ -675,7 +667,7 @@ public:
         return false;
     }
 
-    const SuperType* member(const Identifier* identifier) const override {
+    const SuperType* member(const Identifier* identifier) const {
         if(identifier){
             auto pos = map.find(identifier->value);
 
@@ -729,14 +721,6 @@ public:
     bool equals(const SuperType *other) const override {
         return inner->equals(other);
     }
-
-    const SuperType* call(const Call* call) const override{
-        return inner->call(call);
-    };
-
-    const SuperType* member(const Identifier* identifier) const override{
-        return inner->member(identifier);
-    };
 
     const SimpleType* asSimpleType() const override{
         return inner->asSimpleType();
