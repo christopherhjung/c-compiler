@@ -11,11 +11,10 @@ void Identifier::dump(PrettyPrinter &printer) {
 }
 
 llvm::Value *Identifier::createRightValue(TransformContext &context) {
-    llvm::Value *randomVariable = context.resetAllocBuilder().CreateAlloca(context.builder.getInt32Ty());
-    return context.builder.CreateLoad(randomVariable);
+    llvm::Value *variable = context.currentScope->get(value)->value;
+    return context.builder.CreateLoad(variable);
 }
 
 llvm::Value *Identifier::createLeftValue(TransformContext &context) {
-    llvm::Value *randomVariable = context.resetAllocBuilder().CreateAlloca(context.builder.getInt32Ty());
-    return randomVariable;
+    return context.currentScope->get(value)->value;
 }

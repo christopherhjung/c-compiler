@@ -10,6 +10,9 @@
 #include "llvm/Support/SystemUtils.h"
 #include "llvm/Support/PrettyStackTrace.h"
 
+#include <queue>
+#include "../semantic/Scope.h"
+
 class TransformContext {
     llvm::IRBuilder<> &allocBuilder;
 public:
@@ -18,6 +21,10 @@ public:
     llvm::IRBuilder<> &builder;
 
     llvm::Function *currentFunction;
+    llvm::BasicBlock *currentBlock;
+
+    std::queue<Scope*> scopeQueue;
+    Scope* currentScope;
 
     TransformContext(llvm::LLVMContext &llvmContext, llvm::Module &module, llvm::IRBuilder<> &builder,
                      llvm::IRBuilder<> &allocBuilder) : llvmContext(llvmContext), module(module), builder(builder),
@@ -27,7 +34,6 @@ public:
 
     llvm::BasicBlock *createBasicBlock(const std::string &name) {
         auto bb = llvm::BasicBlock::Create(llvmContext, name, currentFunction, 0);
-        builder.SetInsertPoint(bb);
         return bb;
     }
 
@@ -48,6 +54,21 @@ public:
         allocBuilder.SetInsertPoint(entry);
 
         return entry;
+    }
+
+    void setCurrentBlock(llvm::BasicBlock* bb){
+        currentBlock = bb;
+        builder.SetInsertPoint(bb);
+    }
+
+    void pushScope(Scope* scope){
+        scopeQueue.push(scope);
+        currentScope = scope;
+    }
+
+    void popScope(){
+        scopeQueue.pop();
+        currentScope = scopeQueue.front();
     }
 
     llvm::IRBuilder<> &resetAllocBuilder() {

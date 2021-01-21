@@ -16,9 +16,8 @@ llvm::Value *Expression::createLeftValue(TransformContext &context) {
 };
 
 void
-Expression::createConditionBranch(TransformContext &context, llvm::BasicBlock *activeBlock, llvm::BasicBlock *trueBlock,
+Expression::createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
                                   llvm::BasicBlock *falseBlock) {
-    context.builder.SetInsertPoint(activeBlock);
     llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0));
     context.builder.CreateCondBr(condition, trueBlock, falseBlock);
 }

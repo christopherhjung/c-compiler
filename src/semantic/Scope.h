@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <string>
 
+#include "llvm/IR/GlobalValue.h"
+
 class SuperType;
 
 class SuperStructType;
@@ -17,6 +19,7 @@ public:
     T *superType = nullptr;
     bool implementation = false;
     bool defined = false;
+    llvm::Value* value;
 
     Descriptor() {
 

@@ -35,29 +35,29 @@ void If::dump(PrettyPrinter &printer) {
     }
 }
 
-llvm::BasicBlock *If::create(TransformContext &context, llvm::BasicBlock *start) {
+void If::create(TransformContext &context) {
     llvm::BasicBlock *conditionBlock = context.createBasicBlock("if-condition");
     llvm::BasicBlock *startTrue = context.createBasicBlock("if-true");
     llvm::BasicBlock *end = context.createBasicBlock("if-end");
 
-    context.builder.SetInsertPoint(start);
     context.builder.CreateBr(conditionBlock);
 
     llvm::BasicBlock *startFalse;
-    llvm::BasicBlock *endTrueBlock = trueBranch->create(context, startTrue);
-    context.builder.SetInsertPoint(endTrueBlock);
+    context.setCurrentBlock(startTrue);
+    trueBranch->create(context);
     context.builder.CreateBr(end);
 
     if (falseBranch == nullptr) {
         startFalse = end;
     } else {
         startFalse = context.createBasicBlock("if-false");
-        llvm::BasicBlock *endFalse = falseBranch->create(context, startFalse);
-        context.builder.SetInsertPoint(endFalse);
+        context.setCurrentBlock(startFalse);
+        falseBranch->create(context);
         context.builder.CreateBr(end);
     }
 
-    condition->createConditionBranch(context, conditionBlock, startTrue, startFalse);
+    context.setCurrentBlock(conditionBlock);
+    condition->createConditionBranch(context, startTrue, startFalse);
 
-    return end;
+    context.setCurrentBlock(end);
 }

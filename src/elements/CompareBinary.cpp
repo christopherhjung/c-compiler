@@ -8,9 +8,8 @@
 #include "../transform/TransformContext.h"
 #include "Operator.h"
 
-void CompareBinary::createConditionBranch(TransformContext &context, llvm::BasicBlock *activeBlock,
+void CompareBinary::createConditionBranch(TransformContext &context,
                                           llvm::BasicBlock *trueBlock, llvm::BasicBlock *falseBlock) {
-    context.builder.SetInsertPoint(activeBlock);
     llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0),
                                                           "condition");
     context.builder.CreateCondBr(condition, trueBlock, falseBlock);
@@ -43,5 +42,5 @@ llvm::CmpInst::Predicate CompareBinary::getPredicate() {
 }
 
 llvm::Value *CompareBinary::createRightValue(TransformContext &context) {
-    return context.builder.CreateICmp(getPredicate(), left->create(context), right->create(context));
+    return context.builder.CreateICmp(getPredicate(), left->createRightValue(context), right->createRightValue(context));
 }

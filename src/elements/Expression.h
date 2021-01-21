@@ -18,7 +18,7 @@ public:
     virtual llvm::Value *createLeftValue(TransformContext &context);
 
     virtual void
-    createConditionBranch(TransformContext &context, llvm::BasicBlock *activeBlock, llvm::BasicBlock *trueBlock,
+    createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
                           llvm::BasicBlock *falseBlock);
 };
 

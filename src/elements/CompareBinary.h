@@ -12,7 +12,7 @@ class PrettyPrinter;
 
 class CompareBinary : public Binary {
 public:
-    void createConditionBranch(TransformContext &context, llvm::BasicBlock *activeBlock, llvm::BasicBlock *trueBlock,
+    void createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
                                llvm::BasicBlock *falseBlock) override;
 
     llvm::CmpInst::Predicate getPredicate();

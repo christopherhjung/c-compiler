@@ -5,6 +5,7 @@
 #include "Block.h"
 #include "Util.h"
 #include "../parser/PrettyPrinter.h"
+#include "../transform/TransformContext.h"
 
 void Block::dump(PrettyPrinter &printer) {
     printer << "{";
@@ -18,10 +19,13 @@ void Block::dump(PrettyPrinter &printer) {
     printer << "}";
 }
 
-llvm::BasicBlock *Block::create(TransformContext &context, llvm::BasicBlock *start) {
+void Block::create(TransformContext &context) {
+    auto block = context.createBasicBlock("new-block");
+    context.builder.CreateBr(block);
+    context.setCurrentBlock(block);
+    context.pushScope(scope);
     for (auto child  : children) {
-        start = child->create(context, start);
+        child->create(context);
     }
-
-    return start;
+    context.popScope();
 }

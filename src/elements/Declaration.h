@@ -19,9 +19,7 @@ public:
 
     void dump(PrettyPrinter &printer) override;
 
-    llvm::Value *create(TransformContext &context) override;
-
-    llvm::BasicBlock *create(TransformContext &context, llvm::BasicBlock *start) override;
+    void create(TransformContext &context) override;
 };
 
 

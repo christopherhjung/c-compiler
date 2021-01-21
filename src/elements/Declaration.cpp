@@ -7,6 +7,7 @@
 #include "../transform/TransformContext.h"
 #include "Type.h"
 #include "Declarator.h"
+#include "../types/SuperType.h"
 
 void Declaration::dump(PrettyPrinter &printer) {
     type->dump(printer);
@@ -16,12 +17,7 @@ void Declaration::dump(PrettyPrinter &printer) {
     }
 }
 
-llvm::Value *Declaration::create(TransformContext &context) {
-    return context.resetAllocBuilder().CreateAlloca(context.builder.getInt32Ty());
-}
-
-llvm::BasicBlock *Declaration::create(TransformContext &context, llvm::BasicBlock *start) {
-    context.builder.SetInsertPoint(start);
-    create(context);
-    return start;
+void Declaration::create(TransformContext &context) {
+    auto value = context.resetAllocBuilder().CreateAlloca(context.builder.getInt32Ty());
+    context.currentScope->types[superType->identifier->value].value = value;
 }

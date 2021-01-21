@@ -17,6 +17,8 @@ public:
     Operator *op = nullptr;
 
     void dump(PrettyPrinter &printer) override;
+
+    void create(TransformContext &context) override;
 };
 
 

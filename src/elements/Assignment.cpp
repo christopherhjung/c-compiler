@@ -7,15 +7,6 @@
 #include "../transform/TransformException.h"
 
 llvm::Value *Assignment::createRightValue(TransformContext &context) {
-    return context.builder.CreateStore(right->createRightValue(context), left->createLeftValue(context));
+    return context.builder.CreateStore(left->createLeftValue(context), right->createRightValue(context));
 }
 
-llvm::Value *Assignment::create(TransformContext &context) {
-    TRANSFORM_ERROR();
-}
-
-llvm::BasicBlock *Assignment::create(TransformContext &context, llvm::BasicBlock *start) {
-    context.builder.SetInsertPoint(start);
-    createRightValue(context);
-    return start;
-}

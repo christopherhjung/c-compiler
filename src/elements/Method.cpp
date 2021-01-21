@@ -16,5 +16,6 @@ void Method::dump(PrettyPrinter &printer) {
 
 void Method::create(TransformContext &context) {
     auto entry = context.createFunction("main");
-    body->create(context, entry);
+    context.setCurrentBlock(entry);
+    body->create(context);
 }

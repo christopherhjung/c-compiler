@@ -7,11 +7,12 @@
 #include "../transform/TransformContext.h"
 
 void
-LogicalOr::createConditionBranch(TransformContext &context, llvm::BasicBlock *activeBlock, llvm::BasicBlock *trueBlock,
+LogicalOr::createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
                                  llvm::BasicBlock *falseBlock) {
     auto extraBB = context.createBasicBlock("logic-and-temp");
-    left->createConditionBranch(context, activeBlock, trueBlock, extraBB);
-    right->createConditionBranch(context, extraBB, trueBlock, falseBlock);
+    left->createConditionBranch(context, trueBlock, extraBB);
+    context.setCurrentBlock(extraBB);
+    right->createConditionBranch(context, trueBlock, falseBlock);
 }
 
 llvm::Value *LogicalOr::createLeftValue(TransformContext &context) {

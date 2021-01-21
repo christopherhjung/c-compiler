@@ -22,3 +22,7 @@ void Binary::dump(PrettyPrinter &printer) {
     right->dump(printer);
     printer << ")";
 }
+
+void Binary::create(TransformContext &context) {
+    createRightValue(context);
+}

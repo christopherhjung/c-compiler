@@ -10,7 +10,7 @@ class PrettyPrinter;
 
 class LogicalAnd : public Binary {
 public:
-    void createConditionBranch(TransformContext &context, llvm::BasicBlock *activeBlock, llvm::BasicBlock *trueBlock,
+    void createConditionBranch(TransformContext &context,llvm::BasicBlock *trueBlock,
                                llvm::BasicBlock *falseBlock) override;
 
     llvm::Value *createLeftValue(TransformContext &context) override;

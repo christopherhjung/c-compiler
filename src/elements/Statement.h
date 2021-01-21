@@ -18,11 +18,7 @@ class Statement : public Element {
 public:
     const SuperType *superType = nullptr;
 
-    virtual llvm::Value *create(TransformContext &context) {
-        TRANSFORM_ERROR();
-    }
-
-    virtual llvm::BasicBlock *create(TransformContext &context, llvm::BasicBlock *start) {
+    virtual void create(TransformContext &context) {
         TRANSFORM_ERROR();
     }
 };
