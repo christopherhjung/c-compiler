@@ -11,5 +11,5 @@ void Number::dump(PrettyPrinter &printer) {
 }
 
 llvm::Value *Number::createRightValue(TransformContext &context) {
-    return context.builder.getInt32(1);
+    return context.getInt32(value);
 }

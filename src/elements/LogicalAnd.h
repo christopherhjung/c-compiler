@@ -4,18 +4,15 @@
 
 #pragma once
 
-#include "Binary.h"
+#include "JumpingCompare.h"
 
 class PrettyPrinter;
 
-class LogicalAnd : public Binary {
+class LogicalAnd : public JumpingCompare {
 public:
     void createConditionBranch(TransformContext &context,llvm::BasicBlock *trueBlock,
                                llvm::BasicBlock *falseBlock) override;
 
-    llvm::Value *createLeftValue(TransformContext &context) override;
-
-    llvm::Value *createRightValue(TransformContext &context) override;
 };
 
 

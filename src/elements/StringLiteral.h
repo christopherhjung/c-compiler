@@ -14,6 +14,8 @@ public:
     const std::string *value = nullptr;
 
     void dump(PrettyPrinter &printer) override;
+
+    llvm::Value *createRightValue(TransformContext &context) override;
 };
 
 

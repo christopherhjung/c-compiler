@@ -40,10 +40,13 @@ public:
     std::unordered_map<const std::string *, Descriptor<SuperType>> types;
     std::unordered_map<const std::string *, Descriptor<SuperStructType>> structs;
     std::unordered_map<const std::string *, int> labels;
+    std::unordered_map<const std::string *, llvm::Function*> functions;
     Scope *parent = nullptr;
     const SuperType *returnType = nullptr;
 
     Scope() {}
+
+    llvm::Function* getFunction(const std::string* str);
 
     bool isLabel(const std::string *label);
 

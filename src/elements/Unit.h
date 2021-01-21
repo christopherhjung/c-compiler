@@ -7,13 +7,15 @@
 #include <vector>
 #include "Element.h"
 
-class PrettyPrinter;
 
+class PrettyPrinter;
+class Scope;
 class TransformContext;
 
 class Unit : public Element {
 public:
     std::vector<Element *> children;
+    Scope* scope;
 
     void dump(PrettyPrinter &printer) override;
 

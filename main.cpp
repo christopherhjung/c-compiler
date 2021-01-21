@@ -20,7 +20,7 @@
 #include "src/transform/TransformContext.h"
 #include "src/generated/GeneratedLexer.h"
 
-int runCompiler(Unit *unit, std::ostream &out, std::ostream &err) {
+int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, std::string filename) {
     llvm::LLVMContext context;
     llvm::Module module("shsh", context);
     llvm::IRBuilder<> builder(context);
@@ -34,11 +34,11 @@ int runCompiler(Unit *unit, std::ostream &out, std::ostream &err) {
         std::cerr << ": error: semantic: (" << e.file << ":" << e.lineNumber << ":1) " << e.msg << std::endl;
     }
 
-    transformContext.dump();
+    transformContext.dump(filename);
     return 0;
 }
 
-int runParser(InputReader *fileInputReader, std::ostream &out, std::ostream &err, bool printAST) {
+int runParser(InputReader *fileInputReader, std::ostream &out, std::ostream &err, bool printAST, bool compile) {
     GeneratedLexer lexer;
     CatchingLexerProxy proxy(lexer);
     SimpleParser parser(&proxy);
@@ -57,11 +57,23 @@ int runParser(InputReader *fileInputReader, std::ostream &out, std::ostream &err
                 out << std::endl;
             }
 
-            return runCompiler(unit, out, err);
+
+            if(compile){
+                std::string source = fileInputReader->getContext();
+
+                std::regex filePattern(R"(([^\\/]+)\..+?$)");
+                std::smatch match;
+                if(std::regex_search(source,match, filePattern)){
+                    std::string filename = match[1];
+                    filename += ".ll";
+                    return runCompiler(unit, out, err, filename);
+                }
+            }
         } catch (SemanticException &e) {
-            err << e.location << ": error: semantic: (CheckSemantic.h:" << e.lineNumber << ":1) " << e.msg << std::endl;
+            err << e.location << ": error: semantic: (CheckSemantic.cpp:" << e.lineNumber << ":1) " << e.msg << std::endl;
             return 1;
         } catch (std::exception &e) {
+            err << e.what() << std::endl;
             return 1;
         }
         return 0;
@@ -96,17 +108,31 @@ int main(int, char **const args) {
 
     //InputReader* fileInputReader = new StreamInputReader(&std::cin);
 
-    InputReader* fileInputReader = new FileInputReader(args[2]);
     std::string command = args[1];
     std::string source = args[2];
 
-    bool printAST = command == "--print-ast";
+    bool tokenize = false;
+    bool printAst = false;
+    bool compile;
 
+    std::string filename;
+
+    if (command.rfind("--", 0) == 0) {
+        tokenize = command == "--tokenize";
+        printAst = command == "--print-ast";
+        compile = command == "--compile";
+        filename = args[2];
+    }else{
+        compile = true;
+        filename = args[1];
+    }
+
+    InputReader* fileInputReader = new FileInputReader(filename);
     int code = 1;
-    if(command == "--tokenize"){
+    if(tokenize){
         code = runLexer(fileInputReader, out, err);
     }else{
-        code = runParser(fileInputReader, out, err, printAST);
+        code = runParser(fileInputReader, out, err, printAst,compile);
     }
 
 

@@ -18,6 +18,6 @@ void Declaration::dump(PrettyPrinter &printer) {
 }
 
 void Declaration::create(TransformContext &context) {
-    auto value = context.resetAllocBuilder().CreateAlloca(context.builder.getInt32Ty());
+    auto value = context.resetAllocBuilder().CreateAlloca(context.getType(superType));
     context.currentScope->types[superType->identifier->value].value = value;
 }

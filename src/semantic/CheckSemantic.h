@@ -17,8 +17,8 @@
 
 class Semantic {
 public:
-    Scope mainScope;
-    Scope *currentScope = &mainScope;
+    Scope *mainScope = new Scope();
+    Scope *currentScope = mainScope;
     Scope *methodScope = nullptr;
 
     void checkType(const Expression *element, const SuperType *superType);

@@ -15,10 +15,3 @@ LogicalOr::createConditionBranch(TransformContext &context, llvm::BasicBlock *tr
     right->createConditionBranch(context, trueBlock, falseBlock);
 }
 
-llvm::Value *LogicalOr::createLeftValue(TransformContext &context) {
-
-}
-
-llvm::Value *LogicalOr::createRightValue(TransformContext &context) {
-
-}

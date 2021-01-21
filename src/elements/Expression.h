@@ -20,5 +20,7 @@ public:
     virtual void
     createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
                           llvm::BasicBlock *falseBlock);
+
+    void create(TransformContext &context) override;
 };
 

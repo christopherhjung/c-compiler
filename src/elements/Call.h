@@ -17,6 +17,8 @@ public:
     std::vector<Location> locations;
 
     void dump(PrettyPrinter &printer) override;
+
+    llvm::Value *createRightValue(TransformContext &context) override;
 };
 
 

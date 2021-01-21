@@ -1,8 +1,8 @@
-; ModuleID = 'main.c'
-source_filename = "main.c"
+; ModuleID = 'shsh'
+source_filename = "shsh"
 
-@Format = common global i8* null
-@0 = private unnamed_addr constant [4 x i8] c"%s\0A\00", align 1
+@0 = private unnamed_addr constant [12 x i8] c"hello111 %d\00", align 1
+@1 = private unnamed_addr constant [12 x i8] c"hello222 %d\00", align 1
 
 declare i32 @printf(i8* %0, ...)
 
@@ -13,32 +13,33 @@ entry:
   %2 = alloca i32, align 4
   store i32 %argc, i32* %2, align 4
   store i8** %argv, i8*** %1, align 8
-  store i8* getelementptr inbounds ([4 x i8], [4 x i8]* @0, i32 0, i32 0), i8** @Format, align 8
-  store i32 1, i32* %0, align 4
-  br label %while-header
+  br label %new-block
 
-while-header:                                     ; preds = %while-body, %entry
+new-block:                                        ; preds = %entry
+  store i32 99, i32* %0, align 4
+  br label %if-condition
+
+if-condition:                                     ; preds = %new-block
   %3 = load i32, i32* %0, align 4
-  %4 = load i32, i32* %2, align 4
-  %5 = icmp slt i32 %3, %4
-  br i1 %5, label %while-body, label %while-end
+  %4 = icmp ne i32 %3, 0
+  br i1 %4, label %if-true, label %if-false
 
-while-body:                                       ; preds = %while-header
-  %6 = load i32, i32* %0, align 4
-  %7 = sext i32 %6 to i64
-  %8 = load i8**, i8*** %1, align 8
-  %9 = getelementptr i8*, i8** %8, i64 %7
-  %10 = load i8*, i8** %9, align 8
-  %11 = load i8*, i8** @Format, align 8
-  %12 = call i32 (i8*, ...) @printf(i8* %11, i8* %10)
-  %13 = load i32, i32* %0, align 4
-  %14 = add i32 %13, 1
-  store i32 %14, i32* %0, align 4
-  br label %while-header
+if-true:                                          ; preds = %if-condition
+  br label %new-block1
 
-while-end:                                        ; preds = %while-header
+if-end:                                           ; preds = %new-block2, %new-block1
   ret i32 0
 
-DEAD_BLOCK:                                       ; No predecessors!
-  ret i32 0
+new-block1:                                       ; preds = %if-true
+  %5 = load i32, i32* %0, align 4
+  %6 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @0, i32 0, i32 0), i32 %5)
+  br label %if-end
+
+if-false:                                         ; preds = %if-condition
+  br label %new-block2
+
+new-block2:                                       ; preds = %if-false
+  %7 = load i32, i32* %0, align 4
+  %8 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([12 x i8], [12 x i8]* @1, i32 0, i32 0), i32 %7)
+  br label %if-end
 }

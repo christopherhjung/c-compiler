@@ -16,6 +16,17 @@ void Scope::setLabel(const std::string *label) {
     labels[label] = 0;
 }
 
+llvm::Function* Scope::getFunction(const std::string* str){
+    auto current = functions.find(str);
+    if (current != functions.end()) {
+        return current->second;
+    } else if (parent != nullptr) {
+        return parent->getFunction(str);
+    }
+
+    return nullptr;
+}
+
 const SuperType *Scope::getReturnType() {
     if (returnType != nullptr) {
         return returnType;

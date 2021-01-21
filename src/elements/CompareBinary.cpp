@@ -10,13 +10,14 @@
 
 void CompareBinary::createConditionBranch(TransformContext &context,
                                           llvm::BasicBlock *trueBlock, llvm::BasicBlock *falseBlock) {
-    llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0),
-                                                          "condition");
-    context.builder.CreateCondBr(condition, trueBlock, falseBlock);
+    /*llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0),
+                                                          "condition");*/
+
+    context.builder.CreateCondBr(createRightValue(context), trueBlock, falseBlock);
 }
 
 llvm::CmpInst::Predicate CompareBinary::getPredicate() {
-    llvm::CmpInst::Predicate predicate = llvm::CmpInst::Predicate::BAD_ICMP_PREDICATE;
+    llvm::CmpInst::Predicate predicate;
     switch (this->op->id) {
         case EQUAL:
             predicate = llvm::CmpInst::Predicate::ICMP_EQ;
@@ -36,6 +37,8 @@ llvm::CmpInst::Predicate CompareBinary::getPredicate() {
         case GREATER_EQUAL:
             predicate = llvm::CmpInst::Predicate::ICMP_SGE;
             break;
+        default:
+            TRANSFORM_ERROR();
     }
 
     return predicate;

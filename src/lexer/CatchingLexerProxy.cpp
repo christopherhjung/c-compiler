@@ -3,6 +3,11 @@
 
 std::unordered_set<std::string> map;
 
+const std::string* lookupSymbol(const std::string &str){
+    const auto &p = map.emplace(str);
+    return &(*p.first);
+}
+
 bool CatchingLexerProxy::hasNextToken(Token &token) {
     int32_t startLine = line;
     int32_t startColumn = column;

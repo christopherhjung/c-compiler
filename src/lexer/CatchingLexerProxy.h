@@ -4,6 +4,8 @@
 #include "Lexer.h"
 #include "LexerControl.h"
 
+const std::string* lookupSymbol(const std::string &str);
+
 class CatchingLexerProxy : public Lexer {
 
 public:

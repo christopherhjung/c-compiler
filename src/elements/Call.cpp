@@ -5,6 +5,7 @@
 #include "Call.h"
 
 #include "../parser/PrettyPrinter.h"
+#include "../transform/TransformContext.h"
 
 void Call::dump(PrettyPrinter &printer) {
     printer << "(";
@@ -21,4 +22,20 @@ void Call::dump(PrettyPrinter &printer) {
     }
     printer << ")";
     printer << ")";
+}
+
+llvm::Value *Call::createRightValue(TransformContext &context){
+
+    std::vector<llvm::Value*> arguments;
+    for( auto value : values ){
+        arguments.push_back(value->createRightValue(context));
+    }
+
+    //auto methodType = target->superType->asMethodType();
+    //std::string* name = methodType->identifier->value;
+
+    const std::string* name = dynamic_cast<const Identifier*>(target)->value;
+
+    auto function = context.currentScope->getFunction(name);
+    return context.builder.CreateCall(function, arguments);
 }

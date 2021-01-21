@@ -6,8 +6,10 @@
 #include "../types/TypeDefines.h"
 #include "../parser/PrettyPrinter.h"
 #include "Expression.h"
-#include "Dumpable.h"
 #include "Operator.h"
+#include "Operator.h"
+#include "../types/TypeDefines.h"
+#include "../transform/TransformContext.h"
 
 void Binary::dump(PrettyPrinter &printer) {
     printer << "(";
@@ -23,6 +25,17 @@ void Binary::dump(PrettyPrinter &printer) {
     printer << ")";
 }
 
-void Binary::create(TransformContext &context) {
-    createRightValue(context);
+llvm::Value *Binary::createRightValue(TransformContext &context) {
+    switch (op->id) {
+        case PLUS:
+            return context.builder.CreateAdd(left->createRightValue(context), right->createRightValue(context));
+        case MINUS:
+            return context.builder.CreateSub(left->createRightValue(context), right->createRightValue(context));
+        case STAR:
+            return context.builder.CreateMul(left->createRightValue(context), right->createRightValue(context));
+        case LEFT_SHIFT:
+            return context.builder.CreateShl(left->createRightValue(context), right->createRightValue(context));
+        case RIGHT_SHIFT:
+            return context.builder.CreateAShr(left->createRightValue(context), right->createRightValue(context));
+    }
 }

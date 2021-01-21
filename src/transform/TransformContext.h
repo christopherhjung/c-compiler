@@ -1,5 +1,8 @@
 #pragma once
 
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/raw_ostream.h"
+
 #include "llvm/IR/Module.h"                /* Module */
 #include "llvm/IR/Function.h"              /* Function */
 #include "llvm/IR/IRBuilder.h"             /* IRBuilder */
@@ -12,6 +15,8 @@
 
 #include <queue>
 #include "../semantic/Scope.h"
+#include "../types/Types.h"
+#include "../lexer/CatchingLexerProxy.h"
 
 class TransformContext {
     llvm::IRBuilder<> &allocBuilder;
@@ -23,13 +28,31 @@ public:
     llvm::Function *currentFunction;
     llvm::BasicBlock *currentBlock;
 
-    std::queue<Scope*> scopeQueue;
-    Scope* currentScope;
+    std::queue<Scope *> scopeQueue;
+    Scope *mainScope;
+    Scope *currentScope;
+
 
     TransformContext(llvm::LLVMContext &llvmContext, llvm::Module &module, llvm::IRBuilder<> &builder,
                      llvm::IRBuilder<> &allocBuilder) : llvmContext(llvmContext), module(module), builder(builder),
                                                         allocBuilder(allocBuilder) {
+    }
 
+    void init() {
+
+        const std::string printfName = "printf";
+        std::vector<llvm::Type *> argumentTypes;
+        argumentTypes.push_back(builder.getInt8PtrTy());
+        llvm::FunctionType *funcPrintfType = llvm::FunctionType::get(builder.getInt32Ty(), argumentTypes, true);
+
+        llvm::Function *funcPrintf = llvm::Function::Create(
+                funcPrintfType,
+                llvm::GlobalValue::ExternalLinkage,
+                printfName,
+                &module);
+
+
+        mainScope->functions[lookupSymbol(printfName)] = funcPrintf;
     }
 
     llvm::BasicBlock *createBasicBlock(const std::string &name) {
@@ -37,9 +60,27 @@ public:
         return bb;
     }
 
-    llvm::BasicBlock *createFunction(const std::string &name) {
-        llvm::Type *returnType = builder.getVoidTy();
-        llvm::FunctionType *functionType = llvm::FunctionType::get(returnType, /* isVarArg */ false);
+    llvm::Value *getInt32(const std::string *str) {
+        return builder.getInt32(std::stoi(*str));
+    }
+
+    llvm::Type *getType(const SuperType *type) {
+        if (auto simpleType = type->asSimpleType()) {
+            if (simpleType->equals(IntType)) {
+                return builder.getInt32Ty();
+            } else {
+                return builder.getInt8Ty();
+            }
+        } else if (auto pointerType = type->asPointerType()) {
+            return llvm::PointerType::getUnqual(getType(pointerType->subType));
+        }
+
+        return nullptr;
+    }
+
+    llvm::BasicBlock *
+    createFunction(const std::string &name, llvm::Type *returnType, std::vector<llvm::Type *> &paramTypes) {
+        llvm::FunctionType *functionType = llvm::FunctionType::get(returnType, paramTypes, /* isVarArg */ false);
 
         /* Create a function declaration for 'fac' */
         currentFunction = llvm::Function::Create(
@@ -56,17 +97,21 @@ public:
         return entry;
     }
 
-    void setCurrentBlock(llvm::BasicBlock* bb){
+    void setCurrentBlock(llvm::BasicBlock *bb) {
         currentBlock = bb;
         builder.SetInsertPoint(bb);
     }
 
-    void pushScope(Scope* scope){
+    void setMainScope(Scope* scope){
+        mainScope = scope;
+    }
+
+    void pushScope(Scope *scope) {
         scopeQueue.push(scope);
         currentScope = scope;
     }
 
-    void popScope(){
+    void popScope() {
         scopeQueue.pop();
         currentScope = scopeQueue.front();
     }
@@ -77,8 +122,14 @@ public:
         return allocBuilder;
     }
 
-    void dump() {
-        //verifyModule(module);
+    void println() {
+        verifyModule(module);
         module.dump();
+    }
+
+    void dump(const std::string &filename){
+        std::error_code EC;
+        llvm::raw_fd_ostream stream(filename, EC, llvm::sys::fs::OpenFlags::F_Text);
+        module.print(stream, nullptr);
     }
 };

@@ -3,13 +3,7 @@
 //
 
 #include "CheckSemantic.h"
-
-extern SimpleType *const IntType = new SimpleType(TYPE_INT);
-extern SimpleType *const CharType = new SimpleType(TYPE_CHAR);
-extern SimpleType *const VoidType = new SimpleType(TYPE_VOID);
-extern SuperType *const CharPointerType = new PointerType(CharType);
-extern SuperType *const IntPointerType = new PointerType(IntType);
-extern SuperType *const VoidPointerType = new PointerType(VoidType);
+#include "../types/Types.h"
 
 void Semantic::checkType(const Expression *element, const SuperType *superType) {
     if (element->superType == nullptr || !element->superType->equals(superType)) {
@@ -18,11 +12,12 @@ void Semantic::checkType(const Expression *element, const SuperType *superType) 
 }
 
 void Semantic::check(Unit *element) {
+    element->scope = mainScope;
     for (auto child : element->children) {
         if (auto *declaration = dynamic_cast<Declaration *>(child)) {
             enter0(declaration);
         } else if (auto *method = dynamic_cast<Method *>(child)) {
-            auto methodType = const_cast<MethodType *>(enter(method->declaration)->asMethodType());
+            auto methodType = const_cast<MethodType *>(enter0(method->declaration)->asMethodType());
 
             auto inner = new Scope();
 
@@ -219,6 +214,13 @@ void Semantic::enter0(Expression *expression) {
     } else if (auto call = dynamic_cast<Call *>(expression)) {
         for (auto expr : call->values) {
             enter(expr);
+        }
+
+        if(auto printf = dynamic_cast<const Identifier*>(call->target)){
+            if(*printf->value == "printf"){
+                call->superType = VoidType;
+                return;
+            }
         }
 
         enter(call->target);
@@ -513,9 +515,8 @@ const SuperType *Semantic::enter0(Declaration *declaration) {
     if (declaration != nullptr) {
         auto type = enter(declaration);
         declaration->superType = type;
-
         if (type != nullptr) {
-            if (type->asSimpleType() && type->identifier == nullptr) {
+            if (type->identifier == nullptr) {
                 ERROR(declaration->location);
             }
 

@@ -7,6 +7,6 @@
 #include "../transform/TransformException.h"
 
 llvm::Value *Assignment::createRightValue(TransformContext &context) {
-    return context.builder.CreateStore(left->createLeftValue(context), right->createRightValue(context));
+    return context.builder.CreateStore(right->createRightValue(context), left->createLeftValue(context));
 }
 
