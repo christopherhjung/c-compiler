@@ -1,23 +1,13 @@
 //
-// Created by Christopher Jung on 04.12.20.
+// Created by chris on 21.01.21.
 //
 
-#include "SimpleObjects.h"
-#include "PrettyPrinter.h"
-#include <iostream>
+#include "Util.h"
 
-void Declarator::dump(PrettyPrinter &stream) {
-
-    for(uint32_t i = 0 ; i < pointer ; i++){
-        stream << "(*";
-    }
-    if(directDeclarator != nullptr){
-        directDeclarator->dump(stream);
-    }
-    for(uint32_t i = 0 ; i < pointer ; i++){
-        stream << ")";
-    }
-}
+#include "Block.h"
+#include "If.h"
+#include "While.h"
+#include "LabeledStatement.h"
 
 void printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement){
     if(instanceof<Block>(statement)){
@@ -37,8 +27,7 @@ void printStatement(PrettyPrinter &stream, Statement *statement) {
     }
 
     if(!instanceof<If>(statement) && !instanceof<While>(statement) &&
-            !instanceof<Block>(statement) && !instanceof<LabeledStatement>(statement)){
+       !instanceof<Block>(statement) && !instanceof<LabeledStatement>(statement)){
         stream << ";";
     }
 }
-

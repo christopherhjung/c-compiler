@@ -5,10 +5,10 @@
 #pragma once
 
 
-#include "../parser/SimpleObjects.h"
 #include "../lexer/Location.h"
 #include "SemanticException.h"
 
+#include "../types/Types.h"
 
 extern SimpleType* const IntType = new SimpleType(TYPE_INT);
 extern SimpleType* const CharType = new SimpleType(TYPE_CHAR);
@@ -257,6 +257,9 @@ public:
             }else{
                 currentScope = scope;
             }
+
+            block->scope = currentScope;
+
             currentScope->parent = carry;
             for( auto statement : block->children){
                 enter(statement);

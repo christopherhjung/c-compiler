@@ -5,11 +5,11 @@
 #pragma once
 
 
-#include "TypeDefines.h"
+#include "../types/TypeDefines.h"
 #include "../lexer/Lexer.h"
-#include "SimpleObjects.h"
 #include <vector>
 
+#include "../elements/Elements.h"
 
 class ParseException : public std::exception{
 public:
@@ -97,6 +97,7 @@ public:
         return result;
     }
 
+
     Unit* parse(){
         Unit* unit = new Unit();
         for(;;){
@@ -132,6 +133,8 @@ public:
     static bool isType(int32_t type){
         return type == INT || type == (CHAR) || type == (VOID) || type == (STRUCT);
     }
+
+
 
     Type* parseType(){
         if(is(INT) || is(CHAR) || is(VOID)){
@@ -430,7 +433,6 @@ public:
     }
 
     Expression* parseExpression(uint32_t other){
-
         Expression* left = nullptr;
         uint32_t precedence = unary();
 
