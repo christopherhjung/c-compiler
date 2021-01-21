@@ -5,19 +5,17 @@
 #pragma once
 
 #include <string>
-#include "Elements.h"
+#include "Expression.h"
 
-class Number : public Expression{
+class PrettyPrinter;
+
+class Number : public Expression {
 public:
     const std::string *value = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << *value;
-    }
+    void dump(PrettyPrinter &printer) override;
 
-    llvm::Value* createRightValue(TransformContext &context) override{
-        return context.builder.getInt32(1);
-    }
+    llvm::Value *createRightValue(TransformContext &context) override;
 };
 
 

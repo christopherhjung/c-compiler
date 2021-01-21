@@ -4,20 +4,27 @@
 
 #pragma once
 
+#include <functional>
+#include <exception>
+#include "../lexer/Location.h"
 
-class SemanticException : public std::exception{
+class SemanticException : public std::exception {
 public:
     const Location location;
     std::string msg = "";
-    int32_t  lineNumber;
+    int32_t lineNumber = 0;
 
-    explicit SemanticException(const Location& location) : location(location){
-
-    }
-    explicit SemanticException(const Location& location, int32_t lineNumber) : location(location), lineNumber(lineNumber){
+    explicit SemanticException(const Location &location) : location(location) {
 
     }
-    explicit SemanticException(const Location& location, const std::string& msg, int32_t lineNumber) : location(location), lineNumber(lineNumber), msg(msg){
+
+    explicit SemanticException(const Location &location, int32_t lineNumber) : location(location),
+                                                                               lineNumber(lineNumber) {
+
+    }
+
+    explicit SemanticException(const Location &location, const std::string &msg, int32_t lineNumber) : location(
+            location), lineNumber(lineNumber), msg(msg) {
 
     }
 };

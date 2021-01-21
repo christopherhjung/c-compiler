@@ -4,19 +4,19 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Statement.h"
 
-class While : public Statement{
+
+class PrettyPrinter;
+
+class Expression;
+
+class While : public Statement {
 public:
-    Expression* condition = nullptr;
-    Statement* body = nullptr;
+    Expression *condition = nullptr;
+    Statement *body = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "while (";
-        condition->dump(printer);
-        printer << ")";
-        printIndentIfNotBlock(printer, body);
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

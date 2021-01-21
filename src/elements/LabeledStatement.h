@@ -4,19 +4,16 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Statement.h"
 
-class LabeledStatement : public Statement{
+class PrettyPrinter;
+
+class LabeledStatement : public Statement {
 public:
-    Statement* statement = nullptr;
+    Statement *statement = nullptr;
     const std::string *name = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer.withoutIndent();
-        printer << *name << ":";
-        printer.newLine();
-        printStatement(printer, statement);
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

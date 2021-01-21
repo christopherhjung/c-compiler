@@ -4,23 +4,20 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Expression.h"
 
-class Sizeof : public Expression{
+class PrettyPrinter;
+
+class Type;
+
+class Declarator;
+
+class Sizeof : public Expression {
 public:
-    Type* type = nullptr;
+    Type *type = nullptr;
     Declarator *declarator = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "(";
-        printer << "sizeof(";
-        type->dump(printer);
-        if(declarator != nullptr){
-            declarator->dump(printer);
-        }
-        printer << ")";
-        printer << ")";
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

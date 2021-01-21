@@ -15,10 +15,11 @@ public:
     Location location;
     int32_t id;
     const std::string *value;
-    Token( ){
+
+    Token() {
     };
 
-    friend std::ostream& operator<<(std::ostream& stream, const Token& tok){
+    friend std::ostream &operator<<(std::ostream &stream, const Token &tok) {
         return stream << tok.location << " " << *tok.value;
     }
 };

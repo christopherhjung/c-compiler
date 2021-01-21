@@ -4,18 +4,22 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Statement.h"
 
-class If : public Statement{
+class PrettyPrinter;
+
+class Expression;
+
+class If : public Statement {
 public:
-    Expression* condition = nullptr;
-    Statement* trueBranch = nullptr;
+    Expression *condition = nullptr;
+    Statement *trueBranch = nullptr;
     bool hasFalse = false;
-    Statement* falseBranch = nullptr;
+    Statement *falseBranch = nullptr;
 
-    void dump(PrettyPrinter& printer) override;
+    void dump(PrettyPrinter &printer) override;
 
-    llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock* start) override;
+    llvm::BasicBlock *create(TransformContext &context, llvm::BasicBlock *start) override;
 };
 
 

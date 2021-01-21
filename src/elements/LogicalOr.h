@@ -4,16 +4,18 @@
 
 #pragma once
 
-#include "Elements.h"
-#include "../transform/TransformContext.h"
+#include "Binary.h"
 
-class LogicalOr : public Binary{
+class PrettyPrinter;
+
+class LogicalOr : public Binary {
 public:
-    void createConditionBranch(TransformContext& context, llvm::BasicBlock* activeBlock, llvm::BasicBlock* trueBlock, llvm::BasicBlock* falseBlock) override;
+    void createConditionBranch(TransformContext &context, llvm::BasicBlock *activeBlock, llvm::BasicBlock *trueBlock,
+                               llvm::BasicBlock *falseBlock) override;
 
-    llvm::Value* createLeftValue(TransformContext &context) override;
+    llvm::Value *createLeftValue(TransformContext &context) override;
 
-    llvm::Value* createRightValue(TransformContext &context) override;
+    llvm::Value *createRightValue(TransformContext &context) override;
 };
 
 

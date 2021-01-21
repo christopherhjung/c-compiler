@@ -14,11 +14,12 @@ class Error {
 public:
     Location location;
     std::string msg;
-    Error(const Location &location, const std::string& msg) : location(location),  msg(msg){
+
+    Error(const Location &location, const std::string &msg) : location(location), msg(msg) {
 
     };
 
-    friend std::ostream& operator<<(std::ostream& stream, const Error& tok){
+    friend std::ostream &operator<<(std::ostream &stream, const Error &tok) {
         return stream << tok.location << ": error: " << tok.msg;
     }
 };

@@ -7,7 +7,7 @@
 #include "SuperType.h"
 
 bool PointerType::equals(const SuperType *other) const {
-    if( auto simpleOther = other->asPointerType() ){
+    if (auto simpleOther = other->asPointerType()) {
         return subType->equals(simpleOther->subType);
     }
     return false;

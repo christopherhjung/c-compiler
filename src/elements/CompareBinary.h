@@ -4,17 +4,20 @@
 
 #pragma once
 
-#include "../transform/TransformContext.h"
 
-#include "Elements.h"
+#include "llvm/IR/IRBuilder.h"
+#include "Binary.h"
 
-class CompareBinary : public Binary{
+class PrettyPrinter;
+
+class CompareBinary : public Binary {
 public:
-    void createConditionBranch(TransformContext& context, llvm::BasicBlock* activeBlock, llvm::BasicBlock* trueBlock, llvm::BasicBlock* falseBlock) override;
+    void createConditionBranch(TransformContext &context, llvm::BasicBlock *activeBlock, llvm::BasicBlock *trueBlock,
+                               llvm::BasicBlock *falseBlock) override;
 
     llvm::CmpInst::Predicate getPredicate();
 
-    llvm::Value* createRightValue(TransformContext &context) override;
+    llvm::Value *createRightValue(TransformContext &context) override;
 };
 
 

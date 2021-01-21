@@ -4,24 +4,36 @@
 
 #pragma once
 
-#include "../elements/Identifier.h"
-#include "Types.h"
 #include "../utils/Comparable.h"
+#include "../elements/Identifier.h"
 
-class SuperType : public Comparable<SuperType>{
+class MethodType;
+
+class PointerType;
+
+class SuperStructType;
+
+class SimpleType;
+
+class SuperType : public Comparable<SuperType> {
 public:
     bool assignable = false;
-    const Identifier* identifier = nullptr;
+    const Identifier *identifier = nullptr;
 
-    SuperType(){};
-    SuperType(bool assignable) : assignable(assignable){
+    SuperType() {};
+
+    SuperType(bool assignable) : assignable(assignable) {
 
     };
 
-    virtual const MethodType* asMethodType() const;
-    virtual const PointerType* asPointerType() const;
-    virtual const SuperStructType* asSuperStructType() const;
-    virtual const SimpleType* asSimpleType() const;
+    virtual const MethodType *asMethodType() const;
+
+    virtual const PointerType *asPointerType() const;
+
+    virtual const SuperStructType *asSuperStructType() const;
+
+    virtual const SimpleType *asSimpleType() const;
+
     virtual bool isAssignable() const;
 };
 

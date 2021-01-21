@@ -3,3 +3,8 @@
 //
 
 #include "StringLiteral.h"
+#include "../parser/PrettyPrinter.h"
+
+void StringLiteral::dump(PrettyPrinter &printer) {
+    printer << *value;
+}

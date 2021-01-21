@@ -8,12 +8,13 @@
 #include "If.h"
 #include "While.h"
 #include "LabeledStatement.h"
+#include "../parser/PrettyPrinter.h"
 
-void printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement){
-    if(instanceof<Block>(statement)){
+void printIndentIfNotBlock(PrettyPrinter &stream, Statement *statement) {
+    if (instanceof<Block>(statement)) {
         stream << " ";
         statement->dump(stream);
-    }else{
+    } else {
         stream.newLine();
         stream.increaseDepth();
         printStatement(stream, statement);
@@ -22,12 +23,12 @@ void printIndentIfNotBlock(PrettyPrinter& stream, Statement* statement){
 }
 
 void printStatement(PrettyPrinter &stream, Statement *statement) {
-    if(statement != nullptr){
+    if (statement != nullptr) {
         statement->dump(stream);
     }
 
-    if(!instanceof<If>(statement) && !instanceof<While>(statement) &&
-       !instanceof<Block>(statement) && !instanceof<LabeledStatement>(statement)){
+    if (!instanceof<If>(statement) && !instanceof<While>(statement) &&
+        !instanceof<Block>(statement) && !instanceof<LabeledStatement>(statement)) {
         stream << ";";
     }
 }

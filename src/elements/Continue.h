@@ -4,14 +4,14 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Statement.h"
 
-class Continue : public Statement{
+class PrettyPrinter;
+
+class Continue : public Statement {
 public:
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "continue";
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

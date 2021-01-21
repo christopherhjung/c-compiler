@@ -4,12 +4,14 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "DirectDeclarator.h"
 
-class Declarator : public DirectDeclarator{
+class PrettyPrinter;
+
+class Declarator : public DirectDeclarator {
 public:
     int pointer = 0;
-    DirectDeclarator* directDeclarator = nullptr;
+    DirectDeclarator *directDeclarator = nullptr;
 
     void dump(PrettyPrinter &printer) override;
 };

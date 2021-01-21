@@ -6,13 +6,12 @@
 
 #include <unordered_map>
 #include <vector>
-#include "Types.h"
-#include "../elements/Identifier.h"
+#include "SuperType.h"
 
-class SuperStructType : public SuperType{
+class SuperStructType : public SuperType {
 public:
-    std::unordered_map<const std::string*, int> map;
-    std::vector<const SuperType*> types;
+    std::unordered_map<const std::string *, int> map;
+    std::vector<const SuperType *> types;
 
     explicit SuperStructType() {
 
@@ -23,17 +22,17 @@ public:
     }
 
     bool equals(const SuperType *other) const override {
-        if(auto structType = other->asSuperStructType()){
+        if (auto structType = other->asSuperStructType()) {
             return structType == this;
         }
         return false;
     }
 
-    const SuperType* member(const Identifier* identifier) const {
-        if(identifier){
+    const SuperType *member(const Identifier *identifier) const {
+        if (identifier) {
             auto pos = map.find(identifier->value);
 
-            if(pos == map.end()){
+            if (pos == map.end()) {
                 return nullptr;
             }
 
@@ -43,7 +42,7 @@ public:
         return nullptr;
     }
 
-    const SuperStructType* asSuperStructType() const override{
+    const SuperStructType *asSuperStructType() const override {
         return this;
     }
 };

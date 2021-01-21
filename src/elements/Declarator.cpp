@@ -3,16 +3,17 @@
 //
 
 #include "Declarator.h"
+#include "../parser/PrettyPrinter.h"
 
 void Declarator::dump(PrettyPrinter &stream) {
 
-    for(uint32_t i = 0 ; i < pointer ; i++){
+    for (uint32_t i = 0; i < pointer; i++) {
         stream << "(*";
     }
-    if(directDeclarator != nullptr){
+    if (directDeclarator != nullptr) {
         directDeclarator->dump(stream);
     }
-    for(uint32_t i = 0 ; i < pointer ; i++){
+    for (uint32_t i = 0; i < pointer; i++) {
         stream << ")";
     }
 }

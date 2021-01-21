@@ -5,16 +5,16 @@
 #pragma once
 
 
-#include "Elements.h"
+#include "Expression.h"
 #include <string>
 
-class Constant : public Expression{
+class PrettyPrinter;
+
+class Constant : public Expression {
 public:
     const std::string *value = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << *value;
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

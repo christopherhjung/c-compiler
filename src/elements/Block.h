@@ -5,14 +5,23 @@
 #pragma once
 
 #include <vector>
+#include "Statement.h"
 
-#include "Elements.h"
-#include "../parser/PrettyPrinter.h"
-#include "../transform/TransformContext.h"
+#include "llvm/IR/GlobalValue.h"
 
-class Block : public Statement{
+class PrettyPrinter;
+
+class TransformContext;
+
+class Scope;
+
+class Block : public Statement {
 public:
-    std::vector<Statement*> children;
-    void dump(PrettyPrinter& printer) override;
-    llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock *start) override;
+    Scope *scope;
+
+    std::vector<Statement *> children;
+
+    void dump(PrettyPrinter &printer) override;
+
+    llvm::BasicBlock *create(TransformContext &context, llvm::BasicBlock *start) override;
 };

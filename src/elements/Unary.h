@@ -4,19 +4,18 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Expression.h"
 
-class Unary : public Expression{
+class PrettyPrinter;
+
+class Operator;
+
+class Unary : public Expression {
 public:
-    Expression* value = nullptr;
-    Operator* op = nullptr;
+    Expression *value = nullptr;
+    Operator *op = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "(";
-        op->dump(printer);
-        value->dump(printer);
-        printer << ")";
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

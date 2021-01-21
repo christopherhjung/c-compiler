@@ -4,16 +4,17 @@
 
 #pragma once
 
-#include "Types.h"
+#include "SuperType.h"
 
-class ComplexType : public SuperType{
+class ComplexType : public SuperType {
 public:
-    const SuperType* subType = nullptr;
-    explicit ComplexType(const SuperType* subType) : subType(subType){
+    const SuperType *subType = nullptr;
+
+    explicit ComplexType(const SuperType *subType) : subType(subType) {
 
     }
 
-    explicit ComplexType(const SuperType* subType, bool assignable) : SuperType(assignable), subType(subType){
+    explicit ComplexType(const SuperType *subType, bool assignable) : SuperType(assignable), subType(subType) {
 
     }
 };

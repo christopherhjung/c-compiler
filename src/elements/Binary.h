@@ -4,16 +4,19 @@
 
 #pragma once
 
-#include "Elements.h"
-#include "../parser/PrettyPrinter.h"
+#include "Expression.h"
 
-class Binary : public Expression{
+class PrettyPrinter;
+
+class Operator;
+
+class Binary : public Expression {
 public:
-    Expression* left = nullptr;
-    Expression* right = nullptr;
-    Operator* op = nullptr;
+    Expression *left = nullptr;
+    Expression *right = nullptr;
+    Operator *op = nullptr;
 
-    void dump(PrettyPrinter& printer) override;
+    void dump(PrettyPrinter &printer) override;
 };
 
 

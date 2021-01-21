@@ -4,23 +4,24 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Element.h"
 
-class Method : public Element{
+class PrettyPrinter;
+
+class Declaration;
+
+class Block;
+
+class TransformContext;
+
+class Method : public Element {
 public:
-    Declaration* declaration = nullptr;
-    Block* body = nullptr;
+    Declaration *declaration = nullptr;
+    Block *body = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        declaration->dump(printer);
-        printer.newLine();
-        body->dump(printer);
-    }
+    void dump(PrettyPrinter &printer) override;
 
-    void create(TransformContext& context){
-        auto entry = context.createFunction("main");
-        body->create(context, entry);
-    }
+    void create(TransformContext &context);
 };
 
 

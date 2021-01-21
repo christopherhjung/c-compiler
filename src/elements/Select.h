@@ -4,21 +4,16 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Expression.h"
 
-class Select : public Expression{
+class PrettyPrinter;
+
+class Select : public Expression {
 public:
-    Expression* target = nullptr;
-    Expression* index = nullptr;
+    Expression *target = nullptr;
+    Expression *index = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "(";
-        target->dump(printer);
-        printer << "[";
-        index->dump(printer);
-        printer << "]";
-        printer << ")";
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

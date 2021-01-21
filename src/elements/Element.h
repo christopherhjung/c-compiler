@@ -6,22 +6,18 @@
 
 #include <string>
 #include <sstream>
-
+#include "Dumpable.h"
 #include "../lexer/Location.h"
-#include "../parser/PrettyPrinter.h"
-#include "Elements.h"
 
-class Element : public Dumpable{
+class PrettyPrinter;
+
+class Element : public Dumpable {
 public:
     Location location;
+
     virtual ~Element() = default;
 
-    std::string toString(){
-        std::stringstream ss;
-        PrettyPrinter prettyPrinter(ss);
-        dump(prettyPrinter);
-        return ss.str();
-    }
+    std::string toString();
 };
 
 

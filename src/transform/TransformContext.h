@@ -19,18 +19,19 @@ public:
 
     llvm::Function *currentFunction;
 
-
-    TransformContext(llvm::LLVMContext &llvmContext, llvm::Module &module, llvm::IRBuilder<> &builder, llvm::IRBuilder<> &allocBuilder) : llvmContext(llvmContext), module(module), builder(builder), allocBuilder(allocBuilder) {
+    TransformContext(llvm::LLVMContext &llvmContext, llvm::Module &module, llvm::IRBuilder<> &builder,
+                     llvm::IRBuilder<> &allocBuilder) : llvmContext(llvmContext), module(module), builder(builder),
+                                                        allocBuilder(allocBuilder) {
 
     }
 
-    llvm::BasicBlock* createBasicBlock(const std::string &name) {
+    llvm::BasicBlock *createBasicBlock(const std::string &name) {
         auto bb = llvm::BasicBlock::Create(llvmContext, name, currentFunction, 0);
         builder.SetInsertPoint(bb);
         return bb;
     }
 
-    llvm::BasicBlock* createFunction(const std::string &name) {
+    llvm::BasicBlock *createFunction(const std::string &name) {
         llvm::Type *returnType = builder.getVoidTy();
         llvm::FunctionType *functionType = llvm::FunctionType::get(returnType, /* isVarArg */ false);
 
@@ -49,13 +50,13 @@ public:
         return entry;
     }
 
-    llvm::IRBuilder<>& resetAllocBuilder() {
+    llvm::IRBuilder<> &resetAllocBuilder() {
         allocBuilder.SetInsertPoint(allocBuilder.GetInsertBlock(),
                                     allocBuilder.GetInsertBlock()->begin());
         return allocBuilder;
     }
 
-    void dump(){
+    void dump() {
         //verifyModule(module);
         module.dump();
     }

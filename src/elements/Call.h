@@ -5,29 +5,18 @@
 #pragma once
 
 
-#include "Elements.h"
-class Call : public Expression{
+#include "Expression.h"
+#include "../lexer/Location.h"
+
+class PrettyPrinter;
+
+class Call : public Expression {
 public:
-    Expression* target = nullptr;
-    std::vector<Expression*> values;
+    Expression *target = nullptr;
+    std::vector<Expression *> values;
     std::vector<Location> locations;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "(";
-        target->dump(printer);
-        printer << "(";
-        bool first = true;
-        for(auto val : values){
-            if(first){
-                first = false;
-            }else{
-                printer << ", ";
-            }
-            val->dump(printer);
-        }
-        printer << ")";
-        printer << ")";
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

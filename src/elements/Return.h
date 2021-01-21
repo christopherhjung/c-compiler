@@ -4,19 +4,17 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Statement.h"
 
-class Return : public Statement{
+class PrettyPrinter;
+
+class Expression;
+
+class Return : public Statement {
 public:
-    Expression* value = nullptr;
+    Expression *value = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "return";
-        if(value != nullptr){
-            printer << " ";
-            value->dump(printer);
-        }
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

@@ -16,12 +16,12 @@
 #include "StateMachineBuilder.h"
 #include "../reader/FileInputReader.h"
 
-inline bool cmpState (State* l, State* r) {
+inline bool cmpState(State *l, State *r) {
     return l->index < r->index;
 }
 
-template <class T>
-inline bool cmpPairState(std::pair<State*, T>& l, std::pair<State*, T>& r) {
+template<class T>
+inline bool cmpPairState(std::pair<State *, T> &l, std::pair<State *, T> &r) {
     return cmpState(l.first, r.first);
 }
 
@@ -29,14 +29,14 @@ class LexerGenerator {
     std::ofstream ss;
     std::string tab = "    ";
 public:
-    void build(const std::string& src, const std::string& target){
+    void build(const std::string &src, const std::string &target) {
         FileInputReader inputReader(src);
 
         std::shared_ptr<State> state;
-        StateMachine* machine = StateMachineBuilder::build(&inputReader);
+        StateMachine *machine = StateMachineBuilder::build(&inputReader);
 
         StateMachineBuilder builder;
-        std::vector<State*> states = builder.getStates();
+        std::vector<State *> states = builder.getStates();
         std::vector<std::string> kinds = builder.getKinds();
 
         ss.open(target);
@@ -44,36 +44,38 @@ public:
         ss << "#include \"../lexer/LexerControl.h\"" << std::endl;
         ss << "#include \"../lexer/LexerProxy.h\"" << std::endl;
         ss << "#include \"../reader/InputReader.h\"" << std::endl;
-        writeClass(machine->states , machine->root, machine->kinds, machine->hides, machine->catches);
+        writeClass(machine->states, machine->root, machine->kinds, machine->hides, machine->catches);
         ss << std::flush;
         ss.close();
     }
 
-    void writeKinds(std::vector<std::string>& kinds){
-        offset(1) << "std::string types["<<  kinds.size() <<"] {" << std::endl ;
-        for( const auto& kind : kinds ){
+    void writeKinds(std::vector<std::string> &kinds) {
+        offset(1) << "std::string types[" << kinds.size() << "] {" << std::endl;
+        for (const auto &kind : kinds) {
             offset(2) << "\"" << kind << "\"," << std::endl;
         }
         offset(1) << "};" << std::endl;
     }
 
-    void writeHides(std::vector<bool>& hides){
-        offset(1) << "bool hides["<<  hides.size() <<"] {" << std::endl ;
-        for( const auto& hide : hides ){
+    void writeHides(std::vector<bool> &hides) {
+        offset(1) << "bool hides[" << hides.size() << "] {" << std::endl;
+        for (const auto &hide : hides) {
             offset(2) << !hide << "," << std::endl;
         }
         offset(1) << "};" << std::endl;
     }
 
-    void writeCatches(std::vector<bool>& catches){
-        offset(1) << "bool catches["<<  catches.size() <<"] {" << std::endl ;
-        for( const auto& catchValue : catches ){
+    void writeCatches(std::vector<bool> &catches) {
+        offset(1) << "bool catches[" << catches.size() << "] {" << std::endl;
+        for (const auto &catchValue : catches) {
             offset(2) << catchValue << "," << std::endl;
         }
         offset(1) << "};" << std::endl;
     }
 
-    void writeClass(std::vector<State*>& states, State* start, std::vector<std::string>& kinds, std::vector<bool>& hides, std::vector<bool>& catches){
+    void
+    writeClass(std::vector<State *> &states, State *start, std::vector<std::string> &kinds, std::vector<bool> &hides,
+               std::vector<bool> &catches) {
         std::sort(states.begin(), states.end(), cmpState);
 
         offset(0) << "class GeneratedLexer : public LexerControl{" << std::endl;
@@ -257,43 +259,43 @@ public:
         offset(2) << "return error;" << std::endl;
         offset(1) << "}" << std::endl;
 */
-        for( auto* state : states ){
+        for (auto *state : states) {
             writeMethod(state, 1);
         }
         offset(0) << "};" << std::endl;
     }
 
-    void writeMethod(State* state, uint32_t depth){
+    void writeMethod(State *state, uint32_t depth) {
         offset(depth) << "void ";
         writeRuleName(state);
         ss << "()";
-        if(state->index == 0){
+        if (state->index == 0) {
             ss << " override ";
         }
         ss << "{" << std::endl;
-        if(state->index > 0){
+        if (state->index > 0) {
             offset(depth + 1) << "next();" << std::endl;
         }
-        if(state->finish){
-            offset(depth + 1) << "set("<< state->id <<"); //" << state->name << std::endl;
+        if (state->finish) {
+            offset(depth + 1) << "set(" << state->id << "); //" << state->name << std::endl;
         }
         writeSwitch(state, depth + 1);
         offset(depth) << "}" << std::endl;
     }
 
-    void writeSwitch(State* state, uint32_t depth){
-        std::unordered_map<State*, std::set<char>> unsorted;
-        for(const auto& pair : state->transitions){
+    void writeSwitch(State *state, uint32_t depth) {
+        std::unordered_map<State *, std::set<char>> unsorted;
+        for (const auto &pair : state->transitions) {
             unsorted[pair.second].insert(pair.first);
         }
 
-        if(unsorted.empty() && !state->greedy){
+        if (unsorted.empty() && !state->greedy) {
             return;
         }
 
-        if(!unsorted.empty()) {
+        if (!unsorted.empty()) {
             offset(depth) << "switch(*current){" << std::endl;
-            std::vector<std::pair<State*, std::set<char>>> sorted;
+            std::vector<std::pair<State *, std::set<char>>> sorted;
 
             sorted.reserve(unsorted.size());
             for (auto &pair : unsorted) {
@@ -322,7 +324,7 @@ public:
                 ss << "break;" << std::endl;
             }
 
-            if(state->greedy){
+            if (state->greedy) {
                 offset(depth + 1) << "default:" << std::endl;
                 offset(depth + 2) << "*accept = -1;" << std::endl;
             }
@@ -331,8 +333,8 @@ public:
         }
     }
 
-    uint32_t writeChar(char c){
-        switch(c){
+    uint32_t writeChar(char c) {
+        switch (c) {
             case '\\':
                 ss << "'\\\\'";
                 return 4;
@@ -364,56 +366,56 @@ public:
                 ss << "'\\v'";
                 return 4;
             default:
-                if(c < 32 || c == 127){
-                    ss << (int32_t)c;
-                    if(c == 127){
+                if (c < 32 || c == 127) {
+                    ss << (int32_t) c;
+                    if (c == 127) {
                         return 3;
-                    }else if(c > 9) {
+                    } else if (c > 9) {
                         return 2;
-                    }else if(c >= 0){
+                    } else if (c >= 0) {
                         return 1;
-                    }else  if(c < -99){
+                    } else if (c < -99) {
                         return 4;
-                    }else if(c < -9){
+                    } else if (c < -9) {
                         return 3;
-                    }else{
+                    } else {
                         return 2;
                     }
-                }else{
-                    ss << "'"  << c << "'";
+                } else {
+                    ss << "'" << c << "'";
                     return 3;
                 }
         }
     }
 
-    void writeCase(char c){
+    void writeCase(char c) {
         ss << "case ";
         uint32_t count = writeChar(c);
-        for(;count < 4;count++){
+        for (; count < 4; count++) {
             ss << " ";
         }
         ss << ":";
     }
 
-    void callRule(State* state){
+    void callRule(State *state) {
         writeRuleName(state);
         ss << "();";
     }
 
-    void writeRuleName(State* state){
-        ss << "parse" ;
-        if(state->finish){
+    void writeRuleName(State *state) {
+        ss << "parse";
+        if (state->finish) {
             ss << "Final";
-        }else if(state->greedy){
+        } else if (state->greedy) {
             ss << "Greedy";
         }
-        if(state->index > 0){
+        if (state->index > 0) {
             ss << state->index;
         }
     }
 
-    std::ofstream& offset(uint32_t indent){
-        for(;indent > 0;indent--){
+    std::ofstream &offset(uint32_t indent) {
+        for (; indent > 0; indent--) {
             ss << tab;
         }
         return ss;

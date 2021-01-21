@@ -9,3 +9,4 @@
 #include "SimpleType.h"
 #include "SuperStructType.h"
 #include "SuperType.h"
+#include "PendingSuperStructType.h"

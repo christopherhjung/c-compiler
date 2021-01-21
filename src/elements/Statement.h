@@ -4,19 +4,25 @@
 
 #pragma once
 
-#include "../transform/TransformException.h"
-#include "../types/SuperType.h"
-
 #include "Element.h"
-class Statement : public Element{
-public:
-    const SuperType* superType = nullptr;
+#include "llvm/IR/GlobalValue.h"
+#include "../transform/TransformException.h"
 
-    virtual llvm::Value* create(TransformContext &context){
+class PrettyPrinter;
+
+class SuperType;
+
+class TransformContext;
+
+class Statement : public Element {
+public:
+    const SuperType *superType = nullptr;
+
+    virtual llvm::Value *create(TransformContext &context) {
         TRANSFORM_ERROR();
     }
 
-    virtual llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock* start){
+    virtual llvm::BasicBlock *create(TransformContext &context, llvm::BasicBlock *start) {
         TRANSFORM_ERROR();
     }
 };

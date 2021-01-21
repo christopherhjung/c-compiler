@@ -3,3 +3,8 @@
 //
 
 #include "Continue.h"
+#include "../parser/PrettyPrinter.h"
+
+void Continue::dump(PrettyPrinter &printer) {
+    printer << "continue";
+}

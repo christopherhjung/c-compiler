@@ -5,15 +5,15 @@
 #pragma once
 
 #include <string>
-#include "Elements.h"
+#include "Statement.h"
 
-class GoTo : public Statement{
+class PrettyPrinter;
+
+class GoTo : public Statement {
 public:
     const std::string *name;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "goto " << *name;
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

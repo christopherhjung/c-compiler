@@ -4,9 +4,11 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Dumpable.h"
 
-class DirectDeclarator : public Dumpable{
+class PrettyPrinter;
+
+class DirectDeclarator : public Dumpable {
 
 };
 

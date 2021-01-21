@@ -5,13 +5,15 @@
 #pragma once
 
 #include <functional>
-#include "Elements.h"
+#include "Element.h"
 
-class Operator : public Element{
+class PrettyPrinter;
+
+class Operator : public Element {
 public:
     uint32_t id;
 
-    void dump(PrettyPrinter& printer) override;
+    void dump(PrettyPrinter &printer) override;
 };
 
 

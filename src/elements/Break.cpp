@@ -3,3 +3,8 @@
 //
 
 #include "Break.h"
+#include "../parser/PrettyPrinter.h"
+
+void Break::dump(PrettyPrinter &printer) {
+    printer << "break";
+}

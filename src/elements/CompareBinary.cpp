@@ -4,27 +4,44 @@
 
 #include "CompareBinary.h"
 #include "../types/TypeDefines.h"
+#include "../parser/PrettyPrinter.h"
+#include "../transform/TransformContext.h"
+#include "Operator.h"
 
-void CompareBinary::createConditionBranch(TransformContext& context, llvm::BasicBlock* activeBlock, llvm::BasicBlock* trueBlock, llvm::BasicBlock* falseBlock)  {
+void CompareBinary::createConditionBranch(TransformContext &context, llvm::BasicBlock *activeBlock,
+                                          llvm::BasicBlock *trueBlock, llvm::BasicBlock *falseBlock) {
     context.builder.SetInsertPoint(activeBlock);
-    llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0), "condition");
+    llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0),
+                                                          "condition");
     context.builder.CreateCondBr(condition, trueBlock, falseBlock);
 }
 
-llvm::CmpInst::Predicate CompareBinary::getPredicate(){
+llvm::CmpInst::Predicate CompareBinary::getPredicate() {
     llvm::CmpInst::Predicate predicate = llvm::CmpInst::Predicate::BAD_ICMP_PREDICATE;
-    switch(this->op->id){
-        case EQUAL: predicate = llvm::CmpInst::Predicate::ICMP_EQ; break;
-        case NOT_EQUAL: predicate = llvm::CmpInst::Predicate::ICMP_NE; break;
-        case LESS: predicate = llvm::CmpInst::Predicate::ICMP_SLT; break;
-        case LESS_EQUAL: predicate = llvm::CmpInst::Predicate::ICMP_SLE; break;
-        case GREATER: predicate = llvm::CmpInst::Predicate::ICMP_SGT; break;
-        case GREATER_EQUAL: predicate = llvm::CmpInst::Predicate::ICMP_SGE; break;
+    switch (this->op->id) {
+        case EQUAL:
+            predicate = llvm::CmpInst::Predicate::ICMP_EQ;
+            break;
+        case NOT_EQUAL:
+            predicate = llvm::CmpInst::Predicate::ICMP_NE;
+            break;
+        case LESS:
+            predicate = llvm::CmpInst::Predicate::ICMP_SLT;
+            break;
+        case LESS_EQUAL:
+            predicate = llvm::CmpInst::Predicate::ICMP_SLE;
+            break;
+        case GREATER:
+            predicate = llvm::CmpInst::Predicate::ICMP_SGT;
+            break;
+        case GREATER_EQUAL:
+            predicate = llvm::CmpInst::Predicate::ICMP_SGE;
+            break;
     }
 
     return predicate;
 }
 
-llvm::Value* CompareBinary::createRightValue(TransformContext &context) {
-    return context.builder.CreateICmp(getPredicate(),left->create(context), right->create(context));
+llvm::Value *CompareBinary::createRightValue(TransformContext &context) {
+    return context.builder.CreateICmp(getPredicate(), left->create(context), right->create(context));
 }

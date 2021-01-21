@@ -5,55 +5,59 @@
 #include "If.h"
 
 #include "Util.h"
+#include "../parser/PrettyPrinter.h"
+#include "Block.h"
+#include "Expression.h"
+#include "../transform/TransformContext.h"
 
-void If::dump(PrettyPrinter& printer) {
-printer << "if (";
-condition->dump(printer);
-printer << ")";
+void If::dump(PrettyPrinter &printer) {
+    printer << "if (";
+    condition->dump(printer);
+    printer << ")";
 
-printIndentIfNotBlock(printer, trueBranch);
+    printIndentIfNotBlock(printer, trueBranch);
 
-if(hasFalse){
-if(instanceof<Block>(trueBranch)){
-printer << " ";
-}else{
-printer.newLine();
+    if (hasFalse) {
+        if (instanceof<Block>(trueBranch)) {
+            printer << " ";
+        } else {
+            printer.newLine();
+        }
+
+        printer << "else";
+
+        if (instanceof<If>(falseBranch)) {
+            printer << " ";
+            falseBranch->dump(printer);
+        } else {
+            printIndentIfNotBlock(printer, falseBranch);
+        }
+    }
 }
 
-printer << "else";
+llvm::BasicBlock *If::create(TransformContext &context, llvm::BasicBlock *start) {
+    llvm::BasicBlock *conditionBlock = context.createBasicBlock("if-condition");
+    llvm::BasicBlock *startTrue = context.createBasicBlock("if-true");
+    llvm::BasicBlock *end = context.createBasicBlock("if-end");
 
-if(instanceof<If>(falseBranch)){
-printer << " ";
-falseBranch->dump(printer);
-}else{
-printIndentIfNotBlock(printer, falseBranch);
-}
-}
-}
+    context.builder.SetInsertPoint(start);
+    context.builder.CreateBr(conditionBlock);
 
-llvm::BasicBlock* If::create(TransformContext &context, llvm::BasicBlock* start) {
-llvm::BasicBlock *conditionBlock = context.createBasicBlock("if-condition");
-llvm::BasicBlock *startTrue = context.createBasicBlock("if-true");
-llvm::BasicBlock *end = context.createBasicBlock("if-end");
+    llvm::BasicBlock *startFalse;
+    llvm::BasicBlock *endTrueBlock = trueBranch->create(context, startTrue);
+    context.builder.SetInsertPoint(endTrueBlock);
+    context.builder.CreateBr(end);
 
-context.builder.SetInsertPoint(start);
-context.builder.CreateBr(conditionBlock);
+    if (falseBranch == nullptr) {
+        startFalse = end;
+    } else {
+        startFalse = context.createBasicBlock("if-false");
+        llvm::BasicBlock *endFalse = falseBranch->create(context, startFalse);
+        context.builder.SetInsertPoint(endFalse);
+        context.builder.CreateBr(end);
+    }
 
-llvm::BasicBlock *startFalse;
-llvm::BasicBlock *endTrueBlock = trueBranch->create(context, startTrue);
-context.builder.SetInsertPoint(endTrueBlock);
-context.builder.CreateBr(end);
+    condition->createConditionBranch(context, conditionBlock, startTrue, startFalse);
 
-if(falseBranch == nullptr){
-startFalse = end;
-}else{
-startFalse = context.createBasicBlock("if-false");
-llvm::BasicBlock *endFalse = falseBranch->create(context, startFalse);
-context.builder.SetInsertPoint(endFalse);
-context.builder.CreateBr(end);
-}
-
-condition->createConditionBranch(context,conditionBlock, startTrue, startFalse);
-
-return end;
+    return end;
 }

@@ -3,6 +3,7 @@
 //
 
 #pragma once
+
 #include <string>
 #include <iostream>
 
@@ -12,7 +13,7 @@ public:
     int32_t line = 0;
     int32_t column = 0;
 
-    friend std::ostream& operator<<(std::ostream& stream, const Location& tok){
+    friend std::ostream &operator<<(std::ostream &stream, const Location &tok) {
         return stream << tok.fileName << ":" << tok.line << ":" << tok.column;
     }
 };

@@ -3,3 +3,8 @@
 //
 
 #include "Constant.h"
+#include "../parser/PrettyPrinter.h"
+
+void Constant::dump(PrettyPrinter &printer) {
+    printer << *value;
+}

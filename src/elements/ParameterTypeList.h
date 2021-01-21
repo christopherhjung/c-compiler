@@ -4,26 +4,20 @@
 
 #pragma once
 
+#include <vector>
 #include "../lexer/Location.h"
-#include "Elements.h"
+#include "Dumpable.h"
+
+class PrettyPrinter;
+
+class Declaration;
 
 class ParameterTypeList : public Dumpable {
 public:
     std::vector<Location> locations;
     std::vector<Declaration *> declarations;
 
-    void dump(PrettyPrinter& printer) override{
-        bool first = true;
-        for(auto decl : declarations){
-            if(first){
-                first = false;
-            }else{
-                printer << ", ";
-            }
-
-            decl->dump(printer);
-        }
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

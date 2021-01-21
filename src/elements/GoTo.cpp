@@ -3,3 +3,9 @@
 //
 
 #include "GoTo.h"
+#include "../parser/PrettyPrinter.h"
+#include "../parser/PrettyPrinter.h"
+
+void GoTo::dump(PrettyPrinter &printer) {
+    printer << "goto " << *name;
+}

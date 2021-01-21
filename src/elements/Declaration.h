@@ -4,30 +4,24 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Statement.h"
 
-class Declaration : public Statement{
+class PrettyPrinter;
+
+class Declarator;
+
+class Type;
+
+class Declaration : public Statement {
 public:
-    Type* type = nullptr;
-    Declarator* declarator = nullptr;
+    Type *type = nullptr;
+    Declarator *declarator = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        type->dump(printer);
-        if(declarator != nullptr){
-            printer << " ";
-            declarator->dump(printer);
-        }
-    }
+    void dump(PrettyPrinter &printer) override;
 
-    llvm::Value* create(TransformContext &context) override{
-        return context.resetAllocBuilder().CreateAlloca(context.builder.getInt32Ty());
-    }
+    llvm::Value *create(TransformContext &context) override;
 
-    llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock* start) override{
-        context.builder.SetInsertPoint(start);
-        create(context);
-        return start;
-    }
+    llvm::BasicBlock *create(TransformContext &context, llvm::BasicBlock *start) override;
 };
 
 

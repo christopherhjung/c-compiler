@@ -5,7 +5,6 @@
 #pragma once
 
 
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -15,7 +14,7 @@
 #include <algorithm>
 
 
-class StreamInputReader : public InputReader{
+class StreamInputReader : public InputReader {
 
 protected:
     std::istream *stream{};
@@ -30,11 +29,11 @@ protected:
     int16_t current = 256;
     char *buffer = new char[capacity]{0};
 
-    StreamInputReader(){
+    StreamInputReader() {
 
     }
 
-    void init(){
+    void init() {
         reset(0);
     }
 
@@ -47,22 +46,23 @@ public:
     ~StreamInputReader() override {
         delete[](buffer);
     }
+
 public:
-    StreamInputReader(std::istream* stream) :stream(stream){
+    StreamInputReader(std::istream *stream) : stream(stream) {
         init();
     };
 
-    int16_t peek() override{
+    int16_t peek() override {
         return current;
     }
 
-    int16_t next() override{
+    int16_t next() override {
         offset++;
-        if(offset < size){
+        if (offset < size) {
             current = buffer[(tail + offset) & mask];
-        }else if(empty){
+        } else if (empty) {
             current = 256;
-        }else{
+        } else {
             sizeUp();
             current = buffer[(tail + offset) & mask];
         }
@@ -73,7 +73,7 @@ public:
         return size;
     }
 
-    int16_t get(uint32_t index) override{
+    int16_t get(uint32_t index) override {
         return buffer[(tail + index) & mask];
     }
 
@@ -81,12 +81,12 @@ public:
         char arr[count];
         uint32_t last = tail + count;
 
-        if(last > capacity){
+        if (last > capacity) {
             last = capacity;
         }
 
         std::copy(buffer + tail, buffer + last, arr);
-        if(tail + count >= capacity){
+        if (tail + count >= capacity) {
             uint32_t already = last - tail;
             uint32_t rest = count - already;
             std::copy(buffer, buffer + rest, arr + already);
@@ -95,40 +95,40 @@ public:
         return std::string(arr, count);
     }
 
-    bool readLine(std::string& str) override {
-        if(current == 256){
+    bool readLine(std::string &str) override {
+        if (current == 256) {
             return false;
         }
 
-        for( ; current != '\n' && current != '\r' && current != 256 ; ){
+        for (; current != '\n' && current != '\r' && current != 256;) {
             next();
         }
-        str = readString(offset );
+        str = readString(offset);
 
-        if(current == '\n'){
+        if (current == '\n') {
             next();
-            if(current == '\r'){
+            if (current == '\r') {
                 next();
             }
-        }else if(current == '\r'){
+        } else if (current == '\r') {
             next();
-            if(current == '\n'){
+            if (current == '\n') {
                 next();
             }
         }
 
-        reset(offset );
+        reset(offset);
         return true;
     }
 
-    void sizeUp()  {
+    void sizeUp() {
         uint32_t nextCapacity = capacity << 1u;
 
-        char* arr = new char[nextCapacity];
+        char *arr = new char[nextCapacity];
 
-        if(head > tail){
+        if (head > tail) {
             std::copy(buffer + tail, buffer + head, arr);
-        }else{
+        } else {
             std::copy(buffer + tail, buffer + capacity, arr);
             std::copy(buffer, buffer + head, arr + capacity - tail);
         }
@@ -149,9 +149,9 @@ public:
         offset = 0;
         size -= index;
         check();
-        if(size > 0){
+        if (size > 0) {
             current = buffer[(tail + offset) & mask];
-        }else{
+        } else {
             current = 256;
         }
     }
@@ -160,24 +160,23 @@ public:
         return offset;
     }
 
-    void check(){
-        if ( size < ( capacity >> 1u ) && !empty )
-        {
+    void check() {
+        if (size < (capacity >> 1u) && !empty) {
             fetch();
         }
 
         full &= tail == head;
     }
 
-    virtual void fetch(){
+    virtual void fetch() {
         uint32_t readCount;
-        if(tail > head){
+        if (tail > head) {
             stream->read(buffer + head, tail - head);
             readCount = stream->gcount();
-        }else{
+        } else {
             stream->read(buffer + head, capacity - head);
             readCount = stream->gcount();
-            if(readCount > 0){
+            if (readCount > 0) {
                 stream->read(buffer, tail);
                 readCount += stream->gcount();;
             }
@@ -185,9 +184,9 @@ public:
 
         head = (head + readCount) & mask;
         size += readCount;
-        if( head == tail ){
+        if (head == tail) {
             full = true;
-        }else{
+        } else {
             empty = true;
         }
     }

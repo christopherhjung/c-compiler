@@ -10,24 +10,24 @@
 #include <iostream>
 #include <string>
 
-class FileInputReader : public StreamInputReader  {
+class FileInputReader : public StreamInputReader {
     std::ifstream fileStream;
     std::string file;
     std::string context;
 public:
-    explicit FileInputReader(const std::string& file) : FileInputReader(file, file) {
+    explicit FileInputReader(const std::string &file) : FileInputReader(file, file) {
 
     }
 
-    explicit FileInputReader(const std::string& file, const std::string& context) : StreamInputReader(), fileStream(file), file(file) {
+    explicit FileInputReader(const std::string &file, const std::string &context)
+            : StreamInputReader(), fileStream(file), file(file) {
         stream = &fileStream;
         this->context = context;
         init();
     }
 
     void fetch() override {
-        if (fileStream.is_open())
-        {
+        if (fileStream.is_open()) {
             StreamInputReader::fetch();
         }
     }

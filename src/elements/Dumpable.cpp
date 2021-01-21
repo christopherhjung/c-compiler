@@ -3,3 +3,4 @@
 //
 
 #include "Dumpable.h"
+#include "../parser/PrettyPrinter.h"

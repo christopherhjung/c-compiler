@@ -4,26 +4,18 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "DirectDeclarator.h"
 
-class ParameterDirectDeclarator : public DirectDeclarator{
+class PrettyPrinter;
+
+class ParameterTypeList;
+
+class ParameterDirectDeclarator : public DirectDeclarator {
 public:
-    DirectDeclarator* directDeclarator = nullptr;
-    ParameterTypeList* parameterTypeList = nullptr;
+    DirectDeclarator *directDeclarator = nullptr;
+    ParameterTypeList *parameterTypeList = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "(";
-        if(directDeclarator != nullptr){
-            directDeclarator->dump(printer);
-        }
-
-        if(parameterTypeList != nullptr){
-            printer << "(";
-            parameterTypeList->dump(printer);
-            printer << ")";
-        }
-        printer << ")";
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

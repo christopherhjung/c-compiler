@@ -14,15 +14,16 @@ public:
     int16_t current;
     int32_t accept;
     uint32_t offset;
-    InputReader* reader;
-    virtual void reset(InputReader* reader){
+    InputReader *reader;
+
+    virtual void reset(InputReader *reader) {
         this->reader = reader;
         this->reader->reset(0);
     }
 
-    virtual bool hasNextToken(Token& token) = 0;
+    virtual bool hasNextToken(Token &token) = 0;
 
-    virtual Error* getError() = 0;
+    virtual Error *getError() = 0;
 
     virtual bool isError() = 0;
 };

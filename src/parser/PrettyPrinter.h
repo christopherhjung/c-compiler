@@ -7,22 +7,22 @@
 #include <iostream>
 
 class PrettyPrinter {
-    std::ostream& stream;
+    std::ostream &stream;
     int32_t depth = 0;
     bool needIndent = true;
 public:
-    PrettyPrinter(std::ostream& stream) : stream(stream){
+    PrettyPrinter(std::ostream &stream) : stream(stream) {
 
     }
 
-    void print(const std::string& str){
+    void print(const std::string &str) {
         stream << str;
     }
 
-    PrettyPrinter& operator<<(const std::string& str){
-        if(needIndent){
+    PrettyPrinter &operator<<(const std::string &str) {
+        if (needIndent) {
             needIndent = false;
-            for(int32_t i = depth ; i > 0  ; i-- ){
+            for (int32_t i = depth; i > 0; i--) {
                 stream << "\t";
             }
         }
@@ -30,20 +30,20 @@ public:
         return *this;
     }
 
-    void increaseDepth(){
+    void increaseDepth() {
         depth++;
     }
 
-    void decreaseDepth(){
+    void decreaseDepth() {
         depth--;
     }
 
-    void newLine(){
+    void newLine() {
         stream << "\n";
         needIndent = true;
     }
 
-    void withoutIndent(){
+    void withoutIndent() {
         needIndent = false;
     }
 };

@@ -4,23 +4,17 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Expression.h"
 
-class IfSmall : public Expression{
+class PrettyPrinter;
+
+class IfSmall : public Expression {
 public:
-    Expression* condition = nullptr;
-    Expression* left = nullptr;
-    Expression* right = nullptr;
+    Expression *condition = nullptr;
+    Expression *left = nullptr;
+    Expression *right = nullptr;
 
-    void dump(PrettyPrinter& printer) override{
-        printer << "(";
-        condition->dump(printer);
-        printer << " ? ";
-        left->dump(printer);
-        printer << " : ";
-        right->dump(printer);
-        printer << ")";
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

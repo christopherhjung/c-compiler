@@ -1,4 +1,4 @@
-#include "lexer/LexerGenerator.h"
+#include "src/lexer/LexerGenerator.h"
 
 int main(int, char ** const args) {
     LexerGenerator generator;

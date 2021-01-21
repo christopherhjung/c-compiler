@@ -4,13 +4,13 @@
 
 #pragma once
 
-#include "Types.h"
+#include "SuperType.h"
 
-class ProxyType : public SuperType{
+class ProxyType : public SuperType {
 public:
-    const SuperType* inner;
+    const SuperType *inner;
 
-    explicit ProxyType(const SuperType* inner, bool assignable) : SuperType(assignable), inner(inner){
+    explicit ProxyType(const SuperType *inner, bool assignable) : SuperType(assignable), inner(inner) {
 
     }
 
@@ -18,19 +18,19 @@ public:
         return inner->equals(other);
     }
 
-    const SimpleType* asSimpleType() const override{
+    const SimpleType *asSimpleType() const override {
         return inner->asSimpleType();
     }
 
-    const MethodType* asMethodType() const override{
+    const MethodType *asMethodType() const override {
         return inner->asMethodType();
     }
 
-    const PointerType* asPointerType() const override{
+    const PointerType *asPointerType() const override {
         return inner->asPointerType();
     }
 
-    const SuperStructType* asSuperStructType() const override{
+    const SuperStructType *asSuperStructType() const override {
         return inner->asSuperStructType();
     }
 };

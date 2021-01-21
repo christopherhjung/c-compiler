@@ -3,12 +3,14 @@
 //
 
 #include "Block.h"
+#include "Util.h"
+#include "../parser/PrettyPrinter.h"
 
-void Block::dump(PrettyPrinter& printer){
+void Block::dump(PrettyPrinter &printer) {
     printer << "{";
     printer.increaseDepth();
     printer.newLine();
-    for(auto child : children){
+    for (auto child : children) {
         printStatement(printer, child);
         printer.newLine();
     }
@@ -16,8 +18,8 @@ void Block::dump(PrettyPrinter& printer){
     printer << "}";
 }
 
-llvm::BasicBlock* Block::create(TransformContext &context, llvm::BasicBlock *start){
-    for( auto child  : children ){
+llvm::BasicBlock *Block::create(TransformContext &context, llvm::BasicBlock *start) {
+    for (auto child  : children) {
         start = child->create(context, start);
     }
 

@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include "../parser/PrettyPrinter.h"
+class PrettyPrinter;
 
-class Dumpable{
+class Dumpable {
 public:
-    virtual void dump(PrettyPrinter& printer) = 0;
+    virtual void dump(PrettyPrinter &printer) = 0;
 };
 
 

@@ -3,3 +3,14 @@
 //
 
 #include "IfSmall.h"
+#include "../parser/PrettyPrinter.h"
+
+void IfSmall::dump(PrettyPrinter &printer) {
+    printer << "(";
+    condition->dump(printer);
+    printer << " ? ";
+    left->dump(printer);
+    printer << " : ";
+    right->dump(printer);
+    printer << ")";
+}

@@ -5,7 +5,6 @@
 #pragma once
 
 
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -18,10 +17,10 @@ class StringInputReader : public InputReader {
     uint32_t offset = 0;
     int16_t current;
 
-    void assign(){
-        if(index + offset >= getSize()){
+    void assign() {
+        if (index + offset >= getSize()) {
             current = 256;
-        }else{
+        } else {
             current = str[index + offset];
         }
     }
@@ -32,26 +31,26 @@ public:
     }
 
 public:
-    StringInputReader(){
+    StringInputReader() {
 
     }
 
-    StringInputReader(const std::string& str){
+    StringInputReader(const std::string &str) {
         reset(str);
     }
 
-    void reset(const std::string& str){
+    void reset(const std::string &str) {
         this->str = str;
         index = 0;
         offset = 0;
         assign();
     };
 
-    int16_t peek() override{
+    int16_t peek() override {
         return current;
     }
 
-    int16_t next() override{
+    int16_t next() override {
         offset++;
         assign();
         return current;
@@ -61,7 +60,7 @@ public:
         return str.length();
     }
 
-    int16_t get(uint32_t index) override{
+    int16_t get(uint32_t index) override {
         return str[this->index + index];
     }
 
@@ -77,7 +76,7 @@ public:
 
     std::string readString(uint32_t count) override {
         char arr[count];
-        const char* src = str.c_str();
+        const char *src = str.c_str();
         std::copy(src + index, src + index + count, arr);
         return std::string(arr, count);
     }

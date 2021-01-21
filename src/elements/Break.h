@@ -5,12 +5,13 @@
 #pragma once
 
 
-#include "Elements.h"
-class Break : public Statement{
+#include "Statement.h"
+
+class PrettyPrinter;
+
+class Break : public Statement {
 public:
-    void dump(PrettyPrinter& printer) override{
-        printer << "break";
-    }
+    void dump(PrettyPrinter &printer) override;
 };
 
 

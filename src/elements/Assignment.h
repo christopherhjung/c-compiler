@@ -4,15 +4,17 @@
 
 #pragma once
 
-#include "Elements.h"
+#include "Binary.h"
 
-class Assignment : public Binary{
+class PrettyPrinter;
+
+class Assignment : public Binary {
 public:
-    llvm::Value* createRightValue(TransformContext &context) override;
+    llvm::Value *createRightValue(TransformContext &context) override;
 
-    llvm::Value* create(TransformContext &context) override;
+    llvm::Value *create(TransformContext &context) override;
 
-    llvm::BasicBlock* create(TransformContext &context, llvm::BasicBlock* start) override;
+    llvm::BasicBlock *create(TransformContext &context, llvm::BasicBlock *start) override;
 };
 
 

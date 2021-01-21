@@ -1,6 +1,8 @@
 #pragma once
+
 #include "Lexer.h"
 #include "LexerControl.h"
+
 class LexerProxy : public Lexer {
 
 public:
@@ -10,10 +12,10 @@ public:
     Error *errorObj;
     char last = 0;
     bool finish = false;
-    LexerControl& control;
+    LexerControl &control;
     std::string value;
 
-    LexerProxy(LexerControl& control): control(control){
+    LexerProxy(LexerControl &control) : control(control) {
 
     }
 
