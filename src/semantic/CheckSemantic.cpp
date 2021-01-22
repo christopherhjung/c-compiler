@@ -4,6 +4,8 @@
 
 #include "CheckSemantic.h"
 #include "../types/Types.h"
+#include "../common.h"
+
 
 void Semantic::checkType(const Expression *element, const SuperType *superType) {
     if (element->superType == nullptr || !element->superType->equals(superType)) {
@@ -216,12 +218,14 @@ void Semantic::enter0(Expression *expression) {
             enter(expr);
         }
 
+#ifdef DEBUG
         if(auto printf = dynamic_cast<const Identifier*>(call->target)){
             if(*printf->value == "printf"){
                 call->superType = VoidType;
                 return;
             }
         }
+#endif
 
         enter(call->target);
         if (auto methodType = call->target->superType->asMethodType()) {

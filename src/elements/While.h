@@ -17,6 +17,8 @@ public:
     Statement *body = nullptr;
 
     void dump(PrettyPrinter &printer) override;
+
+    void create(TransformContext &context) override;
 };
 
 

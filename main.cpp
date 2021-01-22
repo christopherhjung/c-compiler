@@ -11,6 +11,7 @@
 //#define MEASURE
 #define OUTPUT
 
+
 #include "src/lexer/lexerCore.h"
 
 #include "src/parser/SimpleParser.h"

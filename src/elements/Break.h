@@ -12,6 +12,8 @@ class PrettyPrinter;
 class Break : public Statement {
 public:
     void dump(PrettyPrinter &printer) override;
+
+    void create(TransformContext &context) override;
 };
 
 

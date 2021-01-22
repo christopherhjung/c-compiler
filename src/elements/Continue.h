@@ -12,6 +12,8 @@ class Continue : public Statement {
 public:
 
     void dump(PrettyPrinter &printer) override;
+
+    void create(TransformContext &context) override;
 };
 
 

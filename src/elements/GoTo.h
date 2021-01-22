@@ -14,6 +14,8 @@ public:
     const std::string *name;
 
     void dump(PrettyPrinter &printer) override;
+
+    void create(TransformContext &context) override;
 };
 
 

@@ -18,6 +18,8 @@
 #include "../types/Types.h"
 #include "../lexer/CatchingLexerProxy.h"
 
+#include "../common.h"
+
 class TransformContext {
     llvm::IRBuilder<> &allocBuilder;
 public:
@@ -28,9 +30,15 @@ public:
     llvm::Function *currentFunction;
     llvm::BasicBlock *currentBlock;
 
+    llvm::BasicBlock *whileCondition;
+    llvm::BasicBlock *whileEnd;
+
     std::queue<Scope *> scopeQueue;
     Scope *mainScope;
+    Scope *functionScope;
     Scope *currentScope;
+
+    std::unordered_map<const std::string*, llvm::BasicBlock*> jumps;
 
 
     TransformContext(llvm::LLVMContext &llvmContext, llvm::Module &module, llvm::IRBuilder<> &builder,
@@ -39,7 +47,7 @@ public:
     }
 
     void init() {
-
+#ifdef DEBUG
         const std::string printfName = "printf";
         std::vector<llvm::Type *> argumentTypes;
         argumentTypes.push_back(builder.getInt8PtrTy());
@@ -53,6 +61,7 @@ public:
 
 
         mainScope->functions[lookupSymbol(printfName)] = funcPrintf;
+#endif
     }
 
     llvm::BasicBlock *createBasicBlock(const std::string &name) {
@@ -78,8 +87,18 @@ public:
         return nullptr;
     }
 
+    llvm::BasicBlock *getJumpTarget(const std::string *target){
+        auto find = jumps.find(target);
+        if(find != jumps.end()){
+            return find->second;
+        }else{
+            return jumps[target] = createBasicBlock(*target);
+        }
+    }
+
     llvm::BasicBlock *
     createFunction(const std::string &name, llvm::Type *returnType, std::vector<llvm::Type *> &paramTypes) {
+        jumps.clear();
         llvm::FunctionType *functionType = llvm::FunctionType::get(returnType, paramTypes, /* isVarArg */ false);
 
         /* Create a function declaration for 'fac' */

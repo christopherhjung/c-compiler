@@ -14,6 +14,10 @@ public:
     Expression *index = nullptr;
 
     void dump(PrettyPrinter &printer) override;
+
+    llvm::Value *createRightValue(TransformContext &context) override;
+
+    llvm::Value *createLeftValue(TransformContext &context) override;
 };
 
 

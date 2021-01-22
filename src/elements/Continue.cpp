@@ -4,7 +4,12 @@
 
 #include "Continue.h"
 #include "../parser/PrettyPrinter.h"
+#include "../transform/TransformContext.h"
 
 void Continue::dump(PrettyPrinter &printer) {
     printer << "continue";
+}
+
+void Continue::create(TransformContext &context){
+    context.builder.CreateBr(context.whileCondition);
 }
