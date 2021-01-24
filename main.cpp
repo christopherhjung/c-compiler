@@ -7,10 +7,10 @@
 
 #include "src/reader/StreamInputReader.h"
 #include "src/reader/FileInputReader.h"
+#include "core.cpp"
 
 //#define MEASURE
 #define OUTPUT
-
 
 #include "src/lexer/lexerCore.h"
 
@@ -21,68 +21,7 @@
 #include "src/transform/TransformContext.h"
 #include "src/generated/GeneratedLexer.h"
 
-int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, std::string filename) {
-    llvm::LLVMContext context;
-    llvm::Module module("shsh", context);
-    llvm::IRBuilder<> builder(context);
-    llvm::IRBuilder<> allocBuilder(context);
 
-    TransformContext transformContext(context, module, builder, allocBuilder);
-
-    try {
-        unit->create(transformContext);
-    } catch (TransformException &e) {
-        std::cerr << ": error: semantic: (" << e.file << ":" << e.lineNumber << ":1) " << e.msg << std::endl;
-    }
-
-    transformContext.dump(filename);
-    return 0;
-}
-
-int runParser(InputReader *fileInputReader, std::ostream &out, std::ostream &err, bool printAST, bool compile) {
-    GeneratedLexer lexer;
-    CatchingLexerProxy proxy(lexer);
-    SimpleParser parser(&proxy);
-
-    try {
-        parser.init(fileInputReader);
-        auto *unit = parser.parse();
-
-        try {
-            Semantic checker;
-            checker.check(unit);
-
-            if (printAST) {
-                PrettyPrinter printer(out);
-                unit->dump(printer);
-                out << std::endl;
-            }
-
-
-            if(compile){
-                std::string source = fileInputReader->getContext();
-
-                std::regex filePattern(R"(([^\\/]+)\..+?$)");
-                std::smatch match;
-                if(std::regex_search(source,match, filePattern)){
-                    std::string filename = match[1];
-                    filename += ".ll";
-                    return runCompiler(unit, out, err, filename);
-                }
-            }
-        } catch (SemanticException &e) {
-            err << e.location << ": error: semantic: (CheckSemantic.cpp:" << e.lineNumber << ":1) " << e.msg << std::endl;
-            return 1;
-        } catch (std::exception &e) {
-            err << e.what() << std::endl;
-            return 1;
-        }
-        return 0;
-    } catch (ParseException &e) {
-        err << e.error << " parser: " << std::endl;
-        return 1;
-    }
-}
 
 
 

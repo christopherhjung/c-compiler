@@ -12,7 +12,7 @@ struct { int somevalue; char nextdecl; } value21;
 struct { int somevalue; struct { int inner; }; } nested;
 struct { int somevalue; struct { int inner; } id; } nested2;
 struct name { int foo; };
-struct name2 { int foo; } value3;
+struct withname { int foo; } value3;
 void nm(int (void));
 void nm(int (x)(void));
 

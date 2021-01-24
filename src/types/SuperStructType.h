@@ -12,6 +12,7 @@ class SuperStructType : public SuperType {
 public:
     std::unordered_map<const std::string *, int> map;
     std::vector<const SuperType *> types;
+    int size = -1;
 
     explicit SuperStructType() {
 
@@ -19,6 +20,17 @@ public:
 
     explicit SuperStructType(bool assignable) : SuperType(assignable) {
 
+    }
+
+    int getSize() override{
+        if(size == -1){
+            size = 0;
+            for( auto type : types ){
+                size += const_cast<SuperType*>(type)->getSize();
+            }
+        }
+
+        return size;
     }
 
     bool equals(const SuperType *other) const override {

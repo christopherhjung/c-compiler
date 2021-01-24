@@ -5,6 +5,7 @@
 #pragma once
 
 #include "SuperType.h"
+#include "SuperStructType.h"
 
 class Scope;
 
@@ -15,6 +16,10 @@ public:
 
     explicit PendingSuperStructType(const std::string *name, Scope *scope) : name(name), scope(scope) {
 
+    }
+
+    int getSize() override{
+        return const_cast<SuperStructType*>(asSuperStructType())->getSize();
     }
 
     bool equals(const SuperType *other) const override;

@@ -7,7 +7,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include "FirstTest.h"
 
 #include <filesystem>
 #include <iostream>
@@ -16,8 +15,8 @@
 #include <string>
 
 #include "../src/reader/FileInputReader.h"
-#include "../src/parser/parserCore.h"
 #include "../src/lexer/lexerCore.h"
+#include "../core.cpp"
 
 std::string filter = "";
 
@@ -151,11 +150,11 @@ int main(int argc, char** argv){
     });
 
     errors += check("print_ast", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
-        return runParser(inputReader, out, err, true);
+        return runParser(inputReader, out, err, true, false);
     });
 
     errors += check("semantic_analysis", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
-        return runParser(inputReader, out, err, true);
+        return runParser(inputReader, out, err, true, false);
     });
 
     return errors;

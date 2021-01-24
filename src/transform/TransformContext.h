@@ -38,6 +38,8 @@ public:
     Scope *functionScope;
     Scope *currentScope;
 
+    std::unordered_map<const SuperType*, llvm::Type*> typeLookup;
+
     std::unordered_map<const std::string*, llvm::BasicBlock*> jumps;
 
 
@@ -82,6 +84,22 @@ public:
             }
         } else if (auto pointerType = type->asPointerType()) {
             return llvm::PointerType::getUnqual(getType(pointerType->subType));
+        } else if( auto structType = type->asSuperStructType()){
+            auto find = typeLookup.find(structType);
+
+            if(find != typeLookup.end()){
+                return find->second;
+            }
+
+            auto llvmStructType = llvm::StructType::create(llvmContext, "struct.S");
+            typeLookup[structType] = llvmStructType;
+
+            std::vector<llvm::Type*> types;
+            for( auto type : structType->types ){
+                types.push_back(getType(type));
+            }
+
+            return llvmStructType;
         }
 
         return nullptr;
@@ -92,7 +110,7 @@ public:
         if(find != jumps.end()){
             return find->second;
         }else{
-            return jumps[target] = createBasicBlock(*target);
+            return jumps[target] = createBasicBlock("label-" + *target);
         }
     }
 

@@ -8,11 +8,8 @@
 #include "../elements/Identifier.h"
 
 class MethodType;
-
 class PointerType;
-
 class SuperStructType;
-
 class SimpleType;
 
 class SuperType : public Comparable<SuperType> {
@@ -25,6 +22,10 @@ public:
     SuperType(bool assignable) : assignable(assignable) {
 
     };
+
+    virtual int getSize(){
+        return 4;
+    }
 
     virtual const MethodType *asMethodType() const;
 

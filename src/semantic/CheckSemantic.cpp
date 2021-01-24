@@ -520,7 +520,7 @@ const SuperType *Semantic::enter0(Declaration *declaration) {
         auto type = enter(declaration);
         declaration->superType = type;
         if (type != nullptr) {
-            if (type->identifier == nullptr) {
+            if (type->asSimpleType() && type->identifier == nullptr) {
                 ERROR(declaration->location);
             }
 
