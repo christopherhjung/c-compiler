@@ -54,7 +54,7 @@ include_directories(${LLVM_INCLUDES})
 link_libraries(${LLVM_LIBS})
 
 add_executable(c4 ${source_list} main.cpp )
-add_executable(build ${source_list} build.cpp src/types/Types.cpp src/elements/JumpingCompare.cpp src/elements/JumpingCompare.h src/common.h core.cpp)
+add_executable(build ${source_list} build.cpp src/types/Types.cpp src/elements/JumpingCompare.cpp src/elements/JumpingCompare.h src/common.h)
 add_executable(testC4 ${source_list} tests/main.cpp)
 
 add_executable(llvmExample examples/custom.cpp)
