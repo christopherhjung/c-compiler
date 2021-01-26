@@ -13,5 +13,5 @@ void GoTo::dump(PrettyPrinter &printer) {
 
 void GoTo::create(TransformContext &context){
     context.builder.CreateBr(context.getJumpTarget(name));
-    context.setCurrentBlock(context.createBasicBlock("after-goto"));
+    context.setCurrentBlock(context.unreachable);
 }

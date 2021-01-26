@@ -34,11 +34,20 @@ void Method::create(TransformContext &context) {
         declared = reinterpret_cast<llvm::Function*>(context.mainScope->types[methodName].value);
     }
 
-    llvm::BasicBlock* entry;
 
-    entry = llvm::BasicBlock::Create(context.llvmContext, "entry", declared, 0);
+    auto unreachable = llvm::BasicBlock::Create(context.llvmContext, "unreachable", declared, 0);
+    context.unreachable = unreachable;
+    context.setCurrentBlock(unreachable);
+    llvm::Type *returnType = context.builder.getCurrentFunctionReturnType();
+    if (returnType->isVoidTy()) {
+        context.builder.CreateRetVoid();
+    } else {
+        context.builder.CreateRet(llvm::Constant::getNullValue(declared->getReturnType()));
+    }
+
     context.currentFunction = declared;
     context.functionScope = body->scope;
+    llvm::BasicBlock* entry = context.createBasicBlock("entry");
     context.setCurrentBlock(entry);
     context.allocBuilder.SetInsertPoint(entry);
 

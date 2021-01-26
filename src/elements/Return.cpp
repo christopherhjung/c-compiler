@@ -21,4 +21,6 @@ void Return::create(TransformContext &context) {
     }else{
         context.builder.CreateRet(value->createRightValue(context));
     }
+
+    context.setCurrentBlock(context.unreachable);
 }

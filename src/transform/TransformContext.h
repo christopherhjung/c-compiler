@@ -34,6 +34,8 @@ public:
     llvm::BasicBlock *whileCondition = nullptr;
     llvm::BasicBlock *whileEnd = nullptr;
 
+    llvm::BasicBlock *unreachable = nullptr;
+
     std::queue<Scope *> scopeQueue;
     Scope *mainScope = nullptr;
     Scope *functionScope = nullptr;

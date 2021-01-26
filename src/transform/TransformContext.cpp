@@ -28,7 +28,7 @@
 
 
 llvm::BasicBlock *TransformContext::createBasicBlock(const std::string &name) {
-    auto bb = llvm::BasicBlock::Create(llvmContext, name, currentFunction, 0);
+    auto bb = llvm::BasicBlock::Create(llvmContext, name, currentFunction, unreachable);
     return bb;
 }
 

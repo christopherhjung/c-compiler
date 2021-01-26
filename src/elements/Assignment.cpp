@@ -27,6 +27,7 @@ llvm::Value *Assignment::createRightValue(TransformContext &context) {
         value = context.builder.CreatePointerCast(right->createRightValue(context), context.getType(left->semanticType));
     }
 
-    return context.builder.CreateStore(value, left->createLeftValue(context));
+    context.builder.CreateStore(value, left->createLeftValue(context));
+    return value;
 }
 
