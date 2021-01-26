@@ -19,7 +19,7 @@ void Scope::setLabel(const std::string *label) {
 llvm::Function* Scope::getFunction(const std::string* str){
     auto current = types.find(str);
     if (current != types.end()) {
-        return current->second.function;
+        return reinterpret_cast<llvm::Function*>(current->second.value);
     } else if (parent != nullptr) {
         return parent->getFunction(str);
     }

@@ -35,7 +35,7 @@ void Declaration::create(TransformContext &context) {
 
         context.createFunctionDecl(*methodName, returnType, paramTypes);
 
-        context.mainScope->types[methodName].function = context.currentFunction;
+        context.mainScope->types[methodName].value = context.currentFunction;
     }else if(auto structType = dynamic_cast<StructType*>(type)){
         context.getType(superType);
     }else{

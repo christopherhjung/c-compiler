@@ -39,7 +39,7 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
 llvm::Value *Unary::createLeftValue(TransformContext &context){
     switch (op->id) {
         case STAR:
-            return context.builder.CreateLoad(value->createRightValue(context));
+            return value->createRightValue(context);
     }
 
     TRANSFORM_ERROR();

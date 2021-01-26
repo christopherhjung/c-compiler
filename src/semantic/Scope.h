@@ -20,7 +20,7 @@ public:
     bool implementation = false;
     bool defined = false;
     llvm::Value* value;
-    llvm::Function* function;
+    //llvm::Function* function;
 
     Descriptor() {
 
