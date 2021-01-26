@@ -32,8 +32,8 @@ void Method::create(TransformContext &context) {
     auto args = context.currentFunction->arg_begin();
     for(auto type : methodType->types){
         llvm::Argument *arg = args;
-        const std::string* name = type->identifier->value;
         if(!type->equals(VoidType)){
+            const std::string* name = type->identifier->value;
             arg->setName(*name);
             llvm::Value *argPtr = context.resetAllocBuilder().CreateAlloca(arg->getType());
             context.builder.CreateStore(arg, argPtr);
