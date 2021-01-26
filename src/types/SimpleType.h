@@ -5,6 +5,7 @@
 #pragma once
 
 #include "SuperType.h"
+#include "../types/TypeDefines.h"
 
 class SimpleType : public SuperType {
 public:
@@ -16,6 +17,14 @@ public:
 
     explicit SimpleType(int id, bool assignable) : SuperType(assignable), id(id) {
 
+    }
+
+    int getSize() override{
+        if(id == TYPE_INT){
+            return 4;
+        }else{
+            return 1;
+        }
     }
 
     bool equals(const SuperType *other) const override {

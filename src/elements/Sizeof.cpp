@@ -6,6 +6,8 @@
 #include "../parser/PrettyPrinter.h"
 #include "Type.h"
 #include "Declarator.h"
+#include "../types/Types.h"
+#include "../transform/TransformContext.h"
 
 void Sizeof::dump(PrettyPrinter &printer) {
     printer << "(";
@@ -16,4 +18,8 @@ void Sizeof::dump(PrettyPrinter &printer) {
     }
     printer << ")";
     printer << ")";
+}
+
+llvm::Value *Sizeof::createRightValue(TransformContext &context){
+    return context.builder.getInt32(inner->getSize());
 }

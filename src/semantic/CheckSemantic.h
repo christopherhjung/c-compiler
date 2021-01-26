@@ -50,7 +50,7 @@ public:
     void enter(Unary *unary);
 
     void enter(Binary *binary);
-
+    SuperType *enter(Declarator *declarator, Type* type, Location* location);
     SuperType *enter(DirectDeclarator *directDeclarator, SuperType *simpleType);
 
     const SuperType *enter0(Declaration *declaration);

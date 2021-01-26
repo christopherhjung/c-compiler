@@ -278,6 +278,7 @@ void Semantic::enter0(Expression *expression) {
         }
 
     } else if (auto sizeOf = dynamic_cast<Sizeof *>(expression)) {
+        sizeOf->inner = enter(sizeOf->declarator, sizeOf->type, &sizeOf->location);
         sizeOf->superType = IntType;
     } else if (auto ifSmall = dynamic_cast<IfSmall *>(expression)) {
         checkCondition(ifSmall->condition, ifSmall->condition->location);
@@ -535,9 +536,14 @@ const SuperType *Semantic::enter0(Declaration *declaration) {
     return nullptr;
 }
 
+
 SuperType *Semantic::enter(Declaration *declaration) {
+    return enter(declaration->declarator, declaration->type, &declaration->location);
+}
+
+SuperType *Semantic::enter(Declarator *declarator, Type* type, Location* location) {
     SuperType *superType = nullptr;
-    if (auto structType = dynamic_cast<StructType *>(declaration->type)) {
+    if (auto structType = dynamic_cast<StructType *>(type)) {
         auto superStruct = new SuperStructType(true);
 
         if (structType->name != nullptr && structType->declarations.empty()) {
@@ -581,10 +587,7 @@ SuperType *Semantic::enter(Declaration *declaration) {
             superType = superStruct;
         }
     } else {
-        switch (declaration->type->type) {
-            case TYPE_BOOL:
-                superType = new SimpleType(TYPE_BOOL, true);
-                break;
+        switch (type->type) {
             case TYPE_VOID:
                 superType = new SimpleType(TYPE_VOID, true);
                 break;
@@ -598,8 +601,8 @@ SuperType *Semantic::enter(Declaration *declaration) {
     }
 
     if (superType == nullptr) {
-        ERROR(declaration->location);
+        ERROR(*location);
     }
 
-    return enter(declaration->declarator, superType);
+    return enter(declarator, superType);
 }
