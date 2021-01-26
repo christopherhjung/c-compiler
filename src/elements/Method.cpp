@@ -27,11 +27,11 @@ void Method::create(TransformContext &context) {
     }
     const std::string *methodName = declaration->superType->identifier->value;
 
-    llvm::Function* declared = context.mainScope->functions[methodName];
+    llvm::Function* declared = context.mainScope->types[methodName].function;
 
     if(!declared){
         declaration->create(context);
-        declared= context.mainScope->functions[methodName];
+        declared = context.mainScope->types[methodName].function;
     }
 
     llvm::BasicBlock* entry;

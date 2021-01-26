@@ -68,6 +68,16 @@ llvm::Type *TransformContext::getType(const SuperType *type) {
 
         llvmStructType->setBody(types);
         return llvmStructType;
+    }else if(auto methodType = type->asMethodType()){
+        auto returnType = getType(methodType->subType);
+        std::vector<llvm::Type*> paramTypes;
+        for(auto type : methodType->types){
+            if(!type->equals(VoidType)){
+                paramTypes.push_back(getType(type));
+            }
+        }
+
+        return llvm::FunctionType::get(returnType, paramTypes, false);
     }
 
     return nullptr;

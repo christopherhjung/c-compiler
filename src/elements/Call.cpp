@@ -34,8 +34,31 @@ llvm::Value *Call::createRightValue(TransformContext &context){
     //auto methodType = target->superType->asMethodType();
     //std::string* name = methodType->identifier->value;
 
+    llvm::Value* value = target->createLeftValue(context);
+
+
     const std::string* name = dynamic_cast<const Identifier*>(target)->value;
 
-    auto function = context.currentScope->getFunction(name);
+    auto function = context.currentScope->get(name)->function;
+
     return context.builder.CreateCall(function, arguments);
+
+
+
+
+/*
+    auto methodType = target->superType->asMethodType();
+    std::string* name = methodType->identifier->value;
+
+
+
+    llvm::Value* functionValue = target->createLeftValue(context);
+
+
+
+    if(auto function = dynamic_cast<llvm::FunctionCallee*>(functionValue)){
+
+    }
+
+    return context.builder.CreateCall(, arguments);*/
 }

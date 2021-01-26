@@ -20,6 +20,7 @@ public:
     bool implementation = false;
     bool defined = false;
     llvm::Value* value;
+    llvm::Function* function;
 
     Descriptor() {
 
@@ -40,7 +41,7 @@ public:
     std::unordered_map<const std::string *, Descriptor<SuperType>> types;
     std::unordered_map<const std::string *, Descriptor<SuperStructType>> structs;
     std::unordered_map<const std::string *, int> labels;
-    std::unordered_map<const std::string *, llvm::Function*> functions;
+    //std::unordered_map<const std::string *, llvm::Function*> functions;
     Scope *parent = nullptr;
     const SuperType *returnType = nullptr;
 

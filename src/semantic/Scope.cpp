@@ -17,9 +17,9 @@ void Scope::setLabel(const std::string *label) {
 }
 
 llvm::Function* Scope::getFunction(const std::string* str){
-    auto current = functions.find(str);
-    if (current != functions.end()) {
-        return current->second;
+    auto current = types.find(str);
+    if (current != types.end()) {
+        return current->second.function;
     } else if (parent != nullptr) {
         return parent->getFunction(str);
     }
