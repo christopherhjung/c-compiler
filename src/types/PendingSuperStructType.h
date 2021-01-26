@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include "SuperType.h"
-#include "SuperStructType.h"
+#include "SemanticType.h"
+#include "SemanticStructType.h"
 
 class Scope;
 
-class PendingSuperStructType : public SuperType {
+class PendingSuperStructType : public SemanticType {
 public:
     const std::string *name;
     Scope *scope;
@@ -18,9 +18,9 @@ public:
 
     }
 
-    bool equals(const SuperType *other) const override;
+    bool equals(const SemanticType *other) const override;
 
-    const SuperStructType *asSuperStructType() const override;
+    const SemanticStructType *asSuperStructType() const override;
 
     bool isAssignable() const override;
 };

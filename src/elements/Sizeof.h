@@ -15,7 +15,7 @@ class Declarator;
 class Sizeof : public Expression {
 public:
     Type *type = nullptr;
-    SuperType *inner = nullptr;
+    SemanticType *inner = nullptr;
     Declarator *declarator = nullptr;
 
     llvm::Value *createRightValue(TransformContext &context) override;

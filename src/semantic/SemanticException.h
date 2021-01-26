@@ -11,20 +11,20 @@
 class SemanticException : public std::exception {
 public:
     const Location location;
-    std::string msg = "";
-    int32_t lineNumber = 0;
+    std::string msg;
+    int32_t lineNumber;
 
-    explicit SemanticException(const Location &location) : location(location) {
+    explicit SemanticException(const Location &location) : location(location) , msg(""), lineNumber(0) {
 
     }
 
-    explicit SemanticException(const Location &location, int32_t lineNumber) : location(location),
+    explicit SemanticException(const Location &location, int32_t lineNumber) : location(location), msg(""),
                                                                                lineNumber(lineNumber) {
 
     }
 
     explicit SemanticException(const Location &location, const std::string &msg, int32_t lineNumber) : location(
-            location), lineNumber(lineNumber), msg(msg) {
+            location), msg(msg), lineNumber(lineNumber) {
 
     }
 };

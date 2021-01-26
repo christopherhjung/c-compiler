@@ -34,13 +34,13 @@ llvm::Value *Call::createRightValue(TransformContext &context){
     llvm::Value* value = target->createLeftValue(context);
 
     llvm::Type* type = value->getType();
-    auto functionSuperType = target->superType;
+    auto functionSemanticType = target->semanticType;
     if(type->getNumContainedTypes() == 1 && type->getContainedType(0)->isPointerTy()){
         value = context.builder.CreateLoad(value);
-        functionSuperType = functionSuperType->asPointerType()->subType;
+        functionSemanticType = functionSemanticType->asPointerType()->subType;
     }
 
-    auto functionType = reinterpret_cast<llvm::FunctionType*>(context.getType(functionSuperType));
+    auto functionType = reinterpret_cast<llvm::FunctionType*>(context.getType(functionSemanticType));
     auto function = llvm::FunctionCallee(functionType,value);
     return context.builder.CreateCall(function, arguments);
 }

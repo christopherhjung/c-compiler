@@ -5,7 +5,7 @@
 #include "MethodType.h"
 #include "../elements/Call.h"
 
-const SuperType *MethodType::call(const Call *call) const {
+const SemanticType *MethodType::call(const Call *call) const {
     if (call) {
         if (types.size() != call->values.size()) {
             return nullptr;
@@ -13,7 +13,7 @@ const SuperType *MethodType::call(const Call *call) const {
         int min = std::min(types.size(), call->values.size());
 
         for (int i = 0; i < min; i++) {
-            if (!types[i]->equals(call->values[i]->superType)) {
+            if (!types[i]->equals(call->values[i]->semanticType)) {
                 return nullptr;
             }
         }
@@ -24,18 +24,18 @@ const SuperType *MethodType::call(const Call *call) const {
     return nullptr;
 }
 
-bool MethodType::equals(const SuperType *other) const {
-    if (auto superType = other->asMethodType()) {
-        if (types.empty() || superType->types.empty()) {
+bool MethodType::equals(const SemanticType *other) const {
+    if (auto semanticType = other->asMethodType()) {
+        if (types.empty() || semanticType->types.empty()) {
             return true;
         }
 
-        if (types.size() != superType->types.size()) {
+        if (types.size() != semanticType->types.size()) {
             return false;
         }
 
-        for (unsigned long i = 0; i < superType->types.size(); i++) {
-            if (!types[i]->equals(superType->types[i])) {
+        for (unsigned long i = 0; i < semanticType->types.size(); i++) {
+            if (!types[i]->equals(semanticType->types[i])) {
                 return false;
             }
         }

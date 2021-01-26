@@ -62,7 +62,7 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
 llvm::Value *Binary::createLeftValue(TransformContext &context){
     if(op->id == ARROW || op->id == DOT){
         llvm::Value *value = left->createLeftValue(context);
-        auto aType = left->superType;
+        auto aType = left->semanticType;
 
         if(op->id == ARROW){
             value = context.builder.CreateLoad(value);

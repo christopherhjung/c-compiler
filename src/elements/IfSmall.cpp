@@ -22,7 +22,7 @@ llvm::Value *IfSmall::createRightValue(TransformContext &context) {
     auto end = context.createBasicBlock("end");
     condition->createConditionBranch(context, trueBlock, falseBlock);
 
-    auto value = context.resetAllocBuilder().CreateAlloca(context.getType(left->superType));
+    auto value = context.resetAllocBuilder().CreateAlloca(context.getType(left->semanticType));
 
     context.setCurrentBlock(trueBlock);
     context.builder.CreateStore(left->createRightValue(context), value);

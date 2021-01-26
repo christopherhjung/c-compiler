@@ -9,17 +9,17 @@
 
 class MethodType;
 class PointerType;
-class SuperStructType;
+class SemanticStructType;
 class SimpleType;
 
-class SuperType : public Comparable<SuperType> {
+class SemanticType : public Comparable<SemanticType> {
 public:
     bool assignable = false;
     const Identifier *identifier = nullptr;
 
-    SuperType() {};
+    SemanticType() {};
 
-    SuperType(bool assignable) : assignable(assignable) {
+    SemanticType(bool assignable) : assignable(assignable) {
 
     };
 
@@ -27,7 +27,7 @@ public:
 
     virtual const PointerType *asPointerType() const;
 
-    virtual const SuperStructType *asSuperStructType() const;
+    virtual const SemanticStructType *asSuperStructType() const;
 
     virtual const SimpleType *asSimpleType() const;
 

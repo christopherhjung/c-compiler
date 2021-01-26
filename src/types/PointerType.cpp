@@ -4,9 +4,9 @@
 
 #include "PointerType.h"
 #include "ComplexType.h"
-#include "SuperType.h"
+#include "SemanticType.h"
 
-bool PointerType::equals(const SuperType *other) const {
+bool PointerType::equals(const SemanticType *other) const {
     if (auto simpleOther = other->asPointerType()) {
         return subType->equals(simpleOther->subType);
     }

@@ -21,7 +21,7 @@ public:
     Scope *currentScope = mainScope;
     Scope *methodScope = nullptr;
 
-    void checkType(const Expression *element, const SuperType *superType);
+    void checkType(const Expression *element, const SemanticType *semanticType);
 
     void check(Unit *element);
 
@@ -41,7 +41,7 @@ public:
 
     void enter(Return *returnStatement);
 
-    bool isAssignable(const SuperType *target, const SuperType *source);
+    bool isAssignable(const SemanticType *target, const SemanticType *source);
 
     void enter(Expression *expression);
 
@@ -50,10 +50,10 @@ public:
     void enter(Unary *unary);
 
     void enter(Binary *binary);
-    SuperType *enter(Declarator *declarator, Type* type, Location* location);
-    SuperType *enter(DirectDeclarator *directDeclarator, SuperType *simpleType);
+    SemanticType *enter(Declarator *declarator, Type* type, Location* location);
+    SemanticType *enter(DirectDeclarator *directDeclarator, SemanticType *simpleType);
 
-    const SuperType *enter0(Declaration *declaration);
+    const SemanticType *enter0(Declaration *declaration);
 
-    SuperType *enter(Declaration *declaration);
+    SemanticType *enter(Declaration *declaration);
 };

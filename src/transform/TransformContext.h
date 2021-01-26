@@ -22,11 +22,11 @@
 
 class TransformContext {
 public:
-    llvm::IRBuilder<> &allocBuilder;
 
     llvm::LLVMContext &llvmContext;
     llvm::Module &module;
     llvm::IRBuilder<> &builder;
+    llvm::IRBuilder<> &allocBuilder;
 
     llvm::Function *currentFunction = nullptr;
     llvm::BasicBlock *currentBlock = nullptr;
@@ -39,7 +39,7 @@ public:
     Scope *functionScope = nullptr;
     Scope *currentScope = nullptr;
 
-    std::unordered_map<const SuperType*, llvm::Type*> typeLookup;
+    std::unordered_map<const SemanticType*, llvm::Type*> typeLookup;
 
     std::unordered_map<const std::string*, llvm::BasicBlock*> jumps;
 
@@ -53,7 +53,7 @@ public:
 
     llvm::Value *getInt32(const std::string *str);
 
-    llvm::Type *getType(const SuperType *type) ;
+    llvm::Type *getType(const SemanticType *type) ;
 
     llvm::BasicBlock *getJumpTarget(const std::string *target);
 

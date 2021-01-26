@@ -7,7 +7,7 @@
 #include "../transform/TransformContext.h"
 #include "Type.h"
 #include "Declarator.h"
-#include "../types/SuperType.h"
+#include "../types/SemanticType.h"
 #include "StructType.h"
 
 void Declaration::dump(PrettyPrinter &printer) {
@@ -20,10 +20,10 @@ void Declaration::dump(PrettyPrinter &printer) {
 
 void Declaration::create(TransformContext &context) {
     if(context.functionScope){
-        llvm::Type* type = context.getType(superType);
+        llvm::Type* type = context.getType(semanticType);
         auto value = context.resetAllocBuilder().CreateAlloca(type);
-        context.currentScope->types[superType->identifier->value].value = value;
-    }else if(auto methodType = superType->asMethodType()){
+        context.currentScope->types[semanticType->identifier->value].value = value;
+    }else if(auto methodType = semanticType->asMethodType()){
         auto returnType = context.getType(methodType->subType);
         std::vector<llvm::Type*> paramTypes;
         for(auto type : methodType->types){
@@ -37,10 +37,10 @@ void Declaration::create(TransformContext &context) {
 
         context.mainScope->types[methodName].value = context.currentFunction;
     }else if(auto structType = dynamic_cast<StructType*>(type)){
-        context.getType(superType);
+        context.getType(semanticType);
     }else{
-        llvm::Type* type = context.getType(superType);
-        const std::string *name = superType->identifier->value;
+        llvm::Type* type = context.getType(semanticType);
+        const std::string *name = semanticType->identifier->value;
         llvm::GlobalVariable *globalVar = new llvm::GlobalVariable(
                 context.module                                       /* Module & */,
                 type                              /* Type * */,

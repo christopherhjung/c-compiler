@@ -8,13 +8,13 @@
 #include "PointerType.h"
 #include "ProxyType.h"
 #include "SimpleType.h"
-#include "SuperStructType.h"
-#include "SuperType.h"
+#include "SemanticStructType.h"
+#include "SemanticType.h"
 #include "PendingSuperStructType.h"
 
 extern SimpleType *const IntType;
 extern SimpleType *const CharType;
 extern SimpleType *const VoidType;
-extern SuperType *const CharPointerType ;
-extern SuperType *const IntPointerType;
-extern SuperType *const VoidPointerType;
+extern SemanticType *const CharPointerType ;
+extern SemanticType *const IntPointerType;
+extern SemanticType *const VoidPointerType;

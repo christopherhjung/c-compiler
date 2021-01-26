@@ -4,11 +4,10 @@
 
 #include "CheckSemantic.h"
 #include "../types/Types.h"
-#include "../common.h"
 
 
-void Semantic::checkType(const Expression *element, const SuperType *superType) {
-    if (element->superType == nullptr || !element->superType->equals(superType)) {
+void Semantic::checkType(const Expression *element, const SemanticType *semanticType) {
+    if (element->semanticType == nullptr || !element->semanticType->equals(semanticType)) {
         ERROR(element->location);
     }
 }
@@ -126,7 +125,7 @@ void Semantic::enter(Statement *statement) {
 
 void Semantic::checkCondition(Expression *condition, Location &location) {
     enter(condition);
-    if (condition->superType->asSuperStructType()) {
+    if (condition->semanticType->asSuperStructType()) {
         ERROR(location);
     }
 }
@@ -152,14 +151,14 @@ void Semantic::enter(GoTo *gotoStatement) {
 
 void Semantic::enter(Return *returnStatement) {
     Element *loc;
-    const SuperType *returnType;
+    const SemanticType *returnType;
     if (returnStatement->value == nullptr) {
         returnType = VoidType;
         loc = returnStatement;
     } else {
         enter(returnStatement->value);
         loc = returnStatement->value;
-        returnType = returnStatement->value->superType;
+        returnType = returnStatement->value->semanticType;
     }
 
     if (!isAssignable(currentScope->getReturnType(), returnType)) {
@@ -167,7 +166,7 @@ void Semantic::enter(Return *returnStatement) {
     }
 }
 
-bool Semantic::isAssignable(const SuperType *target, const SuperType *source) {
+bool Semantic::isAssignable(const SemanticType *target, const SemanticType *source) {
     bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
     bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType);
 
@@ -189,7 +188,7 @@ void enter(Break*){
 void Semantic::enter(Expression *expression) {
     enter0(expression);
 
-    if (expression->superType == nullptr) {
+    if (expression->semanticType == nullptr) {
         ERROR(expression->location);
     }
 }
@@ -208,11 +207,11 @@ void Semantic::enter0(Expression *expression) {
             ERROR(identifier->location);
         }
 
-        identifier->superType = desc->superType;
+        identifier->semanticType = desc->semanticType;
     } else if (auto constant = dynamic_cast<Constant *>(expression)) {
-        constant->superType = new SimpleType(TYPE_CHAR, false);
+        constant->semanticType = new SimpleType(TYPE_CHAR, false);
     } else if (auto string = dynamic_cast<StringLiteral *>(expression)) {
-        string->superType = new ProxyType(CharPointerType, false);
+        string->semanticType = new ProxyType(CharPointerType, false);
     } else if (auto call = dynamic_cast<Call *>(expression)) {
         for (auto expr : call->values) {
             enter(expr);
@@ -221,15 +220,15 @@ void Semantic::enter0(Expression *expression) {
 #ifdef DEBUG
         if(auto printf = dynamic_cast<const Identifier*>(call->target)){
             if(*printf->value == "printf"){
-                call->superType = VoidType;
+                call->semanticType = VoidType;
                 return;
             }
         }
 #endif
         enter(call->target);
-        auto methodType = call->target->superType->asMethodType();
+        auto methodType = call->target->semanticType->asMethodType();
         if(!methodType){
-            methodType = call->target->superType->asPointerType()->subType->asMethodType();
+            methodType = call->target->semanticType->asPointerType()->subType->asMethodType();
         }
 
         if (methodType) {
@@ -243,7 +242,7 @@ void Semantic::enter0(Expression *expression) {
                 int min = std::min(methodType->types.size(), call->values.size());
 
                 for (int i = 0; i < min; i++) {
-                    if (!methodType->types[i]->equals(call->values[i]->superType)) {
+                    if (!methodType->types[i]->equals(call->values[i]->semanticType)) {
                         ERROR(call->locations[i]);
                     }
                 }
@@ -253,45 +252,45 @@ void Semantic::enter0(Expression *expression) {
                 ERROR(call->location);
             }
 
-            call->superType = new ProxyType(methodType->subType, false);
+            call->semanticType = new ProxyType(methodType->subType, false);
             return;
         }
 
         ERROR(call->target->location);
     } else if (auto number = dynamic_cast<Number *>(expression)) {
-        number->superType = IntType;
+        number->semanticType = IntType;
     } else if (auto select = dynamic_cast<Select *>(expression)) {
         enter(select->target);
         enter(select->index);
 
-        auto rightType = select->index->superType;
-        auto leftType = select->target->superType;
+        auto rightType = select->index->semanticType;
+        auto leftType = select->target->semanticType;
 
         if (auto pointer = leftType->asPointerType()) {
             if (!IntType->equals(rightType)) {
                 ERROR(select->index->location);
             }
 
-            select->superType = pointer->subType;
+            select->semanticType = pointer->subType;
         } else if (auto pointer = rightType->asPointerType()) {
             if (!IntType->equals(leftType)) {
                 ERROR(select->target->location);
             }
 
-            select->superType = pointer->subType;
+            select->semanticType = pointer->subType;
         }
 
     } else if (auto sizeOf = dynamic_cast<Sizeof *>(expression)) {
         sizeOf->inner = enter(sizeOf->declarator, sizeOf->type, &sizeOf->location);
-        sizeOf->superType = IntType;
+        sizeOf->semanticType = IntType;
     } else if (auto ifSmall = dynamic_cast<IfSmall *>(expression)) {
         checkCondition(ifSmall->condition, ifSmall->condition->location);
         enter(ifSmall->left);
         enter(ifSmall->right);
 
-        checkType(ifSmall->left, ifSmall->right->superType);
+        checkType(ifSmall->left, ifSmall->right->semanticType);
 
-        ifSmall->superType = ifSmall->left->superType;
+        ifSmall->semanticType = ifSmall->left->semanticType;
     } else {
         ERROR(expression->location);
     }
@@ -300,26 +299,26 @@ void Semantic::enter0(Expression *expression) {
 void Semantic::enter(Unary *unary) {
     enter(unary->value);
 
-    auto type = unary->value->superType;
+    auto type = unary->value->semanticType;
     switch (unary->op->id) {
         case STAR:
             if (auto dealloc = type->asPointerType()) {
-                unary->superType = new ProxyType(dealloc->subType, true);
+                unary->semanticType = new ProxyType(dealloc->subType, true);
                 return;
             }
             break;
         case PLUS:
             if (type->asPointerType()) {
-                unary->superType = new ProxyType(type, false);
+                unary->semanticType = new ProxyType(type, false);
                 return;
             }
         case MINUS:
         case NOT:
         case SIZEOF:
-            unary->superType = IntType;
+            unary->semanticType = IntType;
             return;
         case AND:
-            unary->superType = new PointerType(type);
+            unary->semanticType = new PointerType(type);
             return;
     }
 
@@ -329,7 +328,7 @@ void Semantic::enter(Unary *unary) {
 void Semantic::enter(Binary *binary) {
 
     enter(binary->left);
-    auto leftType = binary->left->superType;
+    auto leftType = binary->left->semanticType;
 
     if (leftType == nullptr) {
         ERROR(binary->op->location);
@@ -340,8 +339,8 @@ void Semantic::enter(Binary *binary) {
             if (auto deallocType = leftType->asPointerType()) {
                 if (auto superStruct = deallocType->subType->asSuperStructType()) {
                     if (auto identifier = dynamic_cast<Identifier *>(binary->right)) {
-                        binary->superType = superStruct->member(identifier);
-                        if (binary->superType != nullptr) {
+                        binary->semanticType = superStruct->member(identifier);
+                        if (binary->semanticType != nullptr) {
                             return;
                         }
                     }
@@ -352,8 +351,8 @@ void Semantic::enter(Binary *binary) {
         case DOT:
             if (auto superStruct = leftType->asSuperStructType()) {
                 auto identifier = (const Identifier *) binary->right;
-                binary->superType = superStruct->member(identifier);
-                if (binary->superType != nullptr) {
+                binary->semanticType = superStruct->member(identifier);
+                if (binary->semanticType != nullptr) {
                     return;
                 }
             }
@@ -362,7 +361,7 @@ void Semantic::enter(Binary *binary) {
     }
 
     enter(binary->right);
-    auto rightType = binary->right->superType;
+    auto rightType = binary->right->semanticType;
 
     if (rightType == nullptr) {
         ERROR(binary->op->location);
@@ -387,57 +386,57 @@ void Semantic::enter(Binary *binary) {
     switch (binary->op->id) {
         case STAR:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             }
             break;
         case PLUS:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
                 binary->opInfo = 1;
-                binary->superType = new ProxyType(leftType, false);
+                binary->semanticType = new ProxyType(leftType, false);
                 return;
             } else if (rightType->asPointerType() && leftIsInteger) {
                 binary->opInfo = 2;
-                binary->superType = new ProxyType(rightType, false);
+                binary->semanticType = new ProxyType(rightType, false);
                 return;
             }
             break;
         case MINUS:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
                 binary->opInfo = 1;
-                binary->superType = new ProxyType(leftType, false);
+                binary->semanticType = new ProxyType(leftType, false);
                 return;
             } else if (leftType->asPointerType() && rightType->asPointerType() && leftType->equals(rightType)) {
                 binary->opInfo = 2;
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             }
             break;
         case EQUAL:
         case NOT_EQUAL:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (rightType->asPointerType() && leftIsInteger) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (rightType->equals(VoidPointerType) && leftType->asPointerType()) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftType->equals(VoidPointerType) && rightType->asPointerType()) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftType->equals(rightType)) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             }
             break;
@@ -446,10 +445,10 @@ void Semantic::enter(Binary *binary) {
         case GREATER:
         case GREATER_EQUAL:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftIsPointer && rightIsPointer) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             }
             break;
@@ -457,14 +456,14 @@ void Semantic::enter(Binary *binary) {
         case AND_AND:
         case OR_OR:
             if (leftIsComparable && rightIsComparable) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             }
             break;
         case LEFT_SHIFT:
         case RIGHT_SHIFT:
             if (leftIsInteger && rightIsInteger) {
-                binary->superType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
             }
             break;
@@ -474,7 +473,7 @@ void Semantic::enter(Binary *binary) {
             }
 
             if (isAssignable(leftType, rightType)) {
-                binary->superType = rightType;
+                binary->semanticType = rightType;
                 return;
             }
 
@@ -484,7 +483,7 @@ void Semantic::enter(Binary *binary) {
     ERROR(binary->op->location);
 }
 
-SuperType *Semantic::enter(DirectDeclarator *directDeclarator, SuperType *simpleType) {
+SemanticType *Semantic::enter(DirectDeclarator *directDeclarator, SemanticType *simpleType) {
     if (auto declarator = dynamic_cast<Declarator *>(directDeclarator)) {
 
         for (int i = 0; i < declarator->pointer; i++) {
@@ -524,10 +523,10 @@ SuperType *Semantic::enter(DirectDeclarator *directDeclarator, SuperType *simple
     return simpleType;
 }
 
-const SuperType *Semantic::enter0(Declaration *declaration) {
+const SemanticType *Semantic::enter0(Declaration *declaration) {
     if (declaration != nullptr) {
         auto type = enter(declaration);
-        declaration->superType = type;
+        declaration->semanticType = type;
         if (type != nullptr) {
             if (type->asSimpleType() && type->identifier == nullptr) {
                 ERROR(declaration->location);
@@ -545,21 +544,21 @@ const SuperType *Semantic::enter0(Declaration *declaration) {
 }
 
 
-SuperType *Semantic::enter(Declaration *declaration) {
+SemanticType *Semantic::enter(Declaration *declaration) {
     return enter(declaration->declarator, declaration->type, &declaration->location);
 }
 
-SuperType *Semantic::enter(Declarator *declarator, Type* type, Location* location) {
-    SuperType *superType = nullptr;
+SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* location) {
+    SemanticType *semanticType = nullptr;
     if (auto structType = dynamic_cast<StructType *>(type)) {
-        auto superStruct = new SuperStructType(true);
+        auto superStruct = new SemanticStructType(true);
 
         if (structType->name != nullptr && structType->declarations.empty()) {
             if (!structType->declarations.empty()) {
                 ERROR(structType->location);
             }
 
-            superType = new PendingSuperStructType(structType->name, currentScope);
+            semanticType = new PendingSuperStructType(structType->name, currentScope);
         } else {
             if (structType->name != nullptr && currentScope->getStruct(structType->name) != nullptr) {
                 ERROR(structType->location);
@@ -592,25 +591,25 @@ SuperType *Semantic::enter(Declarator *declarator, Type* type, Location* locatio
             if (structType->name != nullptr) {
                 currentScope->setStruct(structType->name, superStruct);
             }
-            superType = superStruct;
+            semanticType = superStruct;
         }
     } else {
         switch (type->type) {
             case TYPE_VOID:
-                superType = new SimpleType(TYPE_VOID, true);
+                semanticType = new SimpleType(TYPE_VOID, true);
                 break;
             case TYPE_CHAR:
-                superType = new SimpleType(TYPE_CHAR, true);
+                semanticType = new SimpleType(TYPE_CHAR, true);
                 break;
             case TYPE_INT:
-                superType = new SimpleType(TYPE_INT, true);
+                semanticType = new SimpleType(TYPE_INT, true);
                 break;
         }
     }
 
-    if (superType == nullptr) {
+    if (semanticType == nullptr) {
         ERROR(*location);
     }
 
-    return enter(declarator, superType);
+    return enter(declarator, semanticType);
 }

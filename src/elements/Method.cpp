@@ -7,7 +7,7 @@
 #include "../transform/TransformContext.h"
 #include "Block.h"
 #include "Declaration.h"
-#include "../types/SuperType.h"
+#include "../types/SemanticType.h"
 #include "Return.h"
 
 void Method::dump(PrettyPrinter &printer) {
@@ -17,7 +17,7 @@ void Method::dump(PrettyPrinter &printer) {
 }
 
 void Method::create(TransformContext &context) {
-    auto methodType = declaration->superType->asMethodType();
+    auto methodType = declaration->semanticType->asMethodType();
 
     std::vector<llvm::Type*> paramTypes;
     for(auto type : methodType->types){
@@ -25,7 +25,7 @@ void Method::create(TransformContext &context) {
             paramTypes.push_back(context.getType(type));
         }
     }
-    const std::string *methodName = declaration->superType->identifier->value;
+    const std::string *methodName = declaration->semanticType->identifier->value;
 
     llvm::Function* declared = reinterpret_cast<llvm::Function*>(context.mainScope->types[methodName].value);
 

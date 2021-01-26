@@ -11,10 +11,10 @@
 llvm::Value *Assignment::createRightValue(TransformContext &context) {
 
     llvm::Value* value = nullptr;
-    if(left->superType->asPointerType() ){
+    if(left->semanticType->asPointerType() ){
         if(auto number = dynamic_cast<Number*>(right)){
             if(number->getValue() == 0){
-                value = llvm::Constant::getNullValue(context.getType(left->superType));
+                value = llvm::Constant::getNullValue(context.getType(left->semanticType));
             }
         }
     }
@@ -23,8 +23,8 @@ llvm::Value *Assignment::createRightValue(TransformContext &context) {
         value = right->createRightValue(context);
     }
 
-    if(left->superType->asPointerType() && right->superType->asPointerType() && !right->superType->equals(left->superType)){
-        value = context.builder.CreatePointerCast(right->createRightValue(context), context.getType(left->superType));
+    if(left->semanticType->asPointerType() && right->semanticType->asPointerType() && !right->semanticType->equals(left->semanticType)){
+        value = context.builder.CreatePointerCast(right->createRightValue(context), context.getType(left->semanticType));
     }
 
     return context.builder.CreateStore(value, left->createLeftValue(context));

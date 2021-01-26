@@ -29,7 +29,7 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
         case AND:
             return value->createLeftValue(context);
         case SIZEOF:
-            llvm::Type* type = context.getType(value->superType);
+            llvm::Type* type = context.getType(value->semanticType);
             llvm::DataLayout layout(&context.module);
             unsigned int size = layout.getTypeAllocSize(type);
             return context.builder.getInt32(size);

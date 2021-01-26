@@ -6,30 +6,30 @@
 
 #include <unordered_map>
 #include <vector>
-#include "SuperType.h"
+#include "SemanticType.h"
 
-class SuperStructType : public SuperType {
+class SemanticStructType : public SemanticType {
 public:
     std::unordered_map<const std::string *, int> map;
-    std::vector<const SuperType *> types;
+    std::vector<const SemanticType *> types;
     int size = -1;
 
-    explicit SuperStructType() {
+    explicit SemanticStructType() {
 
     }
 
-    explicit SuperStructType(bool assignable) : SuperType(assignable) {
+    explicit SemanticStructType(bool assignable) : SemanticType(assignable) {
 
     }
 
-    bool equals(const SuperType *other) const override {
+    bool equals(const SemanticType *other) const override {
         if (auto structType = other->asSuperStructType()) {
             return structType == this;
         }
         return false;
     }
 
-    const SuperType *member(const Identifier *identifier) const {
+    const SemanticType *member(const Identifier *identifier) const {
         if (identifier) {
             auto pos = map.find(identifier->value);
 
@@ -43,7 +43,7 @@ public:
         return nullptr;
     }
 
-    const SuperStructType *asSuperStructType() const override {
+    const SemanticStructType *asSuperStructType() const override {
         return this;
     }
 };

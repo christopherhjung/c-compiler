@@ -9,14 +9,14 @@
 
 #include "llvm/IR/GlobalValue.h"
 
-class SuperType;
+class SemanticType;
 
-class SuperStructType;
+class SemanticStructType;
 
 template<class T>
 class Descriptor {
 public:
-    T *superType = nullptr;
+    T *semanticType = nullptr;
     bool implementation = false;
     bool defined = false;
     llvm::Value* value;
@@ -26,24 +26,24 @@ public:
 
     }
 
-    Descriptor(const Descriptor *other) : superType(other->superType), implementation(other->implementation),
+    Descriptor(const Descriptor *other) : semanticType(other->semanticType), implementation(other->implementation),
                                           defined(other->defined) {
 
     }
 
-    Descriptor(SuperType *superType) : superType(superType) {
+    Descriptor(SemanticType *semanticType) : semanticType(semanticType) {
 
     }
 };
 
 class Scope {
 public:
-    std::unordered_map<const std::string *, Descriptor<SuperType>> types;
-    std::unordered_map<const std::string *, Descriptor<SuperStructType>> structs;
+    std::unordered_map<const std::string *, Descriptor<SemanticType>> types;
+    std::unordered_map<const std::string *, Descriptor<SemanticStructType>> structs;
     std::unordered_map<const std::string *, int> labels;
     //std::unordered_map<const std::string *, llvm::Function*> functions;
     Scope *parent = nullptr;
-    const SuperType *returnType = nullptr;
+    const SemanticType *returnType = nullptr;
 
     Scope() {}
 
@@ -53,14 +53,14 @@ public:
 
     void setLabel(const std::string *label);
 
-    const SuperType *getReturnType();
+    const SemanticType *getReturnType();
 
-    Descriptor<SuperStructType> *getStruct(const std::string *str);
+    Descriptor<SemanticStructType> *getStruct(const std::string *str);
 
-    bool setStruct(const std::string *str, SuperStructType *type);
+    bool setStruct(const std::string *str, SemanticStructType *type);
 
-    bool set(const std::string *str, SuperType *type, bool hasImplementation);
+    bool set(const std::string *str, SemanticType *type, bool hasImplementation);
 
-    Descriptor<SuperType> *get(const std::string *str);
+    Descriptor<SemanticType> *get(const std::string *str);
 };
 

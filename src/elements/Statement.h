@@ -10,13 +10,13 @@
 
 class PrettyPrinter;
 
-class SuperType;
+class SemanticType;
 
 class TransformContext;
 
 class Statement : public Element {
 public:
-    const SuperType *superType = nullptr;
+    const SemanticType *semanticType = nullptr;
 
     virtual void create(TransformContext &context) {
         TRANSFORM_ERROR();

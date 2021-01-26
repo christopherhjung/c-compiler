@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include "SuperType.h"
+#include "SemanticType.h"
 #include "../types/TypeDefines.h"
 
-class SimpleType : public SuperType {
+class SimpleType : public SemanticType {
 public:
     int id;
 
@@ -15,11 +15,11 @@ public:
 
     }
 
-    explicit SimpleType(int id, bool assignable) : SuperType(assignable), id(id) {
+    explicit SimpleType(int id, bool assignable) : SemanticType(assignable), id(id) {
 
     }
 
-    bool equals(const SuperType *other) const override {
+    bool equals(const SemanticType *other) const override {
         if (auto otherSimple = other->asSimpleType()) {
             return id == otherSimple->id;
         }

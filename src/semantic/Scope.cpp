@@ -5,8 +5,8 @@
 #include "Scope.h"
 #include "../lexer/Location.h"
 #include "../semantic/SemanticException.h"
-#include "../types/SuperType.h"
-#include "../types/SuperStructType.h"
+#include "../types/SemanticType.h"
+#include "../types/SemanticStructType.h"
 
 bool Scope::isLabel(const std::string *label) {
     return labels.find(label) != labels.end();
@@ -27,7 +27,7 @@ llvm::Function* Scope::getFunction(const std::string* str){
     return nullptr;
 }
 
-const SuperType *Scope::getReturnType() {
+const SemanticType *Scope::getReturnType() {
     if (returnType != nullptr) {
         return returnType;
     } else if (parent != nullptr) {
@@ -37,7 +37,7 @@ const SuperType *Scope::getReturnType() {
     return nullptr;
 }
 
-Descriptor<SuperStructType> *Scope::getStruct(const std::string *str) {
+Descriptor<SemanticStructType> *Scope::getStruct(const std::string *str) {
     auto current = structs.find(str);
     if (current != structs.end()) {
         return &current->second;
@@ -48,7 +48,7 @@ Descriptor<SuperStructType> *Scope::getStruct(const std::string *str) {
     return nullptr;
 }
 
-bool Scope::setStruct(const std::string *str, SuperStructType *type) {
+bool Scope::setStruct(const std::string *str, SemanticStructType *type) {
     if (str == nullptr) {
         ERROR(Location());
     }
@@ -56,18 +56,18 @@ bool Scope::setStruct(const std::string *str, SuperStructType *type) {
     auto desc = &structs[str];
 
     if (desc->defined) {
-        if (!desc->superType->equals(type)) {
+        if (!desc->semanticType->equals(type)) {
             return false;
         }
     } else {
-        desc->superType = type;
+        desc->semanticType = type;
         desc->defined = true;
     }
 
     return true;
 }
 
-bool Scope::set(const std::string *str, SuperType *type, bool hasImplementation) {
+bool Scope::set(const std::string *str, SemanticType *type, bool hasImplementation) {
     if (str == nullptr) {
         ERROR(Location());
     }
@@ -78,13 +78,13 @@ bool Scope::set(const std::string *str, SuperType *type, bool hasImplementation)
         bool isMethod = type->asMethodType();
         if (!isMethod) {
             return false;
-        } else if (!desc->superType->equals(type)) {
+        } else if (!desc->semanticType->equals(type)) {
             return false;
         } else {
-            desc->superType = type;
+            desc->semanticType = type;
         }
     } else {
-        desc->superType = type;
+        desc->semanticType = type;
         desc->defined = true;
     }
 
@@ -99,7 +99,7 @@ bool Scope::set(const std::string *str, SuperType *type, bool hasImplementation)
     return true;
 }
 
-Descriptor<SuperType> *Scope::get(const std::string *str) {
+Descriptor<SemanticType> *Scope::get(const std::string *str) {
     if (types.find(str) != types.end()) {
         return &types[str];
     } else if (parent != nullptr) {

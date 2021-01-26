@@ -36,7 +36,7 @@ llvm::Value *TransformContext::getInt32(const std::string *str) {
     return builder.getInt32(std::stoi(*str));
 }
 
-llvm::Type *TransformContext::getType(const SuperType *type) {
+llvm::Type *TransformContext::getType(const SemanticType *type) {
     if (auto simpleType = type->asSimpleType()) {
         if (simpleType->equals(IntType)) {
             return builder.getInt32Ty();

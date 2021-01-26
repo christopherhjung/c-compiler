@@ -4,11 +4,11 @@
 
 #include "PendingSuperStructType.h"
 
-#include "SuperType.h"
-#include "SuperStructType.h"
+#include "SemanticType.h"
+#include "SemanticStructType.h"
 #include "../semantic/Scope.h"
 
-bool PendingSuperStructType::equals(const SuperType *other) const {
+bool PendingSuperStructType::equals(const SemanticType *other) const {
     auto type = asSuperStructType();
     if (type == nullptr) {
         return false;
@@ -16,14 +16,14 @@ bool PendingSuperStructType::equals(const SuperType *other) const {
     return type->equals(other);
 }
 
-const SuperStructType *PendingSuperStructType::asSuperStructType() const {
+const SemanticStructType *PendingSuperStructType::asSuperStructType() const {
     auto desc = scope->getStruct(name);
 
     if (desc == nullptr) {
         return nullptr;
     }
 
-    return desc->superType;
+    return desc->semanticType;
 }
 
 bool PendingSuperStructType::isAssignable() const {

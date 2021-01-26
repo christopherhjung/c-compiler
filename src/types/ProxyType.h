@@ -4,17 +4,17 @@
 
 #pragma once
 
-#include "SuperType.h"
+#include "SemanticType.h"
 
-class ProxyType : public SuperType {
+class ProxyType : public SemanticType {
 public:
-    const SuperType *inner;
+    const SemanticType *inner;
 
-    explicit ProxyType(const SuperType *inner, bool assignable) : SuperType(assignable), inner(inner) {
+    explicit ProxyType(const SemanticType *inner, bool assignable) : SemanticType(assignable), inner(inner) {
 
     }
 
-    bool equals(const SuperType *other) const override {
+    bool equals(const SemanticType *other) const override {
         return inner->equals(other);
     }
 
@@ -30,7 +30,7 @@ public:
         return inner->asPointerType();
     }
 
-    const SuperStructType *asSuperStructType() const override {
+    const SemanticStructType *asSuperStructType() const override {
         return inner->asSuperStructType();
     }
 };

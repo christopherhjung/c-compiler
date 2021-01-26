@@ -11,11 +11,11 @@
 
 class TransformException : public std::exception {
 public:
-    std::string msg = "";
-    std::string file = "";
-    int32_t lineNumber = 0;
+    std::string file;
+    int32_t lineNumber;
+    std::string msg;
 
-    explicit TransformException(const std::string &file, int32_t lineNumber) : file(file), lineNumber(lineNumber) {
+    explicit TransformException(const std::string &file, int32_t lineNumber) : file(file), lineNumber(lineNumber), msg("") {
 
     }
 

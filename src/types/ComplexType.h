@@ -4,17 +4,17 @@
 
 #pragma once
 
-#include "SuperType.h"
+#include "SemanticType.h"
 
-class ComplexType : public SuperType {
+class ComplexType : public SemanticType {
 public:
-    const SuperType *subType = nullptr;
+    const SemanticType *subType = nullptr;
 
-    explicit ComplexType(const SuperType *subType) : subType(subType) {
+    explicit ComplexType(const SemanticType *subType) : subType(subType) {
 
     }
 
-    explicit ComplexType(const SuperType *subType, bool assignable) : SuperType(assignable), subType(subType) {
+    explicit ComplexType(const SemanticType *subType, bool assignable) : SemanticType(assignable), subType(subType) {
 
     }
 };
