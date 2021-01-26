@@ -56,4 +56,5 @@ void Method::create(TransformContext &context) {
     }
 
     body->create(context);
+    context.functionScope = nullptr;
 }

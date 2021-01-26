@@ -26,6 +26,8 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
             return context.builder.CreateLoad(value->createRightValue(context));
         case NOT:
             return context.builder.CreateNot(value->createRightValue(context));
+        case AND:
+            return value->createLeftValue(context);
         case SIZEOF:
             int size = const_cast<SuperType*>(value->superType)->getSize();
             return context.builder.getInt32(size);

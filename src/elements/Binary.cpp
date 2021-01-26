@@ -41,7 +41,42 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
 
     if(op->id == ARROW || op->id == DOT){
 
-        llvm::Value *value = left->createRightValue(context);
+        llvm::Value *value = left->createLeftValue(context);
+        auto aType = left->superType;
+
+        //value = context.builder.CreateLoad(value);
+
+        if(op->id == ARROW){
+            value = context.builder.CreateLoad(value);
+            aType = aType->asPointerType()->subType;
+        }
+
+        auto structType = aType->asSuperStructType();
+        auto identifier = dynamic_cast<const Identifier*>(right);
+
+        int index = structType->map.find(identifier->value)->second;
+
+        std::vector<llvm::Value*> indices;
+        indices.push_back(context.builder.getInt32(0));
+        indices.push_back(context.builder.getInt32(index));
+
+        llvm::Value *elementPointer
+                = context.builder.CreateInBoundsGEP(value, indices);
+
+        llvm::Value *result = context.builder.CreateLoad(elementPointer);
+
+        return result;
+    }
+
+
+    TRANSFORM_ERROR();
+}
+
+llvm::Value *Binary::createLeftValue(TransformContext &context){
+
+    if(op->id == ARROW || op->id == DOT){
+
+        llvm::Value *value = left->createLeftValue(context);
         auto aType = left->superType;
 
         if(op->id == ARROW){
@@ -54,23 +89,16 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
 
         int index = structType->map.find(identifier->value)->second;
 
-        int offset = 0;
-        for(int i = 0 ; i < index ; i++){
-            auto inner = structType->types[i];
-            offset += const_cast<SuperType*>(inner)->getSize();
-        }
-
         std::vector<llvm::Value*> indices;
         indices.push_back(context.builder.getInt32(0));
-        indices.push_back(context.builder.getInt32(offset));
+        indices.push_back(context.builder.getInt32(index));
 
         llvm::Value *elementPointer
                 = context.builder.CreateInBoundsGEP(value, indices);
 
-        llvm::Value *result = context.builder.CreateLoad(elementPointer);
-
-        return result;
+        return elementPointer;
     }
 
 
+    TRANSFORM_ERROR();
 }

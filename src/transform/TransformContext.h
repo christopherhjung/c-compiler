@@ -23,6 +23,7 @@
 class TransformContext {
 public:
     llvm::IRBuilder<> &allocBuilder;
+
     llvm::LLVMContext &llvmContext;
     llvm::Module &module;
     llvm::IRBuilder<> &builder;
@@ -79,8 +80,10 @@ public:
         if (auto simpleType = type->asSimpleType()) {
             if (simpleType->equals(IntType)) {
                 return builder.getInt32Ty();
-            } else {
+            } else if(simpleType->equals(CharType)) {
                 return builder.getInt8Ty();
+            }else{
+                return builder.getVoidTy();
             }
         } else if (auto pointerType = type->asPointerType()) {
             return llvm::PointerType::getUnqual(getType(pointerType->subType));
@@ -99,6 +102,7 @@ public:
                 types.push_back(getType(type));
             }
 
+            llvmStructType->setBody(types);
             return llvmStructType;
         }
 

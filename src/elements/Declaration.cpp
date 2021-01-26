@@ -8,6 +8,7 @@
 #include "Type.h"
 #include "Declarator.h"
 #include "../types/SuperType.h"
+#include "StructType.h"
 
 void Declaration::dump(PrettyPrinter &printer) {
     type->dump(printer);
@@ -19,7 +20,8 @@ void Declaration::dump(PrettyPrinter &printer) {
 
 void Declaration::create(TransformContext &context) {
     if(context.functionScope){
-        auto value = context.resetAllocBuilder().CreateAlloca(context.getType(superType));
+        llvm::Type* type = context.getType(superType);
+        auto value = context.resetAllocBuilder().CreateAlloca(type);
         context.currentScope->types[superType->identifier->value].value = value;
     }else if(auto methodType = superType->asMethodType()){
         auto returnType = context.getType(methodType->subType);
@@ -34,6 +36,8 @@ void Declaration::create(TransformContext &context) {
         context.createFunctionDecl(*methodName, returnType, paramTypes);
 
         context.mainScope->functions[methodName] = context.currentFunction;
+    }else if(auto structType = dynamic_cast<StructType*>(type)){
+        context.getType(superType);
     }else{
         llvm::Type* type = context.getType(superType);
         const std::string *name = superType->identifier->value;
