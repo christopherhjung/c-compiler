@@ -18,7 +18,6 @@ void Method::dump(PrettyPrinter &printer) {
 void Method::create(TransformContext &context) {
     auto methodType = declaration->superType->asMethodType();
 
-    auto returnType = context.getType(methodType->subType);
     std::vector<llvm::Type*> paramTypes;
     for(auto type : methodType->types){
         if(!type->equals(VoidType)){
@@ -27,7 +26,19 @@ void Method::create(TransformContext &context) {
     }
     const std::string *methodName = declaration->superType->identifier->value;
 
-    auto entry = context.createFunction(*methodName, returnType, paramTypes);
+    llvm::Function* declared = context.mainScope->functions[methodName];
+
+    if(!declared){
+        declaration->create(context);
+        declared= context.mainScope->functions[methodName];
+    }
+
+    llvm::BasicBlock* entry;
+
+    entry = llvm::BasicBlock::Create(context.llvmContext, "entry", declared, 0);
+    context.currentFunction = declared;
+    context.setCurrentBlock(entry);
+    context.allocBuilder.SetInsertPoint(entry);
 
     auto args = context.currentFunction->arg_begin();
     for(auto type : methodType->types){
@@ -43,8 +54,5 @@ void Method::create(TransformContext &context) {
         args++;
     }
 
-    context.mainScope->functions[methodName] = context.currentFunction;
-
-    context.setCurrentBlock(entry);
     body->create(context);
 }

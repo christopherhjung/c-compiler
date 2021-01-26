@@ -21,22 +21,22 @@
 #include "../common.h"
 
 class TransformContext {
-    llvm::IRBuilder<> &allocBuilder;
 public:
+    llvm::IRBuilder<> &allocBuilder;
     llvm::LLVMContext &llvmContext;
     llvm::Module &module;
     llvm::IRBuilder<> &builder;
 
-    llvm::Function *currentFunction;
-    llvm::BasicBlock *currentBlock;
+    llvm::Function *currentFunction = nullptr;
+    llvm::BasicBlock *currentBlock = nullptr;
 
-    llvm::BasicBlock *whileCondition;
-    llvm::BasicBlock *whileEnd;
+    llvm::BasicBlock *whileCondition = nullptr;
+    llvm::BasicBlock *whileEnd = nullptr;
 
     std::queue<Scope *> scopeQueue;
-    Scope *mainScope;
-    Scope *functionScope;
-    Scope *currentScope;
+    Scope *mainScope = nullptr;
+    Scope *functionScope = nullptr;
+    Scope *currentScope = nullptr;
 
     std::unordered_map<const SuperType*, llvm::Type*> typeLookup;
 
@@ -112,6 +112,18 @@ public:
         }else{
             return jumps[target] = createBasicBlock("label-" + *target);
         }
+    }
+
+    void createFunctionDecl(const std::string &name, llvm::Type *returnType, std::vector<llvm::Type *> &paramTypes) {
+        jumps.clear();
+        llvm::FunctionType *functionType = llvm::FunctionType::get(returnType, paramTypes, /* isVarArg */ false);
+
+        /* Create a function declaration for 'fac' */
+        currentFunction = llvm::Function::Create(
+                functionType,
+                llvm::GlobalValue::ExternalLinkage,
+                name,
+                &module);
     }
 
     llvm::BasicBlock *

@@ -18,6 +18,23 @@ void Declaration::dump(PrettyPrinter &printer) {
 }
 
 void Declaration::create(TransformContext &context) {
-    auto value = context.resetAllocBuilder().CreateAlloca(context.getType(superType));
-    context.currentScope->types[superType->identifier->value].value = value;
+    if(context.functionScope){
+        auto value = context.resetAllocBuilder().CreateAlloca(context.getType(superType));
+        context.currentScope->types[superType->identifier->value].value = value;
+    }else if(auto methodType = superType->asMethodType()){
+
+
+        auto returnType = context.getType(methodType->subType);
+        std::vector<llvm::Type*> paramTypes;
+        for(auto type : methodType->types){
+            if(!type->equals(VoidType)){
+                paramTypes.push_back(context.getType(type));
+            }
+        }
+        const std::string *methodName = methodType->identifier->value;
+
+        context.createFunctionDecl(*methodName, returnType, paramTypes);
+
+        context.mainScope->functions[methodName] = context.currentFunction;
+    }
 }

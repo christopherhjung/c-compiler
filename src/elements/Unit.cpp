@@ -32,7 +32,7 @@ void Unit::create(TransformContext &context) {
         if (auto method = dynamic_cast<Method *>(element)) {
             method->create(context);
         } else if (auto decl = dynamic_cast<Declaration *>(element)) {
-
+            decl->create(context);
         }
     }
 }
