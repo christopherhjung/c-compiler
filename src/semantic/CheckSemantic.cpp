@@ -217,14 +217,6 @@ void Semantic::enter0(Expression *expression) {
             enter(expr);
         }
 
-#ifdef DEBUG
-        if(auto printf = dynamic_cast<const Identifier*>(call->target)){
-            if(*printf->value == "printf"){
-                call->semanticType = VoidType;
-                return;
-            }
-        }
-#endif
         enter(call->target);
         auto methodType = call->target->semanticType->asMethodType();
         if(!methodType){
