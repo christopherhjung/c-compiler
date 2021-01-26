@@ -8,6 +8,7 @@
 #include "Block.h"
 #include "Declaration.h"
 #include "../types/SuperType.h"
+#include "Return.h"
 
 void Method::dump(PrettyPrinter &printer) {
     declaration->dump(printer);
@@ -56,5 +57,15 @@ void Method::create(TransformContext &context) {
     }
 
     body->create(context);
+
+    if(body->children.empty() || !dynamic_cast<Return*>(body->children[body->children.size() - 1])){
+        llvm::Type *returnType = context.builder.getCurrentFunctionReturnType();
+        if (returnType->isVoidTy()) {
+            context.builder.CreateRetVoid();
+        } else {
+            context.builder.CreateRet(llvm::Constant::getNullValue(declared->getReturnType()));
+        }
+    }
+
     context.functionScope = nullptr;
 }

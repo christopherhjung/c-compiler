@@ -7,6 +7,7 @@
 
 #include <exception>
 #include <functional>
+#include <string>
 
 class TransformException : public std::exception {
 public:

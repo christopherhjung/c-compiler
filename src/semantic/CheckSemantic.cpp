@@ -226,9 +226,13 @@ void Semantic::enter0(Expression *expression) {
             }
         }
 #endif
-
         enter(call->target);
-        if (auto methodType = call->target->superType->asMethodType()) {
+        auto methodType = call->target->superType->asMethodType();
+        if(!methodType){
+            methodType = call->target->superType->asPointerType()->subType->asMethodType();
+        }
+
+        if (methodType) {
             if (methodType->types.size() < call->values.size()) {
                 ERROR(call->locations[methodType->types.size()]);
             } else if (methodType->types.size() > call->values.size()) {
