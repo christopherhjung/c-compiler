@@ -34,9 +34,9 @@
 #include "src/elements/Elements.h"
 
 
-int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::string &filename) {
+int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::string &sourceFile, const std::string &targetFile) {
     llvm::LLVMContext context;
-    llvm::Module module(filename, context);
+    llvm::Module module(sourceFile, context);
     llvm::IRBuilder<> builder(context);
     llvm::IRBuilder<> allocBuilder(context);
 
@@ -48,7 +48,7 @@ int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::str
         std::cerr << ": error: semantic: (" << e.file << ":" << e.lineNumber << ":1) " << e.msg << std::endl;
     }
 
-    transformContext.dump(filename);
+    transformContext.dump(targetFile);
     return 0;
 }
 
@@ -78,9 +78,9 @@ int runParser(InputReader *fileInputReader, std::ostream &out, std::ostream &err
                 std::regex filePattern(R"(([^\\/]+)\..+?$)");
                 std::smatch match;
                 if(std::regex_search(source,match, filePattern)){
-                    std::string filename = match[1];
-                    filename += ".ll";
-                    return runCompiler(unit, out, err, filename);
+                    std::string target = match[1];
+                    target += ".ll";
+                    return runCompiler(unit, out, err, source, target);
                 }
             }
         } catch (SemanticException &e) {
