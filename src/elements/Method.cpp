@@ -37,6 +37,7 @@ void Method::create(TransformContext &context) {
 
     entry = llvm::BasicBlock::Create(context.llvmContext, "entry", declared, 0);
     context.currentFunction = declared;
+    context.functionScope = body->scope;
     context.setCurrentBlock(entry);
     context.allocBuilder.SetInsertPoint(entry);
 
