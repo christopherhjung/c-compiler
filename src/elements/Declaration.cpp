@@ -22,8 +22,6 @@ void Declaration::create(TransformContext &context) {
         auto value = context.resetAllocBuilder().CreateAlloca(context.getType(superType));
         context.currentScope->types[superType->identifier->value].value = value;
     }else if(auto methodType = superType->asMethodType()){
-
-
         auto returnType = context.getType(methodType->subType);
         std::vector<llvm::Type*> paramTypes;
         for(auto type : methodType->types){
@@ -36,5 +34,22 @@ void Declaration::create(TransformContext &context) {
         context.createFunctionDecl(*methodName, returnType, paramTypes);
 
         context.mainScope->functions[methodName] = context.currentFunction;
+    }else{
+        llvm::Type* type = context.getType(superType);
+        const std::string *name = superType->identifier->value;
+        llvm::GlobalVariable *globalVar = new llvm::GlobalVariable(
+                context.module                                       /* Module & */,
+                type                              /* Type * */,
+                false                                   /* bool isConstant */,
+                llvm::GlobalValue::CommonLinkage              /* LinkageType */,
+                llvm::Constant::getNullValue(type)      /* Constant * Initializer */,
+                *name                                /* const Twine &Name = "" */,
+                /* --------- We do not need this part (=> use defaults) ---------- */
+                0                                       /* GlobalVariable *InsertBefore = 0 */,
+                llvm::GlobalVariable::NotThreadLocal          /* ThreadLocalMode TLMode = NotThreadLocal */,
+                0                                       /* unsigned AddressSpace = 0 */,
+                false                                   /* bool isExternallyInitialized = false */);
+
+        context.mainScope->get(name)->value = globalVar;
     }
 }
