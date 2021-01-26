@@ -12,4 +12,5 @@ void Break::dump(PrettyPrinter &printer) {
 
 void Break::create(TransformContext &context){
     context.builder.CreateBr(context.whileCondition);
+    context.setCurrentBlock(context.unreachable);
 }
