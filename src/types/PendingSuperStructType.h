@@ -18,10 +18,6 @@ public:
 
     }
 
-    int getSize() override{
-        return const_cast<SuperStructType*>(asSuperStructType())->getSize();
-    }
-
     bool equals(const SuperType *other) const override;
 
     const SuperStructType *asSuperStructType() const override;

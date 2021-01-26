@@ -19,14 +19,6 @@ public:
 
     }
 
-    int getSize() override{
-        if(id == TYPE_INT){
-            return 4;
-        }else{
-            return 1;
-        }
-    }
-
     bool equals(const SuperType *other) const override {
         if (auto otherSimple = other->asSimpleType()) {
             return id == otherSimple->id;

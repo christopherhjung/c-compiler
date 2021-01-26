@@ -23,10 +23,6 @@ public:
 
     };
 
-    virtual int getSize(){
-        return 4;
-    }
-
     virtual const MethodType *asMethodType() const;
 
     virtual const PointerType *asPointerType() const;

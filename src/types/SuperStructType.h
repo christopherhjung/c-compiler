@@ -22,17 +22,6 @@ public:
 
     }
 
-    int getSize() override{
-        if(size == -1){
-            size = 0;
-            for( auto type : types ){
-                size += const_cast<SuperType*>(type)->getSize();
-            }
-        }
-
-        return size;
-    }
-
     bool equals(const SuperType *other) const override {
         if (auto structType = other->asSuperStructType()) {
             return structType == this;

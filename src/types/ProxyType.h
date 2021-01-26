@@ -14,10 +14,6 @@ public:
 
     }
 
-    int getSize() override{
-        return const_cast<SuperType*>(inner)->getSize();
-    }
-
     bool equals(const SuperType *other) const override {
         return inner->equals(other);
     }
