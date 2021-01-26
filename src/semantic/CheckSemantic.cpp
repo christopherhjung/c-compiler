@@ -396,9 +396,11 @@ void Semantic::enter(Binary *binary) {
                 binary->superType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
+                binary->opInfo = 1;
                 binary->superType = new ProxyType(leftType, false);
                 return;
             } else if (rightType->asPointerType() && leftIsInteger) {
+                binary->opInfo = 2;
                 binary->superType = new ProxyType(rightType, false);
                 return;
             }
@@ -408,31 +410,33 @@ void Semantic::enter(Binary *binary) {
                 binary->superType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
+                binary->opInfo = 1;
                 binary->superType = new ProxyType(leftType, false);
                 return;
             } else if (leftType->asPointerType() && rightType->asPointerType() && leftType->equals(rightType)) {
+                binary->opInfo = 2;
                 binary->superType = new SimpleType(TYPE_INT, false);
                 return;
             }
             break;
         case EQUAL:
         case NOT_EQUAL:
-            if (leftType->equals(rightType)) {
-                binary->superType = new SimpleType(TYPE_INT, false);
-                return;
-            } else if (leftIsNumeric && rightIsNumeric) {
+            if (leftIsNumeric && rightIsNumeric) {
                 binary->superType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
                 binary->superType = new SimpleType(TYPE_INT, false);
                 return;
-            } else if (rightType->asPointerType() && leftIsNumeric) {
+            } else if (rightType->asPointerType() && leftIsInteger) {
                 binary->superType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (rightType->equals(VoidPointerType) && leftType->asPointerType()) {
                 binary->superType = new SimpleType(TYPE_INT, false);
                 return;
             } else if (leftType->equals(VoidPointerType) && rightType->asPointerType()) {
+                binary->superType = new SimpleType(TYPE_INT, false);
+                return;
+            } else if (leftType->equals(rightType)) {
                 binary->superType = new SimpleType(TYPE_INT, false);
                 return;
             }

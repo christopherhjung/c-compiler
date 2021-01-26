@@ -10,6 +10,10 @@ void Number::dump(PrettyPrinter &printer) {
     printer << *value;
 }
 
+int Number::getValue(){
+    return std::stoi(*value);
+}
+
 llvm::Value *Number::createRightValue(TransformContext &context) {
-    return context.getInt32(value);
+    return context.builder.getInt32(getValue());
 }

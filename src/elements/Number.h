@@ -15,6 +15,7 @@ public:
 
     void dump(PrettyPrinter &printer) override;
 
+    int getValue();
     llvm::Value *createRightValue(TransformContext &context) override;
 };
 

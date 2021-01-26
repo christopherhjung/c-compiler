@@ -28,9 +28,22 @@ void Binary::dump(PrettyPrinter &printer) {
 llvm::Value *Binary::createRightValue(TransformContext &context) {
     switch (op->id) {
         case PLUS:
-            return context.builder.CreateAdd(left->createRightValue(context), right->createRightValue(context));
+            if(opInfo == 0){
+                return context.builder.CreateAdd(left->createRightValue(context), right->createRightValue(context));
+            }else if (opInfo == 1){
+                return context.builder.CreateGEP(left->createRightValue(context), right->createRightValue(context));
+            }else if (opInfo == 2){
+                return context.builder.CreateGEP(right->createRightValue(context), left->createRightValue(context));
+            }
         case MINUS:
-            return context.builder.CreateSub(left->createRightValue(context), right->createRightValue(context));
+            if(opInfo == 0){
+                return context.builder.CreateSub(left->createRightValue(context), right->createRightValue(context));
+            }else if (opInfo == 1){
+                return context.builder.CreateGEP(left->createRightValue(context), context.builder.CreateNeg(right->createRightValue(context)));
+            }else if (opInfo == 2){
+                llvm::Value* diff = context.builder.CreatePtrDiff(left->createRightValue(context), right->createRightValue(context));
+                return context.builder.CreateTrunc(diff, context.builder.getInt32Ty());
+            }
         case STAR:
             return context.builder.CreateMul(left->createRightValue(context), right->createRightValue(context));
         case LEFT_SHIFT:

@@ -15,6 +15,7 @@ public:
     Expression *left = nullptr;
     Expression *right = nullptr;
     Operator *op = nullptr;
+    int opInfo = 0;
 
     void dump(PrettyPrinter &printer) override;
 

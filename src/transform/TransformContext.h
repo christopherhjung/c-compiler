@@ -49,140 +49,29 @@ public:
                                                         allocBuilder(allocBuilder) {
     }
 
-    void init() {
-#ifdef DEBUG
-        const std::string printfName = "printf";
-        std::vector<llvm::Type *> argumentTypes;
-        argumentTypes.push_back(builder.getInt8PtrTy());
-        llvm::FunctionType *funcPrintfType = llvm::FunctionType::get(builder.getInt32Ty(), argumentTypes, true);
+    llvm::BasicBlock *createBasicBlock(const std::string &name);
 
-        llvm::Function *funcPrintf = llvm::Function::Create(
-                funcPrintfType,
-                llvm::GlobalValue::ExternalLinkage,
-                printfName,
-                &module);
+    llvm::Value *getInt32(const std::string *str);
 
+    llvm::Type *getType(const SuperType *type) ;
 
-        mainScope->functions[lookupSymbol(printfName)] = funcPrintf;
-#endif
-    }
+    llvm::BasicBlock *getJumpTarget(const std::string *target);
 
-    llvm::BasicBlock *createBasicBlock(const std::string &name) {
-        auto bb = llvm::BasicBlock::Create(llvmContext, name, currentFunction, 0);
-        return bb;
-    }
-
-    llvm::Value *getInt32(const std::string *str) {
-        return builder.getInt32(std::stoi(*str));
-    }
-
-    llvm::Type *getType(const SuperType *type) {
-        if (auto simpleType = type->asSimpleType()) {
-            if (simpleType->equals(IntType)) {
-                return builder.getInt32Ty();
-            } else if(simpleType->equals(CharType)) {
-                return builder.getInt8Ty();
-            }else{
-                return builder.getVoidTy();
-            }
-        } else if (auto pointerType = type->asPointerType()) {
-            return llvm::PointerType::getUnqual(getType(pointerType->subType));
-        } else if( auto structType = type->asSuperStructType()){
-            auto find = typeLookup.find(structType);
-
-            if(find != typeLookup.end()){
-                return find->second;
-            }
-
-            auto llvmStructType = llvm::StructType::create(llvmContext, "struct.S");
-            typeLookup[structType] = llvmStructType;
-
-            std::vector<llvm::Type*> types;
-            for( auto type : structType->types ){
-                types.push_back(getType(type));
-            }
-
-            llvmStructType->setBody(types);
-            return llvmStructType;
-        }
-
-        return nullptr;
-    }
-
-    llvm::BasicBlock *getJumpTarget(const std::string *target){
-        auto find = jumps.find(target);
-        if(find != jumps.end()){
-            return find->second;
-        }else{
-            return jumps[target] = createBasicBlock("label-" + *target);
-        }
-    }
-
-    void createFunctionDecl(const std::string &name, llvm::Type *returnType, std::vector<llvm::Type *> &paramTypes) {
-        jumps.clear();
-        llvm::FunctionType *functionType = llvm::FunctionType::get(returnType, paramTypes, /* isVarArg */ false);
-
-        /* Create a function declaration for 'fac' */
-        currentFunction = llvm::Function::Create(
-                functionType,
-                llvm::GlobalValue::ExternalLinkage,
-                name,
-                &module);
-    }
+    void createFunctionDecl(const std::string &name, llvm::Type *returnType, std::vector<llvm::Type *> &paramTypes);
 
     llvm::BasicBlock *
-    createFunction(const std::string &name, llvm::Type *returnType, std::vector<llvm::Type *> &paramTypes) {
-        jumps.clear();
-        llvm::FunctionType *functionType = llvm::FunctionType::get(returnType, paramTypes, /* isVarArg */ false);
+    createFunction(const std::string &name, llvm::Type *returnType, std::vector<llvm::Type *> &paramTypes);
 
-        /* Create a function declaration for 'fac' */
-        currentFunction = llvm::Function::Create(
-                functionType,
-                llvm::GlobalValue::ExternalLinkage,
-                name,
-                &module);
+    void setCurrentBlock(llvm::BasicBlock *bb) ;
 
-        auto entry = createBasicBlock("entry");
+    void setMainScope(Scope* scope);
 
-        builder.SetInsertPoint(entry);
-        allocBuilder.SetInsertPoint(entry);
+    void pushScope(Scope *scope);
 
-        return entry;
-    }
+    void popScope() ;
 
-    void setCurrentBlock(llvm::BasicBlock *bb) {
-        currentBlock = bb;
-        builder.SetInsertPoint(bb);
-    }
+    llvm::IRBuilder<> &resetAllocBuilder();
 
-    void setMainScope(Scope* scope){
-        mainScope = scope;
-    }
-
-    void pushScope(Scope *scope) {
-        scopeQueue.push(scope);
-        currentScope = scope;
-    }
-
-    void popScope() {
-        scopeQueue.pop();
-        currentScope = scopeQueue.front();
-    }
-
-    llvm::IRBuilder<> &resetAllocBuilder() {
-        allocBuilder.SetInsertPoint(allocBuilder.GetInsertBlock(),
-                                    allocBuilder.GetInsertBlock()->begin());
-        return allocBuilder;
-    }
-
-    void println() {
-        verifyModule(module);
-        module.dump();
-    }
-
-    void dump(const std::string &filename){
-        std::error_code EC;
-        llvm::raw_fd_ostream stream(filename, EC, llvm::sys::fs::OpenFlags::F_Text);
-        module.print(stream, nullptr);
-    }
+    void println() ;
+    void dump(const std::string &filename);
 };
