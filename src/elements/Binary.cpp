@@ -26,34 +26,37 @@ void Binary::dump(PrettyPrinter &printer) {
 }
 
 llvm::Value *Binary::createRightValue(TransformContext &context) {
+    if(op->id == ARROW || op->id == DOT){
+        return context.builder.CreateLoad(createLeftValue(context));
+    }
+
+    llvm::Value* leftValue = left->createRightValue(context);
+    llvm::Value* rightValue = right->createRightValue(context);
+
     switch (op->id) {
         case PLUS:
             if(opInfo == 0){
-                return context.builder.CreateAdd(left->createRightValue(context), right->createRightValue(context));
+                return context.builder.CreateAdd(leftValue, rightValue);
             }else if (opInfo == 1){
-                return context.builder.CreateGEP(left->createRightValue(context), right->createRightValue(context));
+                return context.builder.CreateGEP(leftValue, rightValue);
             }else if (opInfo == 2){
-                return context.builder.CreateGEP(right->createRightValue(context), left->createRightValue(context));
+                return context.builder.CreateGEP(rightValue, leftValue);
             }
         case MINUS:
             if(opInfo == 0){
-                return context.builder.CreateSub(left->createRightValue(context), right->createRightValue(context));
+                return context.builder.CreateSub(leftValue, rightValue);
             }else if (opInfo == 1){
-                return context.builder.CreateGEP(left->createRightValue(context), context.builder.CreateNeg(right->createRightValue(context)));
+                return context.builder.CreateGEP(leftValue, context.builder.CreateNeg(rightValue));
             }else if (opInfo == 2){
-                llvm::Value* diff = context.builder.CreatePtrDiff(left->createRightValue(context), right->createRightValue(context));
+                llvm::Value* diff = context.builder.CreatePtrDiff(leftValue, rightValue);
                 return context.builder.CreateTrunc(diff, context.builder.getInt32Ty());
             }
         case STAR:
-            return context.builder.CreateMul(left->createRightValue(context), right->createRightValue(context));
+            return context.builder.CreateMul(leftValue, rightValue);
         case LEFT_SHIFT:
-            return context.builder.CreateShl(left->createRightValue(context), right->createRightValue(context));
+            return context.builder.CreateShl(leftValue, rightValue);
         case RIGHT_SHIFT:
-            return context.builder.CreateAShr(left->createRightValue(context), right->createRightValue(context));
-    }
-
-    if(op->id == ARROW || op->id == DOT){
-        return context.builder.CreateLoad(createLeftValue(context));
+            return context.builder.CreateAShr(leftValue, rightValue);
     }
 
     TRANSFORM_ERROR();

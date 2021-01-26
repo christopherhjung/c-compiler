@@ -513,41 +513,19 @@ public:
 
         switch (op->id) {
             case ARROW:
-                bin = new Binary();
-                break;
             case DOT:
-                bin = new Binary();
-                break;
             case STAR:
-                bin = new Binary();
-                break;
             case PLUS:
-                bin = new Binary();
-                break;
             case MINUS:
-                bin = new Binary();
-                break;
-            case LESS:
-                bin = new CompareBinary();
-                break;
-            case LESS_EQUAL:
-                bin = new CompareBinary();
-                break;
-            case GREATER:
-                bin = new CompareBinary();
-                break;
-            case GREATER_EQUAL:
-                bin = new CompareBinary();
-                break;
             case LEFT_SHIFT:
-                bin = new Binary();
-                break;
             case RIGHT_SHIFT:
                 bin = new Binary();
                 break;
+            case LESS:
+            case LESS_EQUAL:
+            case GREATER:
+            case GREATER_EQUAL:
             case EQUAL:
-                bin = new CompareBinary();
-                break;
             case NOT_EQUAL:
                 bin = new CompareBinary();
                 break;
@@ -565,11 +543,7 @@ public:
         bin->op = op;
         bin->left = left;
         next();
-        if (op->id == ARROW || op->id == DOT) {
-            bin->right = parseIdentifier();
-        } else {
-            bin->right = parseExpression(rightPrecedence(op->id));
-        }
+        bin->right = parseExpression(rightPrecedence(op->id));
         return bin;
     }
 

@@ -350,10 +350,11 @@ void Semantic::enter(Binary *binary) {
             break;
         case DOT:
             if (auto superStruct = leftType->asSuperStructType()) {
-                auto identifier = (const Identifier *) binary->right;
-                binary->semanticType = superStruct->member(identifier);
-                if (binary->semanticType != nullptr) {
-                    return;
+                if (auto identifier = dynamic_cast<Identifier *>(binary->right)) {
+                    binary->semanticType = superStruct->member(identifier);
+                    if (binary->semanticType != nullptr) {
+                        return;
+                    }
                 }
             }
             ERROR(binary->op->location);
