@@ -23,6 +23,10 @@ llvm::Value *Assignment::createRightValue(TransformContext &context) {
         value = right->createRightValue(context);
     }
 
+    if(left->superType->asPointerType() && right->superType->asPointerType() && !right->superType->equals(left->superType)){
+        value = context.builder.CreatePointerCast(right->createRightValue(context), context.getType(left->superType));
+    }
+
     return context.builder.CreateStore(value, left->createLeftValue(context));
 }
 

@@ -46,7 +46,11 @@ llvm::Type *TransformContext::getType(const SuperType *type) {
             return builder.getVoidTy();
         }
     } else if (auto pointerType = type->asPointerType()) {
-        return llvm::PointerType::getUnqual(getType(pointerType->subType));
+        if(pointerType->equals(VoidPointerType)){
+            return builder.getInt8PtrTy();
+        }else{
+            return llvm::PointerType::getUnqual(getType(pointerType->subType));
+        }
     } else if (auto structType = type->asSuperStructType()) {
         auto find = typeLookup.find(structType);
 

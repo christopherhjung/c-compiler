@@ -45,5 +45,16 @@ llvm::CmpInst::Predicate CompareBinary::getPredicate() {
 }
 
 llvm::Value *CompareBinary::createRightValue(TransformContext &context) {
-    return context.builder.CreateICmp(getPredicate(), left->createRightValue(context), right->createRightValue(context));
+
+    llvm::Value* leftValue = left->createRightValue(context);
+    if(left->superType->asPointerType()){
+        leftValue = context.builder.CreatePtrToInt(leftValue, context.builder.getInt32Ty());
+    }
+
+    llvm::Value* rightValue = right->createRightValue(context);
+    if(right->superType->asPointerType()){
+        rightValue = context.builder.CreatePtrToInt(leftValue, context.builder.getInt32Ty());
+    }
+
+    return context.builder.CreateICmp(getPredicate(), leftValue , rightValue);
 }
