@@ -29,7 +29,7 @@ void Semantic::check(Unit *element) {
             }
 
             if (methodType->types.size() != 1 || !methodType->types[0]->equals(VoidType)) {
-                for (int i = 0; i < methodType->types.size(); i++) {
+                for (unsigned long i = 0; i < methodType->types.size(); i++) {
                     auto paramType = methodType->types[i];
                     auto identifier = paramType->identifier;
 

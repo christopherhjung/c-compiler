@@ -25,7 +25,7 @@
 
 
 
-int main(int, char **const args) {
+int main(int argc, char **const args) {
 
 
 #ifdef MEASURE
@@ -48,33 +48,29 @@ int main(int, char **const args) {
 
     //InputReader* fileInputReader = new StreamInputReader(&std::cin);
 
-    std::string command = args[1];
-    std::string source = args[2];
-
-    bool tokenize = false;
-    bool printAst = false;
-    bool compile;
-
-    std::string filename;
-
-    if (command.rfind("--", 0) == 0) {
-        tokenize = command == "--tokenize";
-        printAst = command == "--print-ast";
-        compile = command == "--compile";
-        filename = args[2];
+    std::string command;
+    std::string source;
+    if(argc == 2){
+        command = "--compile";
+        source = args[1];
+    }else if(argc == 3){
+        command = args[1];
+        source = args[2];
     }else{
-        compile = true;
-        filename = args[1];
+        return 1;
     }
 
-    InputReader* fileInputReader = new FileInputReader(filename);
+    bool tokenize = command == "--tokenize";
+    bool printAst = command == "--print-ast";
+    bool compile = command == "--compile";
+
+    InputReader* fileInputReader = new FileInputReader(source);
     int code = 1;
     if(tokenize){
         code = runLexer(fileInputReader, out, err);
     }else{
         code = runParser(fileInputReader, out, err, printAst,compile);
     }
-
 
 #ifdef MEASURE
     auto end_time = std::chrono::high_resolution_clock::now();
