@@ -21,5 +21,8 @@ void Sizeof::dump(PrettyPrinter &printer) {
 }
 
 llvm::Value *Sizeof::createRightValue(TransformContext &context){
-    return context.builder.getInt32(inner->getSize());
+    llvm::Type* type = context.getType(inner);
+    llvm::DataLayout layout(&context.module);
+    unsigned int size = layout.getTypeAllocSize(type);
+    return context.builder.getInt32(size );
 }
