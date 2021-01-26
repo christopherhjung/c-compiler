@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Expression.h"
+#include "JumpingCompare.h"
 
 class PrettyPrinter;
 
@@ -15,6 +16,8 @@ public:
     Expression *right = nullptr;
 
     void dump(PrettyPrinter &printer) override;
+
+    llvm::Value *createRightValue(TransformContext &context) override;
 };
 
 
