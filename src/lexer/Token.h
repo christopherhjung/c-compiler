@@ -13,8 +13,8 @@ struct Token {
 
 public:
     Location location;
-    int32_t id;
-    const std::string *value;
+    int32_t id = 0;
+    const std::string *value = nullptr;
 
     Token() {
     };
