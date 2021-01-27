@@ -20,9 +20,9 @@ void Block::dump(PrettyPrinter &printer) {
 }
 
 void Block::create(TransformContext &context) {
-    auto block = context.createBasicBlock("new-block");
-    context.builder.CreateBr(block);
-    context.setCurrentBlock(block);
+    //auto block = context.createBasicBlock("new-block");
+    //context.builder.CreateBr(block);
+    //context.setCurrentBlock(block);
     context.pushScope(scope);
     for (auto child  : children) {
         child->create(context);
