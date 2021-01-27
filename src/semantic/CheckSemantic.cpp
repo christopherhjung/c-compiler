@@ -220,7 +220,10 @@ void Semantic::enter0(Expression *expression) {
         enter(call->target);
         auto methodType = call->target->semanticType->asMethodType();
         if(!methodType){
-            methodType = call->target->semanticType->asPointerType()->subType->asMethodType();
+            auto pointerType = call->target->semanticType->asPointerType();
+            if(pointerType){
+                methodType = pointerType->subType->asMethodType();
+            }
         }
 
         if (methodType) {
