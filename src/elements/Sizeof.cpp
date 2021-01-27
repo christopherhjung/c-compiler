@@ -20,9 +20,20 @@ void Sizeof::dump(PrettyPrinter &printer) {
     printer << ")";
 }
 
-llvm::Value *Sizeof::createRightValue(TransformContext &context){
-    llvm::Type* type = context.getType(inner);
+llvm::Value* Sizeof::getSize(TransformContext &context, const SemanticType* semanticType){
+    llvm::Type* type = context.getType(semanticType);
     llvm::DataLayout layout(&context.module);
-    unsigned int size = layout.getTypeAllocSize(type);
+
+    unsigned int size;
+    if(type->isSized()){
+        size = layout.getTypeAllocSize(type);
+    }else{
+        size = 1;
+    }
+
     return context.builder.getInt32(size );
+}
+
+llvm::Value *Sizeof::createRightValue(TransformContext &context){
+    return getSize(context, inner);
 }

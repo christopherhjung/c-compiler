@@ -20,6 +20,8 @@ public:
 
     llvm::Value *createRightValue(TransformContext &context) override;
 
+    static llvm::Value* getSize(TransformContext &context, const SemanticType* type);
+
     void dump(PrettyPrinter &printer) override;
 };
 

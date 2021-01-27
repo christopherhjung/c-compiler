@@ -8,6 +8,7 @@
 #include "../types/TypeDefines.h"
 #include "../transform/TransformContext.h"
 #include "../types/Types.h"
+#include "Sizeof.h"
 
 void Unary::dump(PrettyPrinter &printer) {
     printer << "(";
@@ -29,10 +30,7 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
         case AND:
             return value->createLeftValue(context);
         case SIZEOF:
-            llvm::Type* type = context.getType(value->semanticType);
-            llvm::DataLayout layout(&context.module);
-            unsigned int size = layout.getTypeAllocSize(type);
-            return context.builder.getInt32(size);
+            return Sizeof::getSize(context, value->semanticType);
     }
 
     TRANSFORM_ERROR();
