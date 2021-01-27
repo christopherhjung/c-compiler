@@ -20,6 +20,10 @@ public:
     llvm::Value *createRightValue(TransformContext &context) override;
 
     llvm::Value *createLeftValue(TransformContext &context) override;
+
+    void
+    createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
+                          llvm::BasicBlock *falseBlock) override;
 };
 
 

@@ -32,7 +32,8 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
                 rightValue = context.builder.CreatePtrToInt(rightValue, context.builder.getInt32Ty());
             }
 
-            return context.builder.CreateNot(rightValue);
+            return context.builder.CreateIntCast(
+                    context.builder.CreateICmpEQ(rightValue, context.builder.getInt32(0)), context.builder.getInt32Ty(), false);
         }
         case AND:
             return value->createLeftValue(context);
@@ -50,4 +51,23 @@ llvm::Value *Unary::createLeftValue(TransformContext &context){
     }
 
     TRANSFORM_ERROR();
+}
+
+void Unary::createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
+                      llvm::BasicBlock *falseBlock){
+    switch (op->id) {case NOT:
+        {
+            llvm::Value* rightValue = value->createRightValue(context);
+            if(rightValue->getType()->isPointerTy()){
+                rightValue = context.builder.CreatePtrToInt(rightValue, context.builder.getInt32Ty());
+            }
+
+            llvm::Value* cmp = context.builder.CreateICmpEQ(rightValue, context.builder.getInt32(0));
+
+            context.builder.CreateCondBr(cmp, trueBlock, falseBlock);
+        }
+        return;
+    }
+
+    return Expression::createConditionBranch(context, trueBlock, falseBlock);
 }
