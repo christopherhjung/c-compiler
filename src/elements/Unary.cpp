@@ -26,7 +26,14 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
         case STAR:
             return context.builder.CreateLoad(value->createRightValue(context));
         case NOT:
-            return context.builder.CreateNot(value->createRightValue(context));
+        {
+            llvm::Value* rightValue = value->createRightValue(context);
+            if(rightValue->getType()->isPointerTy()){
+                rightValue = context.builder.CreatePtrToInt(rightValue, context.builder.getInt32Ty());
+            }
+
+            return context.builder.CreateNot(rightValue);
+        }
         case AND:
             return value->createLeftValue(context);
         case SIZEOF:

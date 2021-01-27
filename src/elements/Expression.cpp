@@ -16,7 +16,13 @@ llvm::Value *Expression::createLeftValue(TransformContext &context) {
 }
 
 void Expression::createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock, llvm::BasicBlock *falseBlock) {
-    llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0));
+
+    llvm::Value* value = createRightValue(context);
+    if(value->getType()->isPointerTy()){
+        value = context.builder.CreatePtrToInt(value, context.builder.getInt32Ty());
+    }
+
+    llvm::Value *condition = context.builder.CreateICmpNE(value, context.builder.getInt32(0));
     context.builder.CreateCondBr(condition, trueBlock, falseBlock);
 }
 

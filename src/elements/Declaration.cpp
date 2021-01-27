@@ -9,6 +9,7 @@
 #include "Declarator.h"
 #include "../types/SemanticType.h"
 #include "StructType.h"
+#include "Assignment.h"
 
 void Declaration::dump(PrettyPrinter &printer) {
     type->dump(printer);
@@ -29,8 +30,9 @@ void Declaration::create(TransformContext &context) {
         auto value = context.resetAllocBuilder().CreateAlloca(type);
         context.currentScope->types[semanticType->identifier->value].value = value;
         if (initializer) {
-            llvm::Value *initValue = initializer->createRightValue(context);
-            context.builder.CreateStore(initValue, value);
+            //llvm::Value *initValue = initializer->createRightValue(context);
+            //context.builder.CreateStore(initValue, value);
+            Assignment::makeAssignment(context, const_cast<Identifier*>(semanticType->identifier), initializer);
         }
     } else if (auto methodType = semanticType->asMethodType()) {
         auto returnType = context.getType(methodType->subType);

@@ -513,6 +513,7 @@ SemanticType *Semantic::enter(DirectDeclarator *directDeclarator, SemanticType *
         }
 
         simpleType->identifier = identifier;
+        identifier->semanticType = simpleType;
         return simpleType;
     }
 
@@ -541,7 +542,11 @@ const SemanticType *Semantic::enter0(Declaration *declaration) {
 
 
 SemanticType *Semantic::enter(Declaration *declaration) {
-    return enter(declaration->declarator, declaration->type, &declaration->location);
+    auto semTyp = enter(declaration->declarator, declaration->type, &declaration->location);
+    if(declaration->initializer){
+        enter(declaration->initializer);
+    }
+    return semTyp;
 }
 
 SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* location) {

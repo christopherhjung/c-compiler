@@ -10,6 +10,7 @@ class PrettyPrinter;
 
 class Assignment : public Binary {
 public:
+    static llvm::Value *makeAssignment(TransformContext &context, Expression* left, Expression* right);
     llvm::Value *createRightValue(TransformContext &context) override;
 };
 

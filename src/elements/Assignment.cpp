@@ -8,8 +8,7 @@
 #include "Expression.h"
 #include "Number.h"
 
-llvm::Value *Assignment::createRightValue(TransformContext &context) {
-
+llvm::Value *Assignment::makeAssignment(TransformContext &context, Expression* left, Expression* right)  {
     llvm::Value* value = nullptr;
     if(left->semanticType->asPointerType() ){
         if(auto number = dynamic_cast<Number*>(right)){
@@ -29,5 +28,9 @@ llvm::Value *Assignment::createRightValue(TransformContext &context) {
 
     context.builder.CreateStore(value, left->createLeftValue(context));
     return value;
+}
+
+llvm::Value *Assignment::createRightValue(TransformContext &context) {
+    return makeAssignment(context, left, right);
 }
 
