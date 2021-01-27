@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Statement.h"
+#include "Expression.h"
 
 class PrettyPrinter;
 
@@ -16,6 +17,7 @@ class Declaration : public Statement {
 public:
     Type *type = nullptr;
     Declarator *declarator = nullptr;
+    Expression* initializer = nullptr;
 
     void dump(PrettyPrinter &printer) override;
 

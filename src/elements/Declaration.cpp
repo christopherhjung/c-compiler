@@ -15,19 +15,28 @@ void Declaration::dump(PrettyPrinter &printer) {
     if (declarator != nullptr) {
         printer << " ";
         declarator->dump(printer);
+
+        if (initializer != nullptr) {
+            printer << " = ";
+            initializer->dump(printer);
+        }
     }
 }
 
 void Declaration::create(TransformContext &context) {
-    if(context.functionScope){
-        llvm::Type* type = context.getType(semanticType);
+    if (context.functionScope) {
+        llvm::Type *type = context.getType(semanticType);
         auto value = context.resetAllocBuilder().CreateAlloca(type);
         context.currentScope->types[semanticType->identifier->value].value = value;
-    }else if(auto methodType = semanticType->asMethodType()){
+        if (initializer) {
+            llvm::Value *initValue = initializer->createRightValue(context);
+            context.builder.CreateStore(initValue, value);
+        }
+    } else if (auto methodType = semanticType->asMethodType()) {
         auto returnType = context.getType(methodType->subType);
-        std::vector<llvm::Type*> paramTypes;
-        for(auto type : methodType->types){
-            if(!type->equals(VoidType)){
+        std::vector<llvm::Type *> paramTypes;
+        for (auto type : methodType->types) {
+            if (!type->equals(VoidType)) {
                 paramTypes.push_back(context.getType(type));
             }
         }
@@ -36,23 +45,29 @@ void Declaration::create(TransformContext &context) {
         context.createFunctionDecl(*methodName, returnType, paramTypes);
 
         context.mainScope->types[methodName].value = context.currentFunction;
-    }else if(auto structType = dynamic_cast<StructType*>(type)){
+    } else if (auto structType = dynamic_cast<StructType *>(type)) {
         context.getType(semanticType);
-    }else{
-        llvm::Type* type = context.getType(semanticType);
+    } else {
+        llvm::Type *type = context.getType(semanticType);
+        llvm::Constant *initValue;
+        if (initializer) {
+            initValue = reinterpret_cast<llvm::Constant*>(initializer->createRightValue(context));
+        } else {
+            initValue = llvm::Constant::getNullValue(type);
+        }
+
         const std::string *name = semanticType->identifier->value;
         llvm::GlobalVariable *globalVar = new llvm::GlobalVariable(
-                context.module                                       /* Module & */,
-                type                              /* Type * */,
-                false                                   /* bool isConstant */,
-                llvm::GlobalValue::CommonLinkage              /* LinkageType */,
-                llvm::Constant::getNullValue(type)      /* Constant * Initializer */,
-                *name                                /* const Twine &Name = "" */,
-                /* --------- We do not need this part (=> use defaults) ---------- */
-                0                                       /* GlobalVariable *InsertBefore = 0 */,
-                llvm::GlobalVariable::NotThreadLocal          /* ThreadLocalMode TLMode = NotThreadLocal */,
-                0                                       /* unsigned AddressSpace = 0 */,
-                false                                   /* bool isExternallyInitialized = false */);
+                context.module,
+                type,
+                false,
+                llvm::GlobalValue::ExternalLinkage,
+                initValue,
+                *name,
+                0,
+                llvm::GlobalVariable::NotThreadLocal,
+                0,
+                false);
 
         context.mainScope->get(name)->value = globalVar;
     }

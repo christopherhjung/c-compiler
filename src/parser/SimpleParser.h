@@ -124,6 +124,9 @@ public:
                 method->body = parseBlock();
 
                 return method;
+            }else if(is(ASSIGN)){
+                next();
+                declaration->initializer = parseExpression();
             }
         }
         shall(SEMI);
@@ -369,6 +372,11 @@ public:
         declaration->type = parseType();
         if (!is(SEMI)) {
             declaration->declarator = parseDeclarator(true, false);
+
+            if(is(ASSIGN)){
+                next();
+                declaration->initializer = parseExpression();
+            }
         }
         shall(SEMI);
         return declaration;
