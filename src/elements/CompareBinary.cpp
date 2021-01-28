@@ -56,13 +56,7 @@ llvm::Value *CompareBinary::makeCompare(TransformContext &context) {
         rightValue = context.builder.CreatePtrToInt(leftValue, context.builder.getInt32Ty());
     }
 
-
     llvm::Value* resultValue = context.builder.CreateICmp(getPredicate(), leftValue , rightValue);
-
-
-    if(resultValue->getType()->isIntegerTy(1)){
-        resultValue = resultValue;
-    }
 
     return resultValue;
 }
