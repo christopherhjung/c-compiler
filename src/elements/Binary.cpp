@@ -47,6 +47,8 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
             }
         case MINUS:
             if(opInfo == 0){
+                leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
+                rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
                 return context.builder.CreateSub(leftValue, rightValue);
             }else if (opInfo == 1){
                 return context.builder.CreateGEP(leftValue, context.builder.CreateNeg(rightValue));
