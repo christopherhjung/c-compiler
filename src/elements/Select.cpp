@@ -20,13 +20,8 @@ void Select::dump(PrettyPrinter &printer) {
 llvm::Value *Select::createLeftValue(TransformContext &context){
     auto indexValue = index->createRightValue(context);
     auto indexValue64 = context.builder.CreateSExtOrTrunc(indexValue, context.builder.getInt64Ty());
-
-    std::vector<llvm::Value *> ArgvIndices;
-    ArgvIndices.push_back(indexValue64);
-
     auto basePointer = target->createRightValue(context);
-    auto elemPointer = context.builder.CreateGEP(basePointer, ArgvIndices);
-
+    auto elemPointer = context.builder.CreateGEP(basePointer, indexValue64);
     return elemPointer;
 }
 
