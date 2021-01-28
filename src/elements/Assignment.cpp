@@ -21,14 +21,17 @@ llvm::Value *Assignment::ensureAssignment(TransformContext &context, const Seman
     if(value == nullptr){
         if(right->deref){
             value = right->createLeftValue(context);
-            //value = context.builder.CreateLoad(value);
         }else{
             value = right->createRightValue(context);
         }
     }
 
-    if(leftType->asPointerType() && right->semanticType->asPointerType() && !right->semanticType->equals(leftType)){
-        value = context.builder.CreatePointerCast(right->createRightValue(context), context.getType(leftType));
+    if(!right->semanticType->equals(leftType)){
+        if(leftType->asPointerType() && right->semanticType->asPointerType() ){
+            value = context.builder.CreatePointerCast(right->createRightValue(context), context.getType(leftType));
+        }else if(leftType->asSimpleType() && right->semanticType->asSimpleType()){
+            value = context.builder.CreateIntCast(right->createRightValue(context), context.builder.getInt32Ty(), true);
+        }
     }
 
     return value;
