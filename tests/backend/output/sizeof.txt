@@ -1,0 +1,3 @@
+Size of variable a : 1
+Size of an expression : 4
+Size of explicitly converted expression : 4

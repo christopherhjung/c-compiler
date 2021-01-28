@@ -1,0 +1,2 @@
+Factorial of 1: 120
+Fibbonacci of 5: 0 1 1 2 3
