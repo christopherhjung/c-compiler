@@ -41,7 +41,7 @@ public:
 
     void enter(Return *returnStatement);
 
-    bool isAssignable(const SemanticType *target, const SemanticType *source);
+    bool isAssignable(const SemanticType *target, Expression *sourceStatement);
 
     void enter(Expression *expression);
 

@@ -151,32 +151,48 @@ void Semantic::enter(GoTo *gotoStatement) {
 
 void Semantic::enter(Return *returnStatement) {
     Element *loc;
-    const SemanticType *returnType;
     if (returnStatement->value == nullptr) {
-        returnType = VoidType;
         loc = returnStatement;
     } else {
         enter(returnStatement->value);
         loc = returnStatement->value;
-        returnType = returnStatement->value->semanticType;
     }
 
     returnStatement->semanticType = methodScope->returnType;
-
-    if (!isAssignable(currentScope->getReturnType(), returnType)) {
+    if (!isAssignable(currentScope->getReturnType(), returnStatement->value)) {
         ERROR(loc->location);
     }
 }
 
-bool Semantic::isAssignable(const SemanticType *target, const SemanticType *source) {
+bool Semantic::isAssignable(const SemanticType *target, Expression *sourceStatement) {
+    const SemanticType* source;
+    if(sourceStatement == nullptr){
+        source = VoidType;
+    }else{
+        source = sourceStatement->semanticType;
+    }
+
     bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
     bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType);
 
-    return target->equals(source)
+    bool assignable = target->equals(source)
            || (targetIsNumeric && sourceIsNumeric)
            || (target->asPointerType() && sourceIsNumeric)
            || (target->equals(VoidPointerType) && source->asPointerType())
            || (source->equals(VoidPointerType) && target->asPointerType());
+
+    if(!assignable && sourceStatement != nullptr){
+        if(auto targetPointer = target->asPointerType()){
+            if(auto sourceMethod = source->asMethodType()){
+                if(auto targetMethod = targetPointer->subType->asMethodType()){
+                    assignable = sourceMethod->equals(targetMethod);
+                    sourceStatement->deref = true;
+                }
+            }
+        }
+    }
+
+    return assignable;
 }
 
 /*
@@ -225,6 +241,7 @@ void Semantic::enter0(Expression *expression) {
             auto pointerType = call->target->semanticType->asPointerType();
             if(pointerType){
                 methodType = pointerType->subType->asMethodType();
+                call->target->deref = true;
             }
         }
 
@@ -470,8 +487,8 @@ void Semantic::enter(Binary *binary) {
                 ERROR_MSG(binary->op->location, binary->left->toString() + " not assignable");
             }
 
-            if (isAssignable(leftType, rightType)) {
-                binary->semanticType = rightType;
+            if (isAssignable(leftType, binary->right)) {
+                binary->semanticType = leftType;
                 return;
             }
 

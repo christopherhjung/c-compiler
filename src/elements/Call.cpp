@@ -34,9 +34,8 @@ llvm::Value *Call::createRightValue(TransformContext &context){
 
     llvm::Value* value = target->createLeftValue(context);
 
-    llvm::Type* type = value->getType();
     auto functionSemanticType = target->semanticType;
-    if(type->getNumContainedTypes() == 1 && type->getContainedType(0)->isPointerTy()){
+    if(target->deref){
         value = context.builder.CreateLoad(value);
         functionSemanticType = functionSemanticType->asPointerType()->subType;
     }

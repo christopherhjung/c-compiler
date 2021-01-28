@@ -18,8 +18,15 @@ llvm::Value *Assignment::ensureAssignment(TransformContext &context, const Seman
         }
     }
 
+
+
     if(value == nullptr){
-        value = right->createRightValue(context);
+        if(right->deref){
+            value = right->createLeftValue(context);
+            //value = context.builder.CreateLoad(value);
+        }else{
+            value = right->createRightValue(context);
+        }
     }
 
     if(leftType->asPointerType() && right->semanticType->asPointerType() && !right->semanticType->equals(leftType)){
