@@ -47,6 +47,7 @@ void Method::create(TransformContext &context) {
 
     context.currentFunction = declared;
     context.functionScope = body->scope;
+    context.pushScope(body->scope);
     llvm::BasicBlock* entry = context.createBasicBlock("entry");
     context.setCurrentBlock(entry);
     context.allocBuilder.SetInsertPoint(entry);
@@ -77,4 +78,5 @@ void Method::create(TransformContext &context) {
     }
 
     context.functionScope = nullptr;
+    context.popScope();
 }

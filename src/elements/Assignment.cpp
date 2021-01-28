@@ -8,12 +8,12 @@
 #include "Expression.h"
 #include "Number.h"
 
-llvm::Value *Assignment::makeAssignment(TransformContext &context, Expression* left, Expression* right)  {
+llvm::Value *Assignment::ensureAssignment(TransformContext &context, const SemanticType* leftType, Expression* right)  {
     llvm::Value* value = nullptr;
-    if(left->semanticType->asPointerType() ){
+    if(leftType->asPointerType() ){
         if(auto number = dynamic_cast<Number*>(right)){
             if(number->getValue() == 0){
-                value = llvm::Constant::getNullValue(context.getType(left->semanticType));
+                value = llvm::Constant::getNullValue(context.getType(leftType));
             }
         }
     }
@@ -22,10 +22,15 @@ llvm::Value *Assignment::makeAssignment(TransformContext &context, Expression* l
         value = right->createRightValue(context);
     }
 
-    if(left->semanticType->asPointerType() && right->semanticType->asPointerType() && !right->semanticType->equals(left->semanticType)){
-        value = context.builder.CreatePointerCast(right->createRightValue(context), context.getType(left->semanticType));
+    if(leftType->asPointerType() && right->semanticType->asPointerType() && !right->semanticType->equals(leftType)){
+        value = context.builder.CreatePointerCast(right->createRightValue(context), context.getType(leftType));
     }
 
+    return value;
+}
+
+llvm::Value *Assignment::makeAssignment(TransformContext &context, Expression* left, Expression* right)  {
+    llvm::Value* value = ensureAssignment(context, left->semanticType, right);
     context.builder.CreateStore(value, left->createLeftValue(context));
     return value;
 }

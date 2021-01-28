@@ -6,6 +6,7 @@
 #include "../parser/PrettyPrinter.h"
 #include "Expression.h"
 #include "../transform/TransformContext.h"
+#include "Assignment.h"
 
 void Return::dump(PrettyPrinter &printer) {
     printer << "return";
@@ -19,7 +20,7 @@ void Return::create(TransformContext &context) {
     if(value == nullptr){
         context.builder.CreateRetVoid();
     }else{
-        context.builder.CreateRet(value->createRightValue(context));
+        context.builder.CreateRet(Assignment::ensureAssignment(context, semanticType , value));
     }
 
     context.setCurrentBlock(context.unreachable);

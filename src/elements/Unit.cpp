@@ -27,6 +27,7 @@ void Unit::dump(PrettyPrinter &printer) {
 
 void Unit::create(TransformContext &context) {
     context.setMainScope(scope);
+    context.pushScope(scope);
     for (auto element : children) {
         if (auto method = dynamic_cast<Method *>(element)) {
             method->create(context);
@@ -34,4 +35,5 @@ void Unit::create(TransformContext &context) {
             decl->create(context);
         }
     }
+    context.popScope();
 }

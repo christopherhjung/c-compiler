@@ -47,30 +47,34 @@ void Declaration::create(TransformContext &context) {
         context.createFunctionDecl(*methodName, returnType, paramTypes);
 
         context.mainScope->types[methodName].value = context.currentFunction;
-    } else if (auto structType = dynamic_cast<StructType *>(type)) {
-        context.getType(semanticType);
     } else {
         llvm::Type *type = context.getType(semanticType);
-        llvm::Constant *initValue;
-        if (initializer) {
-            initValue = reinterpret_cast<llvm::Constant*>(initializer->createRightValue(context));
-        } else {
-            initValue = llvm::Constant::getNullValue(type);
+        if(semanticType->identifier){
+            llvm::Constant *initValue;
+            if (initializer) {
+                if(type->isPointerTy()){
+                    initValue = llvm::Constant::getNullValue(type);
+                }else{
+                    initValue = reinterpret_cast<llvm::Constant*>(initializer->createRightValue(context));
+                }
+            } else {
+                initValue = llvm::Constant::getNullValue(type);
+            }
+
+            const std::string *name = semanticType->identifier->value;
+            llvm::GlobalVariable *globalVar = new llvm::GlobalVariable(
+                    context.module,
+                    type,
+                    false,
+                    llvm::GlobalValue::ExternalLinkage,
+                    initValue,
+                    *name,
+                    0,
+                    llvm::GlobalVariable::NotThreadLocal,
+                    0,
+                    false);
+
+            context.mainScope->get(name)->value = globalVar;
         }
-
-        const std::string *name = semanticType->identifier->value;
-        llvm::GlobalVariable *globalVar = new llvm::GlobalVariable(
-                context.module,
-                type,
-                false,
-                llvm::GlobalValue::ExternalLinkage,
-                initValue,
-                *name,
-                0,
-                llvm::GlobalVariable::NotThreadLocal,
-                0,
-                false);
-
-        context.mainScope->get(name)->value = globalVar;
     }
 }

@@ -161,6 +161,8 @@ void Semantic::enter(Return *returnStatement) {
         returnType = returnStatement->value->semanticType;
     }
 
+    returnStatement->semanticType = methodScope->returnType;
+
     if (!isAssignable(currentScope->getReturnType(), returnType)) {
         ERROR(loc->location);
     }

@@ -17,6 +17,10 @@ public:
 
     llvm::CmpInst::Predicate getPredicate();
 
+
+    llvm::Value *makeCompare(TransformContext &context);
+
+    //llvm::Value *createRightValue(TransformContext &context) override;
     llvm::Value *createRightValue(TransformContext &context) override;
 };
 

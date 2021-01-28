@@ -13,7 +13,7 @@ void CompareBinary::createConditionBranch(TransformContext &context,
     /*llvm::Value *condition = context.builder.CreateICmpNE(createRightValue(context), context.builder.getInt32(0),
                                                           "condition");*/
 
-    context.builder.CreateCondBr(createRightValue(context), trueBlock, falseBlock);
+    context.builder.CreateCondBr(makeCompare(context), trueBlock, falseBlock);
 }
 
 llvm::CmpInst::Predicate CompareBinary::getPredicate() {
@@ -44,7 +44,7 @@ llvm::CmpInst::Predicate CompareBinary::getPredicate() {
     return predicate;
 }
 
-llvm::Value *CompareBinary::createRightValue(TransformContext &context) {
+llvm::Value *CompareBinary::makeCompare(TransformContext &context) {
 
     llvm::Value* leftValue = left->createRightValue(context);
     if(left->semanticType->asPointerType()){
@@ -56,5 +56,21 @@ llvm::Value *CompareBinary::createRightValue(TransformContext &context) {
         rightValue = context.builder.CreatePtrToInt(leftValue, context.builder.getInt32Ty());
     }
 
-    return context.builder.CreateICmp(getPredicate(), leftValue , rightValue);
+
+    llvm::Value* resultValue = context.builder.CreateICmp(getPredicate(), leftValue , rightValue);
+
+
+    if(resultValue->getType()->isIntegerTy(1)){
+        resultValue = resultValue;
+    }
+
+    return resultValue;
+}
+
+llvm::Value *CompareBinary::createRightValue(TransformContext &context) {
+
+    llvm::Value* resultValue = makeCompare(context);
+    resultValue = context.builder.CreateIntCast(resultValue, context.builder.getInt32Ty(), false);
+    //resultValue = context.builder.CreateTrunc(resultValue, context.builder.getInt32Ty());
+    return resultValue;
 }

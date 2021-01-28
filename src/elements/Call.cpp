@@ -6,6 +6,7 @@
 
 #include "../parser/PrettyPrinter.h"
 #include "../transform/TransformContext.h"
+#include "Assignment.h"
 
 void Call::dump(PrettyPrinter &printer) {
     printer << "(";
@@ -28,7 +29,7 @@ llvm::Value *Call::createRightValue(TransformContext &context){
 
     std::vector<llvm::Value*> arguments;
     for( auto value : values ){
-        arguments.push_back(value->createRightValue(context));
+        arguments.push_back(Assignment::ensureAssignment(context, value->semanticType, value));
     }
 
     llvm::Value* value = target->createLeftValue(context);
