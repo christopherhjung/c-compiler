@@ -30,7 +30,7 @@ llvm::Value *Assignment::ensureAssignment(TransformContext &context, const Seman
         if(leftType->asPointerType() && right->semanticType->asPointerType() ){
             value = context.builder.CreatePointerCast(right->createRightValue(context), context.getType(leftType));
         }else if(leftType->asSimpleType() && right->semanticType->asSimpleType()){
-            value = context.builder.CreateIntCast(right->createRightValue(context), context.builder.getInt32Ty(), true);
+            value = context.builder.CreateIntCast(right->createRightValue(context), context.getType(leftType), true);
         }
     }
 
