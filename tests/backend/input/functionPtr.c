@@ -21,8 +21,7 @@ int sub(int i, int j)
     return (i - j);
 }
 
-
 int main(void)
 {
-    return compute(99,100, &add) - compute(1,3, &sub);
+    printf("%d", compute(99,100, &add) - compute(1,3, &sub));
 }

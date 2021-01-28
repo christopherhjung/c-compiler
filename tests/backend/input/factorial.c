@@ -28,7 +28,11 @@ int main(void) {
     printf("Fibbonacci of %d: " , n);
 
     while(i<n) {
-        printf("%d ",fibbonacci(i));
+        if(i > 0){
+            printf(" ",0);
+        }
+        printf("%d",fibbonacci(i));
         i = i + 1;
     }
+    return 0;
 }

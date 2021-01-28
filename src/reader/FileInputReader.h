@@ -32,6 +32,10 @@ public:
         }
     }
 
+    std::string getFile() {
+        return file;
+    }
+
     std::string getContext() override {
         return context;
     }

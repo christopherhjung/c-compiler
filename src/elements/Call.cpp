@@ -27,10 +27,6 @@ void Call::dump(PrettyPrinter &printer) {
 
 llvm::Value *Call::createRightValue(TransformContext &context){
 
-    std::vector<llvm::Value*> arguments;
-    for( auto value : values ){
-        arguments.push_back(Assignment::ensureAssignment(context, value->semanticType, value));
-    }
 
     llvm::Value* value = target->createLeftValue(context);
 
@@ -39,6 +35,15 @@ llvm::Value *Call::createRightValue(TransformContext &context){
         value = context.builder.CreateLoad(value);
         functionSemanticType = functionSemanticType->asPointerType()->subType;
     }
+
+    std::vector<llvm::Value*> arguments;
+
+    auto methodType = functionSemanticType->asMethodType();
+    arguments.reserve(values.size());
+    for( int i = 0 ; i < values.size() ; i++){
+        arguments.push_back(Assignment::ensureAssignment(context, methodType->types[i], values[i]));
+    }
+
 
     auto functionType = reinterpret_cast<llvm::FunctionType*>(context.getType(functionSemanticType));
     auto function = llvm::FunctionCallee(functionType,value);

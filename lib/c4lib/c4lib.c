@@ -21,6 +21,10 @@ void *c4_calloc(int num, int sz) {
     return calloc(num, sz);
 }
 
+void c4_scan_int(char* str, int* o){
+    scanf(str, o);
+}
+
 void *c4_realloc(void* p, int sz) {
     return realloc(p, sz);
 }

@@ -10,6 +10,7 @@
 #include "Operator.h"
 #include "../types/TypeDefines.h"
 #include "../transform/TransformContext.h"
+#include "Assignment.h"
 
 void Binary::dump(PrettyPrinter &printer) {
     printer << "(";
@@ -36,6 +37,8 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
     switch (op->id) {
         case PLUS:
             if(opInfo == 0){
+                leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
+                rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
                 return context.builder.CreateAdd(leftValue, rightValue);
             }else if (opInfo == 1){
                 return context.builder.CreateGEP(leftValue, rightValue);

@@ -1,4 +1,4 @@
-#include "../lib/c4lib/c4lib.h"
+#include "../../../lib/c4lib/c4lib.h"
 
 struct node {
     int data;

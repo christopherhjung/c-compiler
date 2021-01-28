@@ -15,6 +15,8 @@ void c4_free(void *p);
 
 void c4_print_str(char* str);
 
+void c4_scan_int(char* str, int* o);
+
 void c4_sprintf(char* buf, char* str, int x);
 
 void c4_print_int(int x);

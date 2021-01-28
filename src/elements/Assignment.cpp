@@ -18,8 +18,6 @@ llvm::Value *Assignment::ensureAssignment(TransformContext &context, const Seman
         }
     }
 
-
-
     if(value == nullptr){
         if(right->deref){
             value = right->createLeftValue(context);

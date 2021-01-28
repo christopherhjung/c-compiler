@@ -256,7 +256,7 @@ void Semantic::enter0(Expression *expression) {
                 int min = std::min(methodType->types.size(), call->values.size());
 
                 for (int i = 0; i < min; i++) {
-                    if (!methodType->types[i]->equals(call->values[i]->semanticType)) {
+                    if(!isAssignable(methodType->types[i], call->values[i])){
                         ERROR(call->locations[i]);
                     }
                 }

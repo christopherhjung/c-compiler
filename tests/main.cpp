@@ -18,7 +18,27 @@
 #include "../src/lexer/lexerCore.h"
 #include "../core.cpp"
 
+#include <cstdio>
+#include <iostream>
+#include <memory>
+#include <stdexcept>
+#include <string>
+#include <array>
+
 std::string filter = "";
+
+std::string exec(std::string cmd) {
+    std::array<char, 128> buffer{};
+    std::string result;
+    std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd.c_str(), "r"), pclose);
+    if (!pipe) {
+        throw std::runtime_error("popen() failed!");
+    }
+    while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+        result += buffer.data();
+    }
+    return result;
+}
 
 std::string removeExtension(const std::string& fileName){
     size_t position = fileName.find(".");
@@ -155,6 +175,13 @@ int main(int argc, char** argv){
 
     errors += check("semantic_analysis", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
         return runParser(inputReader, out, err, true, false);
+    });
+
+    errors += check("backend", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
+        std::string command = "../compile.sh ";
+        command += inputReader->getFile();
+        out << exec( command );
+        return 0;
     });
 
     return errors;
