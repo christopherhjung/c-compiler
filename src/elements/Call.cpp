@@ -27,25 +27,34 @@ void Call::dump(PrettyPrinter &printer) {
 
 llvm::Value *Call::createRightValue(TransformContext &context){
 
-
-    llvm::Value* value = target->createLeftValue(context);
-
     auto functionSemanticType = target->semanticType;
-    if(target->deref){
-        value = context.builder.CreateLoad(value);
-        functionSemanticType = functionSemanticType->asPointerType()->subType;
+
+    llvm::Value* value;
+    if(functionSemanticType->asMethodType()){
+        value = target->createLeftValue(context);
+    }else{
+        value = target->createRightValue(context);
     }
 
-    std::vector<llvm::Value*> arguments;
+    const MethodType* methodType;
+    if(auto pointerType = functionSemanticType->asPointerType()){
+        if(!pointerType->subType->asMethodType()){
+            functionSemanticType = pointerType->subType;
+        }
 
-    auto methodType = functionSemanticType->asMethodType();
+        methodType = functionSemanticType->asPointerType()->subType->asMethodType();
+    }else{
+        methodType = functionSemanticType->asMethodType();
+    }
+
+
+    std::vector<llvm::Value*> arguments;
     arguments.reserve(values.size());
     for( int i = 0 ; i < values.size() ; i++){
         arguments.push_back(Assignment::ensureAssignment(context, methodType->types[i], values[i]));
     }
 
-
-    auto functionType = reinterpret_cast<llvm::FunctionType*>(context.getType(functionSemanticType));
+    auto functionType = reinterpret_cast<llvm::FunctionType*>(context.getType(methodType));
     auto function = llvm::FunctionCallee(functionType,value);
     return context.builder.CreateCall(function, arguments);
 }

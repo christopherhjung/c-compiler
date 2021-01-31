@@ -13,8 +13,6 @@ class PrettyPrinter;
 
 class Expression : public Statement {
 public:
-    bool deref = false;
-
     virtual llvm::Value *createRightValue(TransformContext &context);
 
     virtual llvm::Value *createLeftValue(TransformContext &context);

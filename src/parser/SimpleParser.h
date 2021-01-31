@@ -180,7 +180,7 @@ public:
 
     void parseStructDeclarationList(StructType *structType) {
         while (true) {
-            structType->declarations.push_back(parseDeclaration());
+            structType->declarations.push_back(parseDeclaration(false));
 
             if (is(RIGHT_BRACE)) {
                 break;
@@ -263,7 +263,7 @@ public:
         //if(!nullable || !is(RIGHT_PAREN)){
         while (true) {
             auto declaration = create<Declaration>();
-            Type *type = parseType();
+            Type *type = parseType(false);
             Declarator *declarator = parseDeclarator(true, true);
 
             declaration->type = type;
@@ -361,19 +361,19 @@ public:
 
     Statement *parseBlockItem() {
         if (isType(lookA.id)) {
-            return parseDeclaration();
+            return parseDeclaration(true);
         } else {
             return parseStatement();
         }
     }
 
-    Declaration *parseDeclaration() {
+    Declaration *parseDeclaration(bool initAllowed) {
         auto declaration = create<Declaration>();
         declaration->type = parseType();
         if (!is(SEMI)) {
             declaration->declarator = parseDeclarator(true, false);
 
-            if(is(ASSIGN)){
+            if(initAllowed && is(ASSIGN)){
                 next();
                 declaration->initializer = parseExpression();
             }

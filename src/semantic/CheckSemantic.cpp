@@ -186,7 +186,6 @@ bool Semantic::isAssignable(const SemanticType *target, Expression *sourceStatem
             if(auto sourceMethod = source->asMethodType()){
                 if(auto targetMethod = targetPointer->subType->asMethodType()){
                     assignable = sourceMethod->equals(targetMethod);
-                    sourceStatement->deref = true;
                 }
             }
         }
@@ -241,7 +240,6 @@ void Semantic::enter0(Expression *expression) {
             auto pointerType = call->target->semanticType->asPointerType();
             if(pointerType){
                 methodType = pointerType->subType->asMethodType();
-                call->target->deref = true;
             }
         }
 
