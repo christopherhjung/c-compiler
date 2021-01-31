@@ -263,7 +263,7 @@ public:
         //if(!nullable || !is(RIGHT_PAREN)){
         while (true) {
             auto declaration = create<Declaration>();
-            Type *type = parseType(false);
+            Type *type = parseType();
             Declarator *declarator = parseDeclarator(true, true);
 
             declaration->type = type;
