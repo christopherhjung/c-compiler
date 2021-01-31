@@ -27,12 +27,14 @@ void Declaration::dump(PrettyPrinter &printer) {
 void Declaration::create(TransformContext &context) {
     if (context.functionScope) {
         llvm::Type *type = context.getType(semanticType);
-        auto value = context.resetAllocBuilder().CreateAlloca(type);
-        context.currentScope->types[semanticType->identifier->value].value = value;
-        if (initializer) {
-            //llvm::Value *initValue = initializer->createRightValue(context);
-            //context.builder.CreateStore(initValue, value);
-            Assignment::makeAssignment(context, const_cast<Identifier*>(semanticType->identifier), initializer);
+        if(semanticType->identifier != nullptr){
+            auto value = context.resetAllocBuilder().CreateAlloca(type);
+            context.currentScope->types[semanticType->identifier->value].value = value;
+            if (initializer) {
+                //llvm::Value *initValue = initializer->createRightValue(context);
+                //context.builder.CreateStore(initValue, value);
+                Assignment::makeAssignment(context, const_cast<Identifier*>(semanticType->identifier), initializer);
+            }
         }
     } else if (auto methodType = semanticType->asMethodType()) {
         auto returnType = context.getType(methodType->subType);
