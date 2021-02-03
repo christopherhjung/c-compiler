@@ -315,7 +315,14 @@ void Semantic::enter(Unary *unary) {
     switch (unary->op->id) {
         case STAR:
             if (auto dealloc = type->asPointerType()) {
-                unary->semanticType = new ProxyType(dealloc->subType, true);
+                if(dealloc->asMethodType()){
+                    unary->semanticType = new ProxyType(dealloc, true);
+                }else{
+                    unary->semanticType = new ProxyType(dealloc->subType, true);
+                }
+                return;
+            }else if(type->asMethodType()){
+                unary->semanticType = new ProxyType(type, false);
                 return;
             }
             break;

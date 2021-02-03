@@ -18,3 +18,5 @@ extern SimpleType *const VoidType;
 extern SemanticType *const CharPointerType ;
 extern SemanticType *const IntPointerType;
 extern SemanticType *const VoidPointerType;
+extern SemanticType *const MethodTypeInstance;
+extern SemanticType *const MethodPointerType;

@@ -29,12 +29,7 @@ llvm::Value *Call::createRightValue(TransformContext &context){
 
     auto functionSemanticType = target->semanticType;
 
-    llvm::Value* value;
-    if(functionSemanticType->asMethodType()){
-        value = target->createLeftValue(context);
-    }else{
-        value = target->createRightValue(context);
-    }
+    llvm::Value* value = target->createRightValue(context);
 
     const MethodType* methodType;
     if(auto pointerType = functionSemanticType->asPointerType()){

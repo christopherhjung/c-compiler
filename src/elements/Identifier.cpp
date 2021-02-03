@@ -5,6 +5,7 @@
 #include "Identifier.h"
 #include "../parser/PrettyPrinter.h"
 #include "../transform/TransformContext.h"
+#include "../types/Types.h"
 
 void Identifier::dump(PrettyPrinter &printer) {
     printer << *value;
@@ -12,7 +13,12 @@ void Identifier::dump(PrettyPrinter &printer) {
 
 llvm::Value *Identifier::createRightValue(TransformContext &context) {
     llvm::Value *variable = context.currentScope->get(value)->value;
-    return context.builder.CreateLoad(variable);
+
+    if(semanticType->asMethodType()){
+        return variable;
+    }else{
+        return context.builder.CreateLoad(variable);
+    }
 }
 
 llvm::Value *Identifier::createLeftValue(TransformContext &context) {

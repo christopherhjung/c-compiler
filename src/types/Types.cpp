@@ -11,3 +11,5 @@ extern SimpleType *const VoidType = new SimpleType(TYPE_VOID);
 extern SemanticType *const CharPointerType = new PointerType(CharType);
 extern SemanticType *const IntPointerType = new PointerType(IntType);
 extern SemanticType *const VoidPointerType = new PointerType(VoidType);
+extern SemanticType *const MethodTypeInstance = new MethodType(nullptr);
+extern SemanticType *const MethodPointerType = new PointerType(MethodTypeInstance);

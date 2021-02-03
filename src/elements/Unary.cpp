@@ -23,8 +23,15 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
             return value->createRightValue(context);
         case MINUS:
             return context.builder.CreateNeg(value->createRightValue(context));
-        case STAR:
-            return context.builder.CreateLoad(value->createRightValue(context));
+        case STAR:{
+            llvm::Value *variable = value->createRightValue(context);
+
+            if(value->semanticType->asMethodType() || value->semanticType->equals(MethodPointerType)){
+                return variable;
+            }else{
+                return context.builder.CreateLoad(variable);
+            }
+        }
         case NOT:
         {
             llvm::Value* rightValue = value->createRightValue(context);
