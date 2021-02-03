@@ -12,15 +12,13 @@ void Identifier::dump(PrettyPrinter &printer) {
 }
 
 llvm::Value *Identifier::createRightValue(TransformContext &context) {
-    llvm::Value *variable = context.currentScope->get(value)->value;
-
     if(semanticType->asMethodType()){
-        return variable;
+        return anchor->value;
     }else{
-        return context.builder.CreateLoad(variable);
+        return context.builder.CreateLoad(anchor->value);
     }
 }
 
 llvm::Value *Identifier::createLeftValue(TransformContext &context) {
-    return context.currentScope->get(value)->value;
+    return anchor->value;
 }

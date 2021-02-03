@@ -29,7 +29,7 @@ void Declaration::create(TransformContext &context) {
         llvm::Type *type = context.getType(semanticType);
         if(semanticType->identifier != nullptr){
             auto value = context.resetAllocBuilder().CreateAlloca(type);
-            context.currentScope->types[semanticType->identifier->value].value = value;
+            context.currentScope->types[semanticType->identifier->value].anchor->value = value;
             if (initializer) {
                 //llvm::Value *initValue = initializer->createRightValue(context);
                 //context.builder.CreateStore(initValue, value);
@@ -48,7 +48,7 @@ void Declaration::create(TransformContext &context) {
 
         context.createFunctionDecl(*methodName, returnType, paramTypes);
 
-        context.mainScope->types[methodName].value = context.currentFunction;
+        methodType->identifier->anchor->value = context.currentFunction;
     } else {
         llvm::Type *type = context.getType(semanticType);
         if(semanticType->identifier){
@@ -76,7 +76,7 @@ void Declaration::create(TransformContext &context) {
                     0,
                     false);
 
-            context.mainScope->get(name)->value = globalVar;
+            context.mainScope->get(name)->anchor->value = globalVar;
         }
     }
 }

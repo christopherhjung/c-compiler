@@ -27,11 +27,11 @@ void Method::create(TransformContext &context) {
     }
     const std::string *methodName = declaration->semanticType->identifier->value;
 
-    llvm::Function* declared = reinterpret_cast<llvm::Function*>(context.mainScope->types[methodName].value);
+    llvm::Function* declared = reinterpret_cast<llvm::Function*>(declaration->semanticType->identifier->anchor->value);
 
     if(!declared){
         declaration->create(context);
-        declared = reinterpret_cast<llvm::Function*>(context.mainScope->types[methodName].value);
+        declared = reinterpret_cast<llvm::Function*>(declaration->semanticType->identifier->anchor->value);
     }
 
 
@@ -60,7 +60,7 @@ void Method::create(TransformContext &context) {
             arg->setName(*name);
             llvm::Value *argPtr = context.resetAllocBuilder().CreateAlloca(arg->getType());
             context.builder.CreateStore(arg, argPtr);
-            body->scope->get(name)->value = argPtr;
+            type->identifier->anchor->value = argPtr;
         }
 
         args++;

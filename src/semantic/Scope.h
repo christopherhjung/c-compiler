@@ -7,11 +7,14 @@
 #include <unordered_map>
 #include <string>
 
+#include "Anchor.h"
 #include "llvm/IR/GlobalValue.h"
 
 class SemanticType;
 
 class SemanticStructType;
+
+
 
 template<class T>
 class Descriptor {
@@ -19,7 +22,7 @@ public:
     T *semanticType = nullptr;
     bool implementation = false;
     bool defined = false;
-    llvm::Value* value;
+    Anchor* anchor = new Anchor();
     //llvm::Function* function;
 
     Descriptor() {

@@ -6,11 +6,13 @@
 #include <string>
 #include "DirectDeclarator.h"
 #include "Expression.h"
+#include "../semantic/Anchor.h"
 
 class PrettyPrinter;
 
 class Identifier : public Expression, public DirectDeclarator {
 public:
+    Anchor* anchor = nullptr;
     const std::string *value = nullptr;
 
     Identifier() {}

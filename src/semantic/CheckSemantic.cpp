@@ -21,9 +21,11 @@ void Semantic::check(Unit *element) {
             auto methodType = const_cast<MethodType *>(enter0(method->declaration)->asMethodType());
 
             auto inner = new Scope();
-
+            auto name = methodType->identifier->value;
             if (methodType->identifier != nullptr &&
-                !currentScope->set(methodType->identifier->value, methodType, true)) {
+                !currentScope->set(name, methodType, true)) {
+
+                const_cast<Identifier*>(methodType->identifier)->anchor = currentScope->get(name)->anchor;
                 ERROR(methodType->identifier->location);
             }
 
@@ -40,6 +42,8 @@ void Semantic::check(Unit *element) {
                     } else {
                         if (!inner->set(identifier->value, paramType, false)) {
                             ERROR(identifier->location);
+                        }else{
+                            const_cast<Identifier*>(identifier)->anchor = inner->get(identifier->value)->anchor;
                         }
                     }
                 }
@@ -224,6 +228,7 @@ void Semantic::enter0(Expression *expression) {
             ERROR(identifier->location);
         }
 
+        identifier->anchor = desc->anchor;
         identifier->semanticType = desc->semanticType;
     } else if (auto constant = dynamic_cast<Constant *>(expression)) {
         constant->semanticType = new SimpleType(TYPE_CHAR, false);
@@ -553,8 +558,12 @@ const SemanticType *Semantic::enter0(Declaration *declaration) {
                 ERROR(declaration->location);
             }
 
-            if (type->identifier != nullptr && !currentScope->set(type->identifier->value, type, false)) {
-                ERROR(type->identifier->location);
+            if (type->identifier != nullptr) {
+                if(!currentScope->set(type->identifier->value, type, false)){
+                    ERROR(type->identifier->location);
+                }
+
+                const_cast<Identifier*>(type->identifier)->anchor = currentScope->get(type->identifier->value)->anchor;
             }
         }
 
