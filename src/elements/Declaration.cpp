@@ -35,8 +35,6 @@ void Declaration::create(TransformContext &context) {
                 //context.builder.CreateStore(initValue, value);
                 Assignment::makeAssignment(context, const_cast<Identifier*>(semanticType->identifier), initializer);
             }
-        }else{
-            int  i = 0;
         }
     } else if (auto methodType = semanticType->asMethodType()) {
         auto returnType = context.getType(methodType->subType);
