@@ -29,12 +29,14 @@ void Declaration::create(TransformContext &context) {
         llvm::Type *type = context.getType(semanticType);
         if(semanticType->identifier != nullptr){
             auto value = context.resetAllocBuilder().CreateAlloca(type);
-            context.currentScope->types[semanticType->identifier->value].anchor->value = value;
+            semanticType->identifier->anchor->value = value;
             if (initializer) {
                 //llvm::Value *initValue = initializer->createRightValue(context);
                 //context.builder.CreateStore(initValue, value);
                 Assignment::makeAssignment(context, const_cast<Identifier*>(semanticType->identifier), initializer);
             }
+        }else{
+            int  i = 0;
         }
     } else if (auto methodType = semanticType->asMethodType()) {
         auto returnType = context.getType(methodType->subType);

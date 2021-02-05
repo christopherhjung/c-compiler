@@ -598,7 +598,7 @@ SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* loca
                     ERROR(structType->location);
                 }
 
-                semanticType = desc->semanticType;
+                semanticType = new ProxyType(desc->semanticType, true);
             }
         } else {
             if (structType->name != nullptr && currentScope->structDefinedInScope(structType->name)) {
