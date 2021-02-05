@@ -503,6 +503,8 @@ void Semantic::enter(Binary *binary) {
                 return;
             }
 
+            ERROR(binary->op->location);
+
             break;
     }
 
@@ -576,11 +578,17 @@ const SemanticType *Semantic::enter0(Declaration *declaration) {
 
 
 SemanticType *Semantic::enter(Declaration *declaration) {
-    auto semTyp = enter(declaration->declarator, declaration->type, &declaration->location);
+    auto leftType = enter(declaration->declarator, declaration->type, &declaration->location);
     if(declaration->initializer){
         enter(declaration->initializer);
+
+        auto rightType = declaration->initializer;
+
+        if (!isAssignable(leftType, rightType)) {
+            ERROR(declaration->location);
+        }
     }
-    return semTyp;
+    return leftType;
 }
 
 SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* location) {

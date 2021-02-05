@@ -54,11 +54,7 @@ void Declaration::create(TransformContext &context) {
         if(semanticType->identifier){
             llvm::Constant *initValue;
             if (initializer) {
-                if(type->isPointerTy()){
-                    initValue = llvm::Constant::getNullValue(type);
-                }else{
-                    initValue = reinterpret_cast<llvm::Constant*>(initializer->createRightValue(context));
-                }
+                initValue = reinterpret_cast<llvm::Constant*>(initializer->createRightValue(context));
             } else {
                 initValue = llvm::Constant::getNullValue(type);
             }

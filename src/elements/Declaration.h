@@ -18,6 +18,7 @@ public:
     Type *type = nullptr;
     Declarator *declarator = nullptr;
     Expression* initializer = nullptr;
+    Location assignLocation;
 
     void dump(PrettyPrinter &printer) override;
 

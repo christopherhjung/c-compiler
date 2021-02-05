@@ -125,6 +125,7 @@ public:
 
                 return method;
             }else if(is(ASSIGN)){
+                declaration->assignLocation = lookA.location;
                 next();
                 declaration->initializer = parseExpression();
             }
