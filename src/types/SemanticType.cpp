@@ -17,7 +17,7 @@ const PointerType *SemanticType::asPointerType() const {
     return nullptr;
 }
 
-const SemanticStructType *SemanticType::asSuperStructType() const {
+const SemanticStructType *SemanticType::asSemanticStructType() const {
     return nullptr;
 }
 

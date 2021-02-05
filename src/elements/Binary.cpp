@@ -53,8 +53,13 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
             }else if (opInfo == 1){
                 return context.builder.CreateGEP(leftValue, context.builder.CreateNeg(rightValue));
             }else if (opInfo == 2){
-                llvm::Value* diff = context.builder.CreatePtrDiff(leftValue, rightValue);
-                return context.builder.CreateTrunc(diff, context.builder.getInt32Ty());
+                auto leftInt = context.builder.CreatePtrToInt(leftValue, context.builder.getInt64Ty());
+                auto rightInt = context.builder.CreatePtrToInt(rightValue, context.builder.getInt64Ty());
+
+                auto sub = context.builder.CreateSub(leftInt, rightInt);
+
+                //llvm::Value* diff = context.builder.CreatePtrDiff(leftValue, rightValue);
+                return context.builder.CreateTrunc(sub, context.builder.getInt32Ty());
             }
         case STAR:
             return context.builder.CreateMul(leftValue, rightValue);
@@ -77,7 +82,7 @@ llvm::Value *Binary::createLeftValue(TransformContext &context){
             aType = aType->asPointerType()->subType;
         }
 
-        auto structType = aType->asSuperStructType();
+        auto structType = aType->asSemanticStructType();
         auto identifier = dynamic_cast<const Identifier*>(right);
 
         int index = structType->map.find(identifier->value)->second;

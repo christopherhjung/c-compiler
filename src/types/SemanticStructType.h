@@ -23,7 +23,7 @@ public:
     }
 
     bool equals(const SemanticType *other) const override {
-        if (auto structType = other->asSuperStructType()) {
+        if (auto structType = other->asSemanticStructType()) {
             return structType == this;
         }
         return false;
@@ -43,7 +43,7 @@ public:
         return nullptr;
     }
 
-    const SemanticStructType *asSuperStructType() const override {
+    const SemanticStructType *asSemanticStructType() const override {
         return this;
     }
 };

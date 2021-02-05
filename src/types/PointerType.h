@@ -8,6 +8,8 @@
 
 class PointerType : public ComplexType {
 public:
+    bool methodWrap = false;
+
     explicit PointerType(const SemanticType *subType) : ComplexType(subType) {
 
     }

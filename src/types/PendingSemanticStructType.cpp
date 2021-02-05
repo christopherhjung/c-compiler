@@ -2,21 +2,21 @@
 // Created by chris on 21.01.21.
 //
 
-#include "PendingSuperStructType.h"
+#include "PendingSemanticStructType.h"
 
 #include "SemanticType.h"
 #include "SemanticStructType.h"
 #include "../semantic/Scope.h"
 
-bool PendingSuperStructType::equals(const SemanticType *other) const {
-    auto type = asSuperStructType();
+bool PendingSemanticStructType::equals(const SemanticType *other) const {
+    auto type = asSemanticStructType();
     if (type == nullptr) {
         return false;
     }
     return type->equals(other);
 }
 
-const SemanticStructType *PendingSuperStructType::asSuperStructType() const {
+const SemanticStructType *PendingSemanticStructType::asSemanticStructType() const {
     auto desc = scope->getStruct(name);
 
     if (desc == nullptr) {
@@ -26,8 +26,8 @@ const SemanticStructType *PendingSuperStructType::asSuperStructType() const {
     return desc->semanticType;
 }
 
-bool PendingSuperStructType::isAssignable() const {
-    if (auto superStruct = asSuperStructType()) {
+bool PendingSemanticStructType::isAssignable() const {
+    if (auto superStruct = asSemanticStructType()) {
         return superStruct->assignable;
     }
 

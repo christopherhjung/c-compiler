@@ -21,6 +21,8 @@ public:
     Scope *currentScope = mainScope;
     Scope *methodScope = nullptr;
 
+    std::vector<PendingSemanticStructType*> pendingStructs;
+
     void checkType(const Expression *element, const SemanticType *semanticType);
 
     void check(Unit *element);
@@ -41,7 +43,7 @@ public:
 
     void enter(Return *returnStatement);
 
-    bool isAssignable(const SemanticType *target, Expression *sourceStatement);
+    bool isAssignable(const SemanticType *target, const SemanticType *source);
 
     void enter(Expression *expression);
 

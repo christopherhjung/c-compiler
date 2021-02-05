@@ -55,6 +55,10 @@ void Declaration::create(TransformContext &context) {
             llvm::Constant *initValue;
             if (initializer) {
                 initValue = reinterpret_cast<llvm::Constant*>(initializer->createRightValue(context));
+
+                if( semanticType->asPointerType() && initializer->semanticType->equals(IntType) ){
+                    initValue = reinterpret_cast<llvm::Constant*>(context.builder.CreateIntToPtr(initValue, context.getType(semanticType)));
+                }
             } else {
                 initValue = llvm::Constant::getNullValue(type);
             }

@@ -13,6 +13,7 @@ void Semantic::checkType(const Expression *element, const SemanticType *semantic
 }
 
 void Semantic::check(Unit *element) {
+    pendingStructs.clear();
     element->scope = mainScope;
     for (auto child : element->children) {
         if (auto *declaration = dynamic_cast<Declaration *>(child)) {
@@ -55,6 +56,12 @@ void Semantic::check(Unit *element) {
             findLabels(method->body);
             enter(method->body, inner);
             methodScope = nullptr;
+        }
+    }
+
+    for(auto pending : pendingStructs){
+        if(!pending->asSemanticStructType()){
+            ERROR(pending->location);
         }
     }
 }
@@ -130,7 +137,7 @@ void Semantic::enter(Statement *statement) {
 
 void Semantic::checkCondition(Expression *condition, Location &location) {
     enter(condition);
-    if (condition->semanticType->asSuperStructType()) {
+    if (condition->semanticType->asSemanticStructType()) {
         ERROR(location);
     }
 }
@@ -156,27 +163,23 @@ void Semantic::enter(GoTo *gotoStatement) {
 
 void Semantic::enter(Return *returnStatement) {
     Element *loc;
+    const SemanticType *returnType;
     if (returnStatement->value == nullptr) {
         loc = returnStatement;
+        returnType = VoidType;
     } else {
         enter(returnStatement->value);
         loc = returnStatement->value;
+        returnType = returnStatement->value->semanticType;
     }
 
     returnStatement->semanticType = methodScope->returnType;
-    if (!isAssignable(currentScope->getReturnType(), returnStatement->value)) {
+    if (!isAssignable(currentScope->getReturnType(), returnType)) {
         ERROR(loc->location);
     }
 }
 
-bool Semantic::isAssignable(const SemanticType *target, Expression *sourceStatement) {
-    const SemanticType* source;
-    if(sourceStatement == nullptr){
-        source = VoidType;
-    }else{
-        source = sourceStatement->semanticType;
-    }
-
+bool Semantic::isAssignable(const SemanticType *target, const SemanticType *source) {
     bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
     bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType);
 
@@ -186,15 +189,17 @@ bool Semantic::isAssignable(const SemanticType *target, Expression *sourceStatem
            || (target->equals(VoidPointerType) && source->asPointerType())
            || (source->equals(VoidPointerType) && target->asPointerType());
 
-    if(!assignable && sourceStatement != nullptr){
+    /*if(!assignable && sourceStatement != nullptr){
         if(auto targetPointer = target->asPointerType()){
             if(auto sourceMethod = source->asMethodType()){
                 if(auto targetMethod = targetPointer->subType->asMethodType()){
                     assignable = sourceMethod->equals(targetMethod);
+                }else if(VoidPointerType->equals(targetPointer)){
+                    assignable = true;
                 }
             }
         }
-    }
+    }*/
 
     return assignable;
 }
@@ -260,7 +265,7 @@ void Semantic::enter0(Expression *expression) {
                 int min = std::min(methodType->types.size(), call->values.size());
 
                 for (int i = 0; i < min; i++) {
-                    if(!isAssignable(methodType->types[i], call->values[i])){
+                    if(!isAssignable(methodType->types[i], call->values[i]->semanticType)){
                         ERROR(call->locations[i]);
                     }
                 }
@@ -351,18 +356,17 @@ void Semantic::enter(Unary *unary) {
 }
 
 void Semantic::enter(Binary *binary) {
-
     enter(binary->left);
     auto leftType = binary->left->semanticType;
 
-    if (leftType == nullptr) {
-        ERROR(binary->op->location);
+    if(leftType->asMethodType()){
+        leftType = new PointerType(leftType);
     }
 
     switch (binary->op->id) {
         case ARROW:
             if (auto deallocType = leftType->asPointerType()) {
-                if (auto superStruct = deallocType->subType->asSuperStructType()) {
+                if (auto superStruct = deallocType->subType->asSemanticStructType()) {
                     if (auto identifier = dynamic_cast<Identifier *>(binary->right)) {
                         binary->semanticType = superStruct->member(identifier);
                         if (binary->semanticType != nullptr) {
@@ -374,7 +378,7 @@ void Semantic::enter(Binary *binary) {
             ERROR(binary->op->location);
             break;
         case DOT:
-            if (auto superStruct = leftType->asSuperStructType()) {
+            if (auto superStruct = leftType->asSemanticStructType()) {
                 if (auto identifier = dynamic_cast<Identifier *>(binary->right)) {
                     binary->semanticType = superStruct->member(identifier);
                     if (binary->semanticType != nullptr) {
@@ -389,8 +393,8 @@ void Semantic::enter(Binary *binary) {
     enter(binary->right);
     auto rightType = binary->right->semanticType;
 
-    if (rightType == nullptr) {
-        ERROR(binary->op->location);
+    if(rightType->asMethodType()){
+        rightType = new PointerType(rightType);
     }
 
     bool leftIsInteger = IntType->equals(leftType);
@@ -402,8 +406,8 @@ void Semantic::enter(Binary *binary) {
     bool leftIsNumeric = leftIsInteger || leftType->equals(CharType);
     bool rightIsNumeric = rightIsInteger || rightType->equals(CharType);
 
-    bool leftIsStruct = leftType->asSuperStructType();
-    bool rightIsStruct = rightType->asSuperStructType();
+    bool leftIsStruct = leftType->asSemanticStructType();
+    bool rightIsStruct = rightType->asSemanticStructType();
 
     bool leftIsComparable = !(leftIsStruct || VoidType->equals(leftType));
     bool rightIsComparable = !(rightIsStruct || VoidType->equals(rightType));
@@ -439,6 +443,10 @@ void Semantic::enter(Binary *binary) {
                 binary->semanticType = new ProxyType(leftType, false);
                 return;
             } else if (leftType->asPointerType() && rightType->asPointerType() && leftType->equals(rightType)) {
+                binary->opInfo = 2;
+                binary->semanticType = new SimpleType(TYPE_INT, false);
+                return;
+            } else if (leftType->asMethodType() && rightType->asMethodType() && leftType->equals(rightType)) {
                 binary->opInfo = 2;
                 binary->semanticType = new SimpleType(TYPE_INT, false);
                 return;
@@ -498,7 +506,7 @@ void Semantic::enter(Binary *binary) {
                 ERROR_MSG(binary->op->location, binary->left->toString() + " not assignable");
             }
 
-            if (isAssignable(leftType, binary->right)) {
+            if (isAssignable(leftType, rightType)) {
                 binary->semanticType = leftType;
                 return;
             }
@@ -582,7 +590,11 @@ SemanticType *Semantic::enter(Declaration *declaration) {
     if(declaration->initializer){
         enter(declaration->initializer);
 
-        auto rightType = declaration->initializer;
+        auto rightType = declaration->initializer->semanticType;
+
+        if(rightType->asMethodType()){
+            rightType = new PointerType(rightType);
+        }
 
         if (!isAssignable(leftType, rightType)) {
             ERROR(declaration->location);
@@ -598,7 +610,9 @@ SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* loca
 
         if (structType->name != nullptr && structType->declarations.empty()) {
             if(methodScope == nullptr){
-                semanticType = new PendingSuperStructType(structType->name, currentScope);
+                auto pending = new PendingSemanticStructType(structType->name, location, currentScope);
+                semanticType = pending;
+                pendingStructs.push_back(pending);
             }else{
                 auto desc = currentScope->getStruct(structType->name);
 

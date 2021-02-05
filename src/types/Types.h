@@ -10,7 +10,7 @@
 #include "SimpleType.h"
 #include "SemanticStructType.h"
 #include "SemanticType.h"
-#include "PendingSuperStructType.h"
+#include "PendingSemanticStructType.h"
 
 extern SimpleType *const IntType;
 extern SimpleType *const CharType;

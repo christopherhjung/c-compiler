@@ -51,7 +51,7 @@ llvm::Type *TransformContext::getType(const SemanticType *type) {
         }else{
             return llvm::PointerType::getUnqual(getType(pointerType->subType));
         }
-    } else if (auto structType = type->asSuperStructType()) {
+    } else if (auto structType = type->asSemanticStructType()) {
         auto find = typeLookup.find(structType);
 
         if (find != typeLookup.end()) {

@@ -27,7 +27,7 @@ public:
 
     virtual const PointerType *asPointerType() const;
 
-    virtual const SemanticStructType *asSuperStructType() const;
+    virtual const SemanticStructType *asSemanticStructType() const;
 
     virtual const SimpleType *asSimpleType() const;
 

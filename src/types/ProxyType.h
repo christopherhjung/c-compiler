@@ -30,8 +30,8 @@ public:
         return inner->asPointerType();
     }
 
-    const SemanticStructType *asSuperStructType() const override {
-        return inner->asSuperStructType();
+    const SemanticStructType *asSemanticStructType() const override {
+        return inner->asSemanticStructType();
     }
 };
 
