@@ -54,6 +54,7 @@ void Semantic::check(Unit *element) {
             methodScope = inner;
             findLabels(method->body);
             enter(method->body, inner);
+            methodScope = nullptr;
         }
     }
 }
@@ -588,13 +589,19 @@ SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* loca
         auto superStruct = new SemanticStructType(true);
 
         if (structType->name != nullptr && structType->declarations.empty()) {
-            if (!structType->declarations.empty()) {
-                ERROR(structType->location);
-            }
+            if(methodScope == nullptr){
+                semanticType = new PendingSuperStructType(structType->name, currentScope);
+            }else{
+                auto desc = currentScope->getStruct(structType->name);
 
-            semanticType = new PendingSuperStructType(structType->name, currentScope);
+                if (desc == nullptr) {
+                    ERROR(structType->location);
+                }
+
+                semanticType = desc->semanticType;
+            }
         } else {
-            if (structType->name != nullptr && currentScope->getStruct(structType->name) != nullptr) {
+            if (structType->name != nullptr && currentScope->structDefinedInScope(structType->name)) {
                 ERROR(structType->location);
             }
 
