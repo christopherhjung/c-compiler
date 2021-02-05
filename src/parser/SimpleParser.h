@@ -124,11 +124,14 @@ public:
                 method->body = parseBlock();
 
                 return method;
-            }else if(is(ASSIGN)){
+            }
+#ifdef DEBUG
+            else if(is(ASSIGN)){
                 declaration->assignLocation = lookA.location;
                 next();
                 declaration->initializer = parseExpression();
             }
+#endif
         }
         shall(SEMI);
         return declaration;
@@ -374,10 +377,13 @@ public:
         if (!is(SEMI)) {
             declaration->declarator = parseDeclarator(true, false);
 
+
+#ifdef DEBUG
             if(initAllowed && is(ASSIGN)){
                 next();
                 declaration->initializer = parseExpression();
             }
+#endif
         }
         shall(SEMI);
         return declaration;
