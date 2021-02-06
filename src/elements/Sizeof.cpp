@@ -8,6 +8,7 @@
 #include "Declarator.h"
 #include "../types/Types.h"
 #include "../transform/TransformContext.h"
+#include "llvm/IR/Constant.h"
 
 void Sizeof::dump(PrettyPrinter &printer) {
     printer << "(";
@@ -34,11 +35,11 @@ unsigned int Sizeof::getSize(TransformContext &context, const SemanticType* sema
     return size;
 }
 
-llvm::Value* Sizeof::getInt32Size(TransformContext &context, const SemanticType* semanticType){
+llvm::Constant* Sizeof::getInt32Size(TransformContext &context, const SemanticType* semanticType){
     return context.builder.getInt32( getSize(context, semanticType) );
 }
 
-llvm::Value* Sizeof::getInt64Size(TransformContext &context, const SemanticType* semanticType){
+llvm::Constant* Sizeof::getInt64Size(TransformContext &context, const SemanticType* semanticType){
     return context.builder.getInt64( getSize(context, semanticType) );
 }
 

@@ -10,6 +10,8 @@ int main(void) {
     printf("%d\n" , !!!!!!n );
     printf("%d\n" , !!!!!m );
     printf("%d\n" , !!!!!!m );
-    printf("%d\n" , (-2) >> 1 );
+    printf("%d\n" , (!0) << 10 );
+    printf("%d\n" , 'z' + 'z' + 'z');
+    printf("%d\n" , );
     return 0;
 }

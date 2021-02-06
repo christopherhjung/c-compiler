@@ -8,23 +8,14 @@
 
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/raw_ostream.h"
-
-#include "llvm/IR/Module.h"                /* Module */
-#include "llvm/IR/Function.h"              /* Function */
-#include "llvm/IR/IRBuilder.h"             /* IRBuilder */
-#include "llvm/IR/LLVMContext.h"           /* LLVMContext */
-#include "llvm/IR/GlobalValue.h"           /* GlobaleVariable, LinkageTypes */
-#include "llvm/IR/Verifier.h"              /* verifyFunction, verifyModule */
-#include "llvm/Support/Signals.h"          /* Nice stacktrace output */
-#include "llvm/Support/SystemUtils.h"
-#include "llvm/Support/PrettyStackTrace.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/GlobalValue.h"
+#include "llvm/IR/Verifier.h"
+#include "llvm/Support/Signals.h"
 
 #include <queue>
-#include "../semantic/Scope.h"
-#include "../types/Types.h"
-#include "../lexer/CatchingLexerProxy.h"
-
-#include "../common.h"
 
 
 llvm::BasicBlock *TransformContext::createBasicBlock(const std::string &name) {
