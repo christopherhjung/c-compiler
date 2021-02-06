@@ -245,11 +245,11 @@ int main(void) {
     c4_print_str("\n");
     sort();
 
-    c4_print_str("List after sorting the data: ");
+    c4_print_str("List after sorting the data:");
     printList();
 
     reverse(&head);
-    c4_print_str("\nList after reversing the data: ");
+    c4_print_str("\nList after reversing the data:");
     printList();
 
     return 0;

@@ -90,9 +90,11 @@ int diff(const std::string& orgStr, const std::string& path, bool regex){
             }
 
             if(!match){
-                std::cout << "\u001b[32m" << (refLine) << std::endl;
+                //std::cout << "\u001b[32m" << (refLine) << std::endl;
                 std::cout << "\u001b[31m"  << (orgLine) << std::endl;
                 error++;
+            }else{
+                std::cout << "\u001b[32m"  << (orgLine) << std::endl;
             }
         }else{
             std::cout << "\u001b[31m"  << orgLine << std::endl;

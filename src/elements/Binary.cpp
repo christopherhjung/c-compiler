@@ -35,11 +35,16 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
     llvm::Value* leftValue = left->createRightValue(context);
     llvm::Value* rightValue = right->createRightValue(context);
 
+    if(opInfo == 0){
+        auto commonType = context.getGreatestType(left->semanticType, right->semanticType);
+
+        leftValue = context.builder.CreateIntCast(leftValue, commonType, true);
+        rightValue = context.builder.CreateIntCast(rightValue, commonType, true);
+    }
+
     switch (op->id) {
         case PLUS:
             if(opInfo == 0){
-                leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
-                rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
                 return context.builder.CreateAdd(leftValue, rightValue);
             }else if (opInfo == 1){
                 return context.builder.CreateGEP(leftValue, rightValue);
@@ -48,8 +53,6 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
             }
         case MINUS:
             if(opInfo == 0){
-                leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
-                rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
                 return context.builder.CreateSub(leftValue, rightValue);
             }else if (opInfo == 1){
                 return context.builder.CreateGEP(leftValue, context.builder.CreateNeg(rightValue));
@@ -65,16 +68,10 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
                 //return context.builder.CreateTrunc(context.builder.CreatePtrDiff(leftValue, rightValue), context.builder.getInt32Ty());
             }
         case STAR:
-            leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
-            rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
             return context.builder.CreateMul(leftValue, rightValue);
         case LEFT_SHIFT:
-            leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
-            rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
             return context.builder.CreateShl(leftValue, rightValue);
         case RIGHT_SHIFT:
-            leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
-            rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
             return context.builder.CreateAShr(leftValue, rightValue);
     }
 

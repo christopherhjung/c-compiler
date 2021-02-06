@@ -36,17 +36,46 @@ llvm::Value *TransformContext::getInt32(const std::string *str) {
     return builder.getInt32(std::stoi(*str));
 }
 
+
+llvm::Type *TransformContext::getSimpleType(int simpleTypeId){
+    if (simpleTypeId == TYPE_INT) {
+        return builder.getInt32Ty();
+    } else if (simpleTypeId == TYPE_LONG) {
+        return builder.getInt64Ty();
+    }else if (simpleTypeId == TYPE_CHAR) {
+        return builder.getInt8Ty();
+    } else if (simpleTypeId == TYPE_VOID){
+        return builder.getVoidTy();
+    }
+
+    TRANSFORM_ERROR();
+}
+
+
+llvm::Type *TransformContext::getGreatestType(const SemanticType *left, const SemanticType *right){
+    auto leftSimple = left->asSimpleType();
+    auto rightSimple = right->asSimpleType();
+
+    if(leftSimple && rightSimple){
+        int type = std::min(leftSimple->id, rightSimple->id);
+        return getSimpleType(type);
+    }
+
+    if(left->asPointerType() || right->asPointerType()){
+        return builder.getInt64Ty();
+    }
+
+    if(left->equals(right)){
+        return getType(left);
+    }
+
+    TRANSFORM_ERROR();
+}
+
+
 llvm::Type *TransformContext::getType(const SemanticType *type) {
     if (auto simpleType = type->asSimpleType()) {
-        if (simpleType->equals(IntType)) {
-            return builder.getInt32Ty();
-        } else if (simpleType->equals(LongType)) {
-            return builder.getInt64Ty();
-        }else if (simpleType->equals(CharType)) {
-            return builder.getInt8Ty();
-        } else {
-            return builder.getVoidTy();
-        }
+        return getSimpleType(simpleType->id);
     } else if (auto pointerType = type->asPointerType()) {
         if(pointerType->equals(VoidPointerType)){
             return builder.getInt8PtrTy();

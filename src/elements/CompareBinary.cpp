@@ -46,14 +46,20 @@ llvm::CmpInst::Predicate CompareBinary::getPredicate() {
 
 llvm::Value *CompareBinary::makeCompare(TransformContext &context) {
 
+    auto commonType = context.getGreatestType(left->semanticType, right->semanticType);
+
     llvm::Value* leftValue = left->createRightValue(context);
     if(left->semanticType->asPointerType()){
-        leftValue = context.builder.CreatePtrToInt(leftValue, context.builder.getInt32Ty());
+        leftValue = context.builder.CreatePtrToInt(leftValue, commonType);
+    }else{
+        leftValue = context.builder.CreateIntCast(leftValue, commonType, true);
     }
 
     llvm::Value* rightValue = right->createRightValue(context);
     if(right->semanticType->asPointerType()){
-        rightValue = context.builder.CreatePtrToInt(leftValue, context.builder.getInt32Ty());
+        rightValue = context.builder.CreatePtrToInt(rightValue, commonType);
+    }else{
+        rightValue = context.builder.CreateIntCast(rightValue, commonType, true);
     }
 
     llvm::Value* resultValue = context.builder.CreateICmp(getPredicate(), leftValue , rightValue);

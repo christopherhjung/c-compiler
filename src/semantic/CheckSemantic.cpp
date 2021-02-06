@@ -397,17 +397,14 @@ void Semantic::enter(Binary *binary) {
         rightType = new PointerType(rightType);
     }
 
-    bool leftIsLong = LongType->equals(leftType);
-    bool rightIsLong = LongType->equals(rightType);
-
-    bool leftIsInteger = IntType->equals(leftType);
-    bool rightIsInteger = IntType->equals(rightType);
+    bool leftIsInteger = IntType->equals(leftType) || LongType->equals(leftType);
+    bool rightIsInteger = IntType->equals(rightType) || LongType->equals(rightType);
 
     bool leftIsPointer = IntType->equals(leftType);
     bool rightIsPointer = IntType->equals(rightType);
 
-    bool leftIsNumeric = leftIsInteger || leftType->equals(CharType) || leftIsLong;
-    bool rightIsNumeric = rightIsInteger || rightType->equals(CharType) || rightIsLong;
+    bool leftIsNumeric = leftIsInteger || leftType->equals(CharType);
+    bool rightIsNumeric = rightIsInteger || rightType->equals(CharType);
 
     bool leftIsStruct = leftType->asSemanticStructType();
     bool rightIsStruct = rightType->asSemanticStructType();
@@ -499,7 +496,7 @@ void Semantic::enter(Binary *binary) {
             break;
         case LEFT_SHIFT:
         case RIGHT_SHIFT:
-            if ((leftIsInteger|| leftIsLong) && ( rightIsInteger  || rightIsLong)) {
+            if (leftIsInteger && rightIsInteger) {
                 binary->semanticType = IntType;
                 return;
             }

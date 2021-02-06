@@ -55,7 +55,9 @@ public:
 
     llvm::Value *getInt32(const std::string *str);
 
-    llvm::Type *getType(const SemanticType *type) ;
+    llvm::Type *getType(const SemanticType *type);
+    llvm::Type *getSimpleType(int simpleTypeId);
+    llvm::Type *getGreatestType(const SemanticType *left, const SemanticType *right);
 
     llvm::BasicBlock *getJumpTarget(const std::string *target);
 
