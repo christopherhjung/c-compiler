@@ -558,6 +558,11 @@ public:
         bin->op = op;
         bin->left = left;
         next();
+        if (op->id == ARROW || op->id == DOT) {
+            bin->right = parseIdentifier();
+        } else {
+            bin->right = parseExpression(rightPrecedence(op->id));
+        }
         bin->right = parseExpression(rightPrecedence(op->id));
         return bin;
     }
