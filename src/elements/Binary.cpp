@@ -36,10 +36,8 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
     llvm::Value* rightValue = right->createRightValue(context);
 
     if(opInfo == 0){
-        auto commonType = context.getGreatestType(left->semanticType, right->semanticType);
-
-        leftValue = context.builder.CreateIntCast(leftValue, commonType, true);
-        rightValue = context.builder.CreateIntCast(rightValue, commonType, true);
+        leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
+        rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
     }
 
     switch (op->id) {

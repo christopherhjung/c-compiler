@@ -344,6 +344,8 @@ void Semantic::enter(Unary *unary) {
             }
         case MINUS:
         case NOT:
+            unary->semanticType = IntType;
+            break;
         case SIZEOF:
             unary->semanticType = LongType;
             return;

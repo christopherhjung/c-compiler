@@ -7,6 +7,7 @@
 #define TYPE_INT 1
 #define TYPE_CHAR 2
 #define TYPE_VOID 3
+#define TYPE_BIT 4
 
 #define END_OF_FILE 0
 #define AUTO 4

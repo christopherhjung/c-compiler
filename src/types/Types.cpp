@@ -9,6 +9,7 @@ extern SimpleType *const LongType = new SimpleType(TYPE_LONG);
 extern SimpleType *const IntType = new SimpleType(TYPE_INT);
 extern SimpleType *const CharType = new SimpleType(TYPE_CHAR);
 extern SimpleType *const VoidType = new SimpleType(TYPE_VOID);
+extern SimpleType *const BitType = new SimpleType(TYPE_BIT);
 extern SemanticType *const CharPointerType = new PointerType(CharType);
 extern SemanticType *const IntPointerType = new PointerType(IntType);
 extern SemanticType *const VoidPointerType = new PointerType(VoidType);

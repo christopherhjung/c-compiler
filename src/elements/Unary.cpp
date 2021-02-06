@@ -39,8 +39,7 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
                 rightValue = context.builder.CreatePtrToInt(rightValue, context.builder.getInt32Ty());
             }
 
-            return context.builder.CreateIntCast(
-                    context.builder.CreateICmpEQ(rightValue, context.builder.getInt32(0)), context.builder.getInt32Ty(), false);
+            return context.builder.CreateICmpEQ(rightValue, context.builder.getInt32(0));
         }
         case AND:
             return value->createLeftValue(context);
