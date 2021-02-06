@@ -58,7 +58,7 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
                 auto rightInt = context.builder.CreatePtrToInt(rightValue, context.builder.getInt64Ty());
 
                 auto bytesDiff = context.builder.CreateSub(leftInt, rightInt);
-                auto diff = context.builder.CreateSDiv(bytesDiff, Sizeof::getSize(context, left->semanticType));
+                auto diff = context.builder.CreateSDiv(bytesDiff, Sizeof::getInt64Size(context, left->semanticType));
 
                 return context.builder.CreateTrunc(diff, context.builder.getInt32Ty());
 

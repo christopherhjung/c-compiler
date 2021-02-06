@@ -45,7 +45,7 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
         case AND:
             return value->createLeftValue(context);
         case SIZEOF:
-            return Sizeof::getSize(context, value->semanticType);
+            return Sizeof::getInt32Size(context, value->semanticType);
     }
 
     TRANSFORM_ERROR();

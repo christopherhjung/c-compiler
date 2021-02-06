@@ -20,7 +20,7 @@ void Sizeof::dump(PrettyPrinter &printer) {
     printer << ")";
 }
 
-llvm::Value* Sizeof::getSize(TransformContext &context, const SemanticType* semanticType){
+unsigned int Sizeof::getSize(TransformContext &context, const SemanticType* semanticType){
     llvm::Type* type = context.getType(semanticType);
     llvm::DataLayout layout(&context.module);
 
@@ -31,9 +31,17 @@ llvm::Value* Sizeof::getSize(TransformContext &context, const SemanticType* sema
         size = 1;
     }
 
-    return context.builder.getInt32(size );
+    return size;
+}
+
+llvm::Value* Sizeof::getInt32Size(TransformContext &context, const SemanticType* semanticType){
+    return context.builder.getInt32( getSize(context, semanticType) );
+}
+
+llvm::Value* Sizeof::getInt64Size(TransformContext &context, const SemanticType* semanticType){
+    return context.builder.getInt64( getSize(context, semanticType) );
 }
 
 llvm::Value *Sizeof::createRightValue(TransformContext &context){
-    return getSize(context, inner);
+    return getInt32Size(context, inner);
 }
