@@ -49,7 +49,9 @@ llvm::Value *Call::createRightValue(TransformContext &context){
         arguments.push_back(Assignment::ensureAssignment(context, methodType->types[i], values[i]));
     }
 
-    auto functionType = reinterpret_cast<llvm::FunctionType*>(context.getType(methodType));
+    auto functionType = llvm::dyn_cast<llvm::FunctionType>(context.getType(methodType));
     auto function = llvm::FunctionCallee(functionType,value);
+
+
     return context.builder.CreateCall(function, arguments);
 }

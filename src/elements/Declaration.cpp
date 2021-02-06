@@ -60,7 +60,7 @@ void Declaration::create(TransformContext &context) {
                     initValue = reinterpret_cast<llvm::Constant*>(context.builder.CreateIntToPtr(initValue, context.getType(semanticType)));
                 }*/
 
-                initValue = reinterpret_cast<llvm::Constant*>(Assignment::ensureAssignment(context,semanticType, initializer));
+                initValue = llvm::dyn_cast<llvm::Constant>(Assignment::ensureAssignment(context,semanticType, initializer));
             } else {
                 initValue = llvm::Constant::getNullValue(type);
             }

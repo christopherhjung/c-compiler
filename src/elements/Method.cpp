@@ -25,15 +25,14 @@ void Method::create(TransformContext &context) {
             paramTypes.push_back(context.getType(type));
         }
     }
-    const std::string *methodName = declaration->semanticType->identifier->value;
 
-    llvm::Function* declared = reinterpret_cast<llvm::Function*>(declaration->semanticType->identifier->anchor->value);
+    auto anchor = declaration->semanticType->identifier->anchor;
 
-    if(!declared){
+    if(!anchor->value){
         declaration->create(context);
-        declared = reinterpret_cast<llvm::Function*>(declaration->semanticType->identifier->anchor->value);
     }
 
+    auto declared = llvm::dyn_cast<llvm::Function>(anchor->value);
 
     auto unreachable = llvm::BasicBlock::Create(context.llvmContext, "unreachable", declared, 0);
     context.unreachable = unreachable;
