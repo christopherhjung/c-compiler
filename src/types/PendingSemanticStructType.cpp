@@ -28,7 +28,7 @@ const SemanticStructType *PendingSemanticStructType::asSemanticStructType() cons
 
 bool PendingSemanticStructType::isAssignable() const {
     if (auto superStruct = asSemanticStructType()) {
-        return superStruct->assignable;
+        return superStruct->isAssignable();
     }
 
     return false;

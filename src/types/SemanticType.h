@@ -13,8 +13,8 @@ class SemanticStructType;
 class SimpleType;
 
 class SemanticType : public Comparable<SemanticType> {
-public:
     bool assignable = false;
+public:
     const Identifier *identifier = nullptr;
 
     SemanticType() {};

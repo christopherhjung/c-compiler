@@ -22,6 +22,7 @@ void Expression::createConditionBranch(TransformContext &context, llvm::BasicBlo
         value = context.builder.CreatePtrToInt(value, context.builder.getInt32Ty());
     }
 
+    value = context.builder.CreateIntCast(value, context.builder.getInt32Ty(), true);
     llvm::Value *condition = context.builder.CreateICmpNE(value, context.builder.getInt32(0));
     context.builder.CreateCondBr(condition, trueBlock, falseBlock);
 }

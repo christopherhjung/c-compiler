@@ -397,14 +397,17 @@ void Semantic::enter(Binary *binary) {
         rightType = new PointerType(rightType);
     }
 
+    bool leftIsLong = LongType->equals(leftType);
+    bool rightIsLong = LongType->equals(rightType);
+
     bool leftIsInteger = IntType->equals(leftType);
     bool rightIsInteger = IntType->equals(rightType);
 
     bool leftIsPointer = IntType->equals(leftType);
     bool rightIsPointer = IntType->equals(rightType);
 
-    bool leftIsNumeric = leftIsInteger || leftType->equals(CharType) || leftType->equals(LongType);
-    bool rightIsNumeric = rightIsInteger || rightType->equals(CharType) || rightType->equals(LongType);
+    bool leftIsNumeric = leftIsInteger || leftType->equals(CharType) || leftIsLong;
+    bool rightIsNumeric = rightIsInteger || rightType->equals(CharType) || rightIsLong;
 
     bool leftIsStruct = leftType->asSemanticStructType();
     bool rightIsStruct = rightType->asSemanticStructType();
@@ -416,13 +419,13 @@ void Semantic::enter(Binary *binary) {
     switch (binary->op->id) {
         case STAR:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             }
             break;
         case PLUS:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
                 binary->opInfo = 1;
@@ -436,7 +439,7 @@ void Semantic::enter(Binary *binary) {
             break;
         case MINUS:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
                 binary->opInfo = 1;
@@ -444,33 +447,33 @@ void Semantic::enter(Binary *binary) {
                 return;
             } else if (leftType->asPointerType() && rightType->asPointerType() && leftType->equals(rightType)) {
                 binary->opInfo = 2;
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             } else if (leftType->asMethodType() && rightType->asMethodType() && leftType->equals(rightType)) {
                 binary->opInfo = 2;
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             }
             break;
         case EQUAL:
         case NOT_EQUAL:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             } else if (rightType->asPointerType() && leftIsInteger) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             } else if (rightType->equals(VoidPointerType) && leftType->asPointerType()) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             } else if (leftType->equals(VoidPointerType) && rightType->asPointerType()) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             } else if (leftType->equals(rightType)) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             }
             break;
@@ -478,11 +481,11 @@ void Semantic::enter(Binary *binary) {
         case LESS_EQUAL:
         case GREATER:
         case GREATER_EQUAL:
-            if (leftIsNumeric && rightIsNumeric) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+            if (leftIsNumeric  && rightIsNumeric) {
+                binary->semanticType = IntType;
                 return;
             } else if (leftIsPointer && rightIsPointer) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             }
             break;
@@ -490,14 +493,14 @@ void Semantic::enter(Binary *binary) {
         case AND_AND:
         case OR_OR:
             if (leftIsComparable && rightIsComparable) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+                binary->semanticType = IntType;
                 return;
             }
             break;
         case LEFT_SHIFT:
         case RIGHT_SHIFT:
-            if (leftIsInteger && rightIsInteger) {
-                binary->semanticType = new SimpleType(TYPE_INT, false);
+            if ((leftIsInteger|| leftIsLong) && ( rightIsInteger  || rightIsLong)) {
+                binary->semanticType = IntType;
                 return;
             }
             break;

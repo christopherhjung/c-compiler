@@ -69,8 +69,12 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
             rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
             return context.builder.CreateMul(leftValue, rightValue);
         case LEFT_SHIFT:
+            leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
+            rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
             return context.builder.CreateShl(leftValue, rightValue);
         case RIGHT_SHIFT:
+            leftValue = context.builder.CreateIntCast(leftValue, context.builder.getInt32Ty(), true);
+            rightValue = context.builder.CreateIntCast(rightValue, context.builder.getInt32Ty(), true);
             return context.builder.CreateAShr(leftValue, rightValue);
     }
 

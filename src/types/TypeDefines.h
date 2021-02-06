@@ -3,11 +3,10 @@
 //
 
 
-#define TYPE_INT 0
-#define TYPE_CHAR 1
-#define TYPE_VOID 2
-#define TYPE_LONG 3
-//#define TYPE_STRING 4
+#define TYPE_LONG 0
+#define TYPE_INT 1
+#define TYPE_CHAR 2
+#define TYPE_VOID 3
 
 #define END_OF_FILE 0
 #define AUTO 4
