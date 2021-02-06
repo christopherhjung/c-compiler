@@ -5,6 +5,7 @@
 #include "Types.h"
 #include "TypeDefines.h"
 
+extern SimpleType *const LongType = new SimpleType(TYPE_LONG);
 extern SimpleType *const IntType = new SimpleType(TYPE_INT);
 extern SimpleType *const CharType = new SimpleType(TYPE_CHAR);
 extern SimpleType *const VoidType = new SimpleType(TYPE_VOID);

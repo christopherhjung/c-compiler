@@ -180,8 +180,8 @@ void Semantic::enter(Return *returnStatement) {
 }
 
 bool Semantic::isAssignable(const SemanticType *target, const SemanticType *source) {
-    bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
-    bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType);
+    bool targetIsNumeric = target->equals(IntType) || target->equals(CharType) || target->equals(LongType);
+    bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType) || source->equals(LongType);
 
     bool assignable = target->equals(source)
            || (targetIsNumeric && sourceIsNumeric)
@@ -305,7 +305,7 @@ void Semantic::enter0(Expression *expression) {
 
     } else if (auto sizeOf = dynamic_cast<Sizeof *>(expression)) {
         sizeOf->inner = enter(sizeOf->declarator, sizeOf->type, &sizeOf->location);
-        sizeOf->semanticType = IntType;
+        sizeOf->semanticType = LongType;
     } else if (auto ifSmall = dynamic_cast<IfSmall *>(expression)) {
         checkCondition(ifSmall->condition, ifSmall->condition->location);
         enter(ifSmall->left);
@@ -345,7 +345,7 @@ void Semantic::enter(Unary *unary) {
         case MINUS:
         case NOT:
         case SIZEOF:
-            unary->semanticType = IntType;
+            unary->semanticType = LongType;
             return;
         case AND:
             unary->semanticType = new PointerType(type);
@@ -403,8 +403,8 @@ void Semantic::enter(Binary *binary) {
     bool leftIsPointer = IntType->equals(leftType);
     bool rightIsPointer = IntType->equals(rightType);
 
-    bool leftIsNumeric = leftIsInteger || leftType->equals(CharType);
-    bool rightIsNumeric = rightIsInteger || rightType->equals(CharType);
+    bool leftIsNumeric = leftIsInteger || leftType->equals(CharType) || leftType->equals(LongType);
+    bool rightIsNumeric = rightIsInteger || rightType->equals(CharType) || rightType->equals(LongType);
 
     bool leftIsStruct = leftType->asSemanticStructType();
     bool rightIsStruct = rightType->asSemanticStructType();

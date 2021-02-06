@@ -12,6 +12,7 @@
 #include "SemanticType.h"
 #include "PendingSemanticStructType.h"
 
+extern SimpleType *const LongType;
 extern SimpleType *const IntType;
 extern SimpleType *const CharType;
 extern SimpleType *const VoidType;

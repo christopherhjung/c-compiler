@@ -563,7 +563,6 @@ public:
         } else {
             bin->right = parseExpression(rightPrecedence(op->id));
         }
-        bin->right = parseExpression(rightPrecedence(op->id));
         return bin;
     }
 

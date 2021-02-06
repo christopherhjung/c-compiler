@@ -40,7 +40,9 @@ llvm::Type *TransformContext::getType(const SemanticType *type) {
     if (auto simpleType = type->asSimpleType()) {
         if (simpleType->equals(IntType)) {
             return builder.getInt32Ty();
-        } else if (simpleType->equals(CharType)) {
+        } else if (simpleType->equals(LongType)) {
+            return builder.getInt64Ty();
+        }else if (simpleType->equals(CharType)) {
             return builder.getInt8Ty();
         } else {
             return builder.getVoidTy();

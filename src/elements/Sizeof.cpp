@@ -43,5 +43,5 @@ llvm::Value* Sizeof::getInt64Size(TransformContext &context, const SemanticType*
 }
 
 llvm::Value *Sizeof::createRightValue(TransformContext &context){
-    return getInt32Size(context, inner);
+    return getInt64Size(context, inner);
 }
