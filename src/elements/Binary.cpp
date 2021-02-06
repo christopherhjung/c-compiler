@@ -11,6 +11,7 @@
 #include "../types/TypeDefines.h"
 #include "../transform/TransformContext.h"
 #include "Assignment.h"
+#include "Sizeof.h"
 
 void Binary::dump(PrettyPrinter &printer) {
     printer << "(";
@@ -56,10 +57,12 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
                 auto leftInt = context.builder.CreatePtrToInt(leftValue, context.builder.getInt64Ty());
                 auto rightInt = context.builder.CreatePtrToInt(rightValue, context.builder.getInt64Ty());
 
-                auto sub = context.builder.CreateSub(leftInt, rightInt);
+                auto bytesDiff = context.builder.CreateSub(leftInt, rightInt);
+                auto diff = context.builder.CreateSDiv(bytesDiff, Sizeof::getSize(context, left->semanticType));
 
-                //llvm::Value* diff = context.builder.CreatePtrDiff(leftValue, rightValue);
-                return context.builder.CreateTrunc(sub, context.builder.getInt32Ty());
+                return context.builder.CreateTrunc(diff, context.builder.getInt32Ty());
+
+                //return context.builder.CreateTrunc(context.builder.CreatePtrDiff(leftValue, rightValue), context.builder.getInt32Ty());
             }
         case STAR:
             return context.builder.CreateMul(leftValue, rightValue);
