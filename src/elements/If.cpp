@@ -36,11 +36,11 @@ void If::dump(PrettyPrinter &printer) {
 }
 
 void If::create(TransformContext &context) {
-    llvm::BasicBlock *conditionBlock = context.createBasicBlock("if-condition");
+    llvm::BasicBlock *conditionBlock = context.currentBlock;//context.createBasicBlock("if-condition");
     llvm::BasicBlock *startTrue = context.createBasicBlock("if-true");
     llvm::BasicBlock *end = context.createBasicBlock("if-end");
 
-    context.builder.CreateBr(conditionBlock);
+    //context.builder.CreateBr(conditionBlock);
 
     llvm::BasicBlock *startFalse;
     context.setCurrentBlock(startTrue);
