@@ -23,9 +23,7 @@ int main(void) {
     int n = 5;
     int i = 0;
 
-    char c = !i;
-
-    printf("Factorial of %d" , 2 );
+    printf("Factorial of %d" , n );
     printf(": %d\n" , factorial(n) );
     printf("Fibbonacci of %d: " , n);
 

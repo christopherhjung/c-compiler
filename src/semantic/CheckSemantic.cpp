@@ -323,6 +323,13 @@ void Semantic::enter(Unary *unary) {
     enter(unary->value);
 
     auto type = unary->value->semanticType;
+
+
+    bool isInteger = IntType->equals(type) || LongType->equals(type);
+    bool isNumeric = isInteger || type->equals(CharType);
+    bool isStruct = type->asSemanticStructType();
+    bool leftIsComparable = !(isStruct || VoidType->equals(type));
+
     switch (unary->op->id) {
         case STAR:
             if (auto dealloc = type->asPointerType()) {
@@ -338,13 +345,17 @@ void Semantic::enter(Unary *unary) {
             }
             break;
         case PLUS:
-            if (type->asPointerType()) {
+        case MINUS:
+            if(isNumeric){
                 unary->semanticType = new ProxyType(type, false);
                 return;
             }
-        case MINUS:
+            break;
         case NOT:
-            unary->semanticType = IntType;
+            if(leftIsComparable){
+                unary->semanticType = IntType;
+                return;
+            }
             break;
         case SIZEOF:
             unary->semanticType = LongType;
