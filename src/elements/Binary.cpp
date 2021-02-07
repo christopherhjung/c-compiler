@@ -55,7 +55,7 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
             }else if (opInfo == 1){
                 return context.builder.CreateGEP(leftValue, context.builder.CreateNeg(rightValue));
             }else if (opInfo == 2){
-                auto leftInt = context.builder.CreatePtrToInt(leftValue, context.builder.getInt64Ty());
+                /*auto leftInt = context.builder.CreatePtrToInt(leftValue, context.builder.getInt64Ty());
                 auto rightInt = context.builder.CreatePtrToInt(rightValue, context.builder.getInt64Ty());
 
                 auto bytesDiff = context.builder.CreateSub(leftInt, rightInt);
@@ -69,9 +69,9 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
                 auto size = Sizeof::getInt64Size(context, targetType);
                 auto diff = context.builder.CreateSDiv(bytesDiff, size );
 
-                return context.builder.CreateTrunc(diff, context.builder.getInt32Ty());
+                return context.builder.CreateTrunc(diff, context.builder.getInt32Ty());*/
 
-                //return context.builder.CreateTrunc(context.builder.CreatePtrDiff(leftValue, rightValue), context.builder.getInt32Ty());
+                return context.builder.CreateTrunc(context.builder.CreatePtrDiff(leftValue, rightValue), context.builder.getInt32Ty());
             }
         case STAR:
             return context.builder.CreateMul(leftValue, rightValue);
