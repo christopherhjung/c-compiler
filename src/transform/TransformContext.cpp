@@ -31,9 +31,7 @@ llvm::Value *TransformContext::getInt32(const std::string *str) {
 llvm::Type *TransformContext::getSimpleType(int simpleTypeId){
     if (simpleTypeId == TYPE_INT) {
         return builder.getInt32Ty();
-    } else if (simpleTypeId == TYPE_LONG) {
-        return builder.getInt64Ty();
-    }else if (simpleTypeId == TYPE_CHAR) {
+    } else if (simpleTypeId == TYPE_CHAR) {
         return builder.getInt8Ty();
     } else if (simpleTypeId == TYPE_VOID){
         return builder.getVoidTy();

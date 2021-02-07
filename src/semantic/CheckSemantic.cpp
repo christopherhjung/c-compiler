@@ -180,26 +180,14 @@ void Semantic::enter(Return *returnStatement) {
 }
 
 bool Semantic::isAssignable(const SemanticType *target, const SemanticType *source) {
-    bool targetIsNumeric = target->equals(IntType) || target->equals(CharType) || target->equals(LongType);
-    bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType) || source->equals(LongType);
+    bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
+    bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType);
 
     bool assignable = target->equals(source)
            || (targetIsNumeric && sourceIsNumeric)
            || (target->asPointerType() && sourceIsNumeric)
            || (target->equals(VoidPointerType) && source->asPointerType())
            || (source->equals(VoidPointerType) && target->asPointerType());
-
-    /*if(!assignable && sourceStatement != nullptr){
-        if(auto targetPointer = target->asPointerType()){
-            if(auto sourceMethod = source->asMethodType()){
-                if(auto targetMethod = targetPointer->subType->asMethodType()){
-                    assignable = sourceMethod->equals(targetMethod);
-                }else if(VoidPointerType->equals(targetPointer)){
-                    assignable = true;
-                }
-            }
-        }
-    }*/
 
     return assignable;
 }
@@ -305,7 +293,7 @@ void Semantic::enter0(Expression *expression) {
 
     } else if (auto sizeOf = dynamic_cast<Sizeof *>(expression)) {
         sizeOf->inner = enter(sizeOf->declarator, sizeOf->type, &sizeOf->location);
-        sizeOf->semanticType = LongType;
+        sizeOf->semanticType = IntType;
     } else if (auto ifSmall = dynamic_cast<IfSmall *>(expression)) {
         checkCondition(ifSmall->condition, ifSmall->condition->location);
         enter(ifSmall->left);
@@ -325,7 +313,7 @@ void Semantic::enter(Unary *unary) {
     auto type = unary->value->semanticType;
 
 
-    bool isInteger = IntType->equals(type) || LongType->equals(type);
+    bool isInteger = IntType->equals(type) ;
     bool isNumeric = isInteger || type->equals(CharType);
     bool isStruct = type->asSemanticStructType();
     bool leftIsComparable = !(isStruct || VoidType->equals(type));
@@ -358,7 +346,7 @@ void Semantic::enter(Unary *unary) {
             }
             break;
         case SIZEOF:
-            unary->semanticType = LongType;
+            unary->semanticType = IntType;
             return;
         case AND:
             unary->semanticType = new PointerType(type);
@@ -410,8 +398,8 @@ void Semantic::enter(Binary *binary) {
         rightType = new PointerType(rightType);
     }
 
-    bool leftIsInteger = IntType->equals(leftType) || LongType->equals(leftType);
-    bool rightIsInteger = IntType->equals(rightType) || LongType->equals(rightType);
+    bool leftIsInteger = IntType->equals(leftType);
+    bool rightIsInteger = IntType->equals(rightType) ;
 
     bool leftIsPointer = IntType->equals(leftType);
     bool rightIsPointer = IntType->equals(rightType);

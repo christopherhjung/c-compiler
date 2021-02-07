@@ -27,6 +27,7 @@ public:
     llvm::Module &module;
     llvm::IRBuilder<> &builder;
     llvm::IRBuilder<> &allocBuilder;
+    llvm::DataLayout layout;
 
     llvm::Function *currentFunction = nullptr;
     llvm::BasicBlock *currentBlock = nullptr;
@@ -48,7 +49,8 @@ public:
 
     TransformContext(llvm::LLVMContext &llvmContext, llvm::Module &module, llvm::IRBuilder<> &builder,
                      llvm::IRBuilder<> &allocBuilder) : llvmContext(llvmContext), module(module), builder(builder),
-                                                        allocBuilder(allocBuilder) {
+                                                        allocBuilder(allocBuilder), layout(&module) {
+
     }
 
     llvm::BasicBlock *createBasicBlock(const std::string &name);

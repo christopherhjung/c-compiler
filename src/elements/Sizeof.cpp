@@ -23,11 +23,10 @@ void Sizeof::dump(PrettyPrinter &printer) {
 
 unsigned int Sizeof::getSize(TransformContext &context, const SemanticType* semanticType){
     llvm::Type* type = context.getType(semanticType);
-    llvm::DataLayout layout(&context.module);
 
     unsigned int size;
     if(type->isSized()){
-        size = layout.getTypeAllocSize(type);
+        size = context.layout.getTypeAllocSize(type);
     }else{
         size = 1;
     }
@@ -44,5 +43,5 @@ llvm::Constant* Sizeof::getInt64Size(TransformContext &context, const SemanticTy
 }
 
 llvm::Value *Sizeof::createRightValue(TransformContext &context){
-    return getInt64Size(context, inner);
+    return getInt32Size(context, inner);
 }
