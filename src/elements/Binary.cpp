@@ -66,7 +66,7 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
                     targetType = left->semanticType->asPointerType()->subType;
                 }
 
-                auto size = Sizeof::getInt32Size(context, targetType);
+                auto size = Sizeof::getInt64Size(context, targetType);
                 auto diff = context.builder.CreateSDiv(bytesDiff, size );
 
                 return context.builder.CreateTrunc(diff, context.builder.getInt32Ty());
