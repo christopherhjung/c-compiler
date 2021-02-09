@@ -58,7 +58,7 @@ llvm::Value *Unary::createLeftValue(TransformContext &context){
 
     TRANSFORM_ERROR();
 }
-
+/*
 void Unary::createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
                       llvm::BasicBlock *falseBlock){
     switch (op->id) {case NOT:
@@ -76,4 +76,4 @@ void Unary::createConditionBranch(TransformContext &context, llvm::BasicBlock *t
     }
 
     return Expression::createConditionBranch(context, trueBlock, falseBlock);
-}
+}*/

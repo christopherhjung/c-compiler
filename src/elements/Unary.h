@@ -21,9 +21,9 @@ public:
 
     llvm::Value *createLeftValue(TransformContext &context) override;
 
-    void
+    /*void
     createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
-                          llvm::BasicBlock *falseBlock) override;
+                          llvm::BasicBlock *falseBlock) override;*/
 };
 
 
