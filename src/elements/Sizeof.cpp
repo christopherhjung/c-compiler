@@ -27,6 +27,8 @@ unsigned int Sizeof::getSize(TransformContext &context, const SemanticType* sema
     unsigned int size;
     if(type->isSized()){
         size = context.layout.getTypeAllocSize(type);
+    }else if(semanticType->asMethodType()){
+        size = 8;
     }else{
         size = 1;
     }
