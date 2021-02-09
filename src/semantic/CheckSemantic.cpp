@@ -180,6 +180,10 @@ void Semantic::enter(Return *returnStatement) {
 }
 
 bool Semantic::isAssignable(const SemanticType *target, const SemanticType *source) {
+    if(source->asMethodType()){
+        source = new PointerType(source);
+    }
+
     bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
     bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType);
 
