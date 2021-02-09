@@ -44,11 +44,11 @@ int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::str
 
     try {
         unit->create(transformContext);
+        transformContext.dump(targetFile);
     } catch (TransformException &e) {
         std::cerr << ": error: semantic: (" << e.file << ":" << e.lineNumber << ":1) " << e.msg << std::endl;
     }
 
-    transformContext.dump(targetFile);
     return 0;
 }
 

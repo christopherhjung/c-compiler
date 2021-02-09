@@ -54,6 +54,7 @@ public:
     }
 
     llvm::BasicBlock *createBasicBlock(const std::string &name);
+    llvm::BasicBlock *createBasicBlock(const std::string &name, llvm::BasicBlock *bb);
 
     llvm::Value *getInt32(const std::string *str);
 

@@ -36,28 +36,36 @@ void If::dump(PrettyPrinter &printer) {
 }
 
 void If::create(TransformContext &context) {
-    llvm::BasicBlock *conditionBlock = context.currentBlock;//context.createBasicBlock("if-condition");
-    llvm::BasicBlock *startTrue = context.createBasicBlock("if-true");
-    llvm::BasicBlock *end = context.createBasicBlock("if-end");
+    if(trueBranch == nullptr && falseBranch == nullptr){
+        condition->create(context);
+    }else{
+        llvm::BasicBlock *conditionBlock = context.currentBlock;//context.createBasicBlock("if-condition");
 
-    //context.builder.CreateBr(conditionBlock);
+        llvm::BasicBlock *end = context.createBasicBlock("if-end");
 
-    llvm::BasicBlock *startFalse;
-    context.setCurrentBlock(startTrue);
-    trueBranch->create(context);
-    context.builder.CreateBr(end);
+        llvm::BasicBlock *startTrue;
+        if(trueBranch == nullptr){
+            startTrue = end;
+        }else{
+            startTrue = context.createBasicBlock("if-true", end);
+            context.setCurrentBlock(startTrue);
+            trueBranch->create(context);
+            context.builder.CreateBr(end);
+        }
 
-    if (falseBranch == nullptr) {
-        startFalse = end;
-    } else {
-        startFalse = context.createBasicBlock("if-false");
-        context.setCurrentBlock(startFalse);
-        falseBranch->create(context);
-        context.builder.CreateBr(end);
+        llvm::BasicBlock *startFalse;
+        if (falseBranch == nullptr) {
+            startFalse = end;
+        } else {
+            startFalse = context.createBasicBlock("if-false", end);
+            context.setCurrentBlock(startFalse);
+            falseBranch->create(context);
+            context.builder.CreateBr(end);
+        }
+
+        context.setCurrentBlock(conditionBlock);
+        condition->createConditionBranch(context, startTrue, startFalse);
+
+        context.setCurrentBlock(end);
     }
-
-    context.setCurrentBlock(conditionBlock);
-    condition->createConditionBranch(context, startTrue, startFalse);
-
-    context.setCurrentBlock(end);
 }

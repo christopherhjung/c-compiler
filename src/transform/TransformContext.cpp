@@ -19,8 +19,11 @@
 
 
 llvm::BasicBlock *TransformContext::createBasicBlock(const std::string &name) {
-    auto bb = llvm::BasicBlock::Create(llvmContext, name, currentFunction, unreachable);
-    return bb;
+    return createBasicBlock(name, unreachable);
+}
+
+llvm::BasicBlock *TransformContext::createBasicBlock(const std::string &name, llvm::BasicBlock * bb) {
+    return llvm::BasicBlock::Create(llvmContext, name, currentFunction, bb);
 }
 
 llvm::Value *TransformContext::getInt32(const std::string *str) {
@@ -161,7 +164,13 @@ void TransformContext::pushScope(Scope *scope) {
 
 void TransformContext::popScope() {
     scopeQueue.pop();
-    currentScope = scopeQueue.front();
+    auto scope = scopeQueue.front();
+    //currentScope = currentScope->parent;
+    currentScope = scope;
+    /*
+    if(scope != currentScope){
+        int a = 9;
+    }*/
 }
 
 llvm::IRBuilder<> &TransformContext::resetAllocBuilder() {
@@ -176,6 +185,12 @@ void TransformContext::println() {
 }
 
 void TransformContext::dump(const std::string &filename) {
+    bool correct = verifyModule(module);
+
+    if(!correct){
+        //TRANSFORM_ERROR_MSG("Not valid");
+    }
+
     std::error_code EC;
     llvm::raw_fd_ostream stream(filename, EC, llvm::sys::fs::OpenFlags::F_Text);
     module.print(stream, nullptr);
