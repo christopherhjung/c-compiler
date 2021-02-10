@@ -19,7 +19,7 @@
 #include "../elements/GoTo.h"
 #include "../elements/Identifier.h"
 #include "../elements/If.h"
-#include "../elements/IfSmall.h"
+#include "../elements/Choose.h"
 #include "../elements/LabeledStatement.h"
 #include "../elements/LogicalAnd.h"
 #include "../elements/LogicalOr.h"

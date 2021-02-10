@@ -486,12 +486,12 @@ public:
                 return left;
             } else {
                 if (eat(QUESTION)) {
-                    auto ifSimple = create<IfSmall>();
-                    ifSimple->condition = left;
-                    ifSimple->left = parseExpression();
+                    auto choose = create<Choose>();
+                    choose->condition = left;
+                    choose->left = parseExpression();
                     shall(COLON);
-                    ifSimple->right = parseExpression();
-                    left = ifSimple;
+                    choose->right = parseExpression();
+                    left = choose;
                 } else if (is(LEFT_PAREN)) {
                     auto call = create<Call>();
                     call->location = left->location;

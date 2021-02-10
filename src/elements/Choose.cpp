@@ -23,7 +23,12 @@ llvm::Value *Choose::createRightValue(TransformContext &context) {
     auto end = context.createBasicBlock("end");
     condition->createConditionBranch(context, trueBlock, falseBlock);
 
-    auto value = context.resetAllocBuilder().CreateAlloca(context.getType(left->semanticType));
+    auto targetType = left->semanticType;
+    if(targetType->asMethodType()){
+        targetType = new PointerType(targetType);
+    }
+
+    auto value = context.resetAllocBuilder().CreateAlloca(context.getType(targetType));
 
     context.setCurrentBlock(trueBlock);
     //Assignment::makeAssignment(context, left, left->createRightValue(context))

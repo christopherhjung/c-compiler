@@ -22,6 +22,6 @@ public:
 
     void create(TransformContext &context) override;
 
-    virtual int getSize(TransformContext &context);
+    virtual llvm::Value *getSize(TransformContext &context);
 };
 

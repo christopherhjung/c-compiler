@@ -17,7 +17,7 @@ public:
 
     llvm::Value *createRightValue(TransformContext &context) override;
 
-    int getSize(TransformContext &context) override;
+    llvm::Value *getSize(TransformContext &context) override;
 };
 
 

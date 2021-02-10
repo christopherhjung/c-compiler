@@ -133,6 +133,7 @@ void Semantic::enter(Statement *statement) {
     }/*else{
             ERROR(statement->location);
         }*/
+
 }
 
 void Semantic::checkCondition(Expression *condition, Location &location) {
@@ -298,14 +299,14 @@ void Semantic::enter0(Expression *expression) {
     } else if (auto sizeOf = dynamic_cast<Sizeof *>(expression)) {
         sizeOf->inner = enter(sizeOf->declarator, sizeOf->type, &sizeOf->location);
         sizeOf->semanticType = IntType;
-    } else if (auto ifSmall = dynamic_cast<IfSmall *>(expression)) {
-        checkCondition(ifSmall->condition, ifSmall->condition->location);
-        enter(ifSmall->left);
-        enter(ifSmall->right);
+    } else if (auto choose = dynamic_cast<Choose *>(expression)) {
+        checkCondition(choose->condition, choose->condition->location);
+        enter(choose->left);
+        enter(choose->right);
 
-        checkType(ifSmall->left, ifSmall->right->semanticType);
+        checkType(choose->left, choose->right->semanticType);
 
-        ifSmall->semanticType = ifSmall->left->semanticType;
+        choose->semanticType = choose->left->semanticType;
     } else {
         ERROR(expression->location);
     }

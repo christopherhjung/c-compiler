@@ -9,7 +9,7 @@
 
 class PrettyPrinter;
 
-class IfSmall : public Expression {
+class Choose : public Expression {
 public:
     Expression *condition = nullptr;
     Expression *left = nullptr;

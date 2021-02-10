@@ -16,6 +16,6 @@ llvm::Value *Constant::createRightValue(TransformContext &context){
     return context.builder.getInt8(str[0]);
 }
 
-int Constant::getSize(TransformContext &context){
-    return 4;
+llvm::Value *Constant::getSize(TransformContext &context){
+    return context.builder.getInt32(4);
 }
