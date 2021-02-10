@@ -18,5 +18,5 @@ llvm::Value *StringLiteral::createRightValue(TransformContext &context){
 }
 
 llvm::Value * StringLiteral::getSize(TransformContext &context){
-    return context.builder.getInt32(value->length());
+    return context.builder.getInt32(value->length() - 2);
 }

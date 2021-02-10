@@ -27,7 +27,7 @@ public:
     }
 
     const SemanticType *packMethodType() const override {
-        return inner->packMethodType();
+        return this;
     }
 
     const MethodType *asMethodType() const override {

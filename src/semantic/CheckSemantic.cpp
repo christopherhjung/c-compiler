@@ -295,12 +295,12 @@ void Semantic::enter0(Expression *expression) {
         enter(choose->left);
         enter(choose->right);
 
-        auto leftType = choose->left->semanticType->unpackMethodType();
+        auto leftType = choose->left->semanticType->packMethodType();
         if(leftType == nullptr){
             ERROR(choose->left->location);
         }
 
-        auto rightType = choose->right->semanticType->unpackMethodType();
+        auto rightType = choose->right->semanticType->packMethodType();
         if(rightType == nullptr){
             ERROR(choose->right->location);
         }
@@ -366,7 +366,7 @@ void Semantic::enter(Unary *unary) {
 
 void Semantic::enter(Binary *binary) {
     enter(binary->left);
-    auto leftType = binary->left->semanticType->unpackMethodType();
+    auto leftType = binary->left->semanticType->packMethodType();
 
     switch (binary->op->id) {
         case ARROW:
@@ -396,7 +396,7 @@ void Semantic::enter(Binary *binary) {
     }
 
     enter(binary->right);
-    auto rightType = binary->right->semanticType->unpackMethodType();
+    auto rightType = binary->right->semanticType->packMethodType();
 
     bool leftIsInteger = IntType->equals(leftType);
     bool rightIsInteger = IntType->equals(rightType) ;
@@ -587,7 +587,7 @@ SemanticType *Semantic::enter(Declaration *declaration) {
     if(declaration->initializer){
         enter(declaration->initializer);
 
-        auto rightType = declaration->initializer->semanticType->unpackMethodType();
+        auto rightType = declaration->initializer->semanticType->packMethodType();
 
         if (!isAssignable(leftType, rightType)) {
             ERROR(declaration->location);

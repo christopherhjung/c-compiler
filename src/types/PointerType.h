@@ -23,10 +23,8 @@ public:
     }
 
     const MethodType *unpackMethodType() const override {
-        if(auto pointer = subType->asPointerType()){
-            if(auto method = pointer->subType->asMethodType()){
-                return method;
-            }
+        if(auto method = subType->asMethodType()){
+            return method;
         }
 
         return nullptr;

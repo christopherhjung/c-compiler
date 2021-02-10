@@ -14,7 +14,7 @@ class MethodType : public ComplexType {
 public:
     std::vector<SemanticType *> types;
     std::vector<Location> locations;
-    const PointerType* originalType;
+    const PointerType* originalType = nullptr;
 
     explicit MethodType(const SemanticType *subType) : ComplexType(subType) {
         this->originalType = new PointerType(subType);
