@@ -17,7 +17,7 @@ public:
     const PointerType* originalType = nullptr;
 
     explicit MethodType(const SemanticType *subType) : ComplexType(subType) {
-        this->originalType = new PointerType(subType);
+        this->originalType = new PointerType(this);
     }
 
     const SemanticType *call(const Call *call) const;

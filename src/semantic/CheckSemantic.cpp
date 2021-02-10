@@ -181,6 +181,7 @@ void Semantic::enter(Return *returnStatement) {
 }
 
 bool Semantic::isAssignable(const SemanticType *target, const SemanticType *source) {
+    target = target->packMethodType();
     source = source->packMethodType();
 
     bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
