@@ -5,6 +5,7 @@
 #include "IfSmall.h"
 #include "../parser/PrettyPrinter.h"
 #include "../transform/TransformContext.h"
+#include "Assignment.h"
 
 void IfSmall::dump(PrettyPrinter &printer) {
     printer << "(";
@@ -22,14 +23,12 @@ llvm::Value *IfSmall::createRightValue(TransformContext &context) {
     auto end = context.createBasicBlock("end");
     condition->createConditionBranch(context, trueBlock, falseBlock);
 
-    auto value = context.resetAllocBuilder().CreateAlloca(context.getType(left->semanticType));
-
     context.setCurrentBlock(trueBlock);
-    context.builder.CreateStore(left->createRightValue(context), value);
+    Assignment::makeAssignment(context, left, left->createRightValue(context))
     context.builder.CreateBr(end);
 
     context.setCurrentBlock(falseBlock);
-    context.builder.CreateStore(right->createRightValue(context), value);
+    Assignment::makeAssignment(context, left, right->createRightValue(context))
     context.builder.CreateBr(end);
 
     context.setCurrentBlock(end);

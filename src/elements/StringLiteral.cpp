@@ -16,3 +16,7 @@ llvm::Value *StringLiteral::createRightValue(TransformContext &context){
     llvm::Value* globalPtr = context.builder.CreateGlobalStringPtr(str);
     return globalPtr;
 }
+
+int StringLiteral::getSize(TransformContext &context){
+    return value->length();
+}

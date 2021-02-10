@@ -16,6 +16,8 @@ public:
     void dump(PrettyPrinter &printer) override;
 
     llvm::Value *createRightValue(TransformContext &context) override;
+
+    int getSize(TransformContext &context) override;
 };
 
 
