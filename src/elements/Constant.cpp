@@ -13,9 +13,9 @@ void Constant::dump(PrettyPrinter &printer) {
 
 llvm::Value *Constant::createRightValue(TransformContext &context){
     std::string str = escapeString(*value);
-    return context.builder.getInt8(str[0]);
+    return context.builder.getInt32(str[0]);
 }
-
+/*
 llvm::Value *Constant::getSize(TransformContext &context){
     return context.builder.getInt32(4);
-}
+}*/

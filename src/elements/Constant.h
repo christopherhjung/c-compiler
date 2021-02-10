@@ -18,7 +18,6 @@ public:
 
     llvm::Value *createRightValue(TransformContext &context) override;
 
-    llvm::Value *getSize(TransformContext &context) override;
 };
 
 

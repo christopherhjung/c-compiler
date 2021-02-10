@@ -31,21 +31,11 @@ llvm::Value *Call::createRightValue(TransformContext &context){
 
     llvm::Value* value = target->createRightValue(context);
 
-    const MethodType* methodType;
-    if(auto pointerType = functionSemanticType->asPointerType()){
-        if(!pointerType->subType->asMethodType()){
-            functionSemanticType = pointerType->subType;
-        }
-
-        methodType = functionSemanticType->asPointerType()->subType->asMethodType();
-    }else{
-        methodType = functionSemanticType->asMethodType();
-    }
-
+    const MethodType* methodType = functionSemanticType->unpackMethodType();
 
     std::vector<llvm::Value*> arguments;
     arguments.reserve(values.size());
-    for( int i = 0 ; i < values.size() ; i++){
+    for( size_t i = 0 ; i < values.size() ; i++){
         arguments.push_back(Assignment::ensureAssignment(context, methodType->types[i], values[i]));
     }
 

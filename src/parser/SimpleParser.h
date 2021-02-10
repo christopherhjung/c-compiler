@@ -9,6 +9,8 @@
 #include "../lexer/Lexer.h"
 #include <vector>
 
+#include "../common.h"
+
 #include "../elements/Elements.h"
 
 class ParseException : public std::exception {

@@ -48,3 +48,11 @@ bool MethodType::equals(const SemanticType *other) const {
 const MethodType *MethodType::asMethodType() const {
     return this;
 }
+
+const PointerType *MethodType::packMethodType() const {
+    return originalType;
+}
+
+const MethodType *MethodType::unpackMethodType() const {
+    return this;
+}

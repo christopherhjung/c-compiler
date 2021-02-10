@@ -181,9 +181,7 @@ void Semantic::enter(Return *returnStatement) {
 }
 
 bool Semantic::isAssignable(const SemanticType *target, const SemanticType *source) {
-    if(source->asMethodType()){
-        source = new PointerType(source);
-    }
+    source = source->packMethodType();
 
     bool targetIsNumeric = target->equals(IntType) || target->equals(CharType);
     bool sourceIsNumeric = source->equals(IntType) || source->equals(CharType);
@@ -230,23 +228,16 @@ void Semantic::enter0(Expression *expression) {
         identifier->anchor = desc->anchor;
         identifier->semanticType = desc->semanticType;
     } else if (auto constant = dynamic_cast<Constant *>(expression)) {
-        constant->semanticType = new SimpleType(TYPE_CHAR, false);
+        constant->semanticType = IntType;
     } else if (auto string = dynamic_cast<StringLiteral *>(expression)) {
-        string->semanticType = new ProxyType(CharPointerType, false);
+        string->semanticType = CharPointerType;
     } else if (auto call = dynamic_cast<Call *>(expression)) {
         for (auto expr : call->values) {
             enter(expr);
         }
 
         enter(call->target);
-        auto methodType = call->target->semanticType->asMethodType();
-        if(!methodType){
-            auto pointerType = call->target->semanticType->asPointerType();
-            if(pointerType){
-                methodType = pointerType->subType->asMethodType();
-            }
-        }
-
+        auto methodType = call->target->semanticType->unpackMethodType();
         if (methodType) {
             if (methodType->types.size() < call->values.size()) {
                 ERROR(call->locations[methodType->types.size()]);
@@ -304,20 +295,14 @@ void Semantic::enter0(Expression *expression) {
         enter(choose->left);
         enter(choose->right);
 
-
-
-        auto leftType = choose->left->semanticType;
+        auto leftType = choose->left->semanticType->packMethodType();
         if(leftType == nullptr){
             ERROR(choose->left->location);
-        }else if(leftType->asMethodType()){
-            leftType = new PointerType(leftType);
         }
 
-        auto rightType = choose->right->semanticType;
+        auto rightType = choose->right->semanticType->packMethodType();
         if(rightType == nullptr){
             ERROR(choose->right->location);
-        }else if(rightType->asMethodType()){
-            rightType = new PointerType(rightType);
         }
 
         if (!leftType->equals(rightType)) {
@@ -381,11 +366,7 @@ void Semantic::enter(Unary *unary) {
 
 void Semantic::enter(Binary *binary) {
     enter(binary->left);
-    auto leftType = binary->left->semanticType;
-
-    if(leftType->asMethodType()){
-        leftType = new PointerType(leftType);
-    }
+    auto leftType = binary->left->semanticType->packMethodType();
 
     switch (binary->op->id) {
         case ARROW:
@@ -415,11 +396,7 @@ void Semantic::enter(Binary *binary) {
     }
 
     enter(binary->right);
-    auto rightType = binary->right->semanticType;
-
-    if(rightType->asMethodType()){
-        rightType = new PointerType(rightType);
-    }
+    auto rightType = binary->right->semanticType->packMethodType();
 
     bool leftIsInteger = IntType->equals(leftType);
     bool rightIsInteger = IntType->equals(rightType) ;
@@ -467,10 +444,6 @@ void Semantic::enter(Binary *binary) {
                 binary->semanticType = new ProxyType(leftType, false);
                 return;
             } else if (leftType->asPointerType() && rightType->asPointerType() && leftType->equals(rightType)) {
-                binary->opInfo = 2;
-                binary->semanticType = IntType;
-                return;
-            } else if (leftType->asMethodType() && rightType->asMethodType() && leftType->equals(rightType)) {
                 binary->opInfo = 2;
                 binary->semanticType = IntType;
                 return;
@@ -614,11 +587,7 @@ SemanticType *Semantic::enter(Declaration *declaration) {
     if(declaration->initializer){
         enter(declaration->initializer);
 
-        auto rightType = declaration->initializer->semanticType;
-
-        if(rightType->asMethodType()){
-            rightType = new PointerType(rightType);
-        }
+        auto rightType = declaration->initializer->semanticType->packMethodType();
 
         if (!isAssignable(leftType, rightType)) {
             ERROR(declaration->location);

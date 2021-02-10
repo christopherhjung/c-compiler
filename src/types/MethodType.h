@@ -6,6 +6,7 @@
 
 #include <vector>
 #include "ComplexType.h"
+#include "PointerType.h"
 
 class Call;
 
@@ -13,9 +14,10 @@ class MethodType : public ComplexType {
 public:
     std::vector<SemanticType *> types;
     std::vector<Location> locations;
+    const PointerType* originalType = nullptr;
 
     explicit MethodType(const SemanticType *subType) : ComplexType(subType) {
-
+        this->originalType = new PointerType(subType);
     }
 
     const SemanticType *call(const Call *call) const;
@@ -23,6 +25,10 @@ public:
     bool equals(const SemanticType *other) const override;
 
     const MethodType *asMethodType() const override;
+
+    const PointerType *packMethodType() const override;
+
+    const MethodType *unpackMethodType() const override;
 };
 
 

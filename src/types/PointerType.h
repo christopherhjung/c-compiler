@@ -8,8 +8,6 @@
 
 class PointerType : public ComplexType {
 public:
-    bool methodWrap = false;
-
     explicit PointerType(const SemanticType *subType) : ComplexType(subType) {
 
     }
@@ -22,6 +20,14 @@ public:
 
     const PointerType *asPointerType() const override {
         return this;
+    }
+
+    const MethodType *unpackMethodType() const override {
+        if(auto method = subType->asMethodType()){
+            return method;
+        }
+
+        return nullptr;
     }
 };
 

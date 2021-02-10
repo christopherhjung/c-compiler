@@ -25,6 +25,14 @@ const SimpleType *SemanticType::asSimpleType() const {
     return nullptr;
 }
 
+const SemanticType *SemanticType::packMethodType()  const {
+    return this;
+}
+
+const MethodType *SemanticType::unpackMethodType()  const {
+    return this->asMethodType();
+}
+
 bool SemanticType::isAssignable() const {
     return assignable;
 }
