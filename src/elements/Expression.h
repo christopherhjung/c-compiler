@@ -4,7 +4,6 @@
 #pragma once
 
 #include "Statement.h"
-#include "Sizeof.h"
 
 #include "llvm/IR/GlobalValue.h"
 
@@ -23,8 +22,6 @@ public:
 
     void create(TransformContext &context) override;
 
-    virtual int getSize(TransformContext &context){
-        return Sizeof::getInt32Size(context, semanticType);
-    }
+    virtual int getSize(TransformContext &context);
 };
 

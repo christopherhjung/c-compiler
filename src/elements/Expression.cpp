@@ -6,6 +6,7 @@
 #include "../parser/PrettyPrinter.h"
 #include "../transform/TransformException.h"
 #include "../transform/TransformContext.h"
+#include "Sizeof.h"
 
 llvm::Value *Expression::createRightValue(TransformContext &context) {
     TRANSFORM_ERROR();
@@ -29,4 +30,8 @@ void Expression::createConditionBranch(TransformContext &context, llvm::BasicBlo
 
 void Expression::create(TransformContext &context) {
     createRightValue(context);
+}
+
+virtual int Expression::getSize(TransformContext &context){
+    return Sizeof::getInt32Size(context, semanticType);
 }
