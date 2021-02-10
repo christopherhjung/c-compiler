@@ -2,12 +2,12 @@
 // Created by chris on 21.01.21.
 //
 
-#include "IfSmall.h"
+#include "Choose.h"
 #include "../parser/PrettyPrinter.h"
 #include "../transform/TransformContext.h"
 #include "Assignment.h"
 
-void IfSmall::dump(PrettyPrinter &printer) {
+void Choose::dump(PrettyPrinter &printer) {
     printer << "(";
     condition->dump(printer);
     printer << " ? ";
@@ -17,18 +17,22 @@ void IfSmall::dump(PrettyPrinter &printer) {
     printer << ")";
 }
 
-llvm::Value *IfSmall::createRightValue(TransformContext &context) {
+llvm::Value *Choose::createRightValue(TransformContext &context) {
     auto trueBlock = context.createBasicBlock("write-left");
     auto falseBlock = context.createBasicBlock("write-right");
     auto end = context.createBasicBlock("end");
     condition->createConditionBranch(context, trueBlock, falseBlock);
 
+    auto value = context.resetAllocBuilder().CreateAlloca(context.getType(left->semanticType));
+
     context.setCurrentBlock(trueBlock);
-    Assignment::makeAssignment(context, left, left->createRightValue(context))
+    //Assignment::makeAssignment(context, left, left->createRightValue(context))
+    context.builder.CreateStore(left->createRightValue(context), value);
     context.builder.CreateBr(end);
 
     context.setCurrentBlock(falseBlock);
-    Assignment::makeAssignment(context, left, right->createRightValue(context))
+    //Assignment::makeAssignment(context, left, right->createRightValue(context))
+    context.builder.CreateStore(right->createRightValue(context), value);
     context.builder.CreateBr(end);
 
     context.setCurrentBlock(end);
