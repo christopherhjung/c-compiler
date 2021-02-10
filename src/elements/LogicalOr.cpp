@@ -9,7 +9,7 @@
 void
 LogicalOr::createConditionBranch(TransformContext &context, llvm::BasicBlock *trueBlock,
                                  llvm::BasicBlock *falseBlock) {
-    auto extraBB = context.createBasicBlock("logic-and-temp");
+    auto extraBB = context.createBasicBlock("logic-or-temp");
     left->createConditionBranch(context, trueBlock, extraBB);
     context.setCurrentBlock(extraBB);
     right->createConditionBranch(context, trueBlock, falseBlock);
