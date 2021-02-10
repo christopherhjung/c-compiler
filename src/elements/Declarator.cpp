@@ -7,13 +7,13 @@
 
 void Declarator::dump(PrettyPrinter &stream) {
 
-    for (uint32_t i = 0; i < pointer; i++) {
+    for (int i = 0; i < pointer; i++) {
         stream << "(*";
     }
     if (directDeclarator != nullptr) {
         directDeclarator->dump(stream);
     }
-    for (uint32_t i = 0; i < pointer; i++) {
+    for (int i = 0; i < pointer; i++) {
         stream << ")";
     }
 }
