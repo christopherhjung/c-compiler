@@ -10,8 +10,8 @@ void merge(int* arr, int l, int m, int r)
     int n2 = r - m;
 
     // Create temp arrays
-    int *L = c4_malloc(n1);
-    int *R = c4_malloc(n2);
+    int *L = c4_malloc(n1 * sizeof(int));
+    int *R = c4_malloc(n2 * sizeof(int));
 
     int i = 0;
     int j = 0;
@@ -98,7 +98,7 @@ void printArray(int* A, int size)
 // Driver code
 int main(void)
 {
-    int* arr = c4_malloc(6);
+    int* arr = c4_malloc(6 * sizeof(int));
 
     arr[0] = 12;
     arr[1] = 11;
