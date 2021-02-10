@@ -304,7 +304,25 @@ void Semantic::enter0(Expression *expression) {
         enter(choose->left);
         enter(choose->right);
 
-        checkType(choose->left, choose->right->semanticType);
+
+
+        auto leftType = choose->left->semanticType;
+        if(leftType == nullptr){
+            ERROR(choose->left->location);
+        }else if(leftType->asMethodType()){
+            leftType = new PointerType(leftType);
+        }
+
+        auto rightType = choose->right->semanticType;
+        if(rightType == nullptr){
+            ERROR(choose->right->location);
+        }else if(rightType->asMethodType()){
+            rightType = new PointerType(rightType);
+        }
+
+        if (!leftType->equals(rightType)) {
+            ERROR(choose->location);
+        }
 
         choose->semanticType = choose->left->semanticType;
     } else {
