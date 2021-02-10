@@ -178,11 +178,11 @@ llvm::IRBuilder<> &TransformContext::resetAllocBuilder() {
                                 allocBuilder.GetInsertBlock()->begin());
     return allocBuilder;
 }
-
+/*
 void TransformContext::println() {
     verifyModule(module);
     module.dump();
-}
+}*/
 
 void TransformContext::dump(const std::string &filename) {
     bool correct = verifyModule(module);

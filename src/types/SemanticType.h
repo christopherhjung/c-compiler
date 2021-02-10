@@ -31,6 +31,10 @@ public:
 
     virtual const SimpleType *asSimpleType() const;
 
+    virtual const SemanticType *packMethodType() const;
+
+    virtual const MethodType *unpackMethodType() const;
+
     virtual bool isAssignable() const;
 };
 

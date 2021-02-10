@@ -22,6 +22,14 @@ public:
         return inner->asSimpleType();
     }
 
+    const MethodType *unpackMethodType() const override {
+        return inner->unpackMethodType();
+    }
+
+    const SemanticType *packMethodType() const override {
+        return inner->packMethodType();
+    }
+
     const MethodType *asMethodType() const override {
         return inner->asMethodType();
     }

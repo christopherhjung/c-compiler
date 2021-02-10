@@ -8,11 +8,18 @@ set(CMAKE_CXX_STANDARD 17)
 
 #llvm_config()
 
+
+
 if(EXISTS "/media/hd/workspace/c4/llvm/install/bin/llvm-config")
     set(LLVM_CONFIG /media/hd/workspace/c4/llvm/install/bin/llvm-config)
 else()
-    set(LLVM_CONFIG llvm-config)
+    if(EXISTS "/usr/local/opt/llvm@11/bin/llvm-config")
+        set(LLVM_CONFIG /usr/local/opt/llvm@11/bin/llvm-config)
+    else()
+        set(LLVM_CONFIG llvm-config)
+    endif()
 endif()
+
 
 
 execute_process(COMMAND ${LLVM_CONFIG} --cxxflags OUTPUT_VARIABLE LLVM_CFLAGS)
@@ -30,6 +37,7 @@ string(REPLACE "-l" "" LLVM_LIBS_FLAGS ${LLVM_LIBS_FLAGS})
 string(REPLACE "-l" "" LLVM_CORE_LIBS_FLAGS ${LLVM_CORE_LIBS_FLAGS})
 
 string(REGEX REPLACE "[\r\n ]+$" "" LLVM_CFLAGS ${LLVM_CFLAGS})
+string(REGEX REPLACE "lib.+$" "lib" LLVM_LINKER_FLAGS ${LLVM_LINKER_FLAGS})
 string(REGEX REPLACE "[\r\n ]+$" "" LLVM_LINKER_FLAGS ${LLVM_LINKER_FLAGS})
 string(REGEX REPLACE "[\r\n ]+$" "" LLVM_LIBS_FLAGS ${LLVM_LIBS_FLAGS})
 string(REGEX REPLACE "[\r\n ]+$" "" LLVM_CORE_LIBS_FLAGS ${LLVM_CORE_LIBS_FLAGS})
@@ -37,7 +45,7 @@ string(REGEX REPLACE "[\r\n ]+$" "" LLVM_INCLUDES ${LLVM_INCLUDES})
 
 string(REPLACE " " ";" LLVM_LIBS "${LLVM_LIBS_FLAGS} ${LLVM_CORE_LIBS_FLAGS}")
 
-message(${LLVM_LIBS_FLAGS} ${LLVM_CORE_LIBS_FLAGS})
+message(${LLVM_LINKER_FLAGS})
 add_subdirectory(lib/googletest)
 
 include_directories(lib/googletest)

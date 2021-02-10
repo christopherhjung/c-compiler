@@ -5,10 +5,10 @@
 #pragma once
 
 #include <string>
+#include "vector"
 #include "Type.h"
 
 class PrettyPrinter;
-
 class Declaration;
 
 class StructType : public Type {
