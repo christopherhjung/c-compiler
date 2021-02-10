@@ -230,9 +230,9 @@ void Semantic::enter0(Expression *expression) {
         identifier->anchor = desc->anchor;
         identifier->semanticType = desc->semanticType;
     } else if (auto constant = dynamic_cast<Constant *>(expression)) {
-        constant->semanticType = new SimpleType(TYPE_CHAR, false);
+        constant->semanticType = IntType;
     } else if (auto string = dynamic_cast<StringLiteral *>(expression)) {
-        string->semanticType = new ProxyType(CharPointerType, false);
+        string->semanticType = CharPointerType;
     } else if (auto call = dynamic_cast<Call *>(expression)) {
         for (auto expr : call->values) {
             enter(expr);
@@ -303,8 +303,6 @@ void Semantic::enter0(Expression *expression) {
         checkCondition(choose->condition, choose->condition->location);
         enter(choose->left);
         enter(choose->right);
-
-
 
         auto leftType = choose->left->semanticType;
         if(leftType == nullptr){
