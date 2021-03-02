@@ -114,11 +114,11 @@ public:
         }
 
 
-        std::vector<llvm::BasicBlock*> notReachable;
+        std::unordered_set<llvm::BasicBlock*> notReachable;
         for( auto &bb : func.getBasicBlockList() ){
             auto entry = reachable.find(&bb);
             if(entry == reachable.end() || entry->second.state == NOT_REACHABLE){
-                notReachable.push_back(&bb);
+                notReachable.insert(&bb);
             }
         }
 
