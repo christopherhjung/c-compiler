@@ -12,17 +12,11 @@ llvm::Value *JumpingCompare::createRightValue(TransformContext &context) {
     auto end = context.createBasicBlock("end");
     createConditionBranch(context, trueBlock, falseBlock);
 
-
-
-
-
-
     context.setCurrentBlock(trueBlock);
     context.builder.CreateBr(end);
 
     context.setCurrentBlock(falseBlock);
     context.builder.CreateBr(end);
-
 
     context.setCurrentBlock(end);
     auto value =  context.builder.CreatePHI(context.builder.getInt32Ty(),2);

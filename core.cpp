@@ -34,7 +34,7 @@
 #include "src/elements/Elements.h"
 
 
-int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::string &sourceFile, const std::string &targetFile) {
+int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::string &sourceFile, const std::string &targetFile, bool optimize) {
     llvm::LLVMContext context;
     llvm::Module module(sourceFile, context);
     llvm::IRBuilder<> builder(context);
@@ -44,6 +44,9 @@ int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::str
 
     try {
         unit->create(transformContext);
+        if(optimize){
+            transformContext.optimize();
+        }
         transformContext.dump(targetFile);
     } catch (TransformException &e) {
         std::cerr << ": error: semantic: (" << e.file << ":" << e.lineNumber << ":1) " << e.msg << std::endl;
@@ -52,7 +55,7 @@ int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::str
     return 0;
 }
 
-int runParser(InputReader *fileInputReader, std::ostream &out, std::ostream &err, bool printAST, bool compile) {
+int runParser(InputReader *fileInputReader, std::ostream &out, std::ostream &err, bool printAST, bool compile, bool optimize) {
     GeneratedLexer lexer;
     CatchingLexerProxy proxy(lexer);
     SimpleParser parser(&proxy);
@@ -80,7 +83,7 @@ int runParser(InputReader *fileInputReader, std::ostream &out, std::ostream &err
                 if(std::regex_search(source,match, filePattern)){
                     std::string target = match[1];
                     target += ".ll";
-                    return runCompiler(unit, out, err, source, target);
+                    return runCompiler(unit, out, err, source, target, optimize);
                 }
             }
         } catch (SemanticException &e) {

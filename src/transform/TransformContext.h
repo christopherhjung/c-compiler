@@ -77,6 +77,8 @@ public:
 
     void popScope() ;
 
+    void optimize();
+
     llvm::IRBuilder<> &resetAllocBuilder();
 
     //void println() ;

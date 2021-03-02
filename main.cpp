@@ -50,26 +50,45 @@ int main(int argc, char **const args) {
 
     std::string command;
     std::string source;
-    if(argc == 2){
-        command = "--compile";
-        source = args[1];
-    }else if(argc == 3){
-        command = args[1];
-        source = args[2];
-    }else{
-        return 1;
-    }
 
-    bool tokenize = command == "--tokenize";
-    bool printAst = command == "--print-ast";
-    bool compile = command == "--compile";
+
+    bool tokenize = false;
+    bool printAst = false;
+    bool compile = false;
+    bool optimize = false;
+    bool optimizeRuntime = false;
+    bool optimizeCompileTime = false;
+
+    for(int i = 1; i < argc ; i++){
+        std::string option = args[i];
+        if(option == "--compile"){
+            compile = true;
+            source = args[++i];
+        }else if(option == "--tokenize"){
+            tokenize = true;
+        }else if(option == "--print-ast"){
+            printAst = true;
+        }else if(option == "--compile"){
+            compile = true;
+        }else if(option == "--optimize-run-time") {
+            optimize = true;
+        }else if(option == "--optimize-compile-time"){
+        }else if(option == "--optimize"){
+            compile = true;
+            optimize = true;
+            source = args[++i];
+        }else{
+            return 1;
+
+        }
+    }
 
     InputReader* fileInputReader = new FileInputReader(source);
     int code = 1;
     if(tokenize){
         code = runLexer(fileInputReader, out, err);
     }else{
-        code = runParser(fileInputReader, out, err, printAst,compile);
+        code = runParser(fileInputReader, out, err, printAst, compile, optimize);
     }
 
 #ifdef MEASURE

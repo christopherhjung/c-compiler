@@ -10,12 +10,16 @@
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/IRBuilder.h"
-#include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/GlobalValue.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/Support/Signals.h"
+#include "llvm/IR/LegacyPassManager.h"
+#include "../optimization/Optimizer.h"
+#include <llvm/Target/TargetMachine.h>
+
 
 #include <queue>
+#include <llvm/Transforms/Utils.h>
 
 
 llvm::BasicBlock *TransformContext::createBasicBlock(const std::string &name) {
@@ -184,12 +188,24 @@ void TransformContext::println() {
     module.dump();
 }*/
 
-void TransformContext::dump(const std::string &filename) {
-    bool correct = verifyModule(module);
+void TransformContext::optimize() {
+    llvm::legacy::FunctionPassManager fnPasses(&module);
+    fnPasses.add(llvm::createPromoteMemoryToRegisterPass());
+    fnPasses.add(new Optimizer(llvmContext));
 
-    if(!correct){
-        //TRANSFORM_ERROR_MSG("Not valid");
+    fnPasses.doInitialization();
+    for (llvm::Function &func : module) {
+        fnPasses.run(func);
     }
+    fnPasses.doFinalization();
+}
+
+void TransformContext::dump(const std::string &filename) {
+    //ool correct = verifyModule(module);
+
+    //if(!correct){
+        //TRANSFORM_ERROR_MSG("Not valid");
+    //}
 
     std::error_code EC;
     llvm::raw_fd_ostream stream(filename, EC, llvm::sys::fs::OpenFlags::F_Text);

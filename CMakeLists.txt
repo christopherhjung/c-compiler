@@ -25,8 +25,10 @@ endif()
 execute_process(COMMAND ${LLVM_CONFIG} --cxxflags OUTPUT_VARIABLE LLVM_CFLAGS)
 execute_process(COMMAND ${LLVM_CONFIG} --ldflags OUTPUT_VARIABLE LLVM_LINKER_FLAGS)
 execute_process(COMMAND ${LLVM_CONFIG} --system-libs OUTPUT_VARIABLE LLVM_LIBS_FLAGS)
-execute_process(COMMAND ${LLVM_CONFIG} --libs core OUTPUT_VARIABLE LLVM_CORE_LIBS_FLAGS)
+execute_process(COMMAND ${LLVM_CONFIG} --libs OUTPUT_VARIABLE LLVM_CORE_LIBS_FLAGS)
 execute_process(COMMAND ${LLVM_CONFIG} --includedir OUTPUT_VARIABLE LLVM_INCLUDES)
+
+message(${LLVM_CORE_LIBS_FLAGS})
 
 
 string(REPLACE "-I" "-isystem" LLVM_CFLAGS ${LLVM_CFLAGS})
@@ -53,7 +55,7 @@ message(${LLVM_LINKER_FLAGS})
 #include_directories(lib/googletest/googlemock/include)
 
 
-SET(CMAKE_CXX_FLAGS "-Wall -W -std=c++17 -O3 -g -Wno-unused-parameter  ${LLVM_CFLAGS} -pthread")
+SET(CMAKE_CXX_FLAGS "-Wall -W -std=c++17 -O0 -g -Wno-unused-parameter  ${LLVM_CFLAGS} -pthread")
 
 file(GLOB_RECURSE source_list "src/*.cpp" )
 
@@ -62,6 +64,6 @@ include_directories(${LLVM_INCLUDES})
 link_libraries(${LLVM_LIBS})
 
 add_executable(c4 ${source_list} main.cpp  )
-add_executable(build ${source_list} build.cpp src/types/Types.cpp src/elements/JumpingCompare.cpp src/elements/JumpingCompare.h src/common.h)
+add_executable(build ${source_list} build.cpp )
 add_executable(testC4 ${source_list} tests/main.cpp)
 

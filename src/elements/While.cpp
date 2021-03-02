@@ -17,14 +17,16 @@ void While::dump(PrettyPrinter &printer) {
 
 void While::create(TransformContext &context){
     llvm::BasicBlock *conditionBlock = context.createBasicBlock("while-condition");
-    llvm::BasicBlock *end = context.createBasicBlock("while-end");
+    llvm::BasicBlock *end;
     context.builder.CreateBr(conditionBlock);
 
     llvm::BasicBlock *startBody;
     if(body == nullptr){
-        startBody = end;
+        startBody = conditionBlock;
+        end = context.createBasicBlock("while-end");
     }else{
         startBody = context.createBasicBlock("while-body");
+        end = context.createBasicBlock("while-end");
 
         context.whileCondition = conditionBlock;
         context.whileEnd = end;
