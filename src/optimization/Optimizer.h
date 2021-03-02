@@ -113,10 +113,19 @@ public:
             }
         }
 
-        queue = queue;
+        std::vector<llvm::BasicBlock*> notReachable;
+        for( auto &bb : func.getBasicBlockList() ){
+            auto entry = reachable.find(&bb);
+            if(entry == reachable.end() || entry->second.state == NOT_REACHABLE){
+                notReachable.push_back(&bb);
+            }
+        }
+
+        for(auto *bb : notReachable){
+            bb->eraseFromParent();
+        }
 
         return true;
-
     }
 
     int incrementModify(){

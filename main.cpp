@@ -78,8 +78,7 @@ int main(int argc, char **const args) {
             optimize = true;
             source = args[++i];
         }else{
-            return 1;
-
+            source = args[i];
         }
     }
 
