@@ -113,6 +113,7 @@ public:
             }
         }
 
+
         std::vector<llvm::BasicBlock*> notReachable;
         for( auto &bb : func.getBasicBlockList() ){
             auto entry = reachable.find(&bb);
@@ -272,6 +273,16 @@ public:
                 setState(target, 2);
             }
         }else if(auto cast = llvm::dyn_cast_or_null<llvm::CastInst>(value)){
+            auto child = cast->getOperand(0);
+            ConstantLatticeElement &childElement = getValue(child, currentBlock);
+
+            if(childElement.state == 1 && target.state < 2){
+                llvm::Constant *result =  llvm::ConstantExpr::getCast(cast->getOpcode(), childElement.constant, cast->getDestTy() );
+                combine(target, getValue(result, currentBlock));
+            }else if(childElement.state > 1){
+                setState(target, 2);
+            }
+
             if(target.state != 2){
                 setState(target, 2);
             }

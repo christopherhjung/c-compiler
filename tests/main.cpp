@@ -168,15 +168,15 @@ int main(int argc, char** argv){
     });
 
     errors += check("print_ast", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
-        return runParser(inputReader, out, err, true, false);
+        return runParser(inputReader, out, err, true, false, false);
     });
 
     errors += check("semantic_analysis", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
-        return runParser(inputReader, out, err, true, false);
+        return runParser(inputReader, out, err, true, false, false);
     });
 
     errors += check("backend", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
-        std::string command = "../compile.sh ";
+        std::string command = "../optimize.sh ";
         command += inputReader->getFile();
         out << exec( command );
         return 0;
