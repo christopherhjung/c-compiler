@@ -63,7 +63,7 @@ int main(int argc, char **const args) {
         std::string option = args[i];
         if(option == "--compile"){
             compile = true;
-            source = args[++i];
+            //source = args[++i];
         }else if(option == "--tokenize"){
             tokenize = true;
         }else if(option == "--print-ast"){
@@ -76,10 +76,14 @@ int main(int argc, char **const args) {
         }else if(option == "--optimize"){
             compile = true;
             optimize = true;
-            source = args[++i];
+            //source = args[++i];
         }else{
             source = args[i];
         }
+    }
+
+    if(!tokenize && !printAst && !compile && !optimize){
+        compile = true;
     }
 
     InputReader* fileInputReader = new FileInputReader(source);

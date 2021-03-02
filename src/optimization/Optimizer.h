@@ -58,6 +58,12 @@ public:
     }
 
     bool runOnFunction(llvm::Function &func) override{
+        constant.clear();
+        reachable.clear();
+        targets.clear();
+        updateReachable = false;
+        modifyCounter = 0;
+
         auto *entryBlock = &func.getEntryBlock();
 
         reachable[entryBlock].state = REACHABLE;
@@ -81,11 +87,11 @@ public:
 
                 for (auto insIter = bb->begin(), insEnd = bb->end(); insIter != insEnd; ++insIter) {
                     llvm::Instruction *ins = &*insIter;
-
                     getValue(ins, bb);
                 }
             }
         }
+
 
         for(auto pair : constant){
             if(pair.second.state == 1){
@@ -113,7 +119,6 @@ public:
             }
         }
 
-
         std::unordered_set<llvm::BasicBlock*> notReachable;
         for( auto &bb : func.getBasicBlockList() ){
             auto entry = reachable.find(&bb);
@@ -123,6 +128,7 @@ public:
         }
 
         for(auto *bb : notReachable){
+            //std::cout << bb->getName().str() << std::endl;
             bb->eraseFromParent();
         }
 
@@ -226,71 +232,64 @@ public:
                 auto successor = branch->getSuccessor(0);
                 makeReachable(currentBlock, successor);
             }
-        }else if(auto call = llvm::dyn_cast_or_null<llvm::CallInst>(value)){
-            call = call;
-        }else if(auto returnInst = llvm::dyn_cast_or_null<llvm::ReturnInst>(value)){
-            returnInst = returnInst;
         }else if(auto cmp = llvm::dyn_cast_or_null<llvm::CmpInst>(value)){
-            auto left = cmp->getOperand(0);
-            auto right = cmp->getOperand(1);
+            if(target.state < 2){
+                auto left = cmp->getOperand(0);
+                auto right = cmp->getOperand(1);
 
-            ConstantLatticeElement &leftValue = getValue(left, currentBlock);
-            ConstantLatticeElement &rightValue = getValue(right, currentBlock);
-
-            //if(leftValue.modifyCounter > target.modifyCounter || rightValue.modifyCounter > target.modifyCounter){
-                if(leftValue.state == 1 && rightValue.state == 1 && target.state < 2){
+                ConstantLatticeElement &leftValue = getValue(left, currentBlock);
+                ConstantLatticeElement &rightValue = getValue(right, currentBlock);
+                if(leftValue.state == 1 && rightValue.state == 1 ){
                     auto result = llvm::ConstantExpr::getCompare(cmp->getPredicate(), leftValue.constant, rightValue.constant);
 
                     combine(target, getValue(result, currentBlock));
                 }else if(leftValue.state > 1 || rightValue.state > 1){
                     setState(target, 2);
                 }
-            //}
+            }
         }else if(auto binary = llvm::dyn_cast_or_null<llvm::BinaryOperator>(value)){
-            auto left = binary->getOperand(0);
-            auto right = binary->getOperand(1);
+            if(target.state < 2){
+                auto left = binary->getOperand(0);
+                auto right = binary->getOperand(1);
 
-            ConstantLatticeElement &leftValue = getValue(left, currentBlock);
-            ConstantLatticeElement &rightValue = getValue(right, currentBlock);
-
-
-            //if(leftValue.modifyCounter > target.modifyCounter || rightValue.modifyCounter > target.modifyCounter){
-            if(leftValue.state == 1 && rightValue.state == 1 && target.state < 2){
-                llvm::Constant *result = llvm::ConstantExpr::get(binary->getOpcode(), leftValue.constant, rightValue.constant);
-                combine(target, getValue(result, currentBlock));
-            }else if(leftValue.state > 1 || rightValue.state > 1){
-                setState(target, 2);
+                ConstantLatticeElement &leftValue = getValue(left, currentBlock);
+                ConstantLatticeElement &rightValue = getValue(right, currentBlock);
+                if(leftValue.state == 1 && rightValue.state == 1 ){
+                    llvm::Constant *result = llvm::ConstantExpr::get(binary->getOpcode(), leftValue.constant, rightValue.constant);
+                    combine(target, getValue(result, currentBlock));
+                }else if(leftValue.state > 1 || rightValue.state > 1){
+                    setState(target, 2);
+                }
             }
         }else if(auto unary = llvm::dyn_cast_or_null<llvm::UnaryOperator>(value)){
-            auto child = unary->getOperand(0);
-            ConstantLatticeElement &childElement = getValue(child, currentBlock);
+            if(target.state < 2){
+                auto child = unary->getOperand(0);
+                ConstantLatticeElement &childElement = getValue(child, currentBlock);
 
-            //if(childElement.modifyCounter > target.modifyCounter ){
-            if(childElement.state == 1 && target.state < 2){
-                llvm::Constant *result = llvm::ConstantExpr::get(unary->getOpcode(), childElement.constant);
-                combine(target, getValue(result, currentBlock));
-            }else if(childElement.state > 1){
-                setState(target, 2);
+                //if(childElement.modifyCounter > target.modifyCounter ){
+                if(childElement.state == 1){
+                    llvm::Constant *result = llvm::ConstantExpr::get(unary->getOpcode(), childElement.constant);
+                    combine(target, getValue(result, currentBlock));
+                }else if(childElement.state > 1){
+                    setState(target, 2);
+                }
             }
         }else if(auto cast = llvm::dyn_cast_or_null<llvm::CastInst>(value)){
-            auto child = cast->getOperand(0);
-            ConstantLatticeElement &childElement = getValue(child, currentBlock);
+            if(target.state < 2){
+                auto child = cast->getOperand(0);
+                ConstantLatticeElement &childElement = getValue(child, currentBlock);
 
-            if(childElement.state == 1 && target.state < 2){
-                llvm::Constant *result =  llvm::ConstantExpr::getCast(cast->getOpcode(), childElement.constant, cast->getDestTy() );
-                combine(target, getValue(result, currentBlock));
-            }else if(childElement.state > 1){
-                setState(target, 2);
-            }
-
-            if(target.state != 2){
-                setState(target, 2);
+                if(childElement.state == 1 ){
+                    llvm::Constant *result =  llvm::ConstantExpr::getCast(cast->getOpcode(), childElement.constant, cast->getDestTy() );
+                    combine(target, getValue(result, currentBlock));
+                }else if(childElement.state > 1){
+                    setState(target, 2);
+                }
             }
         }else{
             if(target.state != 2){
                 setState(target, 2);
             }
-            //debug(value);
         }
 
         return target;
