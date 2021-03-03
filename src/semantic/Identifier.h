@@ -21,6 +21,7 @@ class SemanticType;
 
 class Identifier : public DirectDeclarator{
 public:
+    bool defined = false;
     const std::string *value;
     Location location;
     SemanticType *semanticType;

@@ -180,11 +180,11 @@ public:
             }
         }
 
-        std::unordered_set<llvm::BasicBlock*> notReachable;
+        std::vector<llvm::BasicBlock*> notReachable;
         for( auto &bb : func.getBasicBlockList() ){
             auto entry = reachable.find(&bb);
             if(entry == reachable.end() || entry->second.state == NOT_REACHABLE){
-                notReachable.insert(&bb);
+                notReachable.push_back(&bb);
 
             }
         }
@@ -197,6 +197,10 @@ public:
 #endif
             bb->eraseFromParent();
         }
+    }
+
+    void removeBlocks(llvm::BasicBlock *current, std::unordered_set<llvm::BasicBlock*> &notReachable){
+
     }
 
     bool isNotTop(ConstantLatticeElement *element){

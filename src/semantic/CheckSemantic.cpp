@@ -13,39 +13,40 @@ void Semantic::checkUnit(Unit *element) {
 
             auto methodType = const_cast<MethodType*>(checkDeclarationWithScopeCheck(method->declaration)->asMethodType());
 
-            auto inner = new Scope();
+            if( method->body != nullptr ){
+                auto inner = new Scope();
 
-            if (methodType->defined ) {
-                ERROR(method->declaration->location);
-            }
+                if (methodType->identifier->defined ) {
+                    ERROR(method->declaration->location);
+                }
 
-            methodType->defined = true;
+                methodType->identifier->defined = true;
 
-            if (methodType->types.size() != 1 || !methodType->types[0]->equals(VoidType)) {
-                for (unsigned long i = 0; i < methodType->types.size(); i++) {
-                    auto paramType = methodType->types[i];
-                    auto identifier = paramType->identifier;
+                if (methodType->types.size() != 1 || !methodType->types[0]->equals(VoidType)) {
+                    for (unsigned long i = 0; i < methodType->types.size(); i++) {
+                        auto paramType = methodType->types[i];
+                        auto identifier = paramType->identifier;
 
-                    if (identifier == nullptr) {
-                        if (i < methodType->locations.size()) {
-                            ERROR(methodType->locations[i]);
-                        }
-                        ERROR(method->declaration->location);
-                    } else {
-                        if (!inner->set(identifier)) {
-                            ERROR(identifier->location);
+                        if (identifier == nullptr) {
+                            if (i < methodType->locations.size()) {
+                                ERROR(methodType->locations[i]);
+                            }
+                            ERROR(method->declaration->location);
+                        } else {
+                            if (!inner->set(identifier)) {
+                                ERROR(identifier->location);
+                            }
                         }
                     }
                 }
+
+                inner->parent = currentScope;
+                inner->returnType = methodType->subType;
+                methodScope = inner;
+                findLabels(method->body);
+                checkBlock(method->body, inner);
+                methodScope = nullptr;
             }
-
-
-            inner->parent = currentScope;
-            inner->returnType = methodType->subType;
-            methodScope = inner;
-            findLabels(method->body);
-            checkBlock(method->body, inner);
-            methodScope = nullptr;
         }
     }
 }
@@ -205,7 +206,7 @@ void Semantic::checkNullableExpression(Expression *expression) {
         auto identifier = currentScope->get(identifierUse->value);
 
         if (identifier == nullptr) {
-            ERROR(identifier->location);
+            ERROR(identifierUse->location);
         }
 
         identifierUse->identifier = identifier;
@@ -556,7 +557,8 @@ const SemanticType *Semantic::checkDeclarationWithScopeCheck(Declaration *declar
                         ERROR(identifier->location);
                     }
 
-                    return alreadyDeclaredIdentifier->semanticType;
+                    type->identifier = alreadyDeclaredIdentifier;
+                    return type;
                 } else {
                     ERROR(identifier->location);
                 }
