@@ -71,7 +71,7 @@ int runParser(InputReader *fileInputReader, std::ostream &out, std::ostream &err
 
         try {
             Semantic checker;
-            checker.check(unit);
+            checker.checkUnit(unit);
 
             if (printAST) {
                 PrettyPrinter printer(out);

@@ -71,11 +71,11 @@ int main(int argc, char **const args) {
         }else if(option == "--compile"){
             compile = true;
         }else if(option == "--optimize-run-time") {
-            compile = true;
             optimize = true;
+            optimizeRuntime = true;
         }else if(option == "--optimize-compile-time"){
+            optimizeCompileTime = true;
         }else if(option == "--optimize"){
-            compile = true;
             optimize = true;
             //source = args[++i];
         }else{
@@ -83,12 +83,12 @@ int main(int argc, char **const args) {
         }
     }
 
-    if(!tokenize && !printAst && !compile && !optimize){
+    if((!tokenize && !printAst && !compile) || optimize){
         compile = true;
     }
 
     InputReader* fileInputReader = new FileInputReader(source);
-    int code = 1;
+    int code;
     if(tokenize){
         code = runLexer(fileInputReader, out, err);
     }else{

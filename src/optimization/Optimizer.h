@@ -127,6 +127,13 @@ public:
     }
 
     bool runOnFunction(llvm::Function &func) override{
+        analyse(func);
+        optimize(func);
+
+        return true;
+    }
+
+    void analyse(llvm::Function &func){
         constant.clear();
         reachable.clear();
         branches.clear();
@@ -145,7 +152,9 @@ public:
             queue.erase(instruction);
             getValue(instruction);
         }
+    }
 
+    void optimize(llvm::Function &func){
         for(auto pair : constant){
             if(pair.second != nullptr && pair.second->isConstant()){
                 if(auto ins = llvm::dyn_cast_or_null<llvm::Instruction>(pair.first)){
@@ -188,8 +197,6 @@ public:
 #endif
             bb->eraseFromParent();
         }
-
-        return true;
     }
 
     bool isNotTop(ConstantLatticeElement *element){
@@ -197,7 +204,7 @@ public:
     }
 
 
-    void combine(ConstantLatticeElement *& left, ConstantLatticeElement *right){
+    void join(ConstantLatticeElement *& left, ConstantLatticeElement *right){
         if(right == nullptr){
             OPTIMIZE_ERROR();
         }
@@ -206,17 +213,6 @@ public:
             left = right;
         } else{
             left = left->join(right);
-        }
-    }
-
-
-    void setState(ConstantLatticeElement *element, int newState){
-        if(element->isTop()){
-            OPTIMIZE_ERROR();
-        }
-
-        if(element->state != newState ){
-            element->state = newState;
         }
     }
 
@@ -360,8 +356,7 @@ public:
                 auto entry = branches.find(incomingBlock);
 
                 if(entry != branches.end() && entry->second.targets.find(currentBlock) != entry->second.targets.end()){
-                    ConstantLatticeElement* element = getOrCreateLattice(phiNode->getIncomingValue(i));
-                    combine(target, element);
+                    join(target, getOrCreateLattice(phiNode->getIncomingValue(i)));
                 }
             }
 
@@ -393,15 +388,11 @@ public:
 
                 auto *leftValue = getOrCreateLattice(left);
                 auto *rightValue = getOrCreateLattice(right);
-                if(leftValue != nullptr && rightValue != nullptr){
-                    if(leftValue->isConstant() && rightValue->isConstant()){
-                        auto resultA = llvm::ConstantExpr::getCompare(cmp->getPredicate(), leftValue->constant, rightValue->constant);
-                        update(value, getOrCreateLattice(resultA));
-                    }else if(leftValue->state > 1 || rightValue->state > 1){
-                        update(value, ConstantLatticeElement::Top);
-                    }
-                }else{
-                    OPTIMIZE_ERROR();
+                if(leftValue->isConstant() && rightValue->isConstant()){
+                    auto resultA = llvm::ConstantExpr::getCompare(cmp->getPredicate(), leftValue->constant, rightValue->constant);
+                    update(value, getOrCreateLattice(resultA));
+                }else if(leftValue->state > 1 || rightValue->state > 1){
+                    update(value, ConstantLatticeElement::Top);
                 }
             }
         }else if(auto binary = llvm::dyn_cast_or_null<llvm::BinaryOperator>(value)){
@@ -411,15 +402,11 @@ public:
 
                 auto *leftValue = getOrCreateLattice(left);
                 auto *rightValue = getOrCreateLattice(right);
-                if(leftValue != nullptr && rightValue != nullptr){
-                    if(leftValue->isConstant() && rightValue->isConstant() ){
-                        llvm::Constant *result = llvm::ConstantExpr::get(binary->getOpcode(), leftValue->constant, rightValue->constant);
-                        update(value, getOrCreateLattice(result));
-                    }else if(leftValue->isTop() || rightValue->isTop()){
-                        update(value, ConstantLatticeElement::Top);
-                    }
-                }else{
-                    OPTIMIZE_ERROR();
+                if(leftValue->isConstant() && rightValue->isConstant() ){
+                    llvm::Constant *result = llvm::ConstantExpr::get(binary->getOpcode(), leftValue->constant, rightValue->constant);
+                    update(value, getOrCreateLattice(result));
+                }else if(leftValue->isTop() || rightValue->isTop()){
+                    update(value, ConstantLatticeElement::Top);
                 }
             }
         }else if(auto unary = llvm::dyn_cast_or_null<llvm::UnaryOperator>(value)){
@@ -427,32 +414,22 @@ public:
 
                 auto child = unary->getOperand(0);
                 auto *childElement = getOrCreateLattice(child);
-                if(childElement != nullptr){
-                    //if(childElement.modifyCounter > target.modifyCounter ){
-                    if(childElement->isConstant()){
-                        llvm::Constant *result = llvm::ConstantExpr::get(unary->getOpcode(), childElement->getConstant());
-                        update(value, getOrCreateLattice(result));
-                    }else if(childElement->isTop()){
-                        update(value, ConstantLatticeElement::Top);
-                    }
-                }else{
-                    OPTIMIZE_ERROR();
+                if(childElement->isConstant()){
+                    llvm::Constant *result = llvm::ConstantExpr::get(unary->getOpcode(), childElement->getConstant());
+                    update(value, getOrCreateLattice(result));
+                }else if(childElement->isTop()){
+                    update(value, ConstantLatticeElement::Top);
                 }
             }
         }else if(auto cast = llvm::dyn_cast_or_null<llvm::CastInst>(value)){
             if(isNotTop(target)){
                 auto child = cast->getOperand(0);
                 auto *childElement = getOrCreateLattice(child);
-                if(childElement != nullptr){
-                    //if(childElement.modifyCounter > target.modifyCounter ){
-                    if(childElement->isConstant()){
-                        llvm::Constant *result =  llvm::ConstantExpr::getCast(cast->getOpcode(), childElement->getConstant(), cast->getDestTy() );
-                        update(value, getOrCreateLattice(result));
-                    }else if(childElement->isTop()){
-                        update(value, ConstantLatticeElement::Top);
-                    }
-                }else{
-                    OPTIMIZE_ERROR();
+                if(childElement->isConstant()){
+                    llvm::Constant *result =  llvm::ConstantExpr::getCast(cast->getOpcode(), childElement->getConstant(), cast->getDestTy() );
+                    update(value, getOrCreateLattice(result));
+                }else if(childElement->isTop()){
+                    update(value, ConstantLatticeElement::Top);
                 }
             }
         }else{

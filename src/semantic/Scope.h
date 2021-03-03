@@ -15,37 +15,12 @@ class SemanticType;
 class SemanticStructType;
 class IdentifierUse;
 
-
-template<class T>
-class Descriptor {
-public:
-    T *semanticType = nullptr;
-    bool implementation = false;
-    bool defined = false;
-    Identifier* identifier = new Identifier();
-    //llvm::Function* function;
-
-    Descriptor() {
-
-    }
-
-    Descriptor(const Descriptor *other) : semanticType(other->semanticType), implementation(other->implementation),
-                                          defined(other->defined) {
-
-    }
-
-    Descriptor(SemanticType *semanticType) : semanticType(semanticType) {
-
-    }
-};
-
-
 class Scope {
 public:
-    std::unordered_map<const std::string *, Identifier*> types;
+    std::unordered_map<const std::string *, Identifier*> identifiers;
     std::unordered_map<const std::string *, SemanticStructType*> structs;
     std::unordered_map<const std::string *, int> labels;
-    //std::unordered_map<const std::string *, llvm::Function*> functions;
+
     Scope *parent = nullptr;
     const SemanticType *returnType = nullptr;
 

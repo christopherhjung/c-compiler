@@ -18,8 +18,8 @@ void Scope::setLabel(const std::string *label) {
 }
 
 llvm::Function* Scope::getFunction(const std::string* str){
-    auto current = types.find(str);
-    if (current != types.end()) {
+    auto current = identifiers.find(str);
+    if (current != identifiers.end()) {
         return llvm::dyn_cast<llvm::Function>(current->second->llvmValue);
     } else if (parent != nullptr) {
         return parent->getFunction(str);
@@ -44,8 +44,8 @@ bool Scope::structDeclaredInScope(const std::string *str) {
 }
 
 bool Scope::identifierDeclaredInScope(Identifier *identifier) {
-    auto current = types.find(identifier->value);
-    return current != types.end();
+    auto current = identifiers.find(identifier->value);
+    return current != identifiers.end();
 }
 
 SemanticStructType *Scope::getStruct(const std::string *str) {
@@ -77,8 +77,8 @@ bool Scope::set(Identifier *identifier) {
         ERROR(Location());
     }
 
-    if(types.find(identifier->value) == types.end()){
-        types[identifier->value] = identifier;
+    if(identifiers.find(identifier->value) == identifiers.end()){
+        identifiers[identifier->value] = identifier;
         return true;
     }
 
@@ -86,11 +86,11 @@ bool Scope::set(Identifier *identifier) {
 }
 
 Identifier *Scope::get(const std::string *str) {
-    if (types.find(str) != types.end()) {
-        return types[str];
+    if (identifiers.find(str) != identifiers.end()) {
+        return identifiers[str];
     } else if (parent != nullptr) {
         return parent->get(str);
     } else {
-        return types[str];
+        return identifiers[str];
     }
 }

@@ -21,37 +21,37 @@ public:
     Scope *currentScope = mainScope;
     Scope *methodScope = nullptr;
 
-    void check(Unit *element);
+    void checkUnit(Unit *element);
 
     void findLabels(Statement *statement);
 
-    void enter(Block *block, Scope *scope);
+    void checkBlock(Block *block, Scope *scope);
 
-    void enter(Statement *statement);
+    void checkStatement(Statement *statement);
 
     void checkCondition(Expression *condition, Location &location);
 
-    void enter(If *ifStatement);
+    void checkIf(If *ifStatement);
 
-    void enter(While *whileStatement);
+    void checkWhile(While *whileStatement);
 
-    void enter(GoTo *gotoStatement);
+    void checkGoTo(GoTo *gotoStatement);
 
-    void enter(Return *returnStatement);
+    void checkReturn(Return *returnStatement);
 
     bool isAssignable(const SemanticType *target, const SemanticType *source);
 
-    void enter(Expression *expression);
+    void checkExpression(Expression *expression);
 
-    void enter0(Expression *expression);
+    void checkNullableExpression(Expression *expression);
 
-    void enter(Unary *unary);
+    void checkUnary(Unary *unary);
 
-    void enter(Binary *binary);
-    SemanticType *enter(Declarator *declarator, Type* type, Location* location);
-    SemanticType *enter(DirectDeclarator *directDeclarator, SemanticType *simpleType);
+    void checkBinary(Binary *binary);
+    SemanticType *checkDeclarator(Declarator *declarator, Type* type, Location* location);
+    SemanticType *checkDirectDeclarator(DirectDeclarator *directDeclarator, SemanticType *simpleType);
 
-    const SemanticType *enter0(Declaration *declaration);
+    const SemanticType *checkDeclarationWithScopeCheck(Declaration *declaration);
 
-    SemanticType *enter(Declaration *declaration);
+    SemanticType *checkDeclaration(Declaration *declaration);
 };

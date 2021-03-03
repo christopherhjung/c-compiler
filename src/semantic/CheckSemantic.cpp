@@ -4,14 +4,14 @@
 
 #include "CheckSemantic.h"
 
-void Semantic::check(Unit *element) {
+void Semantic::checkUnit(Unit *element) {
     element->scope = mainScope;
     for (auto child : element->children) {
         if (auto *declaration = dynamic_cast<Declaration *>(child)) {
-            enter0(declaration);
+            checkDeclarationWithScopeCheck(declaration);
         } else if (auto *method = dynamic_cast<Method *>(child)) {
 
-            auto methodType = const_cast<MethodType*>(enter0(method->declaration)->asMethodType());
+            auto methodType = const_cast<MethodType*>(checkDeclarationWithScopeCheck(method->declaration)->asMethodType());
 
             auto inner = new Scope();
 
@@ -44,7 +44,7 @@ void Semantic::check(Unit *element) {
             inner->returnType = methodType->subType;
             methodScope = inner;
             findLabels(method->body);
-            enter(method->body, inner);
+            checkBlock(method->body, inner);
             methodScope = nullptr;
         }
     }
@@ -71,7 +71,7 @@ void Semantic::findLabels(Statement *statement) {
     }
 }
 
-void Semantic::enter(Block *block, Scope *scope) {
+void Semantic::checkBlock(Block *block, Scope *scope) {
     if (block != nullptr) {
         Scope *carry = currentScope;
         if (scope == nullptr) {
@@ -84,73 +84,73 @@ void Semantic::enter(Block *block, Scope *scope) {
 
         currentScope->parent = carry;
         for (auto statement : block->children) {
-            enter(statement);
+            checkStatement(statement);
         }
 
         currentScope = carry;
     }
 }
 
-void Semantic::enter(Statement *statement) {
+void Semantic::checkStatement(Statement *statement) {
     if (statement == nullptr) {
         return;
     } else if (auto labeledStatement = dynamic_cast<LabeledStatement *>(statement)) {
-        enter(labeledStatement->statement);
+        checkStatement(labeledStatement->statement);
     } else if (auto ifStatement = dynamic_cast<If *>(statement)) {
-        enter(ifStatement);
+        checkIf(ifStatement);
     } else if (auto whileStatement = dynamic_cast<While *>(statement)) {
-        enter(whileStatement);
+        checkWhile(whileStatement);
     } else if (auto returnStatement = dynamic_cast<Return *>(statement)) {
-        enter(returnStatement);
+        checkReturn(returnStatement);
     } else if (auto gotoStatement = dynamic_cast<GoTo *>(statement)) {
-        enter(gotoStatement);
+        checkGoTo(gotoStatement);
     }/*else if(auto continueStatement = dynamic_cast<Continue*>(statement)){
             enter(continueStatement);
         }else if(auto breakStatement = dynamic_cast<Break*>(statement)){
             enter(breakStatement);
         }*/else if (auto block = dynamic_cast<Block *>(statement)) {
-        enter(block, nullptr);
+        checkBlock(block, nullptr);
     } else if (auto declaration = dynamic_cast<Declaration *>(statement)) {
-        enter0(declaration);
+        checkDeclarationWithScopeCheck(declaration);
     } else if (auto expression = dynamic_cast<Expression *>(statement)) {
-        enter(expression);
+        checkExpression(expression);
     }
 }
 
 void Semantic::checkCondition(Expression *condition, Location &location) {
-    enter(condition);
+    checkExpression(condition);
     if (condition->getType()->asSemanticStructType()) {
         ERROR(location);
     }
 }
 
-void Semantic::enter(If *ifStatement) {
-    enter(ifStatement->condition);
-    enter(ifStatement->trueBranch);
-    enter(ifStatement->falseBranch);
+void Semantic::checkIf(If *ifStatement) {
+    checkExpression(ifStatement->condition);
+    checkStatement(ifStatement->trueBranch);
+    checkStatement(ifStatement->falseBranch);
 
     checkCondition(ifStatement->condition, ifStatement->location);
 }
 
-void Semantic::enter(While *whileStatement) {
+void Semantic::checkWhile(While *whileStatement) {
     checkCondition(whileStatement->condition, whileStatement->location);
-    enter(whileStatement->body);
+    checkStatement(whileStatement->body);
 }
 
-void Semantic::enter(GoTo *gotoStatement) {
+void Semantic::checkGoTo(GoTo *gotoStatement) {
     if (!methodScope->isLabel(gotoStatement->name)) {
         ERROR(gotoStatement->location);
     }
 }
 
-void Semantic::enter(Return *returnStatement) {
+void Semantic::checkReturn(Return *returnStatement) {
     Element *loc;
     const SemanticType *returnType;
     if (returnStatement->value == nullptr) {
         loc = returnStatement;
         returnType = VoidType;
     } else {
-        enter(returnStatement->value);
+        checkExpression(returnStatement->value);
         loc = returnStatement->value;
         returnType = returnStatement->value->getType();
     }
@@ -185,22 +185,22 @@ void enter(Continue*){
 void enter(Break*){
 }*/
 
-void Semantic::enter(Expression *expression) {
-    enter0(expression);
+void Semantic::checkExpression(Expression *expression) {
+    checkNullableExpression(expression);
 
     if (expression->getType() == nullptr) {
-        enter0(expression);
+        checkNullableExpression(expression);
         ERROR(expression->location);
     }
 }
 
-void Semantic::enter0(Expression *expression) {
+void Semantic::checkNullableExpression(Expression *expression) {
     if (expression == nullptr) {
         return;
     } else if (auto binary = dynamic_cast<Binary *>(expression)) {
-        enter(binary);
+        checkBinary(binary);
     } else if (auto unary = dynamic_cast<Unary *>(expression)) {
-        enter(unary);
+        checkUnary(unary);
     } else if (auto identifierUse = dynamic_cast<IdentifierUse *>(expression)) {
         auto identifier = currentScope->get(identifierUse->value);
 
@@ -216,10 +216,10 @@ void Semantic::enter0(Expression *expression) {
         string->setType(CharPointerType);
     } else if (auto call = dynamic_cast<Call *>(expression)) {
         for (auto expr : call->values) {
-            enter(expr);
+            checkExpression(expr);
         }
 
-        enter(call->target);
+        checkExpression(call->target);
         auto methodType = call->target->getType()->unpackMethodType();
         if (methodType) {
             if (methodType->types.size() < call->values.size()) {
@@ -250,8 +250,8 @@ void Semantic::enter0(Expression *expression) {
     } else if (auto number = dynamic_cast<Number *>(expression)) {
         number->setType(IntType);
     } else if (auto select = dynamic_cast<Select *>(expression)) {
-        enter(select->target);
-        enter(select->index);
+        checkExpression(select->target);
+        checkExpression(select->index);
 
         auto rightType = select->index->getType();
         auto leftType = select->target->getType();
@@ -271,12 +271,12 @@ void Semantic::enter0(Expression *expression) {
         }
 
     } else if (auto sizeOf = dynamic_cast<Sizeof *>(expression)) {
-        sizeOf->inner = enter(sizeOf->declarator, sizeOf->type, &sizeOf->location);
+        sizeOf->inner = checkDeclarator(sizeOf->declarator, sizeOf->type, &sizeOf->location);
         sizeOf->setType(IntType);
     } else if (auto choose = dynamic_cast<Choose *>(expression)) {
         checkCondition(choose->condition, choose->condition->location);
-        enter(choose->left);
-        enter(choose->right);
+        checkExpression(choose->left);
+        checkExpression(choose->right);
 
         auto leftType = choose->left->getType()->packMethodType();
         if(leftType == nullptr){
@@ -298,8 +298,8 @@ void Semantic::enter0(Expression *expression) {
     }
 }
 
-void Semantic::enter(Unary *unary) {
-    enter(unary->value);
+void Semantic::checkUnary(Unary *unary) {
+    checkExpression(unary->value);
 
     auto type = unary->value->getType();
 
@@ -347,8 +347,8 @@ void Semantic::enter(Unary *unary) {
     ERROR(unary->op->location);
 }
 
-void Semantic::enter(Binary *binary) {
-    enter(binary->left);
+void Semantic::checkBinary(Binary *binary) {
+    checkExpression(binary->left);
     auto leftType = binary->left->getType()->packMethodType();
 
     switch (binary->op->id) {
@@ -378,7 +378,7 @@ void Semantic::enter(Binary *binary) {
             break;
     }
 
-    enter(binary->right);
+    checkExpression(binary->right);
     auto rightType = binary->right->getType()->packMethodType();
 
     bool leftIsInteger = IntType->equals(leftType);
@@ -499,24 +499,24 @@ void Semantic::enter(Binary *binary) {
     ERROR(binary->op->location);
 }
 
-SemanticType *Semantic::enter(DirectDeclarator *directDeclarator, SemanticType *simpleType) {
+SemanticType *Semantic::checkDirectDeclarator(DirectDeclarator *directDeclarator, SemanticType *simpleType) {
     if (auto declarator = dynamic_cast<Declarator *>(directDeclarator)) {
 
         for (int i = 0; i < declarator->pointer; i++) {
             simpleType = new PointerType(simpleType, true);
         }
 
-        return enter(declarator->directDeclarator, simpleType);
+        return checkDirectDeclarator(declarator->directDeclarator, simpleType);
     } else if (auto paramDecl = dynamic_cast<ParameterDirectDeclarator *>(directDeclarator)) {
         auto methodType = new MethodType(simpleType);
 
         auto decls = paramDecl->parameterTypeList->declarations;
 
         if (decls.size() == 1) {
-            methodType->types.push_back(enter(decls[0]));
+            methodType->types.push_back(checkDeclaration(decls[0]));
         } else {
             for (auto decl : decls) {
-                auto type = enter(decl);
+                auto type = checkDeclaration(decl);
                 if (VoidType->equals(type)) {
                     ERROR(decl->location);
                 }
@@ -526,7 +526,7 @@ SemanticType *Semantic::enter(DirectDeclarator *directDeclarator, SemanticType *
 
         methodType->locations = paramDecl->parameterTypeList->locations;
 
-        return enter(paramDecl->directDeclarator, methodType);
+        return checkDirectDeclarator(paramDecl->directDeclarator, methodType);
     } else if (auto identifier = dynamic_cast<Identifier *>(directDeclarator)) {
         if (VoidType->equals(simpleType)) {
             ERROR(identifier->location);
@@ -541,9 +541,9 @@ SemanticType *Semantic::enter(DirectDeclarator *directDeclarator, SemanticType *
     return simpleType;
 }
 
-const SemanticType *Semantic::enter0(Declaration *declaration) {
+const SemanticType *Semantic::checkDeclarationWithScopeCheck(Declaration *declaration) {
     if (declaration != nullptr) {
-        auto type = enter(declaration);
+        auto type = checkDeclaration(declaration);
         declaration->setType(type);
 
         if (type->identifier != nullptr) {
@@ -576,13 +576,11 @@ const SemanticType *Semantic::enter0(Declaration *declaration) {
 }
 
 
-SemanticType *Semantic::enter(Declaration *declaration) {
-    auto leftType = enter(declaration->declarator, declaration->type, &declaration->location);
-
-
+SemanticType *Semantic::checkDeclaration(Declaration *declaration) {
+    auto leftType = checkDeclarator(declaration->declarator, declaration->type, &declaration->location);
 
     if(declaration->initializer){
-        enter(declaration->initializer);
+        checkExpression(declaration->initializer);
 
         auto rightType = declaration->initializer->getType()->packMethodType();
 
@@ -593,7 +591,7 @@ SemanticType *Semantic::enter(Declaration *declaration) {
     return leftType;
 }
 
-SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* location) {
+SemanticType *Semantic::checkDeclarator(Declarator *declarator, Type* type, Location* location) {
     SemanticType *semanticType = nullptr;
     if (auto structType = dynamic_cast<StructType *>(type)) {
 
@@ -643,7 +641,7 @@ SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* loca
                 auto savedScope = currentScope;
                 currentScope = new Scope();
                 currentScope->parent = savedScope;
-                auto structInner = enter0(decel);
+                auto structInner = checkDeclarationWithScopeCheck(decel);
                 currentScope = savedScope;
 
                 if (structInner == nullptr) {
@@ -683,5 +681,5 @@ SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* loca
         ERROR(*location);
     }
 
-    return enter(declarator, semanticType);
+    return checkDirectDeclarator(declarator, semanticType);
 }
