@@ -152,18 +152,16 @@ public:
                     llvm::Constant* constant = pair.second->getConstant();
                     for(auto &use : pair.first->uses()){
                         if(auto branch = llvm::dyn_cast_or_null<llvm::BranchInst>(use.getUser())){
-                            if(auto constInt = llvm::dyn_cast_or_null<llvm::ConstantInt>(constant) ){
-                                llvm::BasicBlock *target;
-                                if(pair.second->isTrue()){
-                                    target = branch->getSuccessor(0);
-                                }else{
-                                    target = branch->getSuccessor(1);
-                                }
-
-                                auto targetBranch = llvm::BranchInst::Create(target);
-                                targetBranch->insertAfter(branch);
-                                branch->eraseFromParent();
+                            llvm::BasicBlock *target;
+                            if(pair.second->isTrue()){
+                                target = branch->getSuccessor(0);
+                            }else{
+                                target = branch->getSuccessor(1);
                             }
+
+                            auto targetBranch = llvm::BranchInst::Create(target);
+                            targetBranch->insertAfter(branch);
+                            branch->eraseFromParent();
                         }
                     }
 
