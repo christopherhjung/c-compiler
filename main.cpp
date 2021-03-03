@@ -70,6 +70,7 @@ int main(int argc, char **const args) {
             printAst = true;
         }else if(option == "--compile"){
             compile = true;
+        }else if(option == "--parse"){
         }else if(option == "--optimize-run-time") {
             optimize = true;
             optimizeRuntime = true;
@@ -78,7 +79,7 @@ int main(int argc, char **const args) {
         }else if(option == "--optimize"){
             optimize = true;
             //source = args[++i];
-        }else{
+        }else if(option.rfind("--", 0) == 0){
             source = args[i];
         }
     }
