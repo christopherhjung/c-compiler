@@ -127,7 +127,7 @@ public:
 
                 return method;
             }
-#ifdef DEBUG
+#ifdef INITIALIZER
             else if(is(ASSIGN)){
                 declaration->assignLocation = lookA.location;
                 next();
@@ -393,7 +393,7 @@ public:
             declaration->declarator = parseDeclarator(true, false);
 
 
-#ifdef DEBUG
+#ifdef INITIALIZER
             if(initAllowed && is(ASSIGN)){
                 next();
                 declaration->initializer = parseExpression();

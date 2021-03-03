@@ -32,6 +32,7 @@
 #include "src/semantic/CheckSemantic.h"
 #include "src/parser/PrettyPrinter.h"
 #include "src/elements/Elements.h"
+#include "src/optimization/OptimizeException.h"
 
 
 int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::string &sourceFile, const std::string &targetFile, bool optimize) {
@@ -45,7 +46,11 @@ int runCompiler(Unit *unit, std::ostream &out, std::ostream &err, const std::str
     try {
         unit->create(transformContext);
         if(optimize){
-            transformContext.optimize();
+            try{
+                transformContext.optimize();
+            } catch (OptimizeException &e) {
+                std::cerr << ": error: optimize: (" << e.file << ":" << e.lineNumber << ":1) " << e.msg << std::endl;
+            }
         }
         transformContext.dump(targetFile);
     } catch (TransformException &e) {

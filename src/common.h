@@ -4,4 +4,5 @@
 
 #pragma once
 
-#define DEBUG
+#define INITIALIZER
+//#define DEBUG

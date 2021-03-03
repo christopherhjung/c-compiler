@@ -5,3 +5,7 @@
 #include "Optimizer.h"
 
 char Optimizer::ID = 0;
+
+
+ConstantLatticeElement *ConstantLatticeElement::Top = new ConstantLatticeElement(TOP);
+ConstantLatticeElement *ConstantLatticeElement::Bottom = new ConstantLatticeElement(BOTTOM);
