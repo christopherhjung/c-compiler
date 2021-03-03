@@ -1,11 +1,11 @@
-define i32 @max(i32 %0, i32 %1) {
+define i32 @upper(i32 %0, i32 %1) {
 entry:
 
 i32 %0
-; ModuleID = 'max.c'
-source_filename = "max.c"
+; ModuleID = 'upper.c'
+source_filename = "upper.c"
 
-define i32 @max(i32 %a, i32 %b) {
+define i32 @upper(i32 %a, i32 %b) {
 entry:
   %0 = alloca i32, align 4
   %1 = alloca i32, align 4

@@ -18,16 +18,260 @@
 #define BOTTOM 0
 #define VALUE 1
 #define TOP 2
-
+#define TRUE 3
+#define FALSE 4
 
 #define NOT_REACHABLE 0
 #define REACHABLE 1
 
-class ConstantLatticeElement{
+#define NEGATIVE_INFINITY -1
+#define NON_INFINITY 0
+#define POSITIVE_INFINITY 1
+
+class LatticeElement{
+public:
+
+    int modifyCounter = 0;
+    virtual bool isTrue() = 0;
+    virtual bool isFalse() = 0;
+
+    virtual LatticeElement* meet(LatticeElement *right ) = 0;
+    virtual LatticeElement* join(LatticeElement *right ) = 0;
+
+    virtual bool isConstant() = 0;
+    virtual llvm::Constant* getConstant() = 0;
+    virtual bool isTop() = 0;
+};
+
+class RangeLatticeValue : public LatticeElement{
+public:
+    int infinity = NON_INFINITY;
+    llvm::Constant *constant = nullptr;
+
+    bool equals(RangeLatticeValue *other ){
+        if(other->infinity == POSITIVE_INFINITY && infinity == POSITIVE_INFINITY || other->infinity == NEGATIVE_INFINITY && infinity == NEGATIVE_INFINITY){
+            return true;
+        }
+
+        return constant->isElementWiseEqual(other->constant);
+    }
+
+    bool isSmaller(RangeLatticeValue &other ){
+        if(other.infinity == POSITIVE_INFINITY){
+            return infinity != POSITIVE_INFINITY;
+        }else if(other.infinity == NEGATIVE_INFINITY){
+            return false;
+        }else if(infinity == NEGATIVE_INFINITY){
+            return true;
+        }else if(infinity == POSITIVE_INFINITY){
+            return false;
+        }
+
+        return constant->isElementWiseEqual(other.constant);
+    }
+
+    bool isTop() override{
+        return infinity != NON_INFINITY;
+    }
+
+    bool isFalse() override{
+
+
+    }
+
+    bool isTrue() override{
+        
+    }
+
+    bool isConstant() override{
+        return infinity == NON_INFINITY;
+    }
+
+    llvm::Constant * getConstant() override{
+        return constant;
+    }
+
+    RangeLatticeValue * meet(LatticeElement *other) override{
+        if(auto right = dynamic_cast<RangeLatticeValue*>(other)){
+            RangeLatticeValue *result;
+            if(infinity || right->infinity ){
+                result->infinity = true;
+            }else if(llvm::ConstantExpr::getICmp(llvm::CmpInst::Predicate::ICMP_SLT, right->constant, constant)->getUniqueInteger().getBoolValue()){
+                result->constant = right->constant;
+            }else{
+                result->constant = constant;
+            }
+
+            return result;
+        }
+
+        throw "tot";
+    }
+
+    RangeLatticeValue * join(LatticeElement *other) override{
+        if(auto right = dynamic_cast<RangeLatticeValue*>(other)){
+            RangeLatticeValue *result;
+            if(infinity || right->infinity ){
+                result->infinity = true;
+            }else if(llvm::ConstantExpr::getICmp(llvm::CmpInst::Predicate::ICMP_SLT, right->constant, constant)->getUniqueInteger().getBoolValue()){
+                result->constant = constant;
+            }else{
+                result->constant = right->constant;
+            }
+
+            return result;
+        }
+
+        throw "tot";
+    }
+};
+
+
+
+
+class IntervalLatticeElement : public LatticeElement{
 public:
     int state = BOTTOM;
-    int modifyCounter = 0;
-    llvm::Constant *constant = nullptr;
+    RangeLatticeValue *lower = new RangeLatticeValue();
+    RangeLatticeValue *upper = new RangeLatticeValue();
+
+    bool isTop() override{
+        return (lower->isTop() && upper->isTop()) || state == TOP;
+    }
+
+    bool isTrue() override{
+
+    }
+
+    bool isFalse() override{
+
+    }
+
+    bool isConstant() override{
+        return state != BOTTOM && lower->equals(upper);
+    }
+
+    llvm::Constant * getConstant() override{
+        return lower->constant;
+    }
+
+    IntervalLatticeElement *meet(LatticeElement *other ) override{
+        if(auto right = dynamic_cast<IntervalLatticeElement*>(other)){
+            auto *result = new IntervalLatticeElement();
+
+            if(state == 0 && right->state == 1){
+                result->state = VALUE;
+                result->lower->constant = right->lower->constant;
+                result->upper->constant = right->upper->constant;
+            }else if(state == 1 && right->state == 0){
+                result->state = VALUE;
+                result->lower->constant = right->lower->constant;
+                result->upper->constant = right->upper->constant;
+            }else if(state == VALUE && right->state == VALUE){
+                result->lower = lower->join(right->lower);
+                result->upper = upper->meet(right->upper);
+            }
+
+            return result;
+        }
+
+        throw "tot";
+    }
+
+    IntervalLatticeElement *join(LatticeElement *other ) override{
+        if(auto right = dynamic_cast<IntervalLatticeElement*>(other)){
+            auto *result = new IntervalLatticeElement();
+
+            if(state == 0 && right->state == 1){
+                result->state = VALUE;
+                result->lower->constant = right->lower->constant;
+                result->upper->constant = right->upper->constant;
+            }else if(state == 1 && right->state == 0){
+                result->state = VALUE;
+                result->lower->constant = right->lower->constant;
+                result->upper->constant = right->upper->constant;
+            }else if(state == VALUE && right->state == VALUE){
+                result->lower = lower->meet(right->lower);
+                result->upper = upper->join(right->upper);
+            }
+            return result;
+        }
+
+        throw "tot";
+    }
+
+};
+
+static llvm::ConstantInt *trueValue = nullptr;
+static llvm::ConstantInt *falseValue = nullptr;
+
+class BoolLatticeElement : public LatticeElement{
+public:
+    int state = BOTTOM;
+
+    bool isTop() override{
+        return state == TOP;
+    }
+
+    bool isTrue() override{
+        return state == TRUE || state == TOP;
+    }
+
+    bool isFalse() override{
+        return state == FALSE || state == TOP;
+    }
+
+    bool isConstant() override{
+        return state == TRUE || state == FALSE;
+    }
+
+    llvm::Constant * getConstant() override{
+        if(state == TRUE){
+            return trueValue;
+        }else if(state == FALSE){
+            return falseValue;
+        }
+
+        throw "tot";
+    }
+
+    LatticeElement * meet(LatticeElement *other) override{
+        if(auto right = dynamic_cast<BoolLatticeElement*>(other)){
+            auto *result = new BoolLatticeElement();
+
+            if(state == BOTTOM || right->state == BOTTOM){
+                result->state = BOTTOM;
+            }else if(state == TOP && right->state == TOP){
+                result->state = TOP;
+            }else if(state != right->state){
+                result->state = BOTTOM;
+            }else if(state == right->state){
+                result->state = state;
+            }
+
+            return result;
+        }
+
+        throw "tot";
+    }
+
+    LatticeElement * join(LatticeElement *other) override{
+        if(auto right = dynamic_cast<BoolLatticeElement*>(other)){
+            auto *result = new BoolLatticeElement();
+
+            if(state == TOP || right->state == TOP){
+                result->state = TOP;
+            }else if(state == BOTTOM && right->state == BOTTOM){
+                result->state = BOTTOM;
+            }else if(state != right->state){
+                result->state = TOP;
+            }else if(state == right->state){
+                result->state = state;
+            }
+
+            return result;
+        }
+    }
 };
 
 class ReachableLatticeElement{
@@ -46,7 +290,7 @@ public:
 
     llvm::LLVMContext &context;
 
-    std::unordered_map<llvm::Value*, ConstantLatticeElement> constant;
+    std::unordered_map<llvm::Value*, LatticeElement*> constant;
     std::unordered_map<llvm::BasicBlock*, ReachableLatticeElement> reachable;
     std::unordered_map<llvm::BasicBlock*, JumpingLatticeElement> targets;
 
@@ -54,7 +298,8 @@ public:
     bool updateReachable = false;
 
     Optimizer(llvm::LLVMContext &context) : llvm::FunctionPass(ID), context(context) {
-
+        falseValue = llvm::ConstantInt::get(llvm::Type::getInt1Ty(context), 0);
+        trueValue = llvm::ConstantInt::get(llvm::Type::getInt1Ty(context), 1);
     }
 
     bool runOnFunction(llvm::Function &func) override{
@@ -92,15 +337,15 @@ public:
             }
         }
 
-
         for(auto pair : constant){
-            if(pair.second.state == 1){
+            if(pair.second != nullptr && pair.second->isConstant()){
                 if(auto ins = llvm::dyn_cast_or_null<llvm::Instruction>(pair.first)){
+                    llvm::Constant* constant = pair.second->getConstant();
                     for(auto &use : pair.first->uses()){
                         if(auto branch = llvm::dyn_cast_or_null<llvm::BranchInst>(use.getUser())){
-                            if(auto constInt = llvm::dyn_cast_or_null<llvm::ConstantInt>(pair.second.constant) ){
+                            if(auto constInt = llvm::dyn_cast_or_null<llvm::ConstantInt>(constant) ){
                                 llvm::BasicBlock *target;
-                                if(constInt->getValue().getBoolValue()){
+                                if(pair.second->isTrue()){
                                     target = branch->getSuccessor(0);
                                 }else{
                                     target = branch->getSuccessor(1);
@@ -113,7 +358,7 @@ public:
                         }
                     }
 
-                    pair.first->replaceAllUsesWith(pair.second.constant);
+                    pair.first->replaceAllUsesWith(constant);
                     ins->eraseFromParent();
                 }
             }
@@ -139,23 +384,64 @@ public:
         return modifyCounter++;
     }
 
-    void combine(ConstantLatticeElement &left, ConstantLatticeElement &right ){
-        if(left.state == 0 && right.state == 1){
-            setState(left, 1);
-            left.constant = right.constant;
+    bool isNotTop(LatticeElement *element){
+        return element == nullptr || !element->isTop();
+    }
+
+
+    void combine(LatticeElement *& left, LatticeElement *right){
+        if(right == nullptr){
+            throw "xxx";
+        }
+
+        if(left == nullptr){
+            left = right;
+        } else{
+            left = left->join(right);
+        }
+
+        left->modifyCounter = incrementModify();
+    }
+
+    //void combine(LatticeElement &left, LatticeElement &right ){
+    //    left = left.meet(right);
+        /*if(left.state == 0 && right.state == 1){
+            setState(left, VALUE);
+            left.min.constant = right.min.constant;
+            left.max.constant = right.max.constant;
         }else if(left.state == 1 && right.state == 1){
-            if(!right.constant->isElementWiseEqual(left.constant)){
-                setState(left, 2);
+            if(!right.min.constant->isElementWiseEqual(left.max.constant) &&
+                    !right.max.constant->isElementWiseEqual(left.max.constant)){
+
+                if(llvm::ConstantExpr::getICmp(llvm::CmpInst::Predicate::ICMP_SLT, right.min.constant, left.min.constant)->getUniqueInteger().getBoolValue()){
+                    left.min.constant = right.min.constant;
+                }
+
+                if(llvm::ConstantExpr::getICmp(llvm::CmpInst::Predicate::ICMP_SLT, left.max.constant, right.max.constant)->getUniqueInteger().getBoolValue()){
+                    left.max.constant = right.max.constant;
+                }
             }
         }else{
             left.state = std::max(left.state, right.state);
-        }
+        }*/
+    //}
+
+    template<class T>
+    T *createTop(){
+        auto *element = new T();
+        element->state = TOP;
+        element->modifyCounter = incrementModify();
+        return element;
     }
 
-    void setState(ConstantLatticeElement& element, int newState){
-        if(element.state < newState){
-            element.state = newState;
-            element.modifyCounter = incrementModify();
+    void setState(IntervalLatticeElement *element, int newState){
+        if(element->isTop()){
+            throw "xxx";
+        }
+
+        if(element->state != newState ){
+            element->state = newState;
+            element->modifyCounter = incrementModify();
         }
     }
 
@@ -173,17 +459,30 @@ public:
         }
     }
 
-    ConstantLatticeElement &getValue(llvm::Value *value, llvm::BasicBlock* currentBlock){
-        ConstantLatticeElement &target = constant[value];
+    bool getBool(llvm::Constant *constant){
+        if(auto constInt = llvm::dyn_cast_or_null<llvm::ConstantInt>(constant)){
+            return constInt->getValue().getBoolValue();
+        }
+
+        throw "eee";
+    }
+
+    LatticeElement *getValue(llvm::Value *value, llvm::BasicBlock* currentBlock){
+        LatticeElement *target = constant[value];
 
         if(auto constValue = llvm::dyn_cast_or_null<llvm::Constant>(value)){
-            if(target.state == 0){
-                target.constant = constValue;
-                setState(target, 1);
-            }else if(target.state == 1){
-                if(!target.constant->isElementWiseEqual(constValue)){
-                    setState(target, 2);
-                }
+            if(target == nullptr){
+                auto *target = new IntervalLatticeElement();
+                constant[value] = target;
+
+                //if(target->state == BOTTOM){
+                    target->lower->constant = constValue;
+                    target->upper->constant = constValue;
+                    target->modifyCounter = incrementModify();
+                    setState(target, VALUE);
+                //}/*else if(target.state == VALUE){
+                    //throw
+                //}
             }
         }else if(auto phiNode = llvm::dyn_cast_or_null<llvm::PHINode>(value)){
             unsigned int incomingCount = phiNode->getNumIncomingValues();
@@ -203,28 +502,26 @@ public:
                 }
 
                 if(found){
-                    combine(target, getValue(phiNode->getIncomingValue(i), incomingBlock));
+                    LatticeElement* element = getValue(phiNode->getIncomingValue(i), incomingBlock);
+                    if(target == nullptr || element->modifyCounter > target->modifyCounter){
+                        combine(target, element);
+                    }
                 }
             }
+
+            constant[value] = target;
         }else if(auto branch = llvm::dyn_cast_or_null<llvm::BranchInst>(value)){
             if(branch->isConditional()){
                 auto condition = branch->getCondition();
 
-                auto &conditionValue = getValue(condition, currentBlock);
+                auto *conditionValue = getValue(condition, currentBlock);
 
-                if(conditionValue.state == 1){
-                    if(auto constValue = llvm::dyn_cast<llvm::ConstantInt>(conditionValue.constant)){
-                        if(constValue->getValue().getBoolValue()){
-                            auto trueSuccessor = branch->getSuccessor(0);
-                            makeReachable(currentBlock, trueSuccessor);
-                        }else{
-                            auto falseSuccessor = branch->getSuccessor(1);
-                            makeReachable(currentBlock, falseSuccessor);
-                        }
-                    }
-                }else if(conditionValue.state == 2){
+                if(conditionValue->isTrue()){
                     auto trueSuccessor = branch->getSuccessor(0);
                     makeReachable(currentBlock, trueSuccessor);
+                }
+
+                if(conditionValue->isFalse()){
                     auto falseSuccessor = branch->getSuccessor(1);
                     makeReachable(currentBlock, falseSuccessor);
                 }
@@ -233,66 +530,118 @@ public:
                 makeReachable(currentBlock, successor);
             }
         }else if(auto cmp = llvm::dyn_cast_or_null<llvm::CmpInst>(value)){
-            if(target.state < 2){
+            if(isNotTop(target)){
                 auto left = cmp->getOperand(0);
                 auto right = cmp->getOperand(1);
 
-                ConstantLatticeElement &leftValue = getValue(left, currentBlock);
-                ConstantLatticeElement &rightValue = getValue(right, currentBlock);
-                if(leftValue.state == 1 && rightValue.state == 1 ){
-                    auto result = llvm::ConstantExpr::getCompare(cmp->getPredicate(), leftValue.constant, rightValue.constant);
+                auto *leftValue = dynamic_cast<IntervalLatticeElement*>(getValue(left, currentBlock));
+                auto *rightValue = dynamic_cast<IntervalLatticeElement*>(getValue(right, currentBlock));
+                if(leftValue != nullptr && rightValue != nullptr){
+                    if(target == nullptr || leftValue->modifyCounter > target->modifyCounter || rightValue->modifyCounter > target->modifyCounter){
+                        if(leftValue->isConstant() && rightValue->isConstant()){
 
-                    combine(target, getValue(result, currentBlock));
-                }else if(leftValue.state > 1 || rightValue.state > 1){
-                    setState(target, 2);
+                            auto *boolElement = new BoolLatticeElement();
+                            if(llvm::CmpInst::Predicate::ICMP_SLT == cmp->getPredicate()){
+                                auto resultA = llvm::ConstantExpr::getCompare(llvm::CmpInst::Predicate::ICMP_SLT, leftValue->upper->constant, rightValue->lower->constant);
+
+                                if(getBool(resultA)){
+                                    boolElement->state = TRUE;
+                                }else{
+                                    auto resultB = llvm::ConstantExpr::getCompare(llvm::CmpInst::Predicate::ICMP_SLE, rightValue->upper->constant, leftValue->lower->constant);
+                                    if(getBool(resultB)){
+                                        boolElement->state = FALSE;
+                                    }else{
+                                        boolElement->state = TOP;
+                                    }
+                                }
+                            }else if(llvm::CmpInst::Predicate::ICMP_EQ == cmp->getPredicate()){
+                                if(leftValue->lower->equals(leftValue->upper) && leftValue->upper->equals(rightValue->lower) && rightValue->lower->equals(rightValue->upper)){
+                                    boolElement->state = TRUE;
+                                }else{
+                                    auto resultB = llvm::ConstantExpr::getCompare(llvm::CmpInst::Predicate::ICMP_SLE, leftValue->lower->constant, leftValue->lower->constant);
+                                    if(getBool(resultB)){
+                                        boolElement->state = FALSE;
+                                    }else{
+                                        boolElement->state = TOP;
+                                    }
+                                }
+                            }
+
+                            boolElement->modifyCounter = incrementModify();
+                            constant[value] = boolElement;
+                        }else if(leftValue->state > 1 || rightValue->state > 1){
+                            constant[value] = createTop<BoolLatticeElement>();
+                        }
+                    }
+                }else{
+                    throw "xxx";
                 }
             }
         }else if(auto binary = llvm::dyn_cast_or_null<llvm::BinaryOperator>(value)){
-            if(target.state < 2){
+            if(isNotTop(target)){
                 auto left = binary->getOperand(0);
                 auto right = binary->getOperand(1);
 
-                ConstantLatticeElement &leftValue = getValue(left, currentBlock);
-                ConstantLatticeElement &rightValue = getValue(right, currentBlock);
-                if(leftValue.state == 1 && rightValue.state == 1 ){
-                    llvm::Constant *result = llvm::ConstantExpr::get(binary->getOpcode(), leftValue.constant, rightValue.constant);
-                    combine(target, getValue(result, currentBlock));
-                }else if(leftValue.state > 1 || rightValue.state > 1){
-                    setState(target, 2);
+                auto *leftValue = dynamic_cast<IntervalLatticeElement*>(getValue(left, currentBlock));
+                auto *rightValue = dynamic_cast<IntervalLatticeElement*>(getValue(right, currentBlock));
+                if(leftValue != nullptr && rightValue != nullptr){
+                    if(target == nullptr || leftValue->modifyCounter > target->modifyCounter || rightValue->modifyCounter > target->modifyCounter){
+                        if(leftValue->isConstant() && rightValue->isConstant() ){
+                            llvm::Constant *result = llvm::ConstantExpr::get(binary->getOpcode(), leftValue->lower->constant, rightValue->lower->constant);
+
+                            constant[value] = getValue(result, currentBlock);
+                        }else if(leftValue->isTop() || rightValue->isTop()){
+                            constant[value] = createTop<IntervalLatticeElement>();
+                        }
+                    }
+                }else{
+                    throw "ooo";
                 }
             }
         }else if(auto unary = llvm::dyn_cast_or_null<llvm::UnaryOperator>(value)){
-            if(target.state < 2){
-                auto child = unary->getOperand(0);
-                ConstantLatticeElement &childElement = getValue(child, currentBlock);
+            if(isNotTop(target)){
 
-                //if(childElement.modifyCounter > target.modifyCounter ){
-                if(childElement.state == 1){
-                    llvm::Constant *result = llvm::ConstantExpr::get(unary->getOpcode(), childElement.constant);
-                    combine(target, getValue(result, currentBlock));
-                }else if(childElement.state > 1){
-                    setState(target, 2);
+                auto child = unary->getOperand(0);
+                auto *childElement = dynamic_cast<IntervalLatticeElement*>(getValue(child, currentBlock));
+                if(childElement != nullptr){
+                    if(target == nullptr || childElement->modifyCounter > target->modifyCounter){
+                        //if(childElement.modifyCounter > target.modifyCounter ){
+                        if(childElement->isConstant()){
+                            llvm::Constant *result = llvm::ConstantExpr::get(unary->getOpcode(), childElement->getConstant());
+                            constant[value] = getValue(result, currentBlock);
+                        }else if(childElement->isTop()){
+                            constant[value] = createTop<IntervalLatticeElement>();
+                        }
+                    }
+                }else{
+                    throw "ooo";
                 }
             }
         }else if(auto cast = llvm::dyn_cast_or_null<llvm::CastInst>(value)){
-            if(target.state < 2){
-                auto child = cast->getOperand(0);
-                ConstantLatticeElement &childElement = getValue(child, currentBlock);
-
-                if(childElement.state == 1 ){
-                    llvm::Constant *result =  llvm::ConstantExpr::getCast(cast->getOpcode(), childElement.constant, cast->getDestTy() );
-                    combine(target, getValue(result, currentBlock));
-                }else if(childElement.state > 1){
-                    setState(target, 2);
+            if(isNotTop(target)){
+                auto child = unary->getOperand(0);
+                auto *childElement = dynamic_cast<IntervalLatticeElement*>(getValue(child, currentBlock));
+                if(childElement != nullptr){
+                    if(target == nullptr || childElement->modifyCounter > target->modifyCounter){
+                        //if(childElement.modifyCounter > target.modifyCounter ){
+                        if(childElement->isConstant()){
+                            llvm::Constant *result =  llvm::ConstantExpr::getCast(cast->getOpcode(), childElement->getConstant(), cast->getDestTy() );
+                            constant[value] = getValue(result, currentBlock);
+                        }else if(childElement->isTop()){
+                            constant[value] = createTop<IntervalLatticeElement>();
+                        }
+                    }
+                }else{
+                    throw "ooo";
                 }
             }
         }else{
-            if(target.state != 2){
-                setState(target, 2);
+            if(isNotTop(target)){
+                constant[value] = createTop<IntervalLatticeElement>();
             }
         }
 
-        return target;
+        return constant[value];
     }
 
 
