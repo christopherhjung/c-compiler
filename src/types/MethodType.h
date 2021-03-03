@@ -12,6 +12,7 @@ class Call;
 
 class MethodType : public ComplexType {
 public:
+    bool defined = false;
     std::vector<SemanticType *> types;
     std::vector<Location> locations;
     const PointerType* originalType = nullptr;

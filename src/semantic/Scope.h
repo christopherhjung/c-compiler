@@ -40,23 +40,10 @@ public:
 };
 
 
-class IdentifierScope {
-public:
-    std::unordered_map<const std::string *, IdentifierUse*> identifiers;
-    //std::unordered_map<const std::string *, llvm::Function*> functions;
-    IdentifierScope *parent = nullptr;
-
-    IdentifierScope() {}
-
-    IdentifierUse *createIdentifier(const std::string *str);
-    IdentifierUse *get(const std::string *str);
-};
-
-
 class Scope {
 public:
-    std::unordered_map<const std::string *, Descriptor<SemanticType>> types;
-    std::unordered_map<const std::string *, Descriptor<SemanticStructType>> structs;
+    std::unordered_map<const std::string *, Identifier*> types;
+    std::unordered_map<const std::string *, SemanticStructType*> structs;
     std::unordered_map<const std::string *, int> labels;
     //std::unordered_map<const std::string *, llvm::Function*> functions;
     Scope *parent = nullptr;
@@ -72,14 +59,16 @@ public:
 
     const SemanticType *getReturnType();
 
-    Descriptor<SemanticStructType> *getStruct(const std::string *str);
+    SemanticStructType *getStruct(const std::string *str);
 
     bool structDeclaredInScope(const std::string *str);
 
     bool setStruct(const std::string *str, SemanticStructType *type);
 
-    bool set(Identifier *identifier, bool hasImplementation);
+    bool identifierDeclaredInScope(Identifier *identifier);
 
-    Descriptor<SemanticType> *get(const std::string *str);
+    bool set(Identifier *identifier);
+
+    Identifier *get(const std::string *str);
 };
 

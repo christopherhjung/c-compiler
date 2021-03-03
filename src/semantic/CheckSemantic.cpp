@@ -10,14 +10,16 @@ void Semantic::check(Unit *element) {
         if (auto *declaration = dynamic_cast<Declaration *>(child)) {
             enter0(declaration);
         } else if (auto *method = dynamic_cast<Method *>(child)) {
-            auto methodType = enter0(method->declaration)->asMethodType();
+
+            auto methodType = const_cast<MethodType*>(enter0(method->declaration)->asMethodType());
 
             auto inner = new Scope();
-            if (methodType->identifier != nullptr &&
-                !currentScope->set(methodType->identifier, true)) {
 
-                ERROR(methodType->identifier->location);
+            if (methodType->defined ) {
+                ERROR(method->declaration->location);
             }
+
+            methodType->defined = true;
 
             if (methodType->types.size() != 1 || !methodType->types[0]->equals(VoidType)) {
                 for (unsigned long i = 0; i < methodType->types.size(); i++) {
@@ -30,12 +32,13 @@ void Semantic::check(Unit *element) {
                         }
                         ERROR(method->declaration->location);
                     } else {
-                        if (!inner->set(identifier, false)) {
+                        if (!inner->set(identifier)) {
                             ERROR(identifier->location);
                         }
                     }
                 }
             }
+
 
             inner->parent = currentScope;
             inner->returnType = methodType->subType;
@@ -198,14 +201,14 @@ void Semantic::enter0(Expression *expression) {
         enter(binary);
     } else if (auto unary = dynamic_cast<Unary *>(expression)) {
         enter(unary);
-    } else if (auto identifier = dynamic_cast<IdentifierUse *>(expression)) {
-        auto desc = currentScope->get(identifier->value);
+    } else if (auto identifierUse = dynamic_cast<IdentifierUse *>(expression)) {
+        auto identifier = currentScope->get(identifierUse->value);
 
-        if (!desc->defined) {
+        if (identifier == nullptr) {
             ERROR(identifier->location);
         }
 
-        identifier->identifier = desc->identifier;
+        identifierUse->identifier = identifier;
         //identifier->setType(desc->semanticType);
     } else if (auto constant = dynamic_cast<Constant *>(expression)) {
         constant->setType(IntType);
@@ -531,6 +534,7 @@ SemanticType *Semantic::enter(DirectDeclarator *directDeclarator, SemanticType *
 
         simpleType->identifier = identifier;
         identifier->setType(simpleType);
+
         return simpleType;
     }
 
@@ -541,15 +545,27 @@ const SemanticType *Semantic::enter0(Declaration *declaration) {
     if (declaration != nullptr) {
         auto type = enter(declaration);
         declaration->setType(type);
-        if (type != nullptr) {
-            if (type->asSimpleType() && type->identifier == nullptr) {
-                ERROR(declaration->location);
+
+        if (type->identifier != nullptr) {
+            auto identifier = type->identifier;
+
+            if (currentScope->identifierDeclaredInScope(identifier)) {
+                if (type->asMethodType()) {
+                    auto alreadyDeclaredIdentifier = currentScope->get(identifier->value);
+                    if (!alreadyDeclaredIdentifier->getType()->equals(type)) {
+                        ERROR(identifier->location);
+                    }
+
+                    return alreadyDeclaredIdentifier->semanticType;
+                } else {
+                    ERROR(identifier->location);
+                }
+            } else {
+                currentScope->set(identifier);
             }
 
-            if (type->identifier != nullptr) {
-                if(!currentScope->set(type->identifier, false)){
-                    ERROR(type->identifier->location);
-                }
+            if (type->asSimpleType() && type->identifier == nullptr) {
+                ERROR(declaration->location);
             }
         }
 
@@ -562,6 +578,9 @@ const SemanticType *Semantic::enter0(Declaration *declaration) {
 
 SemanticType *Semantic::enter(Declaration *declaration) {
     auto leftType = enter(declaration->declarator, declaration->type, &declaration->location);
+
+
+
     if(declaration->initializer){
         enter(declaration->initializer);
 
@@ -585,7 +604,7 @@ SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* loca
         if (hasName) {
             if(defining){
                 if(currentScope->structDeclaredInScope(structType->name)){
-                    semanticStruct = currentScope->getStruct(structType->name)->semanticType;
+                    semanticStruct = currentScope->getStruct(structType->name);
 
                     if(semanticStruct->defined){
                         //already defined in scope
@@ -599,10 +618,8 @@ SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* loca
                     }
                 }
             }else{
-                auto desc = currentScope->getStruct(structType->name);
-                if (desc != nullptr) {
-                    semanticStruct = desc->semanticType;
-                }else{
+                semanticStruct = currentScope->getStruct(structType->name);
+                if (semanticStruct == nullptr) {
                     semanticStruct = new SemanticStructType(true);
 
                     if(!currentScope->setStruct(structType->name, semanticStruct)){

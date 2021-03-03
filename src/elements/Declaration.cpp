@@ -37,18 +37,20 @@ void Declaration::create(TransformContext &context) {
             }
         }
     } else if (auto methodType = getType()->asMethodType()) {
-        auto returnType = context.getType(methodType->subType);
-        std::vector<llvm::Type *> paramTypes;
-        for (auto type : methodType->types) {
-            if (!type->equals(VoidType)) {
-                paramTypes.push_back(context.getType(type));
+        if(methodType->identifier->llvmValue == nullptr){
+            auto returnType = context.getType(methodType->subType);
+            std::vector<llvm::Type *> paramTypes;
+            for (auto type : methodType->types) {
+                if (!type->equals(VoidType)) {
+                    paramTypes.push_back(context.getType(type));
+                }
             }
+            const std::string *methodName = methodType->identifier->value;
+
+            context.createFunctionDecl(*methodName, returnType, paramTypes);
+
+            methodType->identifier->llvmValue = context.currentFunction;
         }
-        const std::string *methodName = methodType->identifier->value;
-
-        context.createFunctionDecl(*methodName, returnType, paramTypes);
-
-        methodType->identifier->llvmValue = context.currentFunction;
     } else {
         llvm::Type *type = context.getType(getType());
         if(getType()->identifier){
@@ -72,7 +74,7 @@ void Declaration::create(TransformContext &context) {
                     0,
                     false);
 
-            context.mainScope->get(name)->identifier->llvmValue = globalVar;
+            context.mainScope->get(name)->llvmValue = globalVar;
         }
     }
 }

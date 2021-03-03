@@ -31,9 +31,6 @@ public:
     Token lookB;
     bool insideLoop = false;
 
-    IdentifierScope *scope = new IdentifierScope();
-
-
     explicit SimpleParser(Lexer *lexer) : lexer(lexer) {
 
     }
@@ -376,11 +373,7 @@ public:
                 break;
             }
 
-            IdentifierScope innerScope;
-            innerScope.parent = scope;
-            scope = &innerScope;
             block->children.push_back(parseBlockItem());
-            scope = innerScope.parent;
         }
         return block;
     }
