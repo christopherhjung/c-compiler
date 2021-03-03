@@ -5,6 +5,22 @@
 #include <string.h>
 #include <assert.h>
 
+#include "c4lib.h"
+
+struct Test{
+    int i;
+};
+
+struct Test *c4_createStruct(void){
+    struct Test *test = (struct Test*)c4_malloc(sizeof(struct Test));
+    test->i = 999;
+    return test;
+}
+
+void c4_testStruct(struct Test *a){
+    c4_print_int(a->i);
+}
+
 void c4_exit(int x) {
     exit(x);
 }

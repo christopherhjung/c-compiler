@@ -37,7 +37,7 @@ const SemanticType *Scope::getReturnType() {
     return nullptr;
 }
 
-bool Scope::structDefinedInScope(const std::string *str) {
+bool Scope::structDeclaredInScope(const std::string *str) {
     auto current = structs.find(str);
     return current != structs.end();
 }
@@ -58,15 +58,9 @@ bool Scope::setStruct(const std::string *str, SemanticStructType *type) {
         ERROR(Location());
     }
 
-    auto desc = &structs[str];
-
-    if (desc->defined) {
-        if (!desc->semanticType->equals(type)) {
-            return false;
-        }
-    } else {
+    if(structs.find(str) == structs.end()){
+        auto desc = &structs[str];
         desc->semanticType = type;
-        desc->defined = true;
     }
 
     return true;

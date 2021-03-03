@@ -60,7 +60,7 @@ public:
 
     Descriptor<SemanticStructType> *getStruct(const std::string *str);
 
-    bool structDefinedInScope(const std::string *str);
+    bool structDeclaredInScope(const std::string *str);
 
     bool setStruct(const std::string *str, SemanticStructType *type);
 

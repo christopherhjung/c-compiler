@@ -176,7 +176,7 @@ int main(int argc, char** argv){
     });
 
     errors += check("backend", [](FileInputReader *inputReader, std::ostream &out, std::ostream &err) {
-        std::string command = "../optimize.sh ";
+        std::string command = "../compile.sh ";
         command += inputReader->getFile();
         out << exec( command );
         return 0;

@@ -88,12 +88,14 @@ llvm::Type *TransformContext::getType(const SemanticType *type) {
         auto llvmStructType = llvm::StructType::create(llvmContext, "struct.S");
         typeLookup[structType] = llvmStructType;
 
-        std::vector<llvm::Type *> types;
-        for (auto type : structType->types) {
-            types.push_back(getType(type));
-        }
+        if(structType->defined){
+            std::vector<llvm::Type *> types;
+            for (auto type : structType->types) {
+                types.push_back(getType(type));
+            }
 
-        llvmStructType->setBody(types);
+            llvmStructType->setBody(types);
+        }
         return llvmStructType;
     }else if(auto methodType = type->asMethodType()){
         auto returnType = getType(methodType->subType);

@@ -12,6 +12,7 @@ class SemanticStructType : public SemanticType {
 public:
     std::unordered_map<const std::string *, int> map;
     std::vector<const SemanticType *> types;
+    bool defined = false;
     int size = -1;
 
     explicit SemanticStructType() {

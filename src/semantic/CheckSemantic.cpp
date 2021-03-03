@@ -13,7 +13,6 @@ void Semantic::checkType(const Expression *element, const SemanticType *semantic
 }
 
 void Semantic::check(Unit *element) {
-    pendingStructs.clear();
     element->scope = mainScope;
     for (auto child : element->children) {
         if (auto *declaration = dynamic_cast<Declaration *>(child)) {
@@ -59,11 +58,12 @@ void Semantic::check(Unit *element) {
         }
     }
 
+    /*
     for(auto pending : pendingStructs){
         if(!pending->asSemanticStructType()){
             ERROR(pending->location);
         }
-    }
+    }*/
 }
 
 void Semantic::findLabels(Statement *statement) {
@@ -130,10 +130,7 @@ void Semantic::enter(Statement *statement) {
         enter0(declaration);
     } else if (auto expression = dynamic_cast<Expression *>(statement)) {
         enter(expression);
-    }/*else{
-            ERROR(statement->location);
-        }*/
-
+    }
 }
 
 void Semantic::checkCondition(Expression *condition, Location &location) {
@@ -600,24 +597,47 @@ SemanticType *Semantic::enter(Declaration *declaration) {
 SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* location) {
     SemanticType *semanticType = nullptr;
     if (auto structType = dynamic_cast<StructType *>(type)) {
-        auto superStruct = new SemanticStructType(true);
 
-        if (structType->name != nullptr && structType->declarations.empty()) {
-            if(methodScope == nullptr){
-                auto pending = new PendingSemanticStructType(structType->name, location, currentScope);
-                semanticType = pending;
-                pendingStructs.push_back(pending);
+        bool defining = !structType->declarations.empty();
+        bool hasName = structType->name != nullptr;
+
+        SemanticStructType *semanticStruct = nullptr;
+        if (hasName) {
+            if(defining){
+                if(currentScope->structDeclaredInScope(structType->name)){
+                    semanticStruct = currentScope->getStruct(structType->name)->semanticType;
+
+                    if(semanticStruct->defined){
+                        //already defined in scope
+                        ERROR(structType->location);
+                    }
+                }else{
+                    semanticStruct = new SemanticStructType(true);
+
+                    if (!currentScope->setStruct(structType->name, semanticStruct)) {
+                        ERROR(structType->location);
+                    }
+                }
             }else{
                 auto desc = currentScope->getStruct(structType->name);
+                if (desc != nullptr) {
+                    semanticStruct = desc->semanticType;
+                }else{
+                    semanticStruct = new SemanticStructType(true);
 
-                if (desc == nullptr) {
-                    ERROR(structType->location);
+                    if(!currentScope->setStruct(structType->name, semanticStruct)){
+                        ERROR(structType->location);
+                    }
                 }
-
-                semanticType = new ProxyType(desc->semanticType, true);
             }
+        }else{
+            semanticStruct = new SemanticStructType(true);
+        }
+
+        if (!defining) {
+            semanticType = new ProxyType(semanticStruct, true);
         } else {
-            if (structType->name != nullptr && currentScope->structDefinedInScope(structType->name)) {
+            if(semanticStruct->defined){
                 ERROR(structType->location);
             }
 
@@ -633,22 +653,20 @@ SemanticType *Semantic::enter(Declarator *declarator, Type* type, Location* loca
                     ERROR(structType->location);
                 }
 
-                superStruct->types.push_back(structInner);
+                semanticStruct->types.push_back(structInner);
 
                 auto identifier = structInner->identifier;
                 if (identifier != nullptr) {
-                    if (superStruct->map.find(identifier->value) != superStruct->map.end()) {
+                    if (semanticStruct->map.find(identifier->value) != semanticStruct->map.end()) {
                         ERROR(identifier->location);
                     }
 
-                    superStruct->map[identifier->value] = superStruct->types.size() - 1;
+                    semanticStruct->map[identifier->value] = semanticStruct->types.size() - 1;
                 }
             }
 
-            if (structType->name != nullptr) {
-                currentScope->setStruct(structType->name, superStruct);
-            }
-            semanticType = superStruct;
+            semanticStruct->defined = true;
+            semanticType = semanticStruct;
         }
     } else {
         switch (type->type) {

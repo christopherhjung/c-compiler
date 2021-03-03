@@ -21,8 +21,6 @@ public:
     Scope *currentScope = mainScope;
     Scope *methodScope = nullptr;
 
-    std::vector<PendingSemanticStructType*> pendingStructs;
-
     void checkType(const Expression *element, const SemanticType *semanticType);
 
     void check(Unit *element);

@@ -1,6 +1,11 @@
 #define EOF -1
 #define NULL 0
 
+struct Test;
+
+struct Test *c4_createStruct(void);
+void c4_testStruct(struct Test *a);
+
 void c4_exit(int x);
 
 void c4_assert(int x);
