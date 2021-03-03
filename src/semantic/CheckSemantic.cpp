@@ -10,7 +10,7 @@ void Semantic::check(Unit *element) {
         if (auto *declaration = dynamic_cast<Declaration *>(child)) {
             enter0(declaration);
         } else if (auto *method = dynamic_cast<Method *>(child)) {
-            auto methodType = const_cast<MethodType *>(enter0(method->declaration)->asMethodType());
+            auto methodType = enter0(method->declaration)->asMethodType();
 
             auto inner = new Scope();
             if (methodType->identifier != nullptr &&
@@ -45,13 +45,6 @@ void Semantic::check(Unit *element) {
             methodScope = nullptr;
         }
     }
-
-    /*
-    for(auto pending : pendingStructs){
-        if(!pending->asSemanticStructType()){
-            ERROR(pending->location);
-        }
-    }*/
 }
 
 void Semantic::findLabels(Statement *statement) {

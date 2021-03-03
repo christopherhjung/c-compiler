@@ -12,7 +12,7 @@ void IdentifierUse::dump(PrettyPrinter &printer) {
 }
 
 llvm::Value *IdentifierUse::createRightValue(TransformContext &context) {
-    if(semanticType->asMethodType()){
+    if(getType()->asMethodType()){
         return identifier->llvmValue;
     }else{
         return context.builder.CreateLoad(identifier->llvmValue);

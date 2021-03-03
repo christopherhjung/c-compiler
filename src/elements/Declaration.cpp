@@ -26,17 +26,17 @@ void Declaration::dump(PrettyPrinter &printer) {
 
 void Declaration::create(TransformContext &context) {
     if (context.functionScope) {
-        llvm::Type *type = context.getType(semanticType);
-        if(semanticType->identifier != nullptr){
+        llvm::Type *type = context.getType(getType());
+        if(getType()->identifier != nullptr){
             auto value = context.resetAllocBuilder().CreateAlloca(type);
-            const_cast<SemanticType*>(semanticType)->identifier->llvmValue = value;
+            getType()->identifier->llvmValue = value;
             if (initializer) {
                 //llvm::Value *initValue = initializer->createRightValue(context);
                 //context.builder.CreateStore(initValue, value);
-                Assignment::makeAssignment(context, semanticType->identifier, initializer);
+                Assignment::makeAssignment(context, getType()->identifier, initializer);
             }
         }
-    } else if (auto methodType = semanticType->asMethodType()) {
+    } else if (auto methodType = getType()->asMethodType()) {
         auto returnType = context.getType(methodType->subType);
         std::vector<llvm::Type *> paramTypes;
         for (auto type : methodType->types) {
@@ -48,25 +48,19 @@ void Declaration::create(TransformContext &context) {
 
         context.createFunctionDecl(*methodName, returnType, paramTypes);
 
-        const_cast<MethodType*>(methodType)->identifier->llvmValue = context.currentFunction;
+        methodType->identifier->llvmValue = context.currentFunction;
     } else {
-        llvm::Type *type = context.getType(semanticType);
-        if(semanticType->identifier){
+        llvm::Type *type = context.getType(getType());
+        if(getType()->identifier){
             llvm::Constant *initValue;
             if (initializer) {
-                /*initValue = reinterpret_cast<llvm::Constant*>(initializer->createRightValue(context));
-
-                if( semanticType->asPointerType() && initializer->semanticType->equals(IntType) ){
-                    initValue = reinterpret_cast<llvm::Constant*>(context.builder.CreateIntToPtr(initValue, context.getType(semanticType)));
-                }*/
-
-                initValue = llvm::dyn_cast<llvm::Constant>(Assignment::ensureAssignment(context,semanticType, initializer));
+                initValue = llvm::dyn_cast<llvm::Constant>(Assignment::ensureAssignment(context, getType(), initializer));
             } else {
                 initValue = llvm::Constant::getNullValue(type);
             }
 
-            const std::string *name = semanticType->identifier->value;
-            llvm::GlobalVariable *globalVar = new llvm::GlobalVariable(
+            const std::string *name = getType()->identifier->value;
+            auto *globalVar = new llvm::GlobalVariable(
                     context.module,
                     type,
                     false,

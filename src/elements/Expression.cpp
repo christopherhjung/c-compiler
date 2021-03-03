@@ -33,5 +33,5 @@ void Expression::create(TransformContext &context) {
 }
 
 llvm::Value * Expression::getSize(TransformContext &context){
-    return Sizeof::getInt32Size(context, semanticType);
+    return Sizeof::getInt32Size(context, getType());
 }

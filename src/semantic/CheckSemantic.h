@@ -21,8 +21,6 @@ public:
     Scope *currentScope = mainScope;
     Scope *methodScope = nullptr;
 
-    void checkType(const Expression *element, const SemanticType *semanticType);
-
     void check(Unit *element);
 
     void findLabels(Statement *statement);
