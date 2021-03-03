@@ -71,6 +71,7 @@ int main(int argc, char **const args) {
         }else if(option == "--compile"){
             compile = true;
         }else if(option == "--optimize-run-time") {
+            compile = true;
             optimize = true;
         }else if(option == "--optimize-compile-time"){
         }else if(option == "--optimize"){
