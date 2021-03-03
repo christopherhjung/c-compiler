@@ -565,11 +565,11 @@ const SemanticType *Semantic::checkDeclarationWithScopeCheck(Declaration *declar
             } else {
                 currentScope->set(identifier);
             }
-
-            if (type->asSimpleType() && type->identifier == nullptr) {
-                ERROR(declaration->location);
-            }
+        }else if (type->asSimpleType()) {
+            ERROR(declaration->location);
         }
+
+
 
         return type;
     }

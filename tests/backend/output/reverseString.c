@@ -1,0 +1,1 @@
+Reversed String is:mordnilap oll2h
