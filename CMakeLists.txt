@@ -55,7 +55,7 @@ message(${LLVM_LINKER_FLAGS})
 #include_directories(lib/googletest/googlemock/include)
 
 
-SET(CMAKE_CXX_FLAGS "-Wall -W -std=c++17 -O0 -g -Wno-unused-parameter  ${LLVM_CFLAGS} -pthread")
+SET(CMAKE_CXX_FLAGS "-Wall -W -std=c++17 -O3 -g -Wno-unused-parameter  ${LLVM_CFLAGS} -pthread")
 
 file(GLOB_RECURSE source_list "src/*.cpp" )
 
