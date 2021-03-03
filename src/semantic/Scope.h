@@ -7,13 +7,13 @@
 #include <unordered_map>
 #include <string>
 
-#include "Anchor.h"
+#include "Identifier.h"
 #include "llvm/IR/GlobalValue.h"
 
 class SemanticType;
 
 class SemanticStructType;
-
+class IdentifierUse;
 
 
 template<class T>
@@ -22,7 +22,7 @@ public:
     T *semanticType = nullptr;
     bool implementation = false;
     bool defined = false;
-    Anchor* anchor = new Anchor();
+    Identifier* identifier = new Identifier();
     //llvm::Function* function;
 
     Descriptor() {
@@ -38,6 +38,20 @@ public:
 
     }
 };
+
+
+class IdentifierScope {
+public:
+    std::unordered_map<const std::string *, IdentifierUse*> identifiers;
+    //std::unordered_map<const std::string *, llvm::Function*> functions;
+    IdentifierScope *parent = nullptr;
+
+    IdentifierScope() {}
+
+    IdentifierUse *createIdentifier(const std::string *str);
+    IdentifierUse *get(const std::string *str);
+};
+
 
 class Scope {
 public:
@@ -64,7 +78,7 @@ public:
 
     bool setStruct(const std::string *str, SemanticStructType *type);
 
-    bool set(const std::string *str, SemanticType *type, bool hasImplementation);
+    bool set(Identifier *identifier, bool hasImplementation);
 
     Descriptor<SemanticType> *get(const std::string *str);
 };

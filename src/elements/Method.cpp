@@ -17,7 +17,7 @@ void Method::dump(PrettyPrinter &printer) {
 }
 
 void Method::create(TransformContext &context) {
-    auto methodType = declaration->semanticType->asMethodType();
+    auto methodType = declaration->getType()->asMethodType();
 
     std::vector<llvm::Type*> paramTypes;
     for(auto type : methodType->types){
@@ -26,13 +26,13 @@ void Method::create(TransformContext &context) {
         }
     }
 
-    auto anchor = declaration->semanticType->identifier->anchor;
+    auto anchor = declaration->getType()->identifier;
 
-    if(!anchor->value){
+    if(!anchor->llvmValue){
         declaration->create(context);
     }
 
-    auto declared = llvm::dyn_cast<llvm::Function>(anchor->value);
+    auto declared = llvm::dyn_cast<llvm::Function>(anchor->llvmValue);
 
     auto unreachable = llvm::BasicBlock::Create(context.llvmContext, "unreachable", declared, 0);
     context.unreachable = unreachable;
@@ -59,7 +59,7 @@ void Method::create(TransformContext &context) {
             arg->setName(*name);
             llvm::Value *argPtr = context.resetAllocBuilder().CreateAlloca(arg->getType());
             context.builder.CreateStore(arg, argPtr);
-            type->identifier->anchor->value = argPtr;
+            type->identifier->llvmValue = argPtr;
         }
 
         args++;

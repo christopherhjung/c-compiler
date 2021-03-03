@@ -22,10 +22,10 @@ llvm::Value *Assignment::ensureAssignment(TransformContext &context, const Seman
         value = right->createRightValue(context);
     }
 
-    if(!right->semanticType->equals(leftType)){
-        if(leftType->asPointerType() && right->semanticType->asPointerType() ){
+    if(!right->getType()->equals(leftType)){
+        if(leftType->asPointerType() && right->getType()->asPointerType() ){
             value = context.builder.CreatePointerCast(value, context.getType(leftType));
-        }else if(leftType->asSimpleType() && right->semanticType->asSimpleType()){
+        }else if(leftType->asSimpleType() && right->getType()->asSimpleType()){
             value = context.builder.CreateIntCast(value, context.getType(leftType), true);
         }
     }
@@ -33,8 +33,14 @@ llvm::Value *Assignment::ensureAssignment(TransformContext &context, const Seman
     return value;
 }
 
+llvm::Value *Assignment::makeAssignment(TransformContext &context, Identifier* left, Expression* right)  {
+    llvm::Value* value = ensureAssignment(context, left->getType(), right);
+    context.builder.CreateStore(value, left->llvmValue);
+    return value;
+}
+
 llvm::Value *Assignment::makeAssignment(TransformContext &context, Expression* left, Expression* right)  {
-    llvm::Value* value = ensureAssignment(context, left->semanticType, right);
+    llvm::Value* value = ensureAssignment(context, left->getType(), right);
     context.builder.CreateStore(value, left->createLeftValue(context));
     return value;
 }

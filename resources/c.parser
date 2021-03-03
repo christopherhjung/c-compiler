@@ -11,8 +11,8 @@ PostfixExpression
     :   PrimaryExpression
     |   PostfixExpression '[' Expression ']'
     |   PostfixExpression '(' ArgumentExpressionList? ')'
-    |   PostfixExpression '.' 'identifier'
-    |   PostfixExpression '->' 'identifier'
+    |   PostfixExpression '.' 'identifiers'
+    |   PostfixExpression '->' 'identifiers'
     |   PostfixExpression '++'
     |   PostfixExpression '--'
     |   '(' TypeName ')' '{' InitializerList '}'
@@ -31,7 +31,7 @@ UnaryExpression
     |   UnaryOperator CastExpression
     |   'sizeof' UnaryExpression
     |   'sizeof' '(' TypeName ')'
-    |   '&&' 'identifier' // 'gcC' Extension Address Of Label
+    |   '&&' 'identifiers' // 'gcC' Extension Address Of Label
     ;
 
 UnaryOperator
@@ -180,8 +180,8 @@ TypeSpecifier
     ;
 
 StructOrUnionSpecifier
-    :   StructOrUnion 'identifier'? '{' StructDeclarationList '}'
-    |   StructOrUnion 'identifier'
+    :   StructOrUnion 'identifiers'? '{' StructDeclarationList '}'
+    |   StructOrUnion 'identifiers'
     ;
 
 StructOrUnion
@@ -214,9 +214,9 @@ StructDeclarator
     ;
 
 EnumSpecifier
-    :   'enum' 'identifier'? '{' EnumeratorList '}'
-    |   'enum' 'identifier'? '{' EnumeratorList ',' '}'
-    |   'enum' 'identifier'
+    :   'enum' 'identifiers'? '{' EnumeratorList '}'
+    |   'enum' 'identifiers'? '{' EnumeratorList ',' '}'
+    |   'enum' 'identifiers'
     ;
 
 EnumeratorList
@@ -230,7 +230,7 @@ Enumerator
     ;
 
 EnumerationConstant
-    :   'identifier'
+    :   'identifiers'
     ;
 
 TypeQualifier
@@ -256,7 +256,7 @@ DirectDeclarator
     |   DirectDeclarator '[' TypeQualifierList? '*' ']'
     |   DirectDeclarator '(' ParameterTypeList ')'
     |   DirectDeclarator '(' IdentifierList? ')'
-    |   'identifier' ':' 'digitSequence'  // Bit Field
+    |   'identifiers' ':' 'digitSequence'  // Bit Field
     |   '(' TypeSpecifier? Pointer DirectDeclarator ')' // Function Pointer Like: (__cdecl *f)
     ;
 
@@ -290,8 +290,8 @@ ParameterDeclaration
     ;
 
 IdentifierList
-    :   'identifier'
-    |   IdentifierList ',' 'identifier'
+    :   'identifiers'
+    |   IdentifierList ',' 'identifiers'
     ;
 
 TypeName
@@ -318,7 +318,7 @@ DirectAbstractDeclarator
     ;
 
 TypedefName
-    :   'identifier'
+    :   'identifiers'
     ;
 
 Initializer
@@ -343,7 +343,7 @@ DesignatorList
 
 Designator
     :   '[' ConstantExpression ']'
-    |   '.' 'identifier'
+    |   '.' 'identifiers'
     ;
 
 
@@ -357,7 +357,7 @@ Statement
     ;
 
 LabeledStatement
-    :   'identifier' ':' Statement
+    :   'identifiers' ':' Statement
     |   'case' ConstantExpression ':' Statement
     |   'default' ':' Statement
     ;
@@ -407,7 +407,7 @@ ForExpression
     ;
 
 JumpStatement
-    :   'goto' 'identifier' ';'
+    :   'goto' 'identifiers' ';'
     |   'continue' ';'
     |   'break' ';'
     |   'return' Expression? ';'

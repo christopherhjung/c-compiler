@@ -13,8 +13,8 @@ to the following rationale.
 Underscore (`_`) is special, as C++ reserves the following to be used by the
 compiler and the standard library:
 
-1.  any identifier that starts with an `_` followed by an upper-case letter, and
-2.  any identifier that contains two consecutive underscores (i.e. `__`)
+1.  any identifiers that starts with an `_` followed by an upper-case letter, and
+2.  any identifiers that contains two consecutive underscores (i.e. `__`)
     *anywhere* in its name.
 
 User code is *prohibited* from using such identifiers.

@@ -11,6 +11,8 @@
 #include "../common.h"
 #include "../elements/Elements.h"
 
+#include "../semantic/Scope.h"
+
 class ParseException : public std::exception {
 public:
     Error error;
@@ -28,6 +30,9 @@ public:
     Token lookA;
     Token lookB;
     bool insideLoop = false;
+
+    IdentifierScope *scope = new IdentifierScope();
+
 
     explicit SimpleParser(Lexer *lexer) : lexer(lexer) {
 
@@ -205,6 +210,19 @@ public:
         return nullptr;
     }
 
+    IdentifierUse *parseIdentifierUse() {
+        if (is(IDENTIFIER)) {
+            auto identifier = create<IdentifierUse>();
+            identifier->value = lookA.value;
+            next();
+            return identifier;
+        } else {
+            fatal();
+        }
+
+        return nullptr;
+    }
+
     Declarator *parseDeclarator(bool normal, bool abstract) {
         auto declaration = new Declarator();
 
@@ -358,7 +376,11 @@ public:
                 break;
             }
 
+            IdentifierScope innerScope;
+            innerScope.parent = scope;
+            scope = &innerScope;
             block->children.push_back(parseBlockItem());
+            scope = innerScope.parent;
         }
         return block;
     }
@@ -434,7 +456,7 @@ public:
             next();
             return constant;
         } else if (is(IDENTIFIER)) {
-            return parseIdentifier();
+            return parseIdentifierUse();
         }
 
         fatal();
@@ -559,7 +581,7 @@ public:
         bin->left = left;
         next();
         if (op->id == ARROW || op->id == DOT) {
-            bin->right = parseIdentifier();
+            bin->right = parseIdentifierUse();
         } else {
             bin->right = parseExpression(rightPrecedence(op->id));
         }

@@ -3,14 +3,6 @@
 //
 
 #include "CheckSemantic.h"
-#include "../types/Types.h"
-
-
-void Semantic::checkType(const Expression *element, const SemanticType *semanticType) {
-    if (element->semanticType == nullptr || !element->semanticType->equals(semanticType)) {
-        ERROR(element->location);
-    }
-}
 
 void Semantic::check(Unit *element) {
     element->scope = mainScope;
@@ -21,11 +13,9 @@ void Semantic::check(Unit *element) {
             auto methodType = const_cast<MethodType *>(enter0(method->declaration)->asMethodType());
 
             auto inner = new Scope();
-            auto name = methodType->identifier->value;
             if (methodType->identifier != nullptr &&
-                !currentScope->set(name, methodType, true)) {
+                !currentScope->set(methodType->identifier, true)) {
 
-                const_cast<Identifier*>(methodType->identifier)->anchor = currentScope->get(name)->anchor;
                 ERROR(methodType->identifier->location);
             }
 
@@ -40,10 +30,8 @@ void Semantic::check(Unit *element) {
                         }
                         ERROR(method->declaration->location);
                     } else {
-                        if (!inner->set(identifier->value, paramType, false)) {
+                        if (!inner->set(identifier, false)) {
                             ERROR(identifier->location);
-                        }else{
-                            const_cast<Identifier*>(identifier)->anchor = inner->get(identifier->value)->anchor;
                         }
                     }
                 }
@@ -135,7 +123,7 @@ void Semantic::enter(Statement *statement) {
 
 void Semantic::checkCondition(Expression *condition, Location &location) {
     enter(condition);
-    if (condition->semanticType->asSemanticStructType()) {
+    if (condition->getType()->asSemanticStructType()) {
         ERROR(location);
     }
 }
@@ -168,10 +156,10 @@ void Semantic::enter(Return *returnStatement) {
     } else {
         enter(returnStatement->value);
         loc = returnStatement->value;
-        returnType = returnStatement->value->semanticType;
+        returnType = returnStatement->value->getType();
     }
 
-    returnStatement->semanticType = methodScope->returnType;
+    returnStatement->setType(methodScope->returnType);
     if (!isAssignable(currentScope->getReturnType(), returnType)) {
         ERROR(loc->location);
     }
@@ -204,7 +192,8 @@ void enter(Break*){
 void Semantic::enter(Expression *expression) {
     enter0(expression);
 
-    if (expression->semanticType == nullptr) {
+    if (expression->getType() == nullptr) {
+        enter0(expression);
         ERROR(expression->location);
     }
 }
@@ -216,26 +205,26 @@ void Semantic::enter0(Expression *expression) {
         enter(binary);
     } else if (auto unary = dynamic_cast<Unary *>(expression)) {
         enter(unary);
-    } else if (auto identifier = dynamic_cast<Identifier *>(expression)) {
+    } else if (auto identifier = dynamic_cast<IdentifierUse *>(expression)) {
         auto desc = currentScope->get(identifier->value);
 
         if (!desc->defined) {
             ERROR(identifier->location);
         }
 
-        identifier->anchor = desc->anchor;
-        identifier->semanticType = desc->semanticType;
+        identifier->identifier = desc->identifier;
+        //identifier->setType(desc->semanticType);
     } else if (auto constant = dynamic_cast<Constant *>(expression)) {
-        constant->semanticType = IntType;
+        constant->setType(IntType);
     } else if (auto string = dynamic_cast<StringLiteral *>(expression)) {
-        string->semanticType = CharPointerType;
+        string->setType(CharPointerType);
     } else if (auto call = dynamic_cast<Call *>(expression)) {
         for (auto expr : call->values) {
             enter(expr);
         }
 
         enter(call->target);
-        auto methodType = call->target->semanticType->unpackMethodType();
+        auto methodType = call->target->getType()->unpackMethodType();
         if (methodType) {
             if (methodType->types.size() < call->values.size()) {
                 ERROR(call->locations[methodType->types.size()]);
@@ -247,7 +236,7 @@ void Semantic::enter0(Expression *expression) {
                 int min = std::min(methodType->types.size(), call->values.size());
 
                 for (int i = 0; i < min; i++) {
-                    if(!isAssignable(methodType->types[i], call->values[i]->semanticType)){
+                    if(!isAssignable(methodType->types[i], call->values[i]->getType())){
                         ERROR(call->locations[i]);
                     }
                 }
@@ -257,48 +246,48 @@ void Semantic::enter0(Expression *expression) {
                 ERROR(call->location);
             }
 
-            call->semanticType = new ProxyType(methodType->subType, false);
+            call->setType(new ProxyType(methodType->subType, false));
             return;
         }
 
         ERROR(call->target->location);
     } else if (auto number = dynamic_cast<Number *>(expression)) {
-        number->semanticType = IntType;
+        number->setType(IntType);
     } else if (auto select = dynamic_cast<Select *>(expression)) {
         enter(select->target);
         enter(select->index);
 
-        auto rightType = select->index->semanticType;
-        auto leftType = select->target->semanticType;
+        auto rightType = select->index->getType();
+        auto leftType = select->target->getType();
 
         if (auto pointer = leftType->asPointerType()) {
             if (!IntType->equals(rightType)) {
                 ERROR(select->index->location);
             }
 
-            select->semanticType = pointer->subType;
+            select->setType(pointer->subType);
         } else if (auto pointer = rightType->asPointerType()) {
             if (!IntType->equals(leftType)) {
                 ERROR(select->target->location);
             }
 
-            select->semanticType = pointer->subType;
+            select->setType(pointer->subType);
         }
 
     } else if (auto sizeOf = dynamic_cast<Sizeof *>(expression)) {
         sizeOf->inner = enter(sizeOf->declarator, sizeOf->type, &sizeOf->location);
-        sizeOf->semanticType = IntType;
+        sizeOf->setType(IntType);
     } else if (auto choose = dynamic_cast<Choose *>(expression)) {
         checkCondition(choose->condition, choose->condition->location);
         enter(choose->left);
         enter(choose->right);
 
-        auto leftType = choose->left->semanticType->packMethodType();
+        auto leftType = choose->left->getType()->packMethodType();
         if(leftType == nullptr){
             ERROR(choose->left->location);
         }
 
-        auto rightType = choose->right->semanticType->packMethodType();
+        auto rightType = choose->right->getType()->packMethodType();
         if(rightType == nullptr){
             ERROR(choose->right->location);
         }
@@ -307,7 +296,7 @@ void Semantic::enter0(Expression *expression) {
             ERROR(choose->location);
         }
 
-        choose->semanticType = choose->left->semanticType;
+        choose->setType(choose->left->getType());
     } else {
         ERROR(expression->location);
     }
@@ -316,7 +305,7 @@ void Semantic::enter0(Expression *expression) {
 void Semantic::enter(Unary *unary) {
     enter(unary->value);
 
-    auto type = unary->value->semanticType;
+    auto type = unary->value->getType();
 
 
     bool isInteger = IntType->equals(type) ;
@@ -328,34 +317,34 @@ void Semantic::enter(Unary *unary) {
         case STAR:
             if (auto dealloc = type->asPointerType()) {
                 if(dealloc->asMethodType()){
-                    unary->semanticType = new ProxyType(dealloc, true);
+                    unary->setType(new ProxyType(dealloc, true));
                 }else{
-                    unary->semanticType = new ProxyType(dealloc->subType, true);
+                    unary->setType( new ProxyType(dealloc->subType, true));
                 }
                 return;
             }else if(type->asMethodType()){
-                unary->semanticType = new ProxyType(type, false);
+                unary->setType( new ProxyType(type, false));
                 return;
             }
             break;
         case PLUS:
         case MINUS:
             if(isNumeric){
-                unary->semanticType = new ProxyType(type, false);
+                unary->setType(new ProxyType(type, false));
                 return;
             }
             break;
         case NOT:
             if(leftIsComparable){
-                unary->semanticType = IntType;
+                unary->setType(IntType);
                 return;
             }
             break;
         case SIZEOF:
-            unary->semanticType = IntType;
+            unary->setType(IntType);
             return;
         case AND:
-            unary->semanticType = new PointerType(type);
+            unary->setType(new PointerType(type));
             return;
     }
 
@@ -364,15 +353,15 @@ void Semantic::enter(Unary *unary) {
 
 void Semantic::enter(Binary *binary) {
     enter(binary->left);
-    auto leftType = binary->left->semanticType->packMethodType();
+    auto leftType = binary->left->getType()->packMethodType();
 
     switch (binary->op->id) {
         case ARROW:
             if (auto deallocType = leftType->asPointerType()) {
                 if (auto superStruct = deallocType->subType->asSemanticStructType()) {
-                    if (auto identifier = dynamic_cast<Identifier *>(binary->right)) {
-                        binary->semanticType = superStruct->member(identifier);
-                        if (binary->semanticType != nullptr) {
+                    if (auto identifier = dynamic_cast<IdentifierUse *>(binary->right)) {
+                        binary->setType( superStruct->member(identifier));
+                        if (binary->getType() != nullptr) {
                             return;
                         }
                     }
@@ -382,9 +371,9 @@ void Semantic::enter(Binary *binary) {
             break;
         case DOT:
             if (auto superStruct = leftType->asSemanticStructType()) {
-                if (auto identifier = dynamic_cast<Identifier *>(binary->right)) {
-                    binary->semanticType = superStruct->member(identifier);
-                    if (binary->semanticType != nullptr) {
+                if (auto identifier = dynamic_cast<IdentifierUse *>(binary->right)) {
+                    binary->setType(superStruct->member(identifier));
+                    if (binary->getType() != nullptr) {
                         return;
                     }
                 }
@@ -394,7 +383,7 @@ void Semantic::enter(Binary *binary) {
     }
 
     enter(binary->right);
-    auto rightType = binary->right->semanticType->packMethodType();
+    auto rightType = binary->right->getType()->packMethodType();
 
     bool leftIsInteger = IntType->equals(leftType);
     bool rightIsInteger = IntType->equals(rightType) ;
@@ -415,57 +404,57 @@ void Semantic::enter(Binary *binary) {
     switch (binary->op->id) {
         case STAR:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             }
             break;
         case PLUS:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
                 binary->opInfo = 1;
-                binary->semanticType = new ProxyType(leftType, false);
+                binary->setType(new ProxyType(leftType, false));
                 return;
             } else if (rightType->asPointerType() && leftIsInteger) {
                 binary->opInfo = 2;
-                binary->semanticType = new ProxyType(rightType, false);
+                binary->setType(new ProxyType(rightType, false));
                 return;
             }
             break;
         case MINUS:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
                 binary->opInfo = 1;
-                binary->semanticType = new ProxyType(leftType, false);
+                binary->setType(new ProxyType(leftType, false));
                 return;
             } else if (leftType->asPointerType() && rightType->asPointerType() && leftType->equals(rightType)) {
                 binary->opInfo = 2;
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             }
             break;
         case EQUAL:
         case NOT_EQUAL:
             if (leftIsNumeric && rightIsNumeric) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             } else if (leftType->asPointerType() && rightIsInteger) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             } else if (rightType->asPointerType() && leftIsInteger) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             } else if (rightType->equals(VoidPointerType) && leftType->asPointerType()) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             } else if (leftType->equals(VoidPointerType) && rightType->asPointerType()) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             } else if (leftType->equals(rightType)) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             }
             break;
@@ -474,10 +463,10 @@ void Semantic::enter(Binary *binary) {
         case GREATER:
         case GREATER_EQUAL:
             if (leftIsNumeric  && rightIsNumeric) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             } else if (leftIsPointer && rightIsPointer) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             }
             break;
@@ -485,14 +474,14 @@ void Semantic::enter(Binary *binary) {
         case AND_AND:
         case OR_OR:
             if (leftIsComparable && rightIsComparable) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             }
             break;
         case LEFT_SHIFT:
         case RIGHT_SHIFT:
             if (leftIsInteger && rightIsInteger) {
-                binary->semanticType = IntType;
+                binary->setType(IntType);
                 return;
             }
             break;
@@ -502,7 +491,7 @@ void Semantic::enter(Binary *binary) {
             }
 
             if (isAssignable(leftType, rightType)) {
-                binary->semanticType = leftType;
+                binary->setType(leftType);
                 return;
             }
 
@@ -548,7 +537,7 @@ SemanticType *Semantic::enter(DirectDeclarator *directDeclarator, SemanticType *
         }
 
         simpleType->identifier = identifier;
-        identifier->semanticType = simpleType;
+        identifier->setType(simpleType);
         return simpleType;
     }
 
@@ -558,18 +547,16 @@ SemanticType *Semantic::enter(DirectDeclarator *directDeclarator, SemanticType *
 const SemanticType *Semantic::enter0(Declaration *declaration) {
     if (declaration != nullptr) {
         auto type = enter(declaration);
-        declaration->semanticType = type;
+        declaration->setType(type);
         if (type != nullptr) {
             if (type->asSimpleType() && type->identifier == nullptr) {
                 ERROR(declaration->location);
             }
 
             if (type->identifier != nullptr) {
-                if(!currentScope->set(type->identifier->value, type, false)){
+                if(!currentScope->set(type->identifier, false)){
                     ERROR(type->identifier->location);
                 }
-
-                const_cast<Identifier*>(type->identifier)->anchor = currentScope->get(type->identifier->value)->anchor;
             }
         }
 
@@ -585,7 +572,7 @@ SemanticType *Semantic::enter(Declaration *declaration) {
     if(declaration->initializer){
         enter(declaration->initializer);
 
-        auto rightType = declaration->initializer->semanticType->packMethodType();
+        auto rightType = declaration->initializer->getType()->packMethodType();
 
         if (!isAssignable(leftType, rightType)) {
             ERROR(declaration->location);

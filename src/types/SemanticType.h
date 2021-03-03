@@ -5,7 +5,7 @@
 #pragma once
 
 #include "../utils/Comparable.h"
-#include "../elements/Identifier.h"
+#include "../elements/IdentifierUse.h"
 
 class MethodType;
 class PointerType;
@@ -15,7 +15,7 @@ class SimpleType;
 class SemanticType : public Comparable<SemanticType> {
     bool assignable = false;
 public:
-    const Identifier *identifier = nullptr;
+    Identifier *identifier = nullptr;
 
     SemanticType() {};
 

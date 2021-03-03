@@ -6,32 +6,35 @@
 #include <string>
 #include "DirectDeclarator.h"
 #include "Expression.h"
-#include "../semantic/Anchor.h"
+#include "../semantic/Identifier.h"
 
 class PrettyPrinter;
 
-class Identifier : public Expression, public DirectDeclarator {
+class IdentifierUse : public Expression {
 public:
-    Anchor* anchor = nullptr;
+    Identifier* identifier = nullptr;
     const std::string *value = nullptr;
 
-    Identifier() {}
+    IdentifierUse() {}
 
-    Identifier(const std::string *value) : value(value) {}
+    IdentifierUse(const std::string *value) : value(value) {}
 
     void dump(PrettyPrinter &printer) override;
 
-    bool operator==(const Identifier &rhs) const {
+    bool operator==(const IdentifierUse &rhs) const {
         return value == rhs.value;
     }
 
-    bool operator!=(const Identifier &rhs) const {
+    bool operator!=(const IdentifierUse &rhs) const {
         return !(rhs == *this);
     }
 
     llvm::Value *createRightValue(TransformContext &context) override;
 
     llvm::Value *createLeftValue(TransformContext &context) override;
+
+
+    const SemanticType *getType() override;
 };
 
 

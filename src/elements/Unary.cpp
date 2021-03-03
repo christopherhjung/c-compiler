@@ -26,7 +26,7 @@ llvm::Value *Unary::createRightValue(TransformContext &context){
         case STAR:{
             llvm::Value *variable = value->createRightValue(context);
 
-            if(value->semanticType->asMethodType() || value->semanticType->equals(MethodPointerType)){
+            if(value->getType()->asMethodType() || value->getType()->equals(MethodPointerType)){
                 return variable;
             }else{
                 return context.builder.CreateLoad(variable);

@@ -23,6 +23,10 @@ public:
     void dump(PrettyPrinter &printer) override;
 
     void create(TransformContext &context) override;
+
+    const SemanticType *getType(){
+        return semanticType;
+    }
 };
 
 

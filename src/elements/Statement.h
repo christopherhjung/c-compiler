@@ -15,11 +15,16 @@ class SemanticType;
 class TransformContext;
 
 class Statement : public Element {
-public:
+protected:
     const SemanticType *semanticType = nullptr;
 
+public:
     virtual void create(TransformContext &context) {
         TRANSFORM_ERROR();
+    }
+
+    void setType(const SemanticType* semanticType){
+        this->semanticType = semanticType;
     }
 };
 

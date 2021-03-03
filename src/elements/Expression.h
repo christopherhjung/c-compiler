@@ -23,5 +23,9 @@ public:
     void create(TransformContext &context) override;
 
     virtual llvm::Value *getSize(TransformContext &context);
+
+    virtual const SemanticType *getType(){
+        return semanticType;
+    }
 };
 

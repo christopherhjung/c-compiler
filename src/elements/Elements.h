@@ -17,7 +17,7 @@
 #include "../elements/Dumpable.h"
 #include "../elements/Expression.h"
 #include "../elements/GoTo.h"
-#include "../elements/Identifier.h"
+#include "../elements/IdentifierUse.h"
 #include "../elements/If.h"
 #include "../elements/Choose.h"
 #include "../elements/LabeledStatement.h"

@@ -30,7 +30,7 @@ public:
         return false;
     }
 
-    const SemanticType *member(const Identifier *identifier) const {
+    const SemanticType *member(const IdentifierUse *identifier) const {
         if (identifier) {
             auto pos = map.find(identifier->value);
 

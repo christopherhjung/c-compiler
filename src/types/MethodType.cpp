@@ -13,7 +13,7 @@ const SemanticType *MethodType::call(const Call *call) const {
         int min = std::min(types.size(), call->values.size());
 
         for (int i = 0; i < min; i++) {
-            if (!types[i]->equals(call->values[i]->semanticType)) {
+            if (!types[i]->equals(call->values[i]->getType())) {
                 return nullptr;
             }
         }

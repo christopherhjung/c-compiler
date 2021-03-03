@@ -7,7 +7,7 @@ Mul->left:Mul sign:'*' left:Therm
 Mul->right:Mul sign:'/' right:Therm
 Mul->Therm
 Therm->'(' Add ')'
-Therm->key:identifier
+Therm->key:identifiers
 Therm->key:number
 
 

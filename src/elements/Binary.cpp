@@ -87,7 +87,7 @@ llvm::Value *Binary::createRightValue(TransformContext &context) {
 llvm::Value *Binary::createLeftValue(TransformContext &context){
     if(op->id == ARROW || op->id == DOT){
         llvm::Value *value = left->createLeftValue(context);
-        auto aType = left->semanticType;
+        auto aType = left->getType();
 
         if(op->id == ARROW){
             value = context.builder.CreateLoad(value);
@@ -95,7 +95,7 @@ llvm::Value *Binary::createLeftValue(TransformContext &context){
         }
 
         auto structType = aType->asSemanticStructType();
-        auto identifier = dynamic_cast<const Identifier*>(right);
+        auto identifier = dynamic_cast<const IdentifierUse*>(right);
 
         int index = structType->map.find(identifier->value)->second;
 

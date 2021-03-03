@@ -27,7 +27,7 @@ void Call::dump(PrettyPrinter &printer) {
 
 llvm::Value *Call::createRightValue(TransformContext &context){
 
-    auto functionSemanticType = target->semanticType;
+    auto functionSemanticType = target->getType();
 
     llvm::Value* value = target->createRightValue(context);
 
