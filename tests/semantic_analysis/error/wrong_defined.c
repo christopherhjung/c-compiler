@@ -1,1 +1,1 @@
-wrong_defined\.c:5:5: error:.*
+wrong_defined\.c:5:1: error:.*

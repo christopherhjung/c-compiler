@@ -83,21 +83,17 @@ public:
     }
 
     ConstantLatticeElement *join(ConstantLatticeElement *other ) {
-        if(auto right = dynamic_cast<ConstantLatticeElement*>(other)){
-            if(equals(right)){
-                return this;
-            }
-
-            if( state == BOTTOM && right->state == VALUE ){
-                return right;
-            }else if(state == VALUE && right->state == BOTTOM){
-                return this;
-            }else{
-                return ConstantLatticeElement::Top;
-            }
+        if(equals(other)){
+            return this;
         }
 
-        OPTIMIZE_ERROR();
+        if( state == BOTTOM && other->state == VALUE ){
+            return other;
+        }else if(state == VALUE && other->state == BOTTOM){
+            return this;
+        }else{
+            return ConstantLatticeElement::Top;
+        }
     }
 };
 
@@ -197,18 +193,43 @@ public:
 #endif
             bb->eraseFromParent();
         }
+
+        notReachable.clear();
+/*
+        start:
+        for( auto &bb : func.getBasicBlockList() ){
+            if(&bb == &func.getEntryBlock()){
+                continue;
+            }
+
+            if(bb.size() == 1){
+                bool found = false;
+                for(auto &use : bb.uses()){
+                    if(llvm::dyn_cast_or_null<llvm::PHINode>(use.getUser())){
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found){
+                    llvm::Instruction *ins = &*bb.begin();
+                    if(auto branch = llvm::dyn_cast_or_null<llvm::BranchInst>(ins)){
+                        if(!branch->isConditional()){
+                            bb.replaceAllUsesWith(branch->getSuccessor(0));
+                            bb.eraseFromParent();
+                            goto start;
+                        }
+                    }
+                }
+            }
+        }*/
     }
 
-    void removeBlocks(llvm::BasicBlock *current, std::unordered_set<llvm::BasicBlock*> &notReachable){
-
-    }
-
-    bool isNotTop(ConstantLatticeElement *element){
+    static bool isNotTop(ConstantLatticeElement *element){
         return element == nullptr || !element->isTop();
     }
 
 
-    void join(ConstantLatticeElement *& left, ConstantLatticeElement *right){
+    static void join(ConstantLatticeElement *& left, ConstantLatticeElement *right){
         if(right == nullptr){
             OPTIMIZE_ERROR();
         }
