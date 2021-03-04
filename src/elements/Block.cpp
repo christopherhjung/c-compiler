@@ -25,7 +25,9 @@ void Block::create(TransformContext &context) {
     //context.setCurrentBlock(block);
     context.pushScope(scope);
     for (auto child  : children) {
-        child->create(context);
+        if(child != nullptr){
+            child->create(context);
+        }
     }
     context.popScope();
 }

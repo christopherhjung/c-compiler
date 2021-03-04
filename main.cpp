@@ -56,6 +56,7 @@ int main(int argc, char **const args) {
     bool printAst = false;
     bool compile = false;
     bool optimize = false;
+    bool parse = false;
     bool optimizeRuntime = false;
     bool optimizeCompileTime = false;
 
@@ -71,6 +72,7 @@ int main(int argc, char **const args) {
         }else if(option == "--compile"){
             compile = true;
         }else if(option == "--parse"){
+            parse = true;
         }else if(option == "--optimize-run-time") {
             optimize = true;
             optimizeRuntime = true;
@@ -84,7 +86,7 @@ int main(int argc, char **const args) {
         }
     }
 
-    if((!tokenize && !printAst && !compile) || optimize){
+    if((!tokenize && !printAst && !compile && !parse) || optimize){
         compile = true;
     }
 
