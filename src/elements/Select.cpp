@@ -18,9 +18,20 @@ void Select::dump(PrettyPrinter &printer) {
 
 
 llvm::Value *Select::createLeftValue(TransformContext &context){
-    auto indexValue = index->createRightValue(context);
+    Expression *left;
+    Expression *right;
+
+    if(target->getType()->asPointerType()){
+        left = target;
+        right = index;
+    }else{
+        left = index;
+        right = target;
+    }
+
+    auto indexValue = right->createRightValue(context);
     auto indexValue64 = context.builder.CreateSExtOrTrunc(indexValue, context.builder.getInt64Ty());
-    auto basePointer = target->createRightValue(context);
+    auto basePointer = left->createRightValue(context);
     auto elemPointer = context.builder.CreateGEP(basePointer, indexValue64);
     return elemPointer;
 }
