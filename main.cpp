@@ -79,7 +79,7 @@ int main(int argc, char **const args) {
         }else if(option == "--optimize"){
             optimize = true;
             //source = args[++i];
-        }else if(option.rfind("--", 0) == 0){
+        }else if(option.size() < 2 || (option[0] != '-' && option[1] != '-')){
             source = args[i];
         }
     }
