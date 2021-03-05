@@ -151,6 +151,8 @@ public:
     }
 
     void optimize(llvm::Function &func){
+        std::vector<llvm::Instruction*> unusedInstruction;
+
         for(auto pair : constant){
             if(pair.second != nullptr && pair.second->isConstant()){
                 if(auto ins = llvm::dyn_cast_or_null<llvm::Instruction>(pair.first)){
@@ -171,7 +173,7 @@ public:
                     }
 
                     pair.first->replaceAllUsesWith(constant);
-                    ins->eraseFromParent();
+                    unusedInstruction.push_back(ins);
                 }
             }
         }
@@ -184,6 +186,11 @@ public:
 
             }
         }
+
+        for(auto ins : unusedInstruction){
+            ins->eraseFromParent();
+        }
+
 #ifdef DEBUG
         std::cout << "--unreachable--" << std::endl;
 #endif
@@ -194,7 +201,6 @@ public:
             bb->eraseFromParent();
         }
 
-        notReachable.clear();
 /*
         start:
         for( auto &bb : func.getBasicBlockList() ){
